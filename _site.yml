@@ -1,0 +1,16 @@
+name: Stat 436/516
+output_dir: '.'
+navbar:
+  title: Statistics 436/516
+  right:
+  - text: Lectures
+    href: lectures.html
+  - text: Resources
+    href: resources.html
+  - text: Syllabus
+    href: syllabus.html
+output:
+  html_document:
+    lib_dir: site_libs
+    self_contained: no
+      

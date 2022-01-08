@@ -1,0 +1,61 @@
+---
+title: "Applied Regression Modeling (Stat 436/516)"
+subtitle: "Spring Semester, 2022"
+output: 
+  pdf_document: default
+  html_document: 
+    theme: readable
+fontsize: 11pt
+header-includes:
+- \pagenumbering{gobble}
+---
+
+`r ifelse(knitr::is_html_output(), "You can [download a PDF version](syllabus.pdf) of this syllabus.", "")`
+
+\raggedright
+
+**Instructor**: Dr.\ Timothy R. Johnson, Professor of Statistics, Department of Mathematics and Statistical Science. Email: trjohns@uidaho.edu. Office phone number: 208-885-2928. Department phone number: 208-885-6742. My office hours are 10:30 to 11:20 on Monday, Wednesday, and Friday, but I am available to meet other times as well. These meetings will be over Zoom. If you would like to meet, email me and I will send you a Zoom link. 
+
+**Prerequisites**: Statistics 431 (Statistical Analysis) or a similar course. This course assumes familiarity with the fundamentals of statistical inference (e.g., parameter estimation, confidence intervals, and significance tests), and some basic statistical models (e.g., inference for one- and two-sample designs, analysis of variance, and simple and multiple linear regression).
+
+**Course Topics**: Linear regression, linear model specification (including indicator variables, interactions, transformations, polynomials, and splines), linear combinations of parameters and contrasts, nonlinear regression, point estimation using least squares and maximum likelihood, interval estimation and significance tests, methods for assessing and addressing violations of assumptions, weighted least squares, generalized linear models including logistic and Poisson regression, over-dispersion, truncation and censoring, survival analysis, models for categorical response variables, the delta method, marginal effects, linear and generalized linear mixed models, nonlinear mixed models, model fit and selection, and other topics depending on time and interest. 
+
+**Learning Outcomes**: Given data and research questions, students should be able to correctly specify and interpret inferences for an appropriate regression model. Students should be to specify and interpret these inferences mathematically, with code, and in writing. 
+
+**Course Webpage**: See [trobinj.github.io/arm](https://trobinj.github.io/arm) for some course materials including lecture notes, handouts, homework solutions, and other resources. 
+
+**Canvas**: Homework scores will appear on [Canvas](https://canvas.uidaho.edu), but all other material will appear at [trobinj.github.io/stat516](https://trobinj.github.io/stat516) or be distributed in class.
+
+**Software**: This course uses the statistical package R with the RStudio integrated development environment. Previous experience with R and RStudio is not assumed, but students are expected to make the effort to learn how to use these software packages. Both R and RStudio are free and available for Windows, macOS, and Linux operating systems. For information about installing R and RStudio see the section titled "Getting Started with R and RStudio" on the [resources](resources.html) page.  
+
+**Homework**: There will be five take-home homework assignments distributed throughout the semester. Notice of an assignment will be given about a week in advance of when it is assigned, and will typically be due 7-10 days later. Late homework will not be accepted without penalty except under extraordinary circumstances. The penalty for turning in a late homework assignment is one point if the assignment is turned in within 12 hours of the deadline, two points if the assignment is turned in within 24 hours of the deadline, and so on for every additional 12 hours. Each homework assignment is worth a total of 10 points. Homework assignments will include some problems that are required for students enrolled in Stat 516, but extra credit for students enrolled in Stat 436. 
+
+**Attendance**: Regular attendance is expected. You should contact me if reasonable circumstances prohibit you from attending a lecture. More than three unexcused absences will result in a reduction of your grade for the course by one letter grade. 
+
+**Grading**: Letter grades will be assigned according to the following rubric based on the average homework score: A (87.5%-100%), B (75%-87.5%), C (62.5%-75%), D (50%-62.5%), F (less than 50%). 
+
+**Reasonable Accommodations Statement**: Reasonable accommodations are available for students who have documented temporary or permanent disabilities. All accommodations must be approved through the Center for Disability Access and Resources located in the Bruce M. Pitman Center, Suite 127 in order to notify your instructor(s) as soon as possible regarding accommodation(s) needed for the course. Contact DSS at 208-885-6307 or [cdar@uidaho.edu](mailto:cdar@uidaho.edu). For more information see [www.uidaho.edu/current-students/cdar](http://www.uidaho.edu/current-students/cdar).
+
+**Academic Honesty**: You are responsible for being aware of the policies of the University of Idaho on academic honesty. See Section A-1 of Article II of the [Student Code of Conduct](http://www.uidaho.edu/student-affairs/dean-of-students/student-conduct/student-code-of-conduct). This includes but is not limited to cheating, facilitation of cheating, and furnishing false information or false representation. *Breaches of academic honesty will not be tolerated, and will result in a F for the course and referral to the Dean of Students for further disciplinary action.* 
+
+**Healthy Vandals Policies**: Please bookmark the [University of Idaho Covid-19 webpage](https://www.uidaho.edu/vandal-health-clinic/coronavirus) and visit it often for the most up-to-date information about the U of I’s response to Covid-19. In particular note the following university policies concerning class attendance and face coverings. 
+
+1. **Daily Symptom Monitoring and In-Person Class Attendance**. Evaluate your own health status before attending in-person classes and **refrain from attending class in-person if you are ill, if you are experiencing any of the [known symptoms of coronavirus](https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/symptoms.html), or if you have tested positive for COVID-19 or have been potentially exposed to someone with COVID-19**. 
+
+    +	If you display symptoms and/or test positive, you should quarantine following the [CDC's recommendations](https://www.cdc.gov/coronavirus/2019-ncov/if-you-are-sick/steps-when-sick.html). Do not return to class until you meet the [CDC's requirements](https://www.cdc.gov/coronavirus/2019-ncov/if-you-are-sick/end-home-isolation.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2F2019-ncov%2Fprevent-getting-sick%2Fwhen-its-safe.html).  
+
+    +	If you have been exposed but are asymptomatic, you should stay home for 14 days from last exposure if you remain asymptomatic, adhering to the [CDC's requirements](https://www.cdc.gov/coronavirus/2019-ncov/if-you-are-sick/end-home-isolation.html?CDC_AA_refVal=https%3A%2F%2Fwww.cdc.gov%2Fcoronavirus%2F2019-ncov%2Fprevent-getting-sick%2Fwhen-its-safe.html). 
+    
+    Students in quarantine can still attend lectures via Zoom and can access course materials online. Documentation (a doctor's note) for medical excuses is not required; instead, plan to use Zoom and online course materials to stay current with the course schedule. 
+
+2. **Face Coverings**. All faculty, staff, students and visitors across all U of I locations must use face coverings whenever in any U of I buildings. **You are required to wear a face covering over your nose and mouth in this classroom at all times**. 
+
+    + If you have a medical condition that you believe affects your ability to comply with the face covering policy, please contact the [Center for Disability Access and Resources (CDAR)](https://www.uidaho.edu/current-students/cdar/covid-19) to request a reasonable accommodation.
+    
+    + If you have other reasons you believe make you exempt from wearing face coverings, please contact the Covid-19 Coordinator at covid19questions@uidaho.edu. 
+    + Failure to wear a face covering means you will be required to leave the classroom. If a disruption to the learning experience occurs due to repeated offence and/or egregious behavior, it will be referred to the Dean of Students Office for potential code violation. 
+
+   Your instructor has been vaccinated for COVID-19. 
+
+
+
