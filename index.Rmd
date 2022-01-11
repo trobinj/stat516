@@ -7,10 +7,14 @@ output:
   
 This site contains material for Dr. Johnson's *Applied Regression Modeling* course (Stat 436/516) at the University of Idaho for the spring semester of 2022.
 
+***
+
 <center>
 
 ![https://xkcd.com/833](https://imgs.xkcd.com/comics/convincing.png)
 
 </center>
+
+***
 
 Note: If you are interested in seeing the [R Markdown](https://rmarkdown.rstudio.com) code I use to create this website and its contents, you can browse the [source files on Github](https://github.com/trobinj/stat516/tree/gh-pages). The source files have a .Rmd extension.
