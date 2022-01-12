@@ -52,7 +52,7 @@ The following are a few interesting and sometimes useful R packages.
 
 [**tesseract**](https://cran.r-project.org/web/packages/tesseract/index.html) lets you use the [tesseract](https://en.wikipedia.org/wiki/Tesseract_(software)) optical character recognition (OCR) software from R. I have found this useful for reading data into R from a scanned document from a book or article, although it can be a little tricky to calibrate. 
 
-[**tidyr**](http://tidyr.tidyverse.org) is used to rearrange data frames, particularly between "long form" (with one observation per row) and "wide form" with multiple observations per row. It is part of the ["tidyverse"](https://www.tidyverse.org) of R packages. It is a successor to the [**reshape2**](https://github.com/hadley/reshape) package which still exists but is no longer being updated except to keep it working.  
+[**tidyr**](http://tidyr.tidyverse.org) includes functions for "reshaping" data in various ways such as between "long form" (with one observation per row) and "wide form" with multiple observations per row. It is part of the ["tidyverse"](https://www.tidyverse.org) of R packages.
 
 [**tidyverse**](https://www.tidyverse.org/) is actually a collection of packages for manipulating and plotting including **dplyr**, **forcats**, **lubridate**, **tidyr**, and **ggplot2**. You can install all of these packages at once by installing the **tidyverse** package. Also you can load all of these packages at once with `library(tidyverse)`. 
 

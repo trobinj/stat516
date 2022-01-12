@@ -1,0 +1,190 @@
+---
+output:
+  html_document:
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "01-13-2021"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+```{r packages}
+library(tidyverse)
+library(kableExtra)
+```
+
+```{r utilities}
+source("../../utilities.R")
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+## The Data Structure
+
+We let $Y_i$ denote the $i$-th observation of a *response* variable, and $X_{ij}$ denote the $i$-th observation of the $j$-th *explanatory* variable. Assume $n$ observations ($i = 1, 2, \dots, n)$ and $k$ explanatory variables ($j = 1, 2, \dots, k$).
+
+$$
+\begin{array}{cc}
+Y_1 & X_{11}, X_{12}, \dots, X_{1k} \\
+Y_2 & X_{21}, X_{22}, \dots, X_{2k} \\ 
+\vdots & \vdots \\
+Y_n & X_{n1}, X_{n2}, \dots, X_{nk} 
+\end{array}
+$$
+Sometimes when it is not necessary to refer to a specific observation, we will omit the $i$ subscript to denote the response variable and explanatory variables as follows.
+$$
+\begin{array}{cc}
+Y & X_{1}, X_{2}, \dots, X_{k}
+\end{array}
+$$
+How do we usefully *model* the *statistical* relationship between the response variable (i.e., $Y$) and one or more explanatory variables (i.e., $X_{1}, X_{2}, \dots, X_{k}$)? 
+
+## Motivating Examples
+
+**Example**: The data below show observations of the average outdoor temperature (C) and gas consumption (in 1000s of cubic feet) to heat a home for a week. But note that between the 26th and 28th weeks cavity-wall insulation was added. 
+```{r}
+d.before <- subset(MASS::whiteside, Insul == "Before")
+d.after <- subset(MASS::whiteside, Insul == "After")
+d.before <- d.before[sample(1:nrow(d.before)),]
+d.after <- d.after[sample(1:nrow(d.after)),]
+d.day <- data.frame(Week = c(1:26,28:(nrow(MASS::whiteside)+1)))
+d <- cbind(d.day, rbind(d.before, d.after))
+rownames(d) <- NULL
+names(d)[2] <- "Insulation"
+d <- d[,c(1,4,2,3)]
+ktbl(rbind(headtail(subset(d, Insulation == "Before"), 3), headtail(subset(d, Insulation == "After"), 3)))
+```
+
+```{r, echo = FALSE, fig.height = 4}
+p <- ggplot(MASS::whiteside, aes(x = Temp, y = Gas))
+p <- p + geom_point(aes(fill = Insul), shape = 21, size = 1.25)
+p <- p + labs(x = "Temperature (C)", y = "Gas Consumption (1000s of cubic feet)", fill = "Insulation:")
+p <- p + scale_fill_manual(values = c("black","white")) + ylim(0,8)
+p <- p + theme_minimal() + theme(legend.position = c(0.8, 0.8))
+p <- p + ggtitle("Gas Consumption by Temperature and Insulation")
+plot(p)
+```
+
+**Example**: Creative writing students were treated or "primed" with either extrinsic or intrinsic motivation. They were then asked to write a poem in the Haiku style about laughter. Each poem was then scored for "creativity" on a 40-point scale by 12 judges. These scores were then averaged across the 12 judges for each student. 
+
+```{r, echo = FALSE, fig.height = 4}
+d <- Sleuth3::case0101 %>% mutate(Score = round(Score))
+d <- as.data.frame(d)
+ktbl(rbind(headtail(subset(d, Treatment == "Extrinsic"), 3), headtail(subset(d, Treatment == "Intrinsic"), 3)))
+p <- ggplot(Sleuth3::case0101, aes(x = Treatment, y = round(Score)))
+p <- p + geom_dotplot(binaxis = "y", stackdir = "center", binwidth = 1)
+p <- p + ylab("Creativity Score") + xlab("Treatment (Type of Motivation)")
+p <- p + ggtitle("Creativity Score by Type of Motivation") + theme_minimal()
+plot(p)
+```
+
+**Example**: These are data on 3198 walleye captured in Butternut Lake, Wisconsin, during three periods with different management methods in place.
+
+```{r, echo = FALSE, fig.height = 4}
+myfish <- alr4::walleye
+myfish$period <- factor(myfish$period, labels = c("pre-1990", "1991-1996", "1997-2000"))
+
+set.seed(124)
+d <- myfish
+names(d) <- c("Age","Length","Period")
+d <- d[,c(2,1,3)]
+d$Length <- round(d$Length)
+ktbl(headtail(d,5))
+
+p <- ggplot(myfish, aes(x = age))
+p <- p + geom_point(aes(y = length), alpha = 0.25, size = 1)
+p <- p + facet_wrap(~ period) + xlim(0,13) + theme_minimal()
+p <- p + labs(x = "Age (Years)", y = "Length (mm)")
+p <- p + ggtitle("Length of Walleye by Year and Period In Butternut Lake, Wisconsin")
+plot(p)
+```
+
+## A Statistical Model for the Response Variable
+
+We might consider a model for the *distribution* of the response variable, where one or more properties of the *distribution* of $Y$ are *functions of* the explanatory variable(s).
+
+```{r, echo = FALSE, fig.height = 4}
+library(ggnormalviolin)
+
+m <- lm(Gas ~ Temp * Insul, data = MASS::whiteside)
+d <- unique(MASS::whiteside)
+d$yhat <- predict(m, newdata = d)
+
+p <- ggplot(MASS::whiteside, aes(x = Temp, y = Gas))
+p <- p + geom_line(aes(y = yhat, group = Insul), alpha = 0.5, data = d, size = 0.25)
+p <- p + geom_normalviolin(aes(mu = yhat, sigma = summary(m)$sigma), alpha = 0.5, data = d, face_right = FALSE)
+p <- p + geom_point(aes(y = yhat, fill = Insul), data = d, shape = 23, size = 1)
+p <- p + geom_point(aes(fill = Insul), shape = 21, size = 1.25)
+p <- p + labs(x = "Temperature (C)", y = "Gas Consumption (1000s of cubic feet)", fill = "Insulation:")
+p <- p + scale_fill_manual(values = c("black","white")) + ylim(0,8)
+p <- p + theme_minimal() + theme(legend.position = c(0.8, 0.8))
+p <- p + ggtitle("Gas Consumption by Temperature and Insulation")
+plot(p)
+```
+
+```{r, echo = FALSE, fig.height = 4}
+m <- Sleuth3::case0101 %>% group_by(Treatment) %>% summarize(m = mean(Score), s = sd(Score))
+p <- ggplot(Sleuth3::case0101, aes(x = Treatment, y = round(Score)))
+p <- p + geom_normalviolin(aes(mu = m, sigma = s, y = NULL), data = m, face_left = FALSE, alpha = 0.5)
+p <- p + geom_dotplot(binaxis = "y", stackdir = "up", binwidth = 1)
+p <- p + ylab("Poem Creativity Score") + xlab("Treatment (Type of Motivation)")
+p <- p + ggtitle("Poem Creativity Score by Type of Motivation") + theme_minimal()
+plot(p)
+```
+
+One common property of the distribution of a response variable is the *mean* or *expected value* of the variable.
+
+\pagebreak
+
+## Expectation
+
+The **expected value** of a random variable $Y$ is defined as 
+$$
+  E(Y) = \sum_y y P(Y = y)
+$$ 
+if it is *discrete*, and 
+$$
+  E(Y) = \int\limits_{-\infty}^{\infty} yf(y)dy
+$$ 
+if it is *continuous*. Note that by convention, an upper-case letter (e.g., $Y$) denotes a random variable whereas a lower-case letter (e.g., $y$) denotes a *value* or *realization* of that random variable.
+
+\pagebreak
+
+### Models for $E(Y)$
+
+Most regression models focus on the mathematical relationship between the *expectation of the response variable* to the *value(s) of the explanatory variable(s)*. That is, $E(Y)$ is a *function of* $x_{1}, x_{2}, \dots, x_{k}$. 
+
+One way to write a regression model is
+$$
+  E(Y) = f(x_{1}, x_{2}, \dots, x_{k}),
+$$
+where $f$ is some specified function. For example, 
+$$
+  E(Y) = \beta_0 + \beta_1 x,
+$$
+where the subscript is dropped without loss of clarity from $x_{1}$ as there is only one explanatory variable. With two or more explanatory variables we might have
+$$ 
+  E(Y) = \beta_0 + \beta_1 x_{1} + \beta_2 x_{2} + \cdots + \beta_k x_{k}.
+$$
+These are examples of *linear models* (more on that soon). We will also consider *nonlinear* models like
+$$
+  E(Y) = \alpha + (\delta - \alpha)e^{-x\log(2)/\gamma}.
+$$
+Typically the function will involve constants (e.g., $\beta_0, \beta_1, \dots, \beta_k$ or $\alpha$, $\delta$, and $\gamma$) that are unknown, but often of interest. These are the **parameters** of the regression model. 
+

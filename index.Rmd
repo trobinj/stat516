@@ -17,4 +17,4 @@ This site contains material for Dr. Johnson's *Applied Regression Modeling* cour
 
 ***
 
-Note: If you are interested in seeing the [R Markdown](https://rmarkdown.rstudio.com) code I use to create this website and its contents, you can browse the [source files on Github](https://github.com/trobinj/stat516/tree/gh-pages). The source files have a .Rmd extension.
+If you are interested in seeing the [R Markdown](https://rmarkdown.rstudio.com) code I use to create this website and its contents, you can browse the [source files on GitHub](https://github.com/trobinj/stat516/tree/gh-pages). The source files have a .Rmd extension.
