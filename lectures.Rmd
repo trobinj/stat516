@@ -20,7 +20,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Introduction](lecture-01-12-2022.html). 
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Linear (regression) models](lecture-01-14-2022.html).
 
 ***
 
