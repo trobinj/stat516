@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Monday, Jan 24</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Monday, Jan 24</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-01-24-2022.pdf">PDF</a> copy of this lecture.</p>
+<div id="using-the-contrast-function" class="section level2">
+<h2>Using the <code>contrast</code> Function</h2>
+<p>Frequently a quantity of interest has the form <span class="math display">\[
+  E(Y_a) - E(Y_b),
+\]</span> where <span class="math inline">\(E(Y_a)\)</span> and <span class="math inline">\(E(Y_b)\)</span> represent the expected value of the response variable under circumstances <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, respectively. By “circumstances” we mean when explanatory variable(s) assume(s) specific values. This is sometimes called a “contrast” and inferences concerning a contrast can be made using the <code>contrast</code> function from the <strong>trtools</strong> package.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> For linear models, any contrast can be expressed as a linear function of the model parameters, and so <code>contrast</code> can be used instead of <code>lincon</code> if desired.</p>
+<p><strong>Example</strong>: Consider a linear model for the <code>anorexia</code> data.</p>
+<pre class="r"><code>library(MASS) # for anorexia data frame
+anorexia$change &lt;- anorexia$Postwt - anorexia$Prewt # compute weight change
+head(anorexia) # inspect &quot;head&quot; of anorexia data frame</code></pre>
+<pre><code>  Treat Prewt Postwt change
+1  Cont  80.7   80.2   -0.5
+2  Cont  89.4   80.1   -9.3
+3  Cont  91.8   86.4   -5.4
+4  Cont  74.0   86.3   12.3
+5  Cont  78.1   76.1   -2.0
+6  Cont  88.3   78.1  -10.2</code></pre>
+<pre class="r"><code>summary(anorexia) # summary of variables in anorexia data frame</code></pre>
+<pre><code>  Treat        Prewt          Postwt          change      
+ CBT :29   Min.   :70.0   Min.   : 71.3   Min.   :-12.20  
+ Cont:26   1st Qu.:79.6   1st Qu.: 79.3   1st Qu.: -2.23  
+ FT  :17   Median :82.3   Median : 84.0   Median :  1.65  
+           Mean   :82.4   Mean   : 85.2   Mean   :  2.76  
+           3rd Qu.:86.0   3rd Qu.: 91.5   3rd Qu.:  9.10  
+           Max.   :94.9   Max.   :103.6   Max.   : 21.50  </code></pre>
+<pre class="r"><code>str(anorexia) # structure of anorexia data frame</code></pre>
+<pre><code>&#39;data.frame&#39;:   72 obs. of  4 variables:
+ $ Treat : Factor w/ 3 levels &quot;CBT&quot;,&quot;Cont&quot;,&quot;FT&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+ $ Prewt : num  80.7 89.4 91.8 74 78.1 88.3 87.3 75.1 80.6 78.4 ...
+ $ Postwt: num  80.2 80.1 86.4 86.3 76.1 78.1 75.1 86.7 73.5 84.6 ...
+ $ change: num  -0.5 -9.3 -5.4 12.3 -2 ...</code></pre>
+<pre class="r"><code>m &lt;- lm(change ~ Treat, data = anorexia)
+summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)    3.007      1.398   2.151  0.03499
+TreatCont     -3.457      2.033  -1.700  0.09361
+TreatFT        4.258      2.300   1.852  0.06838</code></pre>
+<p>We can see that the model is <span class="math display">\[
+  E(Y_i) = 
+  \begin{cases}
+  \beta_0, &amp; \text{if the treatment for the $i$-th observation is cognitive-behavioral therapy}, \\
+  \beta_0 + \beta_1, &amp; \text{if the treatment for the $i$-th observation is control}, \\
+  \beta_0 + \beta_2, &amp; \text{if the treatment for the $i$-th observation is family therapy}.
+  \end{cases}
+\]</span> Suppose we want to make inferences about the difference in the expected weight change under the cognitive-behavioral and control conditions. Thus <span class="math display">\[\begin{align*}
+  E(Y_a) &amp; = \beta_0, \\
+  E(Y_b) &amp; = \beta_0 + \beta_1,
+\end{align*}\]</span> and <span class="math display">\[
+  E(Y_a) - E(Y_b) = \beta_0 - (\beta_0 + \beta_1) = -\beta_1.
+\]</span> Inferences concerning <span class="math inline">\(-\beta_1\)</span> can be made using <code>lincon</code> since this is a linear function of the model parameters: <span class="math display">\[
+  \ell = 0 \times \beta_0 + (-1) \times \beta_1 + 0 \times \beta_2 = -\beta_1.
+\]</span></p>
+<pre class="r"><code>library(trtools) # loading for the lincon and contrast functions
+lincon(m, a = c(0,-1,0))</code></pre>
+<pre><code>           estimate    se   lower upper tvalue df  pvalue
+(0,-1,0),0    3.457 2.033 -0.5994 7.513    1.7 69 0.09361</code></pre>
+<p>Alternatively we can use the <code>contrast</code> function in which we specify values of the explanatory variables rather than having work out the coefficients of the linear function.</p>
+<pre class="r"><code>contrast(m, a = list(Treat = &quot;CBT&quot;), b = list(Treat = &quot;Cont&quot;))</code></pre>
+<pre><code> estimate    se   lower upper tvalue df  pvalue
+    3.457 2.033 -0.5994 7.513    1.7 69 0.09361</code></pre>
+<p><strong>Note</strong>: The meaning of the <code>a</code> and <code>b</code> arguments are different for the <code>lincon</code> and <code>contrast</code> functions.</p>
+<p>The <code>contrast</code> function can compute multiple contrasts at a time. Suppose we want to estimate the difference in the expected weight change between each of the two therapy conditions and the control condition:</p>
+<pre class="r"><code>contrast(m, a = list(Treat = c(&quot;CBT&quot;,&quot;FT&quot;)), b = list(Treat = &quot;Cont&quot;))</code></pre>
+<pre><code> estimate    se   lower  upper tvalue df   pvalue
+    3.457 2.033 -0.5994  7.513  1.700 69 0.093608
+    7.715 2.348  3.0302 12.399  3.285 69 0.001602</code></pre>
+<p><code>contrast</code> includes an optional <code>cnames</code> (contrast names) argument to label the output for clarity.</p>
+<pre class="r"><code>contrast(m, 
+  a = list(Treat = c(&quot;CBT&quot;,&quot;FT&quot;)), 
+  b = list(Treat = &quot;Cont&quot;),
+  cnames = c(&quot;CBT vs Control&quot;,&quot;FT vs Control&quot;))</code></pre>
+<pre><code>               estimate    se   lower  upper tvalue df   pvalue
+CBT vs Control    3.457 2.033 -0.5994  7.513  1.700 69 0.093608
+FT vs Control     7.715 2.348  3.0302 12.399  3.285 69 0.001602</code></pre>
+<p><strong>Warning</strong>: To avoid confusion, do not list multiple values of more than one explanatory variable. It is possible to specify multiple values of two or more explanatory variables, but the output can be confusing.</p>
+<p>If we do not specify the <code>b</code> argument then <code>contrast</code> will produce an estimate of just <span class="math inline">\(E(Y_a)\)</span>. For example, we can estimate the expected weight change under each condition.</p>
+<pre class="r"><code>contrast(m, a = list(Treat = c(&quot;CBT&quot;,&quot;FT&quot;,&quot;Cont&quot;)),
+  cnames = c(&quot;Cognitive-Behavioral&quot;,&quot;Family&quot;,&quot;Control&quot;))</code></pre>
+<pre><code>                     estimate    se  lower  upper  tvalue df    pvalue
+Cognitive-Behavioral    3.007 1.398  0.218  5.796  2.1509 69 0.0349920
+Family                  7.265 1.826  3.622 10.907  3.9787 69 0.0001688
+Control                -0.450 1.476 -3.395  2.495 -0.3048 69 0.7614470</code></pre>
+<p><strong>Example</strong>: Consider again a model for the <code>whiteside</code> data.</p>
+<pre class="r"><code>m &lt;- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+summary(m)$coefficients</code></pre>
+<pre><code>                Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)       6.8538    0.13596  50.409 7.997e-46
+InsulAfter       -2.1300    0.18009 -11.827 2.316e-16
+Temp             -0.3932    0.02249 -17.487 1.976e-23
+InsulAfter:Temp   0.1153    0.03211   3.591 7.307e-04</code></pre>
+<p>Recall that the model can be written as <span class="math display">\[
+  E(G_i) = 
+  \begin{cases}
+    \beta_0 + \beta_2t_i, &amp; \text{if the $i$-th observation is before insulation}, \\
+    \beta_0 + \beta_1 + (\beta_2 + \beta_3)t_i, &amp; \text{if the $i$-th observation is after insulation.}
+  \end{cases}
+\]</span> So the rate of change in expected gas consumption per unit increase in temperature is <span class="math inline">\(\beta_2\)</span> before insulation and <span class="math inline">\(\beta_2 + \beta_3\)</span> after insulation. Inferences concerning both of these quantities can be obtained using <code>lincon</code>.</p>
+<pre class="r"><code>lincon(m, a = c(0,0,1,0)) # b2 (note: also shown by summary above)</code></pre>
+<pre><code>            estimate      se   lower   upper tvalue df    pvalue
+(0,0,1,0),0  -0.3932 0.02249 -0.4384 -0.3481 -17.49 52 1.976e-23</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,0,1,1)) # b2 + b3</code></pre>
+<pre><code>            estimate      se   lower   upper tvalue df    pvalue
+(0,0,1,1),0  -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
+<p>To use <code>contrast</code> to produce these inferences we consider a one unit change temperature.</p>
+<pre class="r"><code>contrast(m,
+  a = list(Insul = &quot;Before&quot;, Temp = 1),
+  b = list(Insul = &quot;Before&quot;, Temp = 0))</code></pre>
+<pre><code> estimate      se   lower   upper tvalue df    pvalue
+  -0.3932 0.02249 -0.4384 -0.3481 -17.49 52 1.976e-23</code></pre>
+<pre class="r"><code>contrast(m,
+  a = list(Insul = &quot;After&quot;, Temp = 1),
+  b = list(Insul = &quot;After&quot;, Temp = 0))</code></pre>
+<pre><code> estimate      se   lower   upper tvalue df    pvalue
+  -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
+<pre class="r"><code>contrast(m,
+  a = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = 1),
+  b = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = 0),
+  cnames = c(&quot;before&quot;,&quot;after&quot;))</code></pre>
+<pre><code>       estimate      se   lower   upper tvalue df    pvalue
+before  -0.3932 0.02249 -0.4384 -0.3481 -17.49 52 1.976e-23
+after   -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
+<p>Note that since the rate of change in expected gas consumption is <em>constant</em>, any two values of temperature one unit apart would produce the same result. For example:</p>
+<pre class="r"><code>contrast(m,
+  a = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = 3),
+  b = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = 2),
+  cnames = c(&quot;before&quot;,&quot;after&quot;))</code></pre>
+<pre><code>       estimate      se   lower   upper tvalue df    pvalue
+before  -0.3932 0.02249 -0.4384 -0.3481 -17.49 52 1.976e-23
+after   -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
+<p>What is the change in expected gas consumption if temperature goes up by 10C?</p>
+<pre class="r"><code>contrast(m,
+  a = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = 12),
+  b = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = 2),
+  cnames = c(&quot;before&quot;,&quot;after&quot;))</code></pre>
+<pre><code>       estimate     se  lower  upper tvalue df    pvalue
+before   -3.932 0.2249 -4.384 -3.481 -17.49 52 1.976e-23
+after    -2.779 0.2292 -3.239 -2.319 -12.12 52 8.936e-17</code></pre>
+<p>Expected gas consumption at 5C before and after insulation are <span class="math inline">\(\beta_0 + \beta_25\)</span> and <span class="math inline">\(\beta_0 + \beta_1 + (\beta_2 + \beta_3)5\)</span>. Inferences concerning these quantities can be obtained as follows.</p>
+<pre class="r"><code>lincon(m, a = c(1,0,5,0)) # b0 + b2 x 5</code></pre>
+<pre><code>            estimate      se lower upper tvalue df    pvalue
+(1,0,5,0),0    4.888 0.06383  4.76 5.016  76.57 52 3.885e-55</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,1,5,5)) # b0 + b1 + (b2 + b3)5</code></pre>
+<pre><code>            estimate      se lower upper tvalue df    pvalue
+(1,1,5,5),0    3.334 0.06024 3.213 3.455  55.35 52 6.772e-48</code></pre>
+<pre class="r"><code>contrast(m,
+  a = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = 5),
+  cnames = c(&quot;before @ 5C&quot;,&quot;after @ 5C&quot;))</code></pre>
+<pre><code>            estimate      se lower upper tvalue df    pvalue
+before @ 5C    4.888 0.06383 4.760 5.016  76.57 52 3.885e-55
+after @ 5C     3.334 0.06024 3.213 3.455  55.35 52 6.772e-48</code></pre>
+<p>The difference in expected gas consumption between before and after insulation at 5C is <span class="math inline">\(\beta_1 + \beta_35\)</span>. Inferences concerning this quantity can be obtained as follows.</p>
+<pre class="r"><code>lincon(m, a = c(0,1,0,5))</code></pre>
+<pre><code>            estimate      se lower  upper tvalue df    pvalue
+(0,1,0,5),0   -1.553 0.08777 -1.73 -1.377  -17.7 52 1.155e-23</code></pre>
+<pre class="r"><code>contrast(m,
+  a = list(Insul = &quot;After&quot;, Temp = 5),
+  b = list(Insul = &quot;Before&quot;, Temp = 5))</code></pre>
+<pre><code> estimate      se lower  upper tvalue df    pvalue
+   -1.553 0.08777 -1.73 -1.377  -17.7 52 1.155e-23</code></pre>
+<p>In many cases we can use either <code>lincon</code> or <code>contrast</code>. The latter is often easier to use since it does not require the user to work out the coefficients for the linear function of model parameters. But there are cases where <code>lincon</code> can do something that <code>contrast</code> cannot.</p>
+</div>
+<div id="computing-and-plotting-estimated-expected-responses" class="section level2">
+<h2>Computing and Plotting Estimated Expected Responses</h2>
+<p>Recall that we can use <code>contrast</code> to compute estimated expected responses at specified values of the explanatory variables.</p>
+<pre class="r"><code>contrast(m, a = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = -1),
+  cnames = c(&quot;before @ -1&quot;,&quot;after @ -1&quot;))</code></pre>
+<pre><code>            estimate     se lower upper tvalue df    pvalue
+before @ -1    7.247 0.1562 6.934 7.561  46.39 52 5.473e-44
+after @ -1     5.002 0.1384 4.724 5.280  36.13 52 1.640e-38</code></pre>
+<p>But to create several estimates of the expected response it is more convenient to use the <code>predict</code> function (so-called because an estimate of <span class="math inline">\(E(Y)\)</span> can be also be viewed as a <em>prediction</em> of the value of <span class="math inline">\(Y\)</span>). First let’s create a data frame where we’d like to obtain estimates of the expected response.</p>
+<pre class="r"><code>d &lt;- expand.grid(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = seq(-1, 11, by = 1))
+head(d)</code></pre>
+<pre><code>   Insul Temp
+1 Before   -1
+2  After   -1
+3 Before    0
+4  After    0
+5 Before    1
+6  After    1</code></pre>
+<pre class="r"><code>tail(d)</code></pre>
+<pre><code>    Insul Temp
+21 Before    9
+22  After    9
+23 Before   10
+24  After   10
+25 Before   11
+26  After   11</code></pre>
+<p>There are a couple of things to note here: the <code>expand.grid</code> function creates a data frame for <em>all combinations</em> of the values of the variables, and <code>seq</code> creates a <em>sequence</em> of values. For example,</p>
+<pre class="r"><code>seq(-1, 11, by = 2)     # sequence from -1 to 11 by increments of two</code></pre>
+<pre><code>[1] -1  1  3  5  7  9 11</code></pre>
+<pre class="r"><code>seq(-1, 11, length = 5) # sequence from -1 to 11 of five values</code></pre>
+<pre><code>[1] -1  2  5  8 11</code></pre>
+<p>The <code>predict</code> function can be used to compute the estimated expected response for each pseudo-observation.</p>
+<pre class="r"><code>d$ey &lt;- predict(m, newdata = d)
+head(d)</code></pre>
+<pre><code>   Insul Temp    ey
+1 Before   -1 7.247
+2  After   -1 5.002
+3 Before    0 6.854
+4  After    0 4.724
+5 Before    1 6.461
+6  After    1 4.446</code></pre>
+<p>Now let’s see if we can show expected gas consumption as a function of insulation and temperature. First we will plot the data.</p>
+<pre class="r"><code>library(ggplot2) 
+p &lt;- ggplot(whiteside, aes(x = Temp, y = Gas, color = Insul)) + geom_point()
+plot(p)</code></pre>
+<p><img src="lecture-01-24-2022_files/figure-html/unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;" /> Let’s change the aesthetic labels and the theme.</p>
+<pre class="r"><code>p &lt;- ggplot(whiteside, aes(x = Temp, y = Gas, color = Insul)) + geom_point() +
+  labs(x = &quot;Temperature (C)&quot;, y = &quot;Gas Consumption&quot;, color = &quot;Insulation&quot;) + 
+  theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-01-24-2022_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" /> Now we can add lines to represent expected gas consumption as a function of temperature and insulation. Note that we need to change the <code>y</code> variable and the data frame for this part.</p>
+<pre class="r"><code>p &lt;- ggplot(whiteside, aes(x = Temp, y = Gas, color = Insul)) + geom_point() +
+  labs(x = &quot;Temperature (C)&quot;, y = &quot;Gas Consumption&quot;, color = &quot;Insulation&quot;) + 
+  theme_minimal() + geom_line(aes(y = ey), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-01-24-2022_files/figure-html/unnamed-chunk-22-1.png" width="100%" style="display: block; margin: auto;" /> Note that you can do this in pieces, which might be easier to debug.</p>
+<pre class="r"><code>p &lt;- ggplot(whiteside, aes(x = Temp, y = Gas, color = Insul)) + geom_point() + 
+  labs(x = &quot;Temperature (C)&quot;, y = &quot;Gas Consumption&quot;, color = &quot;Insulation&quot;) + 
+  theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-01-24-2022_files/figure-html/unnamed-chunk-23-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p &lt;- p + geom_line(aes(y = ey), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-01-24-2022_files/figure-html/unnamed-chunk-23-2.png" width="100%" style="display: block; margin: auto;" /> Now consider the <code>anorexia</code> data and model from earlier.</p>
+<pre class="r"><code>m &lt;- lm(change ~ Treat, data = anorexia)
+contrast(m, a = list(Treat = c(&quot;CBT&quot;,&quot;FT&quot;,&quot;Cont&quot;)),
+  cnames = c(&quot;Cognitive-Behavioral&quot;,&quot;Family&quot;,&quot;Control&quot;))</code></pre>
+<pre><code>                     estimate    se  lower  upper  tvalue df    pvalue
+Cognitive-Behavioral    3.007 1.398  0.218  5.796  2.1509 69 0.0349920
+Family                  7.265 1.826  3.622 10.907  3.9787 69 0.0001688
+Control                -0.450 1.476 -3.395  2.495 -0.3048 69 0.7614470</code></pre>
+<pre class="r"><code>d &lt;- data.frame(Treat = c(&quot;CBT&quot;,&quot;FT&quot;,&quot;Cont&quot;))
+d$yhat &lt;- predict(m, newdata = d)
+d</code></pre>
+<pre><code>  Treat   yhat
+1   CBT  3.007
+2    FT  7.265
+3  Cont -0.450</code></pre>
+<p><strong>Note</strong>: We can use <code>data.frame</code> to create a data frame for generating estimated expected responses when there is just one explanatory variable. But if we want to create a data frame with various combinations of values of two or more explanatory variables it is easier to use <code>expand.grid</code>.</p>
+<p>Here is a plot of the raw data.</p>
+<pre class="r"><code>p &lt;- ggplot(anorexia, aes(x = Treat, y = change)) + theme_minimal() +
+  geom_point(alpha = 0.5) + labs(x = &quot;Treatment&quot;, y = &quot;Weight Change (lbs)&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-01-24-2022_files/figure-html/unnamed-chunk-25-1.png" width="100%" style="display: block; margin: auto;" /> Note the use of <code>alpha = 0.5</code> to control the transparency of the points. Now we can add the estimated expected responses.</p>
+<pre class="r"><code>p &lt;- p + geom_point(aes(y = yhat), data = d, shape = 21, size = 3, fill = &quot;white&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-01-24-2022_files/figure-html/unnamed-chunk-26-1.png" width="100%" style="display: block; margin: auto;" /> Hint: Try a Google image search for “R point shapes” to know what number to use. Shape numbers 21-25 let you separately specify the colors of the point fill and outline. For other aesthetics (e.g., size) you sometimes just have to experiment.</p>
+<p>Maybe that would look better sideways?</p>
+<pre class="r"><code>p &lt;- p + coord_flip()
+plot(p)</code></pre>
+<p><img src="lecture-01-24-2022_files/figure-html/unnamed-chunk-27-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The <code>contrast</code> function in the <strong>trtools</strong> package is modeled after functions of the same name in the <strong>contrast</strong> and <strong>rms</strong> packages. Mine has some features not found in those functions, but I did not incorporate all of the features in those functions either. You will also learn how to use functions from the <strong>emmeans</strong> package which have some functionality like that of <code>contrast</code> from the <strong>trtools</strong> package.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
