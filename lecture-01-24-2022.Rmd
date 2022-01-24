@@ -68,12 +68,12 @@ $$
   \beta_0 + \beta_2, & \text{if the treatment for the $i$-th observation is family therapy}.
   \end{cases}
 $$
-Suppose we want to make inferences about the difference in the expected weight change under the cognitive-behavioral and control conditions. Thus
+Suppose we want to make inferences about the difference in the expected weight change between the cognitive-behavioral and control conditions. We have that
 \begin{align*}
   E(Y_a) & = \beta_0, \\
   E(Y_b) & = \beta_0 + \beta_1,
 \end{align*}
-and 
+and so this difference is
 $$
   E(Y_a) - E(Y_b) = \beta_0 - (\beta_0 + \beta_1) = -\beta_1.
 $$
@@ -95,7 +95,7 @@ The `contrast` function can compute multiple contrasts at a time. Suppose we wan
 ```{r}
 contrast(m, a = list(Treat = c("CBT","FT")), b = list(Treat = "Cont"))
 ```
-`contrast` includes an optional `cnames` (contrast names) argument to label the output for clarity.
+Note that `contrast` includes an optional `cnames` (contrast names) argument to label the output for clarity.
 ```{r}
 contrast(m, 
   a = list(Treat = c("CBT","FT")), 

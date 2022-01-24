@@ -311,10 +311,10 @@ TreatFT        4.258      2.300   1.852  0.06838</code></pre>
   \beta_0 + \beta_1, &amp; \text{if the treatment for the $i$-th observation is control}, \\
   \beta_0 + \beta_2, &amp; \text{if the treatment for the $i$-th observation is family therapy}.
   \end{cases}
-\]</span> Suppose we want to make inferences about the difference in the expected weight change under the cognitive-behavioral and control conditions. Thus <span class="math display">\[\begin{align*}
+\]</span> Suppose we want to make inferences about the difference in the expected weight change between the cognitive-behavioral and control conditions. We have that <span class="math display">\[\begin{align*}
   E(Y_a) &amp; = \beta_0, \\
   E(Y_b) &amp; = \beta_0 + \beta_1,
-\end{align*}\]</span> and <span class="math display">\[
+\end{align*}\]</span> and so this difference is <span class="math display">\[
   E(Y_a) - E(Y_b) = \beta_0 - (\beta_0 + \beta_1) = -\beta_1.
 \]</span> Inferences concerning <span class="math inline">\(-\beta_1\)</span> can be made using <code>lincon</code> since this is a linear function of the model parameters: <span class="math display">\[
   \ell = 0 \times \beta_0 + (-1) \times \beta_1 + 0 \times \beta_2 = -\beta_1.
@@ -333,7 +333,7 @@ lincon(m, a = c(0,-1,0))</code></pre>
 <pre><code> estimate    se   lower  upper tvalue df   pvalue
     3.457 2.033 -0.5994  7.513  1.700 69 0.093608
     7.715 2.348  3.0302 12.399  3.285 69 0.001602</code></pre>
-<p><code>contrast</code> includes an optional <code>cnames</code> (contrast names) argument to label the output for clarity.</p>
+<p>Note that <code>contrast</code> includes an optional <code>cnames</code> (contrast names) argument to label the output for clarity.</p>
 <pre class="r"><code>contrast(m, 
   a = list(Treat = c(&quot;CBT&quot;,&quot;FT&quot;)), 
   b = list(Treat = &quot;Cont&quot;),
