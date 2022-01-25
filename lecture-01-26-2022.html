@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Monday, Jan 24</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Monday, Jan 24</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-01-24-2022.pdf">PDF</a> copy of this lecture.</p>
+<div id="parameter-estimation" class="section level2">
+<h2>Parameter Estimation</h2>
+<p>There are <em>many</em> ways to estimate the parameters of a regression model. One useful and common approach is to use the method of <em>least squares</em>.</p>
+<div id="least-squares-estimation-of-beta_0-beta_1-dots-beta_k" class="section level3">
+<h3>Least Squares Estimation of <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_k\)</span></h3>
+<p>Consider the linear model <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_k x_{ik}.
+\]</span> The <em>least squares estimates</em> of <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_p\)</span> are those values that minimize <span class="math display">\[
+    \sum_{i=1}^n (y_i - \mu_i)^2 = (y_1-\mu_1)^2 + (y_2-\mu_2)^2 + \cdots + (y_n-\mu_n)^2,
+\]</span> where <span class="math display">\[
+    \mu_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}.
+\]</span> These estimates are denoted as <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \dots, \hat{\beta}_k\)</span>. They are labeled under <code>Estimate</code> from the output of the <code>summary</code> function.</p>
+</div>
+<div id="estimation-of-a-linear-function-of-parameters" class="section level3">
+<h3>Estimation of a Linear Function of Parameters</h3>
+<p>Replacing <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_k\)</span> with <span class="math inline">\(\hat{\beta}_0, \hat{\beta}_1, \dots, \hat{\beta}_k\)</span> in <span class="math display">\[
+  \ell = a_0\beta_0 + a_1\beta_1 + \cdots + a_k\beta_k + b
+\]</span> gives the <em>estimate</em> of the linear function <span class="math inline">\(\ell\)</span>, <span class="math display">\[
+  \hat\ell = a_0\hat\beta_0 + a_1\hat\beta_1 + \cdots + a_k\hat\beta_k + b.
+\]</span> These estimates are labeled as <code>estimate</code> when using the <code>lincon</code> and <code>contrast</code> functions.</p>
+</div>
+<div id="estimation-of-the-response-variable-variance" class="section level3">
+<h3>Estimation of the Response Variable Variance</h3>
+<p>The typical linear model also has one additional parameter, the variance of <span class="math inline">\(Y_i\)</span> (denoted as <span class="math inline">\(\sigma^2\)</span>), which is assumed to be a constant (i.e., the same regardless of the values of the explanatory variables). The usual estimator of <span class="math inline">\(\sigma^2\)</span> is <span class="math display">\[
+  \hat\sigma^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n-k-1}.
+\]</span> The estimate of <span class="math inline">\(\sigma\)</span> (not <span class="math inline">\(\sigma^2\)</span>) is labeled as the “residual standard error” from the output of <code>summary</code>, and the “degrees of freedom”” associated with it is <span class="math inline">\(n-k-1\)</span> (more generally, this degrees of freedom is <span class="math inline">\(n\)</span> minus the number of <span class="math inline">\(\beta\)</span> parameters in the model so we would define it as <span class="math inline">\(n-p\)</span> where <span class="math inline">\(p\)</span> is the number of parameters other than <span class="math inline">\(\sigma^2\)</span>).</p>
+<p>Note: We sometimes make a distinction between an <em>estimator</em> (i.e., the formula/procedure that produces a <em>estimate</em>), and the <em>estimate</em> (i.e., a specific value produced by an <em>estimator</em>).</p>
+</div>
+</div>
+<div id="sampling-distributions" class="section level2">
+<h2>Sampling Distributions</h2>
+<p>A <strong>sampling distribution</strong> is the probability distribution of an estimator.</p>
+<p><strong>Example</strong>: Consider the model <span class="math inline">\(E(Y_i) = \beta_0\)</span>, and assume that <span class="math inline">\(\beta_0\)</span> = 50 and also that the standard deviation of <span class="math inline">\(Y_i\)</span> is <span class="math inline">\(\sigma\)</span> = 10. The probability distribution below shows the sampling distribution of <span class="math inline">\(\hat\beta_0\)</span>. <img src="lecture-01-26-2022_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" /> The figure below is a histogram of <span class="math inline">\(\hat\beta_0\)</span> from 1000 samples of <span class="math inline">\(n\)</span> = 25 observations <span class="math inline">\(Y_1, Y_2, \dots, Y_{25}\)</span>. <img src="lecture-01-26-2022_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>Example</strong>: Consider the model <span class="math inline">\(E(Y_i) = \beta_0 + \beta_1 x_i\)</span> where <span class="math inline">\(x_1\)</span> = 1, <span class="math inline">\(x_2\)</span> = 2, <span class="math inline">\(\dots\)</span>, <span class="math inline">\(x_{10}\)</span> = 10, <span class="math inline">\(\beta_0\)</span> = 5, <span class="math inline">\(\beta_1\)</span> = 1, and <span class="math inline">\(\sigma\)</span> = 1. The figure below shows the distribution of <span class="math inline">\(\hat\beta_0\)</span> and <span class="math inline">\(\hat\beta_1\)</span> from 10000 samples of observations of <span class="math inline">\(Y_1, Y_2, \dots, Y_{10}\)</span>.</p>
+<p><img src="lecture-01-26-2022_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Three properties of a sampling distribution are of interest.</p>
+<ol style="list-style-type: decimal">
+<li><p>The <strong>mean</strong> of a sampling distribution of an estimator (i.e., the <em>expected value</em> of the estimator). Ideally this is equal to the parameter we are estimating (in which case we the estimator is <em>unbiased</em>), or relatively close.</p></li>
+<li><p>The <strong>standard deviation</strong> of the sampling distribution of an estimator, which is referred to as the <strong>standard error</strong> of the estimator.</p></li>
+<li><p>The <strong>shape</strong> of the sampling distribution. Typically as <span class="math inline">\(n\)</span> increases the shape “approaches” that of a normal distribution.</p></li>
+</ol>
+</div>
+<div id="standard-errors" class="section level2">
+<h2>Standard Errors</h2>
+<p>We can often <em>estimate</em> standard errors of estimators of parameters or linear functions thereof. These are labeled as <code>Std. Error</code> in the output of the <code>summary</code> function, and as <code>se</code> in the output of the <code>lincon</code> and <code>contrast</code> functions.</p>
+<p><strong>Example</strong>: Consider the model for the <code>whiteside</code> data.</p>
+<pre class="r"><code>library(MASS) # contains the whiteside and anorexia data frames
+mgas &lt;- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+summary(mgas)$coefficients</code></pre>
+<pre><code>                Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)       6.8538    0.13596  50.409 7.997e-46
+InsulAfter       -2.1300    0.18009 -11.827 2.316e-16
+Temp             -0.3932    0.02249 -17.487 1.976e-23
+InsulAfter:Temp   0.1153    0.03211   3.591 7.307e-04</code></pre>
+<p>Recall that the model can be written as <span class="math display">\[
+  E(G_i) = \beta_0 + \beta_1 d_i + \beta_2 t_i + \beta_3 d_it_i,
+\]</span> where <span class="math inline">\(d_i\)</span> is an indicator variable for <em>after</em> insulation so that we can also write the model as <span class="math display">\[
+  E(G_i) = 
+  \begin{cases}
+    \beta_0 + \beta_2 t_i, &amp; \text{if the $i$-th observation is before insulation}, \\
+    \beta_0 + \beta_1 + (\beta_2 + \beta_3)t_i, &amp; \text{if the $i$-th observation is after insulation}.
+  \end{cases}
+\]</span> <em>Estimates</em> of the standard errors are reported by <code>summary</code>. Standard errors are also shown by <code>lincon</code> and <code>contrast</code>.</p>
+<pre class="r"><code>library(trtools)
+lincon(mgas, a = c(0,0,1,1)) # b2 + b3</code></pre>
+<pre><code>            estimate      se   lower   upper tvalue df    pvalue
+(0,0,1,1),0  -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
+<pre class="r"><code>contrast(mgas, 
+  a = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = 2),
+  b = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = 1),
+  cnames = c(&quot;before&quot;,&quot;after&quot;))</code></pre>
+<pre><code>       estimate      se   lower   upper tvalue df    pvalue
+before  -0.3932 0.02249 -0.4384 -0.3481 -17.49 52 1.976e-23
+after   -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
+<p>We can also obtain standard errors for estimating the expected weight change under each treatment condition for the <code>anorexia</code> study/model.</p>
+<pre class="r"><code>anorexia$change &lt;- anorexia$Postwt - anorexia$Prewt
+mwght &lt;- lm(change ~ Treat, data = anorexia)
+contrast(mwght, a = list(Treat = c(&quot;Cont&quot;,&quot;CBT&quot;,&quot;FT&quot;)), 
+  cnames = c(&quot;Control&quot;,&quot;Cognitive&quot;,&quot;Family&quot;))</code></pre>
+<pre><code>          estimate    se  lower  upper  tvalue df    pvalue
+Control     -0.450 1.476 -3.395  2.495 -0.3048 69 0.7614470
+Cognitive    3.007 1.398  0.218  5.796  2.1509 69 0.0349920
+Family       7.265 1.826  3.622 10.907  3.9787 69 0.0001688</code></pre>
+<p>Because the <em>shape</em> of a sampling distribution is usually approximately normal, we can say the following.</p>
+<ol style="list-style-type: decimal">
+<li><p>The <em>mean distance</em> between the parameter and the estimator is approximately <span class="math inline">\(\text{SE} \times \sqrt{2/\pi} \approx \text{SE} \times 0.8\)</span>.</p></li>
+<li><p>The <em>median distance</em> between the parameter and the estimator is approximately <span class="math inline">\(\text{SE} \times 0.67\)</span>.</p></li>
+<li><p>The <em>95th percentile</em> of the distance between the parameter and the estimator is approximately <span class="math inline">\(\text{SE} \times 1.96 \approx \text{SE} \times 2\)</span>.</p></li>
+</ol>
+<p>Note that all of these quantities are <em>proportional</em> to the standard error. Standard errors give us an idea of how (in)accurate a given estimator is for a given parameter in a given model for a given design — the larger the standard error the farther away the estimator will tend to be to the parameter (or function thereof) being estimated.</p>
+<p>Also note that in many cases the estimate and the (estimated) standard error are sufficient for computing both confidence intervals and test statistics as shown in the next two sections.</p>
+</div>
+<div id="confidence-intervals" class="section level2">
+<h2>Confidence Intervals</h2>
+<p>A <strong>confidence interval</strong> is an <em>interval estimator</em> (as opposed to a <em>point estimator</em> which is a single value) with the property that the estimator has a specified probability of being correct (i.e., the <em>confidence level</em> of the interval). Note that this probability is a property of the estimator, not an estimate.</p>
+<p>One common kind of confidence interval (sometimes called a <em>Wald</em> confidence interval) has the general form <span class="math display">\[
+  \text{estimator} \pm \text{multiplier} \times \text{standard error}.
+\]</span> For example, <span class="math display">\[
+  \hat\beta_j \pm t \times \mbox{SE}(\hat\beta_j)
+\]</span> where <span class="math inline">\(\mbox{SE}(\hat\beta_j)\)</span> is the (estimated) standard error of <span class="math inline">\(\hat\beta_j\)</span>, and <span class="math inline">\(t\)</span> is a “multiplier” to set the desired confidence level. Similarly a confidence interval for <span class="math inline">\(\ell\)</span> is <span class="math display">\[
+  \hat\ell \pm t \times \mbox{SE}(\hat\ell).
+\]</span> In R confidence intervals for model parameters can usually be computed by applying the <code>confint</code> function to the model object.</p>
+<pre class="r"><code>confint(mgas) # 95% confidence level is the default</code></pre>
+<pre><code>                   2.5 %  97.5 %
+(Intercept)      6.58100  7.1267
+InsulAfter      -2.49136 -1.7686
+Temp            -0.43836 -0.3481
+InsulAfter:Temp  0.05087  0.1797</code></pre>
+<pre class="r"><code>confint(mgas, level = 0.99) # 99% confidence level</code></pre>
+<pre><code>                   0.5 %  99.5 %
+(Intercept)      6.49030  7.2174
+InsulAfter      -2.61150 -1.6485
+Temp            -0.45336 -0.3331
+InsulAfter:Temp  0.02944  0.2012</code></pre>
+<p>For some compact output I often use <code>cbind</code> to append the confidence intervals to the output from <code>summary</code> as follows.</p>
+<pre class="r"><code>cbind(summary(mgas)$coefficients, confint(mgas))</code></pre>
+<pre><code>                Estimate Std. Error t value  Pr(&gt;|t|)    2.5 %  97.5 %
+(Intercept)       6.8538    0.13596  50.409 7.997e-46  6.58100  7.1267
+InsulAfter       -2.1300    0.18009 -11.827 2.316e-16 -2.49136 -1.7686
+Temp             -0.3932    0.02249 -17.487 1.976e-23 -0.43836 -0.3481
+InsulAfter:Temp   0.1153    0.03211   3.591 7.307e-04  0.05087  0.1797</code></pre>
+<p>Note that other functions like <code>lincon</code> and <code>contrast</code> provide confidence intervals by default.</p>
+<pre class="r"><code>lincon(mgas, a = c(0,0,1,1)) # b2 + b3</code></pre>
+<pre><code>            estimate      se   lower   upper tvalue df    pvalue
+(0,0,1,1),0  -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
+<pre class="r"><code>contrast(mgas, 
+  a = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = 2),
+  b = list(Insul = c(&quot;Before&quot;,&quot;After&quot;), Temp = 1),
+  cnames = c(&quot;before&quot;,&quot;after&quot;))</code></pre>
+<pre><code>       estimate      se   lower   upper tvalue df    pvalue
+before  -0.3932 0.02249 -0.4384 -0.3481 -17.49 52 1.976e-23
+after   -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
+<p>They also have a default confidence level of 95%, and will accept a <code>level</code> argument to specify other confidence levels.</p>
+</div>
+<div id="significance-tests" class="section level2">
+<h2>Significance Tests</h2>
+<p>We consider four components to a given significance test: <em>hypotheses</em>, <em>test statistics</em>, <em><span class="math inline">\(p\)</span>-values</em>, and a <em>decision rule</em>.</p>
+<div id="hypotheses" class="section level3">
+<h3>Hypotheses</h3>
+<p>A significance test for a single parameter concerns a pair of hypotheses such as <span class="math display">\[
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j \neq c, 
+\]</span> or <span class="math display">\[
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j &gt; c, 
+\]</span> or <span class="math display">\[
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j &lt; c,
+\]</span> where <span class="math inline">\(c\)</span> is some specified value (often but not necessarily zero). Similarly we can have hypotheses concerning <span class="math inline">\(\ell\)</span> by replacing <span class="math inline">\(\beta_j\)</span> with <span class="math inline">\(\ell\)</span> in the above statement such as <span class="math display">\[
+  H_0\!: \ell = c \ \ \text{and} \ \ H_a\!: \ell \neq c.
+\]</span> Tests that are reported by default by functions like <code>summary</code>, <code>lincon</code>, and <code>contrast</code> are for the two-sided null hypothesis with <span class="math inline">\(c = 0\)</span> so that the hypotheses are <span class="math inline">\(H_0\!:\beta_j = 0\)</span> versus <span class="math inline">\(H_a\!:\beta_j \neq 0\)</span> (as when using <code>summary</code>) or <span class="math inline">\(H_0\!: \ell = 0\)</span> versus <span class="math inline">\(H_a\!: \ell \neq 0\)</span> (as when using <code>lincon</code> or <code>contrast</code>).</p>
+</div>
+<div id="test-statistics" class="section level3">
+<h3>Test Statistics</h3>
+<p>Assuming <span class="math inline">\(H_0\)</span> is <em>true</em>, the <strong>test statistics</strong> <span class="math display">\[
+  t = \frac{\hat\beta_j - \beta_j}{\text{SE}(\hat\beta_j)}
+\]</span> and <span class="math display">\[
+  t = \frac{\hat\ell - \ell}{\text{SE}(\hat\ell)}
+\]</span> have an approximate <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n - p\)</span> degrees of freedom (usually denoted as <code>df</code> in output, where <span class="math inline">\(p\)</span> is the number of <span class="math inline">\(\beta_j\)</span> parameters). Note that <span class="math inline">\(\beta_j\)</span> and <span class="math inline">\(\ell\)</span> are the values of these quantities hypothesized by the <em>null</em> hypothesis.</p>
+</div>
+<div id="p-values" class="section level3">
+<h3>P-Values</h3>
+<p>The <span class="math inline">\(p\)</span>-value is the probability of a value of the test statistic <em>as or more extreme than the observed value, assuming <span class="math inline">\(H_0\)</span> is true</em>. What is <em>as or more extreme</em> is decided by <span class="math inline">\(H_a\)</span>: <span class="math display">\[
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j \neq c \Rightarrow \text{$p$-value} = P(|t| \ge t_{\text{obs}}|H_0),
+\]</span> or <span class="math display">\[
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j &gt; c \Rightarrow \text{$p$-value} = P(t \ge t_{\text{obs}}|H_0),
+\]</span> or <span class="math display">\[
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j &lt; c \Rightarrow \text{$p$-value} = P(t \le t_{\text{obs}}|H_0),
+\]</span> where <span class="math inline">\(t_{\text{obs}}\)</span> is the observed/computed value of the <span class="math inline">\(t\)</span> test statistic.</p>
+<p>Note: Software typically produces the following: (a) a test with a null hypothesis where <span class="math inline">\(\beta_j = 0\)</span> of <span class="math inline">\(\ell = 0\)</span>, and (b) p-values only for <em>two-sided/tailed</em> tests. This is true of <code>summary</code>, <code>lincon</code>, and <code>contrast</code>. But the p-value for a <em>one-sided/tailed</em> test can be obtained as half of the p-value for the two-sided/tailed test (assuming that <span class="math inline">\(t_{\text{obs}}\)</span>) is in the direction hypothesized by <span class="math inline">\(H_a\)</span>.</p>
+<p>A <em>composite</em> null hypothesis such as <span class="math display">\[
+  H_0\!: \beta_j \le c \ \ \text{and} \ \ H_a\!: \beta_j &gt; c, 
+\]</span> or <span class="math display">\[
+  H_0\!: \ell \le c \ \ \text{and} \ \ H_a\!: \ell &gt; c, 
+\]</span> can be done by assuming the equality under the null (e.g., <span class="math inline">\(\beta_j = c\)</span> or <span class="math inline">\(\ell = c\)</span>), and interpreting the computed p-value as the <em>upper bound</em> on the p-value.</p>
+</div>
+<div id="decision-rule" class="section level3">
+<h3>Decision Rule</h3>
+<p>The decision rule for a significance test is always <span class="math display">\[
+  \text{$p$-value} \le \alpha \Rightarrow \text{reject $H_0$}, \ \ 
+  \text{$p$-value} &gt; \alpha \Rightarrow \text{do not reject $H_0$},
+\]</span> for some specified significance level <span class="math inline">\(0 &lt; \alpha &lt; 1\)</span> (frequently <span class="math inline">\(\alpha\)</span> = 0.05).</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

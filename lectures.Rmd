@@ -34,7 +34,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Contrasts and estimated expected responses, and plotting estimated expected responses](lecture-01-24-2022.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Least squares estimators, sampling distributions, standard errors, confidence intervals, and tests](lecture-01-26-2022.html).
 
 `r i <- i + 1; d[i]` 
  
