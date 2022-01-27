@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Sampling Distributions</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Sampling Distributions</h1>
+
+</div>
+
+
+<p>You can also download a <a href="sampdist.pdf">PDF</a> copy of this document.</p>
+<div id="no-explanatory-variables" class="section level3">
+<h3>No Explanatory Variables</h3>
+<p>Consider a regression model with <em>no</em> explanatory variables such that <span class="math display">\[
+   E(Y_i) = \beta_0.
+\]</span> It can be shown that the least squares estimator of <span class="math inline">\(\beta_0\)</span> is simply the sample mean of the observations, <span class="math display">\[
+   \hat\beta_0 = \frac{1}{n}\sum_{i=1}^n y_i.
+\]</span> That is, <span class="math inline">\(\hat\beta_0 = \bar{y}\)</span>. If certain assumptions about the model are correct, then it can also be shown that the <em>sampling</em> distribution of <span class="math inline">\(\hat\beta_0\)</span> is approximately normal in shape, <span class="math display">\[
+   E(\hat\beta_0) = \beta_0,
+\]</span> meaning that the mean of <span class="math inline">\(\hat\beta_0\)</span> equals <span class="math inline">\(\beta_0\)</span> (i.e., <span class="math inline">\(\hat\beta_0\)</span> is an <em>unbiased estimator</em>), and <span class="math display">\[
+   \text{Var}(\hat\beta_0) = \sigma^2/n,
+\]</span> where <span class="math inline">\(\sigma^2\)</span> is the variance of the response variable <span class="math inline">\(Y_i\)</span>. Thus the <em>standard error</em> is <span class="math display">\[
+   \sqrt{\text{Var}(\hat\beta_0)} = \sigma/\sqrt{n}.
+\]</span> The plot below shows the sampling distribution of <span class="math inline">\(\hat\beta_0\)</span> <img src="sampdist_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" /> The standard error <span class="math inline">\(\sigma/\sqrt{n}\)</span> cannot be computed since <span class="math inline">\(\sigma\)</span> is unknown, but we can estimate <span class="math inline">\(\sigma\)</span> with the estimator <span class="math display">\[
+   \hat\sigma = \sqrt{\frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n-k-1}},
+\]</span> where <span class="math inline">\(\hat{y}_i = \hat\beta_0\)</span> and <span class="math inline">\(k\)</span> is the number of explanatory variables so <span class="math inline">\(k = 0\)</span> here. The confidence interval for <span class="math inline">\(\hat\beta_0\)</span> is computed as <span class="math display">\[
+   \hat\beta_0 \pm t\frac{\hat\sigma}{\sqrt{n}},
+\]</span> where <span class="math inline">\(t\)</span> is a value from the <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n - k - 1 = n - 1\)</span> (because <span class="math inline">\(k = 0\)</span>) degrees of freedom to specify the desired confidence level. A test of the null hypothesis <span class="math inline">\(H_0: \beta_0 = c\)</span> for some number <span class="math inline">\(c\)</span> would use the test statistic <span class="math display">\[
+   t = \frac{\hat\beta_0 - c}{\hat\sigma/\sqrt{n}}.
+\]</span> The <span class="math inline">\(p\)</span>-value is computed using the <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n - 1\)</span> degrees of freedom. If we change the notation by replacing <span class="math inline">\(\beta_0\)</span> with <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\hat\beta_0\)</span> with <span class="math inline">\(\bar{y}\)</span> then you have a confidence interval and test statistic for inferences about <span class="math inline">\(\mu\)</span> based on a single sample of observations — typically the first examples of inference that are seen in an introductory statistic course. The estimated standard error and test statistic shown above would be shown by the <code>summary</code> function, where the test statistic is for the null hypothesis that <span class="math inline">\(\beta_0 = 0\)</span>. The confidence interval shown above is reported by the function <code>confint</code>.</p>
+</div>
+<div id="simple-linear-regression" class="section level3">
+<h3>Simple Linear Regression</h3>
+<p>Now consider a regression model with one explanatory variable so that <span class="math display">\[
+   E(Y_i) = \beta_0 + \beta_1x_i.
+\]</span> It can be shown that the least squares estimators of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> can be written as <span class="math display">\[
+   \hat\beta_0 = \bar{y} - \hat\beta_1\bar{x},
+\]</span> and <span class="math display">\[
+   \hat\beta_1 = \frac{\sum_{i=1}^n(y_i - \bar{y})(x_i - \bar{x})}{\sum_{i=1}^n(x_i-\bar{x})^2}.
+\]</span> These estimates are shown by <code>summary</code>. Furthermore, if certain assumptions are met, it can be shown that <span class="math inline">\(\hat\beta_0\)</span> and <span class="math inline">\(\hat\beta_1\)</span> each have an approximate normal distribution, that these two estimators have means equal to the parameter being estimated meaning that <span class="math inline">\(E(\hat\beta_0) = \beta_0\)</span> and <span class="math inline">\(E(\hat\beta_1) = \beta_1\)</span>, and that the variances of these two estimators are <span class="math display">\[
+   \text{Var}(\hat\beta_0) = \sigma^2\left[\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n(x_i - \bar{x})^2}\right],
+\]</span> and <span class="math display">\[
+   \text{Var}(\hat\beta_1) = \frac{\sigma^2}{\sum_{i=1}^n(x_i - \bar{x})^2}.
+\]</span> The <em>standard errors</em> of <span class="math inline">\(\hat\beta_0\)</span> and <span class="math inline">\(\hat\beta_1\)</span> are then then <span class="math display">\[
+   \sqrt{\text{Var}(\hat\beta_0)} = \sigma\sqrt{\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n(x_i - \bar{x})^2}},
+\]</span> and <span class="math display">\[
+   \sqrt{\text{Var}(\hat\beta_1)} = \frac{\sigma}{\sqrt{\sum_{i=1}^n(x_i - \bar{x})^2}}.
+\]</span> So the sampling distribution of <span class="math inline">\(\hat\beta_1\)</span>, for example, would look like the following. <img src="sampdist_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" /> Again, since <span class="math inline">\(\sigma\)</span> is unknown, these standard errors are <em>estimated</em> by estimating <span class="math inline">\(\sigma\)</span> with <span class="math display">\[
+   \hat\sigma = \sqrt{\frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n-k-1}},
+\]</span> where now <span class="math inline">\(k = 2\)</span>. These estimated standard errors are what are shown by <code>summary</code>. The test statistics shown by <code>summary</code> are computed as <span class="math display">\[
+   t = \frac{\hat\beta_0 - c}{\hat\sigma\sqrt{\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n(x_i - \bar{x})^2}}},
+\]</span> and <span class="math display">\[
+   t = \frac{\hat\beta_1 - c}{\hat\sigma/\sqrt{\sum_{i=1}^n(x_i - \bar{x})^2}},
+\]</span> These are the test statistics for the null hypotheses that <span class="math inline">\(\beta_0 = c\)</span> and <span class="math inline">\(\beta_1 = c\)</span>, respectively, but <code>summary</code> only shows the test statistics for when <span class="math inline">\(c = 0\)</span>. The confidence intervals for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> shown by <code>confint</code> are computed as <span class="math display">\[
+   \hat\beta_0 \pm t\hat\sigma\sqrt{\frac{1}{n} + \frac{\bar{x}^2}{\sum_{i=1}^n(x_i - \bar{x})^2}}
+\]</span> and <span class="math display">\[
+   \hat\beta_1 \pm t\frac{\hat\sigma}{\sqrt{\sum_{i=1}^n(x_i - \bar{x})^2}}.
+\]</span></p>
+</div>
+<div id="more-than-two-explanatory-variables-and-linear-combinations" class="section level3">
+<h3>More than Two Explanatory Variables and Linear Combinations</h3>
+<p>Expressions for the least squares estimators and the variances and standard errors of those estimators in the case of two or more explanatory variables are very tedious to write without using matrix algebra. This is also true for the variances and standard errors of many estimators based on linear combinations.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
