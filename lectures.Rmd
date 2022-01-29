@@ -40,7 +40,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [In-class exercise on specifying and using linear models](lecture-01-31-2022.html).
 
 `r i <- i + 1; d[i]` 
 
