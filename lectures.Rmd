@@ -12,7 +12,8 @@ knitr::opts_chunk$set(echo = FALSE)
 ```{r, message = FALSE}
 library(lubridate)
 d <- dmy("10-01-2022","12-01-2022","14-01-2022") + rep(7 * c(0:17), each = 3)
-d <- paste(wday(d, label = TRUE, abbr = FALSE), ", ", month(d, label = TRUE), " ", day(d), ".", sep = "")
+d <- paste(wday(d, label = TRUE, abbr = FALSE), ", ", 
+  month(d, label = TRUE), " ", day(d), ".", sep = "")
 i <- 1
 ```
 
@@ -40,7 +41,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` [In-class exercise on specifying and using linear models](lecture-01-31-2022.html).
+`r i <- i + 1; d[i]` [In-class exercise on specifying and using linear models](lecture-01-31-2022.html). The first [homework assignment](hw1.html) is now available.
 
 `r i <- i + 1; d[i]` 
 
