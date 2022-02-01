@@ -43,7 +43,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [In-class exercise on specifying and using linear models](lecture-01-31-2022.html). The first [homework assignment](hw1.html) is now available.
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Estimated expected responses, prediction, and visualization](lecture-02-02-2022.html).
 
 `r i <- i + 1; d[i]` 
  
