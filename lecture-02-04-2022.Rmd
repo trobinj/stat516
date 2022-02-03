@@ -1,0 +1,408 @@
+---
+output:
+  html_document:
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "02-04-2022"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+  - \usepackage{array}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"), warning = FALSE)
+```
+
+```{r packages, echo = FALSE}
+library(ggplot2)
+library(trtools)
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+```{r options, echo = FALSE}
+options(digits = 4)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+## Marginal Means
+
+A *marginal mean* is effectively an average of expected responses. The **emmeans** package is particularly useful for making inferences about marginal means. 
+
+**Example**: Consider again the data from the platy fish study.
+```{r}
+m <- lm(Percentage ~ Pair, data = Sleuth3::case0602)
+summary(m)$coefficients
+```
+We see that there are indicator variables for male pairs 2-6. The model can be written as
+$$
+  E(Y_i) = 
+  \begin{cases}
+    \beta_0, & \text{if the $i$-th observation was from the first male pair}, \\ 
+    \beta_0 + \beta_1, & \text{if the $i$-th observation was from the second male pair}, \\ 
+    \beta_0 + \beta_2, & \text{if the $i$-th observation was from the third male pair}, \\ 
+    \beta_0 + \beta_3, & \text{if the $i$-th observation was from the fourth male pair}, \\ 
+    \beta_0 + \beta_4, & \text{if the $i$-th observation was from the fifth male pair}, \\ 
+    \beta_0 + \beta_5, & \text{if the $i$-th observation was from the sixth male pair}. \\ 
+  \end{cases}
+$$
+We can use `contrast` to estimate the expected response for each pair.
+```{r, eval = FALSE}
+contrast(m, a = list(Pair = paste("Pair", 1:6, sep = "")), 
+   cnames = paste("Pair", 1:6, sep = ""))
+```
+```{r, echo = FALSE}
+trtools::contrast(m, a = list(Pair = paste("Pair", 1:6, sep = "")), 
+   cnames = paste("Pair", 1:6, sep = ""))
+```
+Note how I used a shortcut to specify the pairs.
+```{r}
+paste("Pair", 1:6, sep = "")
+```
+
+This can also be done using the `emmeans` function from the package **emmeans**.
+```{r}
+library(emmeans)
+emmeans(m, ~ Pair)
+```
+**Warning**: The **emmeans** package contains a function called `contrast` which is not the same as the function of the same name in the **trtools** package, resulting in a namespace conflict if both packages are loaded. If you have both packages loaded in a given session, use `trtools::contrast` and `emmeans::contrast` to refer to a given function. 
+
+Denote the six expected responses (one for each pair) as 
+\begin{align*}
+  \mu_1 & = \beta_0, \\
+  \mu_2 & = \beta_0 + \beta_1, \\
+  \mu_3 & = \beta_0 + \beta_2, \\
+  \mu_4 & = \beta_0 + \beta_3, \\ 
+  \mu_5 & = \beta_0 + \beta_4, \\
+  \mu_6 & = \beta_0 + \beta_5.
+\end{align*}
+One marginal mean would be the average expected response across the pairs. This could be written as 
+$$
+  \mu = \frac{\mu_1 + \mu_2 + \mu_3 + \mu_4 + \mu_5 + \mu_6}{6} = 
+    \beta_0 + \tfrac{1}{6}\beta_1 + \tfrac{1}{6}\beta_2 + \tfrac{1}{6}\beta_3 + \tfrac{1}{6}\beta_4 + \tfrac{1}{6}\beta_5.
+$$
+We can estimate this quantity with `lincon`. 
+```{r}
+lincon(m, a = c(1,1/6,1/6,1/6,1/6,1/6))
+```
+We can also use `emmeans`.
+```{r}
+emmeans(m, ~ 1)
+```
+Note that we can use the confidence interval to test the null hypothesis that $\mu$ = 50. For a test statistic and p-value for this test we could write this as 
+$$
+  \mu = 50 \Leftrightarrow \beta_0 + \tfrac{1}{6}\beta_1 + \tfrac{1}{6}\beta_2 + \tfrac{1}{6}\beta_3 + \tfrac{1}{6}\beta_4 + \tfrac{1}{6}\beta_5 = 50 \Leftrightarrow \beta_0 + \tfrac{1}{6}\beta_1 + \tfrac{1}{6}\beta_2 + \tfrac{1}{6}\beta_3 + \tfrac{1}{6}\beta_4 + \tfrac{1}{6}\beta_5 - 50 = 0.
+$$
+Here is how we can do that with `lincon`.
+```{r}
+lincon(m, a = c(1,1/6,1/6,1/6,1/6,1/6), b = -50)
+```
+Here is how we do it with `emmeans`. 
+```{r}
+emmeans(m, ~ 1, offset = -50, infer = TRUE)
+```
+By *not* listing an explanatory variable on the right-hand side of `~`, we are asking that `emmeans` average over that explanatory variable. Also note that the argument `infer = TRUE` makes the `emmeans` function provide both confidence intervals as well as tests.
+
+**Example**: Consider the following data from a stratified random sampling using 0.1ha circular plots from three strata: softwood, mixed, and hardwood.
+```{r, fig.height = 2}
+library(trtools) # contains the bole data frame
+p <- ggplot(bole, aes(x = stratum, y = volume)) + theme_minimal() + 
+  geom_dotplot(binaxis = "y", stackdir = "center", binwidth = 0.1) +
+  labs(y = "Volume (cubic meters)", x = NULL) + coord_flip()
+plot(p)
+```
+Here is a basic linear model for these data.
+```{r}
+m <- lm(volume ~ stratum, data = bole)
+summary(m)$coefficients
+```
+So the model is $E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2}$ where 
+$$
+    x_{i1} = 
+    \begin{cases}
+        1, & \text{if the $i$-th observation is from the mixed stratum}, \\
+        0, & \text{otherwise},
+    \end{cases}
+$$
+and 
+$$
+    x_{i2} = 
+    \begin{cases}
+        1, & \text{if the $i$-th observation is from the softwood stratum}, \\
+        0, & \text{otherwise}.
+    \end{cases}
+$$
+So we can write the model case-wise as
+$$
+    E(Y_i) = 
+    \begin{cases}
+        \beta_0, & \text{if the $i$-th observation is from the hardwood stratum}, \\
+        \beta_0 + \beta_1, & \text{if the $i$-th observation is from the mixed stratum}, \\
+        \beta_0 + \beta_2, & \text{if the $i$-th observation is from the softwood stratum}.
+    \end{cases}
+$$
+The areas of the hardwood, mixed, and softwood strata are 32435ha, 17250ha, and 42541ha, respectively, and the total area is 92226ha. Let $\mu_h$, $\mu_m$, and $\mu_s$ denote the expected volume of a 0.1ha plot sampled from the hardwood, mixed, and softwood strata, respectively. So we have that
+$$
+  \mu_h = \beta_0, \ \ \mu_m = \beta_0 + \beta_1, \ \ \mu_s = \beta_0 + \beta_2.
+$$
+These are also the mean volume per 0.1ha for each stratum. The mean volume per 0.1ha for the whole forest is then the weighted average
+$$
+  \mu = \tfrac{32435}{92226}\mu_h + \tfrac{17250}{92226}\mu_m + \tfrac{42541}{92226}\mu_s = 
+  \beta_0 + \tfrac{17250}{92226}\beta_1 + \tfrac{42541}{92226}\beta_2.
+$$
+We can use `lincon` or `emmeans` to make inferences.
+```{r}
+lincon(m, a = c(1, 17250/92226, 42541/92226))
+```
+Note: The coefficients that are output by `lincon` are the same but simplified. 
+```{r}
+emmeans(m, ~ 1, weights = c(32436/92226, 17250/92226, 42541/92226))
+```
+Note that it is important that the weights are specified in the correct order. There area a couple ways to check this. 
+```{r}
+levels(bole$stratum)
+emmeans(m, ~ 1, weights = "show.levels")
+```
+The `emmeans` function can also be used to make inferences about the differences between pairs of expected responses.
+```{r}
+contrast(emmeans(m, ~ stratum), method = "pairwise", adjust = "none")
+```
+You can also use `contrast` but it is a bit more tedious. 
+```{r}
+trtools::contrast(m,
+    a = list(stratum = c("hardwood","hardwood","mixed")),
+    b = list(stratum = c("mixed","softwood","softwood")),
+    cnames = c("hardwood - mixed","hardwood - softwood","mixed - softwood"))
+```
+The `adjust = "none"` option for `pairs` specifies that no adjustment be made to confidence intervals or tests for the family-wise Type I error rate.[^adjust]
+
+[^adjust]: The family-wise Type I error rate is the probability of making *at least one* Type I error. If it is desired that the family-wise Type I error rate be no greater than $\alpha$ (default is 0.05), then some adjustment can be made. This adjustment is seen in the p-values and confidence intervals. The most general method is to use `adjust = "mvt"`. Some special cases are more widely known such as Tukey (`adjust = "tukey"`) and Bonferroni (`adjust = "bonferroni"`), but the adjustment based on the multivariate $t$-distribution (`adjust = "mvt"`) is the most general and accurate. Note that an adjustment will produce "simultaneous" confidence intervals. A method of producing simultaneous confidence intervals has the property that the probability that *all* of the confidence intervals will contain the quantities being estimated is equal to the specified confidence level (95% by default). The multivariate $t$-distribution adjustment is perhaps not as well known, so a reference that you can cite is Edwards, D. & Berry, J. T. (1987). The efficiency of simulation-based multiple comparisons. *Biometrics*, *43(4)*, 913--928.
+
+## Marginal Means and "Main Effects"
+
+Consider data from a randomized experiment with guinea pigs administered one of three doses of vitamin C (0.5, 1, or 2 mg/day) via one of two supplement methods: orange juice (OJ) or ascorbic acid (VC).  
+```{r}
+p <- ggplot(ToothGrowth, aes(x = dose, y = len)) + 
+  geom_point(alpha = 0.5) + facet_wrap(~supp) + 
+  labs(x = "Dose (mg/day)", y = "Odontoblast Length") + theme_minimal()
+plot(p)
+```
+Here we are going to model dose as a categorical variable so we need to coerce it to a factor. Perhaps the safest approach is to create a new variable.
+```{r}
+ToothGrowth$dosef <- factor(ToothGrowth$dose)
+```
+Note: Whether a variable is a numeric, a factor, or something else can be seen use `str` (for "structure").
+```{r}
+str(ToothGrowth)
+```
+Notice that `ggplot` responds differently.
+```{r}
+summary(ToothGrowth)
+p <- ggplot(ToothGrowth, aes(x = dosef, y = len)) + 
+  geom_point(alpha = 0.5) + facet_wrap(~supp) + 
+  labs(x = "Dose (mg/day)", y = "Odontoblast Length") + theme_minimal()
+plot(p)
+```
+Now consider the following linear model.
+```{r}
+m <- lm(len ~ dosef + supp + dosef:supp, data = ToothGrowth)
+summary(m)$coefficients
+```
+The model is 
+$$
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3} + \beta_4 x_{i4} + \beta_5 x_{i5},
+$$
+where 
+$$
+  x_{i1} = 
+  \begin{cases}
+    1, & \text{if dose is 1 mg/day}, \\
+    0, & \text{otherwise},
+  \end{cases}
+$$
+$$
+  x_{i2} = 
+  \begin{cases}
+    1, & \text{if dose is 2 mg/day}, \\
+    0, & \text{otherwise},
+  \end{cases}
+$$
+$$
+  x_{i3} = 
+  \begin{cases}
+    1, & \text{if supplement type is VC} \\
+    0, & \text{otherwise},
+  \end{cases}
+$$
+$$
+  x_{i4} = x_{i1}x_{i3} =  
+  \begin{cases}
+    1, & \text{if dose is 1 mg/day and supplement type is VC}, \\
+    0, & \text{otherwise},
+  \end{cases}
+$$
+$$
+  x_{i5} = x_{i2}x_{i3} =  
+  \begin{cases}
+    1, & \text{if dose is 2 mg/day and supplement type is VC}, \\
+    0, & \text{otherwise}.
+  \end{cases}
+$$
+
+
+We can write this model case-wise.
+$$
+  E(Y_i) = 
+  \begin{cases}
+    \beta_0, & \text{if dose is 0.5 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_1, & \text{if dose is 1 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_2, & \text{if dose is 2 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_3, & \text{if dose is 0.5 mg/day and supplement type is VC}, \\
+    \beta_0 + \beta_1 + \beta_3 + \beta_4, & \text{if dose is 1 mg/day and supplement type is VC}, \\
+    \beta_0 + \beta_2 + \beta_3 + \beta_5, & \text{if dose is 2 mg/day and supplement type is VC}. \\
+  \end{cases}
+$$
+And we can visualize it.
+```{r}
+d <- expand.grid(dosef = levels(ToothGrowth$dosef), supp = levels(ToothGrowth$supp))
+d$yhat <- predict(m, newdata = d)
+
+p <- ggplot(ToothGrowth, aes(x = dosef, y = len, color = supp)) + 
+  geom_point(alpha = 0.5) + theme_classic() + 
+  theme(legend.position = c(0.8,0.2)) + 
+  geom_point(aes(y = yhat), size = 2, data = d) + 
+  geom_line(aes(y = yhat, group = supp), data = d) + 
+  labs(x = "Dose (mg/day)", y = "Odontoblast Length", color = "Supplement Type")
+plot(p)
+```
+We might want to compare the two supplement types at each dose level. These are sometimes called simple effects. We can do this using `contrast`.
+```{r}
+trtools::contrast(m,
+    a = list(supp = "OJ", dosef = c("0.5","1","2")),
+    b = list(supp = "VC", dosef = c("0.5","1","2")),
+    cnames = c("OJ-VC @ 0.5 mg/day","OJ-VC @ 1.0 mg/day","OJ-VC @ 2.0 mg/day"))
+```
+We can also do this use `emmeans`. First note that we can use `emmeans` to also estimate the expected response for each level of `supp` within each level of `dosef`.
+```{r}
+emmeans(m, ~ supp | dosef)
+```
+We can use `pairs` to make inferences about the differences between levels of `supp` within each level of `dosef`.
+```{r}
+pairs(emmeans(m, ~ supp | dosef), adjust = "none", infer = TRUE)
+```
+The "main effect" of supplement method concerns $\mu_{\text{OJ}}$ and $\mu_{\text{VC}}$, defined as
+$$
+    \mu_{\text{OJ}} = \frac{\mu_{\text{OJ,0.5}} + \mu_{\text{OJ},1.0} + \mu_{\text{OJ},2.0}}{3}, \ \ \ \mu_{\text{VC}} = \frac{\mu_{\text{VC,0.5}} + \mu_{\text{VC},1.0} + \mu_{\text{OJ},2.0}}{3}.
+$$
+So $\mu_{\text{OJ}}$ and $\mu_{\text{VC}}$ are the *marginal means* for `supp`, averaging over levels of `dose`. 
+```{r}
+emmeans(m, ~ supp)
+```
+Inference for the main effect $\mu_{\text{OJ}} - \mu_{\text{VC}}$ can then be obtained as follows.
+```{r}
+pairs(emmeans(m, ~ supp), infer = TRUE)
+```
+This main effect is simply a single linear function of $\beta_0, \beta_1, \dots, \beta_5$. From the case-wise representation of the model,
+$$
+  E(Y_i) = 
+  \begin{cases}
+    \beta_0, & \text{if dose is 0.5 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_1, & \text{if dose is 1 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_2, & \text{if dose is 2 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_3, & \text{if dose is 0.5 mg/day and supplement type is VC}, \\
+    \beta_0 + \beta_1 + \beta_3 + \beta_4, & \text{if dose is 1 mg/day and supplement type is VC}, \\
+    \beta_0 + \beta_2 + \beta_3 + \beta_5, & \text{if dose is 2 mg/day and supplement type is VC}, \\
+  \end{cases}
+$$
+we have that $\mu_{\text{OJ,0.5}} = \beta_0$, $\mu_{\text{OJ,1.0}} = \beta_0 + \beta_1$, $\mu_{\text{OJ,2.0}} = \beta_0 + \beta_3$, $\mu_{\text{VC,0.5}} = \beta_0 + \beta_3$, $\mu_{\text{VC,1.0}} = \beta_0 + \beta_1 + \beta_3 + \beta_4$, $\mu_{\text{VC,2.0}} = \beta_0 + \beta_1 + \beta_3 + \beta_5$. So, we can write this as
+$$
+  \mu_{\text{OJ}} - \mu_{\text{VC}} = \frac{\mu_{\text{OJ,0.5}} + \mu_{\text{OJ},1.0} + \mu_{\text{OJ},2.0}}{3} - \frac{\mu_{\text{VC,0.5}} + \mu_{\text{VC},1.0} + \mu_{\text{OJ},2.0}}{3} = -\beta_3 - \frac{1}{3}\beta_4 - \frac{1}{3}\beta_5.
+$$
+```{r}
+lincon(m, a = c(0,0,0,-1,-1/3,-1/3))
+```
+Clearly using `emmeans` is much less tedious!
+
+The "main effect" of dose concerns differences among the marginal means of dose defined as $\mu_{0.5}$, $\mu_{1}$ and $\mu_{2}$ where 
+$$
+    \mu_{0.5} = \frac{\mu_{\text{OJ},0.5} + \mu_{\text{VC,0.5}}}{2}, \ \ \ 
+    \mu_1 = \frac{\mu_{\text{OJ},1} + \mu_{\text{VC,1}}}{2}, \ \ \ 
+    \mu_2 = \frac{\mu_{\text{OJ},2} + \mu_{\text{VC,2}}}{2}.
+$$
+```{r}
+emmeans(m, ~ dosef)
+pairs(emmeans(m, ~ dosef), adjust = "none")
+pairs(emmeans(m, ~ dosef), reverse = TRUE, adjust = "none")
+```
+
+In ANOVA tables the test of the "main effect" is the (joint) null hypothesis that all pairwise differences are zero. For the variable dose the null hypothesis is $\mu_{0.5} = \mu_{1} = \mu_{2}$. This can be done using the `test` function.
+```{r}
+test(pairs(emmeans(m, ~ dosef)), joint = TRUE)
+```
+This is the traditional main effect that is sometimes reported in an "ANOVA table" such as that produced by `Anova` from the **car** package. 
+```{r}
+library(car)
+m <- lm(len ~ dosef + supp + dosef:supp, data = ToothGrowth,
+  contrast = list(dosef = contr.sum, supp = contr.sum))
+Anova(m, type = 3)
+```
+The option `contrast = list(dosef = contr.sum, supp = contr.sum)` is necessary here for the `Anova` function to do the correct calculations.[^ss]
+
+[^ss]: I am demonstrating here what is sometimes called inferences based on Type III sums of squares. Another common approach is to use what is called Type II sums of squares. This can be done with the `Anova` function with `type = 2`. For inferences based on Type II sums of squares with the functions from the **emmeans** package an extra step is needed (email me for an example if you really want to know how to do it). 
+
+The test of the main effect of supplement method was given by 
+```{r}
+pairs(emmeans(m, ~ supp), infer = TRUE)
+```
+We do not need a joint test here since there are only two marginal means, but here it is anyway.
+```{r}
+test(pairs(emmeans(m, ~ supp)), joint = TRUE)
+```
+Now consider a model without the interaction. 
+```{r}
+m <- lm(len ~ dosef + supp, data = ToothGrowth)
+summary(m)$coefficients
+d <- expand.grid(dosef = levels(ToothGrowth$dosef), supp = levels(ToothGrowth$supp))
+d$yhat <- predict(m, newdata = d)
+
+p <- ggplot(ToothGrowth, aes(x = dosef, y = len, color = supp)) + 
+  geom_point(alpha = 0.5) + theme_classic() + 
+  theme(legend.position = c(0.8,0.2)) + 
+  geom_point(aes(y = yhat), size = 2, data = d) + 
+  geom_line(aes(y = yhat, group = supp), data = d) + 
+  labs(x = "Dose (mg/day)", y = "Odontoblast Length", color = "Supplement Type")
+plot(p)
+```
+Note that without the interaction the "simple effects" and "main effects" are equivalent. Here are the simple and main effects for supplement.
+```{r}
+pairs(emmeans(m, ~ supp | dosef)) # simple
+pairs(emmeans(m, ~ supp))         # main
+```
+And here are the simple and main effects for dose.
+```{r}
+pairs(emmeans(m, ~ dosef | supp), adjust = "none") # simple
+pairs(emmeans(m, ~ dosef), adjust = "none")        # main
+```
+The joint test of the overall main effect for dose can be be obtained as follows.
+```{r}
+test(pairs(emmeans(m, ~ dosef)), joint = TRUE)
+```
+
+
+
+

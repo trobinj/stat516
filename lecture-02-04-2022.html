@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Friday, Feb 4</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Friday, Feb 4</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-02-04-2022.pdf">PDF</a> copy of this lecture.</p>
+<div id="marginal-means" class="section level2">
+<h2>Marginal Means</h2>
+<p>A <em>marginal mean</em> is effectively an average of expected responses. The <strong>emmeans</strong> package is particularly useful for making inferences about marginal means.</p>
+<p><strong>Example</strong>: Consider again the data from the platy fish study.</p>
+<pre class="r"><code>m &lt;- lm(Percentage ~ Pair, data = Sleuth3::case0602)
+summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)   56.406      3.864 14.5965 5.208e-24
+PairPair2      4.479      5.657  0.7919 4.308e-01
+PairPair3      6.023      5.384  1.1187 2.667e-01
+PairPair4     10.594      5.657  1.8727 6.485e-02
+PairPair5      7.805      6.441  1.2118 2.292e-01
+PairPair6      6.929      5.657  1.2250 2.243e-01</code></pre>
+<p>We see that there are indicator variables for male pairs 2-6. The model can be written as <span class="math display">\[
+  E(Y_i) = 
+  \begin{cases}
+    \beta_0, &amp; \text{if the $i$-th observation was from the first male pair}, \\ 
+    \beta_0 + \beta_1, &amp; \text{if the $i$-th observation was from the second male pair}, \\ 
+    \beta_0 + \beta_2, &amp; \text{if the $i$-th observation was from the third male pair}, \\ 
+    \beta_0 + \beta_3, &amp; \text{if the $i$-th observation was from the fourth male pair}, \\ 
+    \beta_0 + \beta_4, &amp; \text{if the $i$-th observation was from the fifth male pair}, \\ 
+    \beta_0 + \beta_5, &amp; \text{if the $i$-th observation was from the sixth male pair}. \\ 
+  \end{cases}
+\]</span> We can use <code>contrast</code> to estimate the expected response for each pair.</p>
+<pre class="r"><code>contrast(m, a = list(Pair = paste(&quot;Pair&quot;, 1:6, sep = &quot;&quot;)), 
+   cnames = paste(&quot;Pair&quot;, 1:6, sep = &quot;&quot;))</code></pre>
+<pre><code>      estimate    se lower upper tvalue df    pvalue
+Pair1    56.41 3.864 48.71 64.10  14.60 78 5.208e-24
+Pair2    60.89 4.131 52.66 69.11  14.74 78 2.990e-24
+Pair3    62.43 3.749 54.97 69.89  16.65 78 2.114e-27
+Pair4    67.00 4.131 58.78 75.22  16.22 78 1.052e-26
+Pair5    64.21 5.152 53.95 74.47  12.46 78 3.039e-20
+Pair6    63.34 4.131 55.11 71.56  15.33 78 3.006e-25</code></pre>
+<p>Note how I used a shortcut to specify the pairs.</p>
+<pre class="r"><code>paste(&quot;Pair&quot;, 1:6, sep = &quot;&quot;)</code></pre>
+<pre><code>[1] &quot;Pair1&quot; &quot;Pair2&quot; &quot;Pair3&quot; &quot;Pair4&quot; &quot;Pair5&quot; &quot;Pair6&quot;</code></pre>
+<p>This can also be done using the <code>emmeans</code> function from the package <strong>emmeans</strong>.</p>
+<pre class="r"><code>library(emmeans)
+emmeans(m, ~ Pair)</code></pre>
+<pre><code> Pair  emmean   SE df lower.CL upper.CL
+ Pair1   56.4 3.86 78     48.7     64.1
+ Pair2   60.9 4.13 78     52.7     69.1
+ Pair3   62.4 3.75 78     55.0     69.9
+ Pair4   67.0 4.13 78     58.8     75.2
+ Pair5   64.2 5.15 78     54.0     74.5
+ Pair6   63.3 4.13 78     55.1     71.6
+
+Confidence level used: 0.95 </code></pre>
+<p><strong>Warning</strong>: The <strong>emmeans</strong> package contains a function called <code>contrast</code> which is not the same as the function of the same name in the <strong>trtools</strong> package, resulting in a namespace conflict if both packages are loaded. If you have both packages loaded in a given session, use <code>trtools::contrast</code> and <code>emmeans::contrast</code> to refer to a given function.</p>
+<p>Denote the six expected responses (one for each pair) as <span class="math display">\[\begin{align*}
+  \mu_1 &amp; = \beta_0, \\
+  \mu_2 &amp; = \beta_0 + \beta_1, \\
+  \mu_3 &amp; = \beta_0 + \beta_2, \\
+  \mu_4 &amp; = \beta_0 + \beta_3, \\ 
+  \mu_5 &amp; = \beta_0 + \beta_4, \\
+  \mu_6 &amp; = \beta_0 + \beta_5.
+\end{align*}\]</span> One marginal mean would be the average expected response across the pairs. This could be written as <span class="math display">\[
+  \mu = \frac{\mu_1 + \mu_2 + \mu_3 + \mu_4 + \mu_5 + \mu_6}{6} = 
+    \beta_0 + \tfrac{1}{6}\beta_1 + \tfrac{1}{6}\beta_2 + \tfrac{1}{6}\beta_3 + \tfrac{1}{6}\beta_4 + \tfrac{1}{6}\beta_5.
+\]</span> We can estimate this quantity with <code>lincon</code>.</p>
+<pre class="r"><code>lincon(m, a = c(1,1/6,1/6,1/6,1/6,1/6))</code></pre>
+<pre><code>                          estimate    se lower upper tvalue df    pvalue
+(1,1/6,1/6,1/6,1/6,1/6),0    62.38 1.722 58.95 65.81  36.23 78 1.501e-50</code></pre>
+<p>We can also use <code>emmeans</code>.</p>
+<pre class="r"><code>emmeans(m, ~ 1)</code></pre>
+<pre><code> 1       emmean   SE df lower.CL upper.CL
+ overall   62.4 1.72 78       59     65.8
+
+Results are averaged over the levels of: Pair 
+Confidence level used: 0.95 </code></pre>
+<p>Note that we can use the confidence interval to test the null hypothesis that <span class="math inline">\(\mu\)</span> = 50. For a test statistic and p-value for this test we could write this as <span class="math display">\[
+  \mu = 50 \Leftrightarrow \beta_0 + \tfrac{1}{6}\beta_1 + \tfrac{1}{6}\beta_2 + \tfrac{1}{6}\beta_3 + \tfrac{1}{6}\beta_4 + \tfrac{1}{6}\beta_5 = 50 \Leftrightarrow \beta_0 + \tfrac{1}{6}\beta_1 + \tfrac{1}{6}\beta_2 + \tfrac{1}{6}\beta_3 + \tfrac{1}{6}\beta_4 + \tfrac{1}{6}\beta_5 - 50 = 0.
+\]</span> Here is how we can do that with <code>lincon</code>.</p>
+<pre class="r"><code>lincon(m, a = c(1,1/6,1/6,1/6,1/6,1/6), b = -50)</code></pre>
+<pre><code>                            estimate    se lower upper tvalue df    pvalue
+(1,1/6,1/6,1/6,1/6,1/6),-50    12.38 1.722  8.95 15.81  7.189 78 3.439e-10</code></pre>
+<p>Here is how we do it with <code>emmeans</code>.</p>
+<pre class="r"><code>emmeans(m, ~ 1, offset = -50, infer = TRUE)</code></pre>
+<pre><code> 1       emmean   SE df lower.CL upper.CL t.ratio p.value
+ overall   12.4 1.72 78     8.95     15.8   7.189  &lt;.0001
+
+Results are averaged over the levels of: Pair 
+Confidence level used: 0.95 </code></pre>
+<p>By <em>not</em> listing an explanatory variable on the right-hand side of <code>~</code>, we are asking that <code>emmeans</code> average over that explanatory variable. Also note that the argument <code>infer = TRUE</code> makes the <code>emmeans</code> function provide both confidence intervals as well as tests.</p>
+<p><strong>Example</strong>: Consider the following data from a stratified random sampling using 0.1ha circular plots from three strata: softwood, mixed, and hardwood.</p>
+<pre class="r"><code>library(trtools) # contains the bole data frame
+p &lt;- ggplot(bole, aes(x = stratum, y = volume)) + theme_minimal() + 
+  geom_dotplot(binaxis = &quot;y&quot;, stackdir = &quot;center&quot;, binwidth = 0.1) +
+  labs(y = &quot;Volume (cubic meters)&quot;, x = NULL) + coord_flip()
+plot(p)</code></pre>
+<p><img src="lecture-02-04-2022_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" /> Here is a basic linear model for these data.</p>
+<pre class="r"><code>m &lt;- lm(volume ~ stratum, data = bole)
+summary(m)$coefficients</code></pre>
+<pre><code>                Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)        1.185      1.588  0.7457 4.589e-01
+stratummixed       5.549      2.021  2.7452 8.075e-03
+stratumsoftwood   14.954      1.946  7.6864 2.284e-10</code></pre>
+<p>So the model is <span class="math inline">\(E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2}\)</span> where <span class="math display">\[
+    x_{i1} = 
+    \begin{cases}
+        1, &amp; \text{if the $i$-th observation is from the mixed stratum}, \\
+        0, &amp; \text{otherwise},
+    \end{cases}
+\]</span> and <span class="math display">\[
+    x_{i2} = 
+    \begin{cases}
+        1, &amp; \text{if the $i$-th observation is from the softwood stratum}, \\
+        0, &amp; \text{otherwise}.
+    \end{cases}
+\]</span> So we can write the model case-wise as <span class="math display">\[
+    E(Y_i) = 
+    \begin{cases}
+        \beta_0, &amp; \text{if the $i$-th observation is from the hardwood stratum}, \\
+        \beta_0 + \beta_1, &amp; \text{if the $i$-th observation is from the mixed stratum}, \\
+        \beta_0 + \beta_2, &amp; \text{if the $i$-th observation is from the softwood stratum}.
+    \end{cases}
+\]</span> The areas of the hardwood, mixed, and softwood strata are 32435ha, 17250ha, and 42541ha, respectively, and the total area is 92226ha. Let <span class="math inline">\(\mu_h\)</span>, <span class="math inline">\(\mu_m\)</span>, and <span class="math inline">\(\mu_s\)</span> denote the expected volume of a 0.1ha plot sampled from the hardwood, mixed, and softwood strata, respectively. So we have that <span class="math display">\[
+  \mu_h = \beta_0, \ \ \mu_m = \beta_0 + \beta_1, \ \ \mu_s = \beta_0 + \beta_2.
+\]</span> These are also the mean volume per 0.1ha for each stratum. The mean volume per 0.1ha for the whole forest is then the weighted average <span class="math display">\[
+  \mu = \tfrac{32435}{92226}\mu_h + \tfrac{17250}{92226}\mu_m + \tfrac{42541}{92226}\mu_s = 
+  \beta_0 + \tfrac{17250}{92226}\beta_1 + \tfrac{42541}{92226}\beta_2.
+\]</span> We can use <code>lincon</code> or <code>emmeans</code> to make inferences.</p>
+<pre class="r"><code>lincon(m, a = c(1, 17250/92226, 42541/92226))</code></pre>
+<pre><code>                          estimate    se lower upper tvalue df    pvalue
+(1,1094/5849,2239/4854),0     9.12 0.797 7.524 10.72  11.44 57 2.136e-16</code></pre>
+<p>Note: The coefficients that are output by <code>lincon</code> are the same but simplified.</p>
+<pre class="r"><code>emmeans(m, ~ 1, weights = c(32436/92226, 17250/92226, 42541/92226))</code></pre>
+<pre><code> 1       emmean    SE df lower.CL upper.CL
+ overall   9.12 0.797 57     7.52     10.7
+
+Results are averaged over the levels of: stratum 
+Confidence level used: 0.95 </code></pre>
+<p>Note that it is important that the weights are specified in the correct order. There area a couple ways to check this.</p>
+<pre class="r"><code>levels(bole$stratum)</code></pre>
+<pre><code>[1] &quot;hardwood&quot; &quot;mixed&quot;    &quot;softwood&quot;</code></pre>
+<pre class="r"><code>emmeans(m, ~ 1, weights = &quot;show.levels&quot;)</code></pre>
+<pre><code>emmeans are obtained by averaging over these factor combinations</code></pre>
+<pre><code>   stratum
+1 hardwood
+2    mixed
+3 softwood</code></pre>
+<p>The <code>emmeans</code> function can also be used to make inferences about the differences between pairs of expected responses.</p>
+<pre class="r"><code>contrast(emmeans(m, ~ stratum), method = &quot;pairwise&quot;, adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast            estimate   SE df t.ratio p.value
+ hardwood - mixed       -5.55 2.02 57  -2.745  0.0081
+ hardwood - softwood   -14.95 1.95 57  -7.686  &lt;.0001
+ mixed - softwood       -9.40 1.68 57  -5.597  &lt;.0001</code></pre>
+<p>You can also use <code>contrast</code> but it is a bit more tedious.</p>
+<pre class="r"><code>trtools::contrast(m,
+    a = list(stratum = c(&quot;hardwood&quot;,&quot;hardwood&quot;,&quot;mixed&quot;)),
+    b = list(stratum = c(&quot;mixed&quot;,&quot;softwood&quot;,&quot;softwood&quot;)),
+    cnames = c(&quot;hardwood - mixed&quot;,&quot;hardwood - softwood&quot;,&quot;mixed - softwood&quot;))</code></pre>
+<pre><code>                    estimate    se   lower   upper tvalue df    pvalue
+hardwood - mixed      -5.549 2.021  -9.596  -1.501 -2.745 57 8.075e-03
+hardwood - softwood  -14.954 1.946 -18.850 -11.058 -7.686 57 2.284e-10
+mixed - softwood      -9.405 1.680 -12.770  -6.040 -5.597 57 6.510e-07</code></pre>
+<p>The <code>adjust = "none"</code> option for <code>pairs</code> specifies that no adjustment be made to confidence intervals or tests for the family-wise Type I error rate.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+</div>
+<div id="marginal-means-and-main-effects" class="section level2">
+<h2>Marginal Means and “Main Effects”</h2>
+<p>Consider data from a randomized experiment with guinea pigs administered one of three doses of vitamin C (0.5, 1, or 2 mg/day) via one of two supplement methods: orange juice (OJ) or ascorbic acid (VC).</p>
+<pre class="r"><code>p &lt;- ggplot(ToothGrowth, aes(x = dose, y = len)) + 
+  geom_point(alpha = 0.5) + facet_wrap(~supp) + 
+  labs(x = &quot;Dose (mg/day)&quot;, y = &quot;Odontoblast Length&quot;) + theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-02-04-2022_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" /> Here we are going to model dose as a categorical variable so we need to coerce it to a factor. Perhaps the safest approach is to create a new variable.</p>
+<pre class="r"><code>ToothGrowth$dosef &lt;- factor(ToothGrowth$dose)</code></pre>
+<p>Note: Whether a variable is a numeric, a factor, or something else can be seen use <code>str</code> (for “structure”).</p>
+<pre class="r"><code>str(ToothGrowth)</code></pre>
+<pre><code>&#39;data.frame&#39;:   60 obs. of  4 variables:
+ $ len  : num  4.2 11.5 7.3 5.8 6.4 10 11.2 11.2 5.2 7 ...
+ $ supp : Factor w/ 2 levels &quot;OJ&quot;,&quot;VC&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+ $ dose : num  0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 ...
+ $ dosef: Factor w/ 3 levels &quot;0.5&quot;,&quot;1&quot;,&quot;2&quot;: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<p>Notice that <code>ggplot</code> responds differently.</p>
+<pre class="r"><code>summary(ToothGrowth)</code></pre>
+<pre><code>      len       supp         dose      dosef   
+ Min.   : 4.2   OJ:30   Min.   :0.50   0.5:20  
+ 1st Qu.:13.1   VC:30   1st Qu.:0.50   1  :20  
+ Median :19.2           Median :1.00   2  :20  
+ Mean   :18.8           Mean   :1.17           
+ 3rd Qu.:25.3           3rd Qu.:2.00           
+ Max.   :33.9           Max.   :2.00           </code></pre>
+<pre class="r"><code>p &lt;- ggplot(ToothGrowth, aes(x = dosef, y = len)) + 
+  geom_point(alpha = 0.5) + facet_wrap(~supp) + 
+  labs(x = &quot;Dose (mg/day)&quot;, y = &quot;Odontoblast Length&quot;) + theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-02-04-2022_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" /> Now consider the following linear model.</p>
+<pre class="r"><code>m &lt;- lm(len ~ dosef + supp + dosef:supp, data = ToothGrowth)
+summary(m)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)      13.23      1.148 11.5208 3.603e-16
+dosef1            9.47      1.624  5.8312 3.176e-07
+dosef2           12.83      1.624  7.9002 1.430e-10
+suppVC           -5.25      1.624 -3.2327 2.092e-03
+dosef1:suppVC    -0.68      2.297 -0.2961 7.683e-01
+dosef2:suppVC     5.33      2.297  2.3207 2.411e-02</code></pre>
+<p>The model is <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3} + \beta_4 x_{i4} + \beta_5 x_{i5},
+\]</span> where <span class="math display">\[
+  x_{i1} = 
+  \begin{cases}
+    1, &amp; \text{if dose is 1 mg/day}, \\
+    0, &amp; \text{otherwise},
+  \end{cases}
+\]</span> <span class="math display">\[
+  x_{i2} = 
+  \begin{cases}
+    1, &amp; \text{if dose is 2 mg/day}, \\
+    0, &amp; \text{otherwise},
+  \end{cases}
+\]</span> <span class="math display">\[
+  x_{i3} = 
+  \begin{cases}
+    1, &amp; \text{if supplement type is VC} \\
+    0, &amp; \text{otherwise},
+  \end{cases}
+\]</span> <span class="math display">\[
+  x_{i4} = x_{i1}x_{i3} =  
+  \begin{cases}
+    1, &amp; \text{if dose is 1 mg/day and supplement type is VC}, \\
+    0, &amp; \text{otherwise},
+  \end{cases}
+\]</span> <span class="math display">\[
+  x_{i5} = x_{i2}x_{i3} =  
+  \begin{cases}
+    1, &amp; \text{if dose is 2 mg/day and supplement type is VC}, \\
+    0, &amp; \text{otherwise}.
+  \end{cases}
+\]</span></p>
+<p>We can write this model case-wise. <span class="math display">\[
+  E(Y_i) = 
+  \begin{cases}
+    \beta_0, &amp; \text{if dose is 0.5 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_1, &amp; \text{if dose is 1 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_2, &amp; \text{if dose is 2 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_3, &amp; \text{if dose is 0.5 mg/day and supplement type is VC}, \\
+    \beta_0 + \beta_1 + \beta_3 + \beta_4, &amp; \text{if dose is 1 mg/day and supplement type is VC}, \\
+    \beta_0 + \beta_2 + \beta_3 + \beta_5, &amp; \text{if dose is 2 mg/day and supplement type is VC}. \\
+  \end{cases}
+\]</span> And we can visualize it.</p>
+<pre class="r"><code>d &lt;- expand.grid(dosef = levels(ToothGrowth$dosef), supp = levels(ToothGrowth$supp))
+d$yhat &lt;- predict(m, newdata = d)
+
+p &lt;- ggplot(ToothGrowth, aes(x = dosef, y = len, color = supp)) + 
+  geom_point(alpha = 0.5) + theme_classic() + 
+  theme(legend.position = c(0.8,0.2)) + 
+  geom_point(aes(y = yhat), size = 2, data = d) + 
+  geom_line(aes(y = yhat, group = supp), data = d) + 
+  labs(x = &quot;Dose (mg/day)&quot;, y = &quot;Odontoblast Length&quot;, color = &quot;Supplement Type&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-04-2022_files/figure-html/unnamed-chunk-23-1.png" width="100%" style="display: block; margin: auto;" /> We might want to compare the two supplement types at each dose level. These are sometimes called simple effects. We can do this using <code>contrast</code>.</p>
+<pre class="r"><code>trtools::contrast(m,
+    a = list(supp = &quot;OJ&quot;, dosef = c(&quot;0.5&quot;,&quot;1&quot;,&quot;2&quot;)),
+    b = list(supp = &quot;VC&quot;, dosef = c(&quot;0.5&quot;,&quot;1&quot;,&quot;2&quot;)),
+    cnames = c(&quot;OJ-VC @ 0.5 mg/day&quot;,&quot;OJ-VC @ 1.0 mg/day&quot;,&quot;OJ-VC @ 2.0 mg/day&quot;))</code></pre>
+<pre><code>                   estimate    se  lower upper   tvalue df    pvalue
+OJ-VC @ 0.5 mg/day     5.25 1.624  1.994 8.506  3.23273 54 0.0020925
+OJ-VC @ 1.0 mg/day     5.93 1.624  2.674 9.186  3.65144 54 0.0005897
+OJ-VC @ 2.0 mg/day    -0.08 1.624 -3.336 3.176 -0.04926 54 0.9608934</code></pre>
+<p>We can also do this use <code>emmeans</code>. First note that we can use <code>emmeans</code> to also estimate the expected response for each level of <code>supp</code> within each level of <code>dosef</code>.</p>
+<pre class="r"><code>emmeans(m, ~ supp | dosef)</code></pre>
+<pre><code>dosef = 0.5:
+ supp emmean   SE df lower.CL upper.CL
+ OJ    13.23 1.15 54    10.93     15.5
+ VC     7.98 1.15 54     5.68     10.3
+
+dosef = 1:
+ supp emmean   SE df lower.CL upper.CL
+ OJ    22.70 1.15 54    20.40     25.0
+ VC    16.77 1.15 54    14.47     19.1
+
+dosef = 2:
+ supp emmean   SE df lower.CL upper.CL
+ OJ    26.06 1.15 54    23.76     28.4
+ VC    26.14 1.15 54    23.84     28.4
+
+Confidence level used: 0.95 </code></pre>
+<p>We can use <code>pairs</code> to make inferences about the differences between levels of <code>supp</code> within each level of <code>dosef</code>.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ supp | dosef), adjust = &quot;none&quot;, infer = TRUE)</code></pre>
+<pre><code>dosef = 0.5:
+ contrast estimate   SE df lower.CL upper.CL t.ratio p.value
+ OJ - VC      5.25 1.62 54     1.99     8.51   3.233  0.0021
+
+dosef = 1:
+ contrast estimate   SE df lower.CL upper.CL t.ratio p.value
+ OJ - VC      5.93 1.62 54     2.67     9.19   3.651  0.0006
+
+dosef = 2:
+ contrast estimate   SE df lower.CL upper.CL t.ratio p.value
+ OJ - VC     -0.08 1.62 54    -3.34     3.18  -0.049  0.9609
+
+Confidence level used: 0.95 </code></pre>
+<p>The “main effect” of supplement method concerns <span class="math inline">\(\mu_{\text{OJ}}\)</span> and <span class="math inline">\(\mu_{\text{VC}}\)</span>, defined as <span class="math display">\[
+    \mu_{\text{OJ}} = \frac{\mu_{\text{OJ,0.5}} + \mu_{\text{OJ},1.0} + \mu_{\text{OJ},2.0}}{3}, \ \ \ \mu_{\text{VC}} = \frac{\mu_{\text{VC,0.5}} + \mu_{\text{VC},1.0} + \mu_{\text{OJ},2.0}}{3}.
+\]</span> So <span class="math inline">\(\mu_{\text{OJ}}\)</span> and <span class="math inline">\(\mu_{\text{VC}}\)</span> are the <em>marginal means</em> for <code>supp</code>, averaging over levels of <code>dose</code>.</p>
+<pre class="r"><code>emmeans(m, ~ supp)</code></pre>
+<pre><code> supp emmean    SE df lower.CL upper.CL
+ OJ     20.7 0.663 54     19.3     22.0
+ VC     17.0 0.663 54     15.6     18.3
+
+Results are averaged over the levels of: dosef 
+Confidence level used: 0.95 </code></pre>
+<p>Inference for the main effect <span class="math inline">\(\mu_{\text{OJ}} - \mu_{\text{VC}}\)</span> can then be obtained as follows.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ supp), infer = TRUE)</code></pre>
+<pre><code> contrast estimate    SE df lower.CL upper.CL t.ratio p.value
+ OJ - VC       3.7 0.938 54     1.82     5.58   3.946  0.0002
+
+Results are averaged over the levels of: dosef 
+Confidence level used: 0.95 </code></pre>
+<p>This main effect is simply a single linear function of <span class="math inline">\(\beta_0, \beta_1, \dots, \beta_5\)</span>. From the case-wise representation of the model, <span class="math display">\[
+  E(Y_i) = 
+  \begin{cases}
+    \beta_0, &amp; \text{if dose is 0.5 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_1, &amp; \text{if dose is 1 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_2, &amp; \text{if dose is 2 mg/day and supplement type is OJ}, \\
+    \beta_0 + \beta_3, &amp; \text{if dose is 0.5 mg/day and supplement type is VC}, \\
+    \beta_0 + \beta_1 + \beta_3 + \beta_4, &amp; \text{if dose is 1 mg/day and supplement type is VC}, \\
+    \beta_0 + \beta_2 + \beta_3 + \beta_5, &amp; \text{if dose is 2 mg/day and supplement type is VC}, \\
+  \end{cases}
+\]</span> we have that <span class="math inline">\(\mu_{\text{OJ,0.5}} = \beta_0\)</span>, <span class="math inline">\(\mu_{\text{OJ,1.0}} = \beta_0 + \beta_1\)</span>, <span class="math inline">\(\mu_{\text{OJ,2.0}} = \beta_0 + \beta_3\)</span>, <span class="math inline">\(\mu_{\text{VC,0.5}} = \beta_0 + \beta_3\)</span>, <span class="math inline">\(\mu_{\text{VC,1.0}} = \beta_0 + \beta_1 + \beta_3 + \beta_4\)</span>, <span class="math inline">\(\mu_{\text{VC,2.0}} = \beta_0 + \beta_1 + \beta_3 + \beta_5\)</span>. So, we can write this as <span class="math display">\[
+  \mu_{\text{OJ}} - \mu_{\text{VC}} = \frac{\mu_{\text{OJ,0.5}} + \mu_{\text{OJ},1.0} + \mu_{\text{OJ},2.0}}{3} - \frac{\mu_{\text{VC,0.5}} + \mu_{\text{VC},1.0} + \mu_{\text{OJ},2.0}}{3} = -\beta_3 - \frac{1}{3}\beta_4 - \frac{1}{3}\beta_5.
+\]</span></p>
+<pre class="r"><code>lincon(m, a = c(0,0,0,-1,-1/3,-1/3))</code></pre>
+<pre><code>                       estimate     se lower upper tvalue df    pvalue
+(0,0,0,-1,-1/3,-1/3),0      3.7 0.9376  1.82  5.58  3.946 54 0.0002312</code></pre>
+<p>Clearly using <code>emmeans</code> is much less tedious!</p>
+<p>The “main effect” of dose concerns differences among the marginal means of dose defined as <span class="math inline">\(\mu_{0.5}\)</span>, <span class="math inline">\(\mu_{1}\)</span> and <span class="math inline">\(\mu_{2}\)</span> where <span class="math display">\[
+    \mu_{0.5} = \frac{\mu_{\text{OJ},0.5} + \mu_{\text{VC,0.5}}}{2}, \ \ \ 
+    \mu_1 = \frac{\mu_{\text{OJ},1} + \mu_{\text{VC,1}}}{2}, \ \ \ 
+    \mu_2 = \frac{\mu_{\text{OJ},2} + \mu_{\text{VC,2}}}{2}.
+\]</span></p>
+<pre class="r"><code>emmeans(m, ~ dosef)</code></pre>
+<pre><code> dosef emmean    SE df lower.CL upper.CL
+ 0.5     10.6 0.812 54     8.98     12.2
+ 1       19.7 0.812 54    18.11     21.4
+ 2       26.1 0.812 54    24.47     27.7
+
+Results are averaged over the levels of: supp 
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~ dosef), adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast estimate   SE df t.ratio p.value
+ 0.5 - 1     -9.13 1.15 54  -7.951  &lt;.0001
+ 0.5 - 2    -15.49 1.15 54 -13.493  &lt;.0001
+ 1 - 2       -6.37 1.15 54  -5.543  &lt;.0001
+
+Results are averaged over the levels of: supp </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~ dosef), reverse = TRUE, adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast estimate   SE df t.ratio p.value
+ 1 - 0.5      9.13 1.15 54   7.951  &lt;.0001
+ 2 - 0.5     15.49 1.15 54  13.493  &lt;.0001
+ 2 - 1        6.37 1.15 54   5.543  &lt;.0001
+
+Results are averaged over the levels of: supp </code></pre>
+<p>In ANOVA tables the test of the “main effect” is the (joint) null hypothesis that all pairwise differences are zero. For the variable dose the null hypothesis is <span class="math inline">\(\mu_{0.5} = \mu_{1} = \mu_{2}\)</span>. This can be done using the <code>test</code> function.</p>
+<pre class="r"><code>test(pairs(emmeans(m, ~ dosef)), joint = TRUE)</code></pre>
+<pre><code> df1 df2 F.ratio p.value note
+   2  54  92.000  &lt;.0001  d  
+
+d: df1 reduced due to linear dependence </code></pre>
+<p>This is the traditional main effect that is sometimes reported in an “ANOVA table” such as that produced by <code>Anova</code> from the <strong>car</strong> package.</p>
+<pre class="r"><code>library(car)
+m &lt;- lm(len ~ dosef + supp + dosef:supp, data = ToothGrowth,
+  contrast = list(dosef = contr.sum, supp = contr.sum))
+Anova(m, type = 3)</code></pre>
+<pre><code>Anova Table (Type III tests)
+
+Response: len
+            Sum Sq Df F value  Pr(&gt;F)    
+(Intercept)  21236  1 1610.39 &lt; 2e-16 ***
+dosef         2426  2   92.00 &lt; 2e-16 ***
+supp           205  1   15.57 0.00023 ***
+dosef:supp     108  2    4.11 0.02186 *  
+Residuals      712 54                    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The option <code>contrast = list(dosef = contr.sum, supp = contr.sum)</code> is necessary here for the <code>Anova</code> function to do the correct calculations.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<p>The test of the main effect of supplement method was given by</p>
+<pre class="r"><code>pairs(emmeans(m, ~ supp), infer = TRUE)</code></pre>
+<pre><code> contrast estimate    SE df lower.CL upper.CL t.ratio p.value
+ OJ - VC       3.7 0.938 54     1.82     5.58   3.946  0.0002
+
+Results are averaged over the levels of: dosef 
+Confidence level used: 0.95 </code></pre>
+<p>We do not need a joint test here since there are only two marginal means, but here it is anyway.</p>
+<pre class="r"><code>test(pairs(emmeans(m, ~ supp)), joint = TRUE)</code></pre>
+<pre><code> df1 df2 F.ratio p.value
+   1  54  15.572  0.0002</code></pre>
+<p>Now consider a model without the interaction.</p>
+<pre class="r"><code>m &lt;- lm(len ~ dosef + supp, data = ToothGrowth)
+summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)    12.46     0.9883  12.603 5.490e-18
+dosef1          9.13     1.2104   7.543 4.383e-10
+dosef2         15.49     1.2104  12.802 2.852e-18
+suppVC         -3.70     0.9883  -3.744 4.293e-04</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(dosef = levels(ToothGrowth$dosef), supp = levels(ToothGrowth$supp))
+d$yhat &lt;- predict(m, newdata = d)
+
+p &lt;- ggplot(ToothGrowth, aes(x = dosef, y = len, color = supp)) + 
+  geom_point(alpha = 0.5) + theme_classic() + 
+  theme(legend.position = c(0.8,0.2)) + 
+  geom_point(aes(y = yhat), size = 2, data = d) + 
+  geom_line(aes(y = yhat, group = supp), data = d) + 
+  labs(x = &quot;Dose (mg/day)&quot;, y = &quot;Odontoblast Length&quot;, color = &quot;Supplement Type&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-04-2022_files/figure-html/unnamed-chunk-35-1.png" width="100%" style="display: block; margin: auto;" /> Note that without the interaction the “simple effects” and “main effects” are equivalent. Here are the simple and main effects for supplement.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ supp | dosef)) # simple</code></pre>
+<pre><code>dosef = 0.5:
+ contrast estimate    SE df t.ratio p.value
+ OJ - VC       3.7 0.988 56   3.744  0.0004
+
+dosef = 1:
+ contrast estimate    SE df t.ratio p.value
+ OJ - VC       3.7 0.988 56   3.744  0.0004
+
+dosef = 2:
+ contrast estimate    SE df t.ratio p.value
+ OJ - VC       3.7 0.988 56   3.744  0.0004</code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~ supp))         # main</code></pre>
+<pre><code> contrast estimate    SE df t.ratio p.value
+ OJ - VC       3.7 0.988 56   3.744  0.0004
+
+Results are averaged over the levels of: dosef </code></pre>
+<p>And here are the simple and main effects for dose.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ dosef | supp), adjust = &quot;none&quot;) # simple</code></pre>
+<pre><code>supp = OJ:
+ contrast estimate   SE df t.ratio p.value
+ 0.5 - 1     -9.13 1.21 56  -7.543  &lt;.0001
+ 0.5 - 2    -15.49 1.21 56 -12.802  &lt;.0001
+ 1 - 2       -6.37 1.21 56  -5.259  &lt;.0001
+
+supp = VC:
+ contrast estimate   SE df t.ratio p.value
+ 0.5 - 1     -9.13 1.21 56  -7.543  &lt;.0001
+ 0.5 - 2    -15.49 1.21 56 -12.802  &lt;.0001
+ 1 - 2       -6.37 1.21 56  -5.259  &lt;.0001</code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~ dosef), adjust = &quot;none&quot;)        # main</code></pre>
+<pre><code> contrast estimate   SE df t.ratio p.value
+ 0.5 - 1     -9.13 1.21 56  -7.543  &lt;.0001
+ 0.5 - 2    -15.49 1.21 56 -12.802  &lt;.0001
+ 1 - 2       -6.37 1.21 56  -5.259  &lt;.0001
+
+Results are averaged over the levels of: supp </code></pre>
+<p>The joint test of the overall main effect for dose can be be obtained as follows.</p>
+<pre class="r"><code>test(pairs(emmeans(m, ~ dosef)), joint = TRUE)</code></pre>
+<pre><code> df1 df2 F.ratio p.value note
+   2  56  82.810  &lt;.0001  d  
+
+d: df1 reduced due to linear dependence </code></pre>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The family-wise Type I error rate is the probability of making <em>at least one</em> Type I error. If it is desired that the family-wise Type I error rate be no greater than <span class="math inline">\(\alpha\)</span> (default is 0.05), then some adjustment can be made. This adjustment is seen in the p-values and confidence intervals. The most general method is to use <code>adjust = "mvt"</code>. Some special cases are more widely known such as Tukey (<code>adjust = "tukey"</code>) and Bonferroni (<code>adjust = "bonferroni"</code>), but the adjustment based on the multivariate <span class="math inline">\(t\)</span>-distribution (<code>adjust = "mvt"</code>) is the most general and accurate. Note that an adjustment will produce “simultaneous” confidence intervals. A method of producing simultaneous confidence intervals has the property that the probability that <em>all</em> of the confidence intervals will contain the quantities being estimated is equal to the specified confidence level (95% by default). The multivariate <span class="math inline">\(t\)</span>-distribution adjustment is perhaps not as well known, so a reference that you can cite is Edwards, D. &amp; Berry, J. T. (1987). The efficiency of simulation-based multiple comparisons. <em>Biometrics</em>, <em>43(4)</em>, 913–928.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>I am demonstrating here what is sometimes called inferences based on Type III sums of squares. Another common approach is to use what is called Type II sums of squares. This can be done with the <code>Anova</code> function with <code>type = 2</code>. For inferences based on Type II sums of squares with the functions from the <strong>emmeans</strong> package an extra step is needed (email me for an example if you really want to know how to do it).<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
