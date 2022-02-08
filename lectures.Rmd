@@ -51,7 +51,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Modeling nonlinearity with linear models](lecture-02-07-2022.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Introduction to nonlinear regression](lecture-02-09-2022.html).
 
 `r i <- i + 1; d[i]`
  
