@@ -347,7 +347,7 @@ library(ggplot2)
 library(npregfast)
 p <- ggplot(children, aes(x = age, y = height, color = sex)) + 
   geom_point(alpha = 0.25) + theme_minimal() + 
-  labs(x = "Age (years)", y = "Height (cm)", color = "Sex") + 
+  labs(x = "Age (years)", y = "Height (cm)", color = "Gender") + 
   theme(legend.position = c(0.9,0.2))
 plot(p)
 ```
@@ -438,7 +438,7 @@ d$yhat <- predict(m, newdata = d)
 p <- ggplot(children, aes(x = age, y = height, color = sex)) + 
   geom_point(alpha = 0.125) + theme_minimal() + 
   geom_line(aes(y = yhat), data = d) + 
-  labs(x = "Age (years)", y = "Height (cm)", color = "Sex") +
+  labs(x = "Age (years)", y = "Height (cm)", color = "Gender") +
   theme(legend.position = c(0.9,0.2))
 plot(p)
 ```

@@ -584,7 +584,7 @@ lincon(m, a = c(0, 1, 1, 0))</code></pre>
 library(npregfast)
 p &lt;- ggplot(children, aes(x = age, y = height, color = sex)) + 
   geom_point(alpha = 0.25) + theme_minimal() + 
-  labs(x = &quot;Age (years)&quot;, y = &quot;Height (cm)&quot;, color = &quot;Sex&quot;) + 
+  labs(x = &quot;Age (years)&quot;, y = &quot;Height (cm)&quot;, color = &quot;Gender&quot;) + 
   theme(legend.position = c(0.9,0.2))
 plot(p)</code></pre>
 <p><img src="lecture-02-11-2022_files/figure-html/unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;" /> The “bent cable” regression model can be used as kind of crude growth model for these data. It can be viewed as a generalization of the segmented regression model where rather than having two lines meet at a sharp angle, one line gradually transitions into the other by attaching them by what looks like a bent cable. The figure below shows a bent cable model. <img src="lecture-02-11-2022_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" /> The grey lines show a segmented regression model while the solid curve shows a bent cable model. Essentially there are two lines: one line to the left of <span class="math inline">\(\delta - \gamma\)</span> and one line to the right of <span class="math inline">\(\delta + \gamma\)</span>. And between the two lines (i.e., between <span class="math inline">\(\delta - \gamma\)</span> and <span class="math inline">\(\delta + \gamma\)</span>) is a quadratic polynomial that joins the two lines in such a way that the whole piece-wise function is smooth. The parameter <span class="math inline">\(\delta\)</span> represents the point at which the two lines would meet if there was no bend, and <span class="math inline">\(\gamma\)</span> is the half of the distance between the points <span class="math inline">\(\delta - \gamma\)</span> and <span class="math inline">\(\delta + \gamma\)</span>. As <span class="math inline">\(\gamma\)</span> gets closer to zero this function approaches a segmented regression model (as shown by the grey lines).</p>
@@ -647,9 +647,9 @@ gammaf   1.9069    0.43727   4.361  1.348e-05</code></pre>
 d$yhat &lt;- predict(m, newdata = d)
   
 p &lt;- ggplot(children, aes(x = age, y = height, color = sex)) + 
-  geom_point(alpha = 0.125) + theme_minimal() + 
+  geom_point(alpha = 0.25) + theme_minimal() + 
   geom_line(aes(y = yhat), data = d) + 
-  labs(x = &quot;Age (years)&quot;, y = &quot;Height (cm)&quot;, color = &quot;Sex&quot;) +
+  labs(x = &quot;Age (years)&quot;, y = &quot;Height (cm)&quot;, color = &quot;Gender&quot;) +
   theme(legend.position = c(0.9,0.2))
 plot(p)</code></pre>
 <p><img src="lecture-02-11-2022_files/figure-html/unnamed-chunk-25-1.png" width="100%" style="display: block; margin: auto;" /></p>
