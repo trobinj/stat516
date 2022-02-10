@@ -647,7 +647,7 @@ gammaf   1.9069    0.43727   4.361  1.348e-05</code></pre>
 d$yhat &lt;- predict(m, newdata = d)
   
 p &lt;- ggplot(children, aes(x = age, y = height, color = sex)) + 
-  geom_point(alpha = 0.25) + theme_minimal() + 
+  geom_point(alpha = 0.125) + theme_minimal() + 
   geom_line(aes(y = yhat), data = d) + 
   labs(x = &quot;Age (years)&quot;, y = &quot;Height (cm)&quot;, color = &quot;Gender&quot;) +
   theme(legend.position = c(0.9,0.2))
