@@ -39,6 +39,8 @@ source("../../utilities.R")
 options(digits = 4)
 ```
 
+<!-- It may be useful to redo these notes by showing explicit formulas for linear models with zero and one explanatory variables, and then just make allusions to what happens in general. See the sampdist.Rmd file for a draft. As it is, these lecture notes don't work very well in lecture. -->
+
 ## Parameter Estimation
 
 There are *many* ways to estimate the parameters of a regression model. One useful and common approach is to use the method of *least squares*. 
