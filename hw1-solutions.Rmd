@@ -15,7 +15,7 @@ header-includes:
 knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
 ```
 
-`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](hw1.pdf) copy of this homework assignment.", sep = ""), "")`
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](hw1-solutions.pdf) copy of these homework solutions.", sep = ""), "")`
 
 This homework assignment concerns specifying and the interpreting (via inference) linear models using data from several studies. In particular, you will see how to make inferences concerning linear combinations of model parameters. You will likely need to install several packages to access the data. These include the **bootstrap** and **agridat** packages, as well as the **trtools** and **ggplot2** packages which you should have already installed. 
 

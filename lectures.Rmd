@@ -61,7 +61,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Assumptions of (non)linear regresssion --- continued](lecture-02-16-2022.html). The [solutions](hw1-solutions.html) to the first homework assignment are now available. 
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Dealing with heteroscedasticity: variance stabilizing transformations and weighted least squares](lecture-02-18-2022.html).
  
 ***
 
