@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Linear Model Specification and Interpretation</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Linear Model Specification and Interpretation</h1>
+<h3 class="subtitle">Statistics 516, Homework 1 (Solutions)</h3>
+
+</div>
+
+
+<p>You can also download a <a href="hw1.pdf">PDF</a> copy of this homework assignment.</p>
+<p>This homework assignment concerns specifying and the interpreting (via inference) linear models using data from several studies. In particular, you will see how to make inferences concerning linear combinations of model parameters. You will likely need to install several packages to access the data. These include the <strong>bootstrap</strong> and <strong>agridat</strong> packages, as well as the <strong>trtools</strong> and <strong>ggplot2</strong> packages which you should have already installed.</p>
+<div id="bumpus-sparrows" class="section level2">
+<h2>Bumpus’ Sparrows</h2>
+<p>A famous <a href="https://amornithhistory.org/2018/03/05/professor-bumpus-and-his-sparrows">lecture</a> by biologist <a href="https://en.wikipedia.org/wiki/Hermon_Carey_Bumpus">Hermon Bumpus</a> demonstrated natural selection using data concerning the survival of house sparrows (<em>Passer domesticus</em>) after a severe winter storm.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> After the storm, moribund sparrows were brought to the Anatomical Laboratory at Brown University. Some of these sparrows were revived, but many died. All of the sparrows that were brought in were examined with respect to a variety of anatomical characteristics. It is interesting to compare the anatomical characteristics of sparrows that survived versus those that did not. Dot plots showing the distributions of humerus (upper wing bone) length in the samples of sparrows that survived and the sparrows that did not are shown below.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<pre class="r"><code>library(trtools)
+library(ggplot2)
+
+bumpus$survived &lt;- factor(bumpus$survival, 
+  levels = c(TRUE,FALSE), labels = c(&quot;yes&quot;,&quot;no&quot;))
+
+p &lt;- ggplot(bumpus, aes(x = survived, y = humerus)) + theme_minimal() + 
+  geom_dotplot(binaxis = &quot;y&quot;, binwidth = 0.001) + coord_flip() + 
+  labs(x = &quot;Survived&quot;, y = &quot;Humerus Length (in)&quot;)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" /> Note that I created a new variable <code>survived</code> from the <code>survival</code> variable. This is not necessary, and you could use the original <code>survival</code> variable. I did it to change the labels to “yes” and “no”.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> The following code shows how you can use the <strong>dplyr</strong> package to compute the sample means, standard deviations, and sizes for the two samples of sparrows.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+<pre class="r"><code>library(dplyr)
+bumpus %&gt;% group_by(survived) %&gt;% 
+  summarize(ybar = mean(humerus), sd = sd(humerus), n = n())</code></pre>
+<pre><code># A tibble: 2 x 4
+  survived  ybar     sd     n
+  &lt;fct&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;int&gt;
+1 yes      0.736 0.0203    72
+2 no       0.727 0.0252    64</code></pre>
+<p>So the sample means for the observations of non-surviving and surviving sparrows are <span class="math inline">\(\bar{y}_n\)</span> = 0.727 and <span class="math inline">\(\bar{y}_y\)</span> = 0.736, respectively, the sample standard deviations are <span class="math inline">\(s_n\)</span> = 0.0252 and <span class="math inline">\(s_y\)</span> = 0.0203, respectively, and the sample sizes are <span class="math inline">\(n_n\)</span> = 64 and <span class="math inline">\(n_y\)</span> = 72, respectively. Note that the sample means and standard deviations are rounded.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> Let <span class="math inline">\(\mu_n\)</span> and <span class="math inline">\(\mu_y\)</span> be the “population means” for humerus length for non-surviving and surviving sparrows, respectively, or what we would call the expected humerus lengths.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> In an introductory statistics course you learned a variety of ways to make inferences using data like these. You learned how to compute a confidence interval for <span class="math inline">\(\mu_y - \mu_n\)</span> such as <span class="math display">\[
+  \bar{y}_y - \bar{y}_n \pm ts_p\sqrt{1/n_y + 1/n_n},
+\]</span> where <span class="math display">\[
+  s_p = \sqrt{\frac{(n_y-1)s_y^2 + (n_n-1)s_n^2}{n_y + n_n - 2}},
+\]</span> is the “pooled” estimate of <span class="math inline">\(\sigma\)</span>, the standard deviation of humerus length, and <span class="math inline">\(t\)</span> is a value from the <em>t</em>-distribution with <span class="math inline">\(n_y + n_n - 2\)</span> degrees of freedom that is used to specify the confidence level.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> The test statistic for a “t-test” of the null hypothesis that <span class="math inline">\(\mu_y - \mu_n\)</span> = 0 (i.e, <span class="math inline">\(\mu_y = \mu_n\)</span>) is <span class="math display">\[
+  t = \frac{\bar{y}_y - \bar{y}_n}{s_p\sqrt{1/n_y + 1/n_n}}.
+\]</span> If you were to compute the confidence interval and test statistic using the formulas above you would get a confidence interval (with a 95% confidence level) for <span class="math inline">\(\mu_y - \mu_n\)</span> of approximately (0.001 in, 0.016 in) and a test statistic for the null hypothesis <span class="math inline">\(\mu_y - \mu_n\)</span> = 0 of approximately <em>t</em> = 2.175. Here you will see how to make these inferences and others using a <em>linear model</em>.</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a linear model using the <code>lm</code> function with humerus length as the response variable and survival as the explanatory variable. Report the parameter estimates and their standard errors using the <code>summary</code> function.</p>
+<p><strong>Solution</strong>: We can estimate the model and produce the parameter estimates and standard errors as follows.</p>
+<pre class="r"><code>m &lt;- lm(humerus ~ survived, data = bumpus)
+summary(m)$coefficients</code></pre>
+<pre><code>             Estimate Std. Error t value   Pr(&gt;|t|)
+(Intercept)  0.735944   0.002683 274.302 3.798e-186
+survivedno  -0.008507   0.003911  -2.175  3.138e-02</code></pre></li>
+<li><p>The model you estimated in the previous problem can be written as <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_i,
+\]</span> where <span class="math inline">\(Y_i\)</span> is the <span class="math inline">\(i\)</span>-th observation of humerus length. Explain how the value of <span class="math inline">\(x_i\)</span> is defined for this model (i.e., how would you determine the value of <span class="math inline">\(x_i\)</span> for a given sparrow?). Write the model case-wise to express the expected humerus length as a function of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> for sparrows that survived and those that did not. Let <span class="math inline">\(\mu_y\)</span> and <span class="math inline">\(\mu_n\)</span> be the expected humerus length of a sparrow that did and did not survive, respectively. Using the case-wise representation of the model, write each of these parameters as a function of <span class="math inline">\(\beta_0\)</span> and/or <span class="math inline">\(\beta_1\)</span> (i.e., how would you compute <span class="math inline">\(\mu_y\)</span> and <span class="math inline">\(\mu_n\)</span> using <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>?).</p>
+<p><strong>Solution</strong>: We can see from <code>summary</code> that <span class="math inline">\(x_i\)</span> is an indicator variable defined as <span class="math inline">\(x_i\)</span> = 1 if the <span class="math inline">\(i\)</span>-th observation is of a non-surviving sparrow, and <span class="math inline">\(x_i\)</span> = 0 otherwise. Thus the model can be written case-wise as <span class="math display">\[
+ E(Y_i) = 
+ \begin{cases}
+   \beta_0, &amp; \text{if the $i$-th observation is of a surviving sparrow}, \\
+   \beta_0 + \beta_1, &amp; \text{if the $i$-th observation is of a non-surviving sparrow}.
+ \end{cases}
+ \]</span> Thus we have that <span class="math inline">\(\mu_y = \beta_0\)</span> and <span class="math inline">\(\mu_n = \beta_0 + \beta_1\)</span>. It is important to note that if the variable <code>survival</code> is used instead of <code>survived</code> as the explanatory variable that the indicator variable will then be one when survival is <code>TRUE</code>, which reverses the definitions of <span class="math inline">\(\mu_y\)</span> and <span class="math inline">\(\mu_n\)</span> in terms of the parameters. But the inferences (if done correctly) will be the same.</p></li>
+<li><p>Using the <code>lincon</code> <em>and</em> <code>contrast</code> functions, produce estimates, standard errors, and confidence intervals for <span class="math inline">\(\mu_y\)</span> and <span class="math inline">\(\mu_n\)</span>. For the <code>lincon</code> function, use the fact that each of these parameters can be written as a function of <span class="math inline">\(\beta_0\)</span> and/or <span class="math inline">\(\beta_1\)</span>. Note that the results from <code>lincon</code> and <code>contrast</code> should be the same.<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a></p>
+<p><strong>Solution</strong>: We can obtain inferences for <span class="math inline">\(\mu_y\)</span> and <span class="math inline">\(\mu_n\)</span> using <code>lincon</code> as follows.</p>
+<pre class="r"><code>library(trtools)
+lincon(m, a = c(1,0)) # surviving</code></pre>
+<pre><code>        estimate       se  lower  upper tvalue  df     pvalue
+(1,0),0   0.7359 0.002683 0.7306 0.7413  274.3 134 3.798e-186</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,1)) # non-surviving</code></pre>
+<pre><code>        estimate       se  lower  upper tvalue  df     pvalue
+(1,1),0   0.7274 0.002846 0.7218 0.7331  255.6 134 4.738e-182</code></pre>
+<p>The same inferences can be obtained using <code>contrast</code> as follows.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(survived = c(&quot;yes&quot;,&quot;no&quot;)), cnames = c(&quot;yes&quot;,&quot;no&quot;))</code></pre>
+<pre><code>    estimate       se  lower  upper tvalue  df     pvalue
+yes   0.7359 0.002683 0.7306 0.7413  274.3 134 3.798e-186
+no    0.7274 0.002846 0.7218 0.7331  255.6 134 4.738e-182</code></pre>
+<p>Note that I am going to use <code>trtools::contrast</code> in these solutions because I will also be using the <strong>emmeans</strong> package. Here are how we can obtain these inferences using the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>library(emmeans)
+emmeans(m, ~ survived)</code></pre>
+<pre><code> survived emmean      SE  df lower.CL upper.CL
+ yes       0.736 0.00268 134    0.731    0.741
+ no        0.727 0.00285 134    0.722    0.733
+
+Confidence level used: 0.95 </code></pre></li>
+<li><p>Using the <code>lincon</code> <em>and</em> <code>contrast</code> functions, produce an estimate, standard error, and confidence interval for <span class="math inline">\(\mu_y - \mu_n\)</span>, as well as the test statistic and p-value for a test of the null hypothesis that <span class="math inline">\(\mu_y - \mu_n\)</span> = 0. Note that the results from <code>lincon</code> and <code>contrast</code> should be the same. Also note that your confidence interval and test statistic should be the same as those shown in the problem description above.</p>
+<p><strong>Solution</strong>: Here are the inferences using <code>lincon</code> and <code>contrast</code>. Note that <span class="math inline">\(\mu_y - \mu_n = \beta_0 - (\beta_0 + \beta_1) = -\beta_1\)</span>.</p>
+<pre class="r"><code>lincon(m, a = c(0,-1))</code></pre>
+<pre><code>         estimate       se     lower   upper tvalue  df  pvalue
+(0,-1),0 0.008507 0.003911 0.0007715 0.01624  2.175 134 0.03138</code></pre>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(survived = &quot;yes&quot;), 
+  b = list(survived = &quot;no&quot;))</code></pre>
+<pre><code> estimate       se     lower   upper tvalue  df  pvalue
+ 0.008507 0.003911 0.0007715 0.01624  2.175 134 0.03138</code></pre>
+<p>And here is how it can be done using the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ survived), infer = TRUE)</code></pre>
+<pre><code> contrast estimate      SE  df lower.CL upper.CL t.ratio p.value
+ yes - no  0.00851 0.00391 134 0.000772   0.0162   2.175  0.0314
+
+Confidence level used: 0.95 </code></pre>
+<p>Note that the confidence interval and test statistic are the same as those given using the formulas given in the problem description.</p></li>
+</ol>
+</div>
+<div id="anti-inflammatory-hormone-devices" class="section level2">
+<h2>Anti-Inflammatory Hormone Devices</h2>
+<p>For this problem you will be using the data frame <code>hormone</code> from the <strong>bootstrap</strong> package. The data are from a fictional study of devices for delivering anti-inflammatory hormones. The primary goal of the study is compare devices from three different manufacturing lots with respect to the amount of hormone remaining in the devices after use. The plot below shows the distribution of hormone remaining for the devices from the three lots.</p>
+<pre class="r"><code>library(bootstrap)
+library(ggplot2)
+
+p &lt;- ggplot(hormone, aes(x = Lot, y = amount)) + theme_minimal() + 
+  geom_point(alpha = 0.5) + coord_flip() + labs(y = &quot;Amount Remaining&quot;)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" /> The following shows the mean for amount remaining by lot.</p>
+<pre class="r"><code>library(dplyr)
+
+hormone %&gt;% group_by(Lot) %&gt;% summarize(ybar = mean(amount))</code></pre>
+<pre><code># A tibble: 3 x 2
+  Lot    ybar
+  &lt;chr&gt; &lt;dbl&gt;
+1 A      23.1
+2 B      22.1
+3 C      28.9</code></pre>
+<p>The goal here is to make inferences about the expected amount of hormone remaining for devices from the three manufacturing lots.</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a linear model using the <code>lm</code> function where the response variable is the amount of hormone remaining and the explanatory variable is lot. Report the parameter estimates and standard errors using the <code>summary</code> function.</p>
+<p><strong>Solution</strong>: This model can be estimated as follows.</p>
+<pre class="r"><code>m &lt;- lm(amount ~ Lot, data = hormone)
+summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)   23.078      1.962 11.7630 1.887e-11
+LotB          -1.011      2.775 -0.3644 7.187e-01
+LotC           5.844      2.775  2.1065 4.581e-02</code></pre></li>
+<li><p>The model you estimated in the previous problem can be written as <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2},
+\]</span> where <span class="math inline">\(Y_i\)</span> is the <span class="math inline">\(i\)</span>-th observation of the amount of hormone remaining. Explain how <span class="math inline">\(x_{i1}\)</span> and <span class="math inline">\(x_{i2}\)</span> are defined for this model (i.e., how would you determine their values for a given device?). Then write the model case-wise to show how the expected amount of hormone remaining for each lot can be written as a function of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and/or <span class="math inline">\(\beta_2\)</span>.</p>
+<p><strong>Solution</strong>: Inspection of the output from <code>summary</code> shows that <span class="math inline">\(x_{i1}\)</span> = 1 if the <span class="math inline">\(i\)</span>-th observation is from Lot B, and <span class="math inline">\(x_{i1}\)</span> = 0 otherwise, and <span class="math inline">\(x_{i2}\)</span> = 1 if the <span class="math inline">\(i\)</span>-th observation is from Lot C, and <span class="math inline">\(x_{i2}\)</span> = 0 otherwise. So the model can be written case-wise as <span class="math display">\[
+  E(Y_i) = 
+  \begin{cases}
+ \beta_0, &amp; \text{if the $i$-th observation is from lot A}, \\
+ \beta_0 + \beta_1, &amp; \text{if the $i$-th observation is from lot B}, \\
+ \beta_0 + \beta_2, &amp; \text{if the $i$-th observation is from lot C}.
+  \end{cases}
+\]</span></p></li>
+<li><p>Using the <code>contrast</code> <em>and</em> <code>lincon</code> functions, produce estimates, standard errors, and confidence intervals for the expected amount of hormone remaining for each lot. Note that the results from <code>lincon</code> and <code>contrast</code> should be the same.</p>
+<p><strong>Solution</strong>: The inferences can be obtained using <code>lincon</code> and <code>contrast</code> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(1,0,0)) # lot A</code></pre>
+<pre><code>          estimate    se lower upper tvalue df    pvalue
+(1,0,0),0    23.08 1.962 19.03 27.13  11.76 24 1.887e-11</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,1,0)) # lot B</code></pre>
+<pre><code>          estimate    se lower upper tvalue df    pvalue
+(1,1,0),0    22.07 1.962 18.02 26.12  11.25 24 4.717e-11</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,0,1)) # lot C</code></pre>
+<pre><code>          estimate    se lower upper tvalue df    pvalue
+(1,0,1),0    28.92 1.962 24.87 32.97  14.74 24 1.583e-13</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(Lot = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;)), 
+  cnames = c(&quot;Lot A&quot;,&quot;Lot B&quot;,&quot;Lot C&quot;))</code></pre>
+<pre><code>      estimate    se lower upper tvalue df    pvalue
+Lot A    23.08 1.962 19.03 27.13  11.76 24 1.887e-11
+Lot B    22.07 1.962 18.02 26.12  11.25 24 4.717e-11
+Lot C    28.92 1.962 24.87 32.97  14.74 24 1.583e-13</code></pre>
+<p>Here is how this can be done using the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>emmeans(m, ~ Lot)</code></pre>
+<pre><code> Lot emmean   SE df lower.CL upper.CL
+ A     23.1 1.96 24     19.0     27.1
+ B     22.1 1.96 24     18.0     26.1
+ C     28.9 1.96 24     24.9     33.0
+
+Confidence level used: 0.95 </code></pre></li>
+<li><p>Using the <code>contrast</code> <em>and</em> <code>lincon</code> functions, produce estimates, standard errors, and confidence intervals for the <em>difference</em> in the expected amount of hormone remaining between lot <em>C</em> and <em>B</em>, lots <em>C</em> and <em>A</em>, and between lots <em>A</em> and <em>B</em>. Note that the results from <code>lincon</code> and <code>contrast</code> should be the same.</p>
+<p><strong>Solution</strong>: Note that the difference in the expected response between lots <em>C</em> and <em>B</em> is <span class="math inline">\(\beta_0 + \beta_2 - (\beta_0 - \beta_1) = \beta_2 - \beta_1\)</span>, the difference in the expected response between lots <em>C</em> and <em>A</em> is <span class="math inline">\(\beta_0 + \beta_2 - \beta_0 = \beta_2\)</span>, and the difference in the expected response between lots <em>A</em> and <em>B</em> is <span class="math inline">\(\beta_0 - (\beta_0 + \beta_1) = -\beta_1\)</span>. We can estimate these differences using <code>lincon</code> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(0,-1,1)) # beta2 - beta1</code></pre>
+<pre><code>           estimate    se lower upper tvalue df  pvalue
+(0,-1,1),0    6.856 2.775 1.129 12.58  2.471 24 0.02097</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,0,1))  # beta2</code></pre>
+<pre><code>          estimate    se  lower upper tvalue df  pvalue
+(0,0,1),0    5.844 2.775 0.1181 11.57  2.106 24 0.04581</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,-1,0)) # -beta1</code></pre>
+<pre><code>           estimate    se  lower upper tvalue df pvalue
+(0,-1,0),0    1.011 2.775 -4.715 6.737 0.3644 24 0.7187</code></pre>
+<p>Here is how we can make these inferences using <code>contrast</code>. Note that we can do it in one statement.</p>
+<pre class="r"><code>trtools::contrast(m,
+  a = list(Lot = c(&quot;C&quot;,&quot;C&quot;,&quot;A&quot;)),
+  b = list(Lot = c(&quot;B&quot;,&quot;A&quot;,&quot;B&quot;)),
+  cnames = c(&quot;C vs B&quot;,&quot;C vs A&quot;,&quot;A vs B&quot;))</code></pre>
+<pre><code>       estimate    se   lower  upper tvalue df  pvalue
+C vs B    6.856 2.775  1.1292 12.582 2.4709 24 0.02097
+C vs A    5.844 2.775  0.1181 11.571 2.1065 24 0.04581
+A vs B    1.011 2.775 -4.7153  6.737 0.3644 24 0.71873</code></pre>
+<p>We can also do this using the <code>pairs</code> function in the <strong>emmeans</strong> package as follows.</p>
+<pre class="r"><code>pairs(emmeans(m, ~Lot), infer = TRUE, adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast estimate   SE df lower.CL upper.CL t.ratio p.value
+ A - B        1.01 2.77 24    -4.71    6.737   0.364  0.7187
+ A - C       -5.84 2.77 24   -11.57   -0.118  -2.106  0.0458
+ B - C       -6.86 2.77 24   -12.58   -1.129  -2.471  0.0210
+
+Confidence level used: 0.95 </code></pre>
+<p>Note that the direction of subtraction is different when using <code>pairs</code>. By default it appears to use the order of the categories/levels (alphabetical if not specified otherwise). But you can reverse the direction of subtraction using the <code>reverse = TRUE</code> argument.</p>
+<pre class="r"><code>pairs(emmeans(m, ~Lot), infer = TRUE, adjust = &quot;none&quot;, reverse = TRUE)</code></pre>
+<pre><code> contrast estimate   SE df lower.CL upper.CL t.ratio p.value
+ B - A       -1.01 2.77 24   -6.737     4.71  -0.364  0.7187
+ C - A        5.84 2.77 24    0.118    11.57   2.106  0.0458
+ C - B        6.86 2.77 24    1.129    12.58   2.471  0.0210
+
+Confidence level used: 0.95 </code></pre></li>
+<li><p>The model and analyses in the previous problems fails to take into account that devices in the three lots tended to have different amounts of use as can be seen in the following.</p>
+<pre class="r"><code>p &lt;- ggplot(hormone, aes(x = Lot, y = hrs)) + theme_minimal() + 
+  geom_point(alpha = 0.5) + coord_flip() + labs(y = &quot;Hours of Use&quot;)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>hormone %&gt;% group_by(Lot) %&gt;% summarize(wear = mean(hrs))</code></pre>
+<pre><code># A tibble: 3 x 2
+  Lot    wear
+  &lt;chr&gt; &lt;dbl&gt;
+1 A      151.
+2 B      233.
+3 C      111 </code></pre>
+<p>As can be seen in the plot and in the descriptive statistics, the devices from lot <em>C</em> had, on average, the least hours of use, while devices from lot <em>B</em> tended to have the most hours of use. We can view the relationship among all three variables in the following plot.</p>
+<pre class="r"><code>p &lt;- ggplot(hormone, aes(x = hrs, y = amount, color = Lot)) + theme_minimal() + 
+  geom_point() + labs(x = &quot;Hours of Use&quot;, y = &quot;Amount of Hormone Remaining&quot;)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" /> There is nothing statistically incorrect about the model used in the previous problem, but it may not be useful since it does not allow for a “fair” comparison between the lots since the devices in the lots differ across lots with respect to use. A more useful comparison would be to compare the expected amount of hormone between the lots while “controlling for” hours of use — i.e., what is the difference in the expected amount of hormone for devices from different lots but with the same amount of use? Estimate a linear model with amount of hormone remaining as a response variable and <em>both</em> lot and hours of use as explanatory variables. Do not include an “interaction” term in your model so that the rate of change in expected amount of hormone with respect to amount of use is the same for each lot. Report the parameter estimates and their standard errors using the <code>summary</code> function, parameter confidence intervals using the <code>confint</code> function, and plot the estimated expected amount of hormone remaining as a function of hours of use and lot by extending the code given above. Note that this will require you to create an artificial data set using the <code>expand.grid</code> function for different combinations of hours of use and lots. For the hours of use variable, have your values go from 29 to 402 hours, which are the smallest and largest values observed in the data.</p>
+<p><strong>Solution</strong>: Here is how to specify the model and produce parameter estimates with confidence intervals.</p>
+<pre class="r"><code>m &lt;- lm(amount ~ Lot + hrs, data = hormone)
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)    2.5 %   97.5 %
+(Intercept) 32.13159   0.748277  42.941 1.823e-23 30.58367 33.67952
+LotB         3.97350   0.809686   4.907 5.868e-05  2.29854  5.64846
+LotC         3.46573   0.769123   4.506 1.594e-04  1.87468  5.05678
+hrs         -0.06014   0.003474 -17.310 1.099e-14 -0.06732 -0.05295</code></pre>
+<p>Next we can create a data frame for plotting purposes.</p>
+<pre class="r"><code>d &lt;- expand.grid(Lot = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;), hrs = c(29,402))
+d$yhat &lt;- predict(m, newdata = d)</code></pre>
+<p>Finally we can “add” the estimated model to the plot.</p>
+<pre class="r"><code>p &lt;- p + geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-24-1.png" width="100%" style="display: block; margin: auto;" /></p></li>
+<li><p>The model you estimated in the previous problem can be written as <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \beta_3x_{i3}.
+\]</span> Explain how <span class="math inline">\(x_{i1}\)</span>, <span class="math inline">\(x_{i2}\)</span>, and <span class="math inline">\(x_{i3}\)</span> are defined (i.e., how would you determine their values for a given device). Then write the model case-wise to show how the expected amount of hormone remaining can be written as a function of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, <span class="math inline">\(\beta_3\)</span>, and hours of use for each lot.</p>
+<p><strong>Solution</strong>: The variables <span class="math inline">\(x_{i1}\)</span> and <span class="math inline">\(x_{i2}\)</span> are defined as they were in the previous model. They are indicator variables for lots <em>B</em> and <em>C</em>, respectively. Then <span class="math inline">\(x_{i3}\)</span> is simply hours of use for the <span class="math inline">\(i\)</span>-th observation. The model can be written case-wise as <span class="math display">\[
+ E(Y_i) = 
+   \begin{cases}
+     \beta_0, &amp; \text{if the $i$-th observation is from lot A}, \\
+     \beta_0 + \beta_1, &amp; \text{if the $i$-th observation is from lot B}, \\
+     \beta_0 + \beta_2, &amp; \text{if the $i$-th observation is from lot C}.
+   \end{cases}
+ \]</span></p></li>
+<li><p>Use the <code>contrast</code> function to estimate (a) the expected amount of hormone remaining in a device from each of the three lots that has had 200 hours of use, and (b) the <em>difference</em> in the expected amount of hormone remaining between lot <em>C</em> and <em>B</em>, lots <em>C</em> and <em>A</em>, and between lots <em>A</em> and <em>B</em>, when the hours of use is 200 hours. Comment briefly on how your comparisons between the lots in (b) compare to what you found earlier when you did not control for hours of use.</p>
+<p><strong>Solution</strong>: Here are the estimated expected amount of hormone remaining for a device from each lot after 200 hours of use.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(Lot = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;), hrs = 200),
+  cnames = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;))</code></pre>
+<pre><code>  estimate     se lower upper tvalue df    pvalue
+A    20.10 0.5620 18.94 21.27  35.77 23 1.146e-21
+B    24.08 0.5476 22.95 25.21  43.97 23 1.063e-23
+C    23.57 0.6180 22.29 24.85  38.14 23 2.689e-22</code></pre>
+<p>And here are the pairwise differences.</p>
+<pre class="r"><code>trtools::contrast(m,
+  a = list(Lot = c(&quot;C&quot;,&quot;C&quot;,&quot;A&quot;), hrs = 200),
+  b = list(Lot = c(&quot;B&quot;,&quot;A&quot;,&quot;B&quot;), hrs = 200),
+  cnames = c(&quot;C vs B&quot;,&quot;C vs A&quot;,&quot;A vs B&quot;))</code></pre>
+<pre><code>       estimate     se  lower  upper  tvalue df    pvalue
+C vs B  -0.5078 0.8681 -2.304  1.288 -0.5849 23 5.643e-01
+C vs A   3.4657 0.7691  1.875  5.057  4.5061 23 1.594e-04
+A vs B  -3.9735 0.8097 -5.648 -2.299 -4.9075 23 5.868e-05</code></pre>
+<p>We can also do this with the <strong>emmeans</strong> package by using the <code>at</code> argument to specify the value of hours of use.</p>
+<pre class="r"><code>emmeans(m, ~Lot, at = list(hrs = 200))</code></pre>
+<pre><code> Lot emmean    SE df lower.CL upper.CL
+ A     20.1 0.562 23     18.9     21.3
+ B     24.1 0.548 23     22.9     25.2
+ C     23.6 0.618 23     22.3     24.8
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~Lot, at = list(hrs = 200)), infer = TRUE, adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast estimate    SE df lower.CL upper.CL t.ratio p.value
+ A - B      -3.973 0.810 23    -5.65    -2.30  -4.907  0.0001
+ A - C      -3.466 0.769 23    -5.06    -1.87  -4.506  0.0002
+ B - C       0.508 0.868 23    -1.29     2.30   0.585  0.5643
+
+Confidence level used: 0.95 </code></pre></li>
+<li><p>In the model used in the previous questions with hours of use as an explanatory variable with lot, one of the <span class="math inline">\(\beta_j\)</span> parameters in the model is the rate of change in the expected amount of hormone remaining with respect to hours of use (i.e., the change in the expected amount of hormone remaining for a one hour increase in use). Because of how the model was specified, this is the same for the three lots. Now use the <code>contrast</code> function to estimate this same quantity for each lot. You should obtain the same estimate, standard error, confidence interval, and test statistic as for the corresponding <span class="math inline">\(\beta_j\)</span> parameter as shown by <code>summary</code> and <code>confint</code>, and these should be the same for each lot. Also use the <code>contrast</code> function to estimate the change in the expected amount of hormone remaining for a 100 hour increase in use. Note that your estimate, standard error, and confidence interval endpoints should be 100 times what you found for a one hour increase, but the test statistic should be the same.</p>
+<p><strong>Solution</strong>: In this model <span class="math inline">\(\beta_3\)</span> is the rate of change in the expected amount of hormone remaining per hour of use. We can also estimate this using <code>contrast</code> as follows.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(Lot = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;), hrs = 2),
+  b = list(Lot = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;), hrs = 1),
+  cnames = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;))</code></pre>
+<pre><code>  estimate       se    lower    upper tvalue df    pvalue
+A -0.06014 0.003474 -0.06732 -0.05295 -17.31 23 1.099e-14
+B -0.06014 0.003474 -0.06732 -0.05295 -17.31 23 1.099e-14
+C -0.06014 0.003474 -0.06732 -0.05295 -17.31 23 1.099e-14</code></pre>
+<p>The rate of change can also be estimated using the <code>emtrends</code> function from the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>emtrends(m, ~Lot, var = &quot;hrs&quot;)</code></pre>
+<pre><code> Lot hrs.trend      SE df lower.CL upper.CL
+ A     -0.0601 0.00347 23  -0.0673  -0.0529
+ B     -0.0601 0.00347 23  -0.0673  -0.0529
+ C     -0.0601 0.00347 23  -0.0673  -0.0529
+
+Confidence level used: 0.95 </code></pre>
+<p>For a 100 hour increase we can estimate the rate of change as follows.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(Lot = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;), hrs = 200),
+  b = list(Lot = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;), hrs = 100),
+  cnames = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;))</code></pre>
+<pre><code>  estimate     se  lower  upper tvalue df    pvalue
+A   -6.014 0.3474 -6.732 -5.295 -17.31 23 1.099e-14
+B   -6.014 0.3474 -6.732 -5.295 -17.31 23 1.099e-14
+C   -6.014 0.3474 -6.732 -5.295 -17.31 23 1.099e-14</code></pre></li>
+<li><p>Consider the following model “formula” argument for the <code>lm</code> function: <code>amount ~ Lot:hrs</code>. It may not be clear exactly what kind of model this specifies, but you can deduce the model from the output from <code>summary</code>. Estimate this model and give the parameter estimates and their standard errors using the <code>summary</code> function. Also plot the model with the raw data like you did with the previous model. This model can be written as <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \beta_3x_{i3},
+\]</span> but now <span class="math inline">\(x_{i1}\)</span>, <span class="math inline">\(x_{i2}\)</span>, and <span class="math inline">\(x_{i3}\)</span> are different from what they were in the previous model, and so <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and <span class="math inline">\(\beta_3\)</span> have different interpretations as well. Explain how <span class="math inline">\(x_{i1}\)</span>, <span class="math inline">\(x_{i2}\)</span>, and <span class="math inline">\(x_{i3}\)</span> are defined for this model (i.e., how would you determine their values for a given device). Write the model case-wise to show how the expected amount of hormone remaining can be written as a function of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, <span class="math inline">\(\beta_3\)</span>, and hours of use for each lot. Use the <code>contrast</code> function to estimate (a) the expected amount of hormone remaining in devices from each lot after zero hours of use, and after 200 hours of use, and (b) the change in the expected amount of hormone for a one hour increase in the amount of use for each lot. Compare these estimates to the parameter estimates from <code>summary</code>, and briefly discuss how one would interpret the parameters <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and <span class="math inline">\(\beta_3\)</span> in terms of the relationship between expected hormone remaining as a function of lot and hours of use. <strong>Note</strong>: This problem is <em>extra credit</em> for students enrolled in Stat 436, but is <em>required</em> for students enrolled in Stat 516.</p>
+<p><strong>Solution</strong>: Here are the parameter estimates.</p>
+<pre class="r"><code>m &lt;- lm(amount ~ Lot:hrs, data = hormone)
+summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept) 35.01572   0.736247  47.560 1.783e-24
+LotA:hrs    -0.07728   0.005146 -15.016 2.238e-13
+LotB:hrs    -0.05566   0.003142 -17.714 6.696e-15
+LotC:hrs    -0.05722   0.007423  -7.709 8.045e-08</code></pre>
+<p>According to the output, <span class="math inline">\(x_{i1}\)</span> is the <em>product</em> of an indicator variable for an observation from lot <em>A</em> and the hours of use. Similarly <span class="math inline">\(x_{i2}\)</span> and <span class="math inline">\(x_{i3}\)</span> are the products of indicator variables for lots <em>B</em> and <em>C</em>, respectively, and hours of use. So the model can be written case-wise as <span class="math display">\[
+ E(Y_i) = 
+ \begin{cases}
+ \beta_0 + \beta_1 h_i, &amp; \text{if the $i$-th observation is from lot A}, \\
+ \beta_0 + \beta_2 h_i, &amp; \text{if the $i$-th observation is from lot B}, \\
+ \beta_0 + \beta_3 h_i, &amp; \text{if the $i$-th observation is from lot C}. \\
+ \end{cases}
+ \]</span> Using contrast we can estimate the expected amount of hormone remaining for each lot after 0 and 100 hours of use.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(Lot = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;), hrs = 0), 
+  cnames = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;))</code></pre>
+<pre><code>  estimate     se lower upper tvalue df    pvalue
+A    35.02 0.7362 33.49 36.54  47.56 23 1.783e-24
+B    35.02 0.7362 33.49 36.54  47.56 23 1.783e-24
+C    35.02 0.7362 33.49 36.54  47.56 23 1.783e-24</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(Lot = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;), hrs = 100), 
+  cnames = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;))</code></pre>
+<pre><code>  estimate     se lower upper tvalue df    pvalue
+A    27.29 0.4678 26.32 28.26  58.33 23 1.692e-26
+B    29.45 0.5354 28.34 30.56  55.00 23 6.481e-26
+C    29.29 0.4819 28.30 30.29  60.79 23 6.576e-27</code></pre>
+<p>Here is how we could do that with the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>emmeans(m, ~Lot, at = list(hrs = 0))</code></pre>
+<pre><code> Lot emmean    SE df lower.CL upper.CL
+ A       35 0.736 23     33.5     36.5
+ B       35 0.736 23     33.5     36.5
+ C       35 0.736 23     33.5     36.5
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>emmeans(m, ~Lot, at = list(hrs = 100))</code></pre>
+<pre><code> Lot emmean    SE df lower.CL upper.CL
+ A     27.3 0.468 23     26.3     28.3
+ B     29.4 0.535 23     28.3     30.6
+ C     29.3 0.482 23     28.3     30.3
+
+Confidence level used: 0.95 </code></pre>
+<p>Note that the estimated expected response at zero hours is the same for all three lots, and these are also equal to the estimate for <span class="math inline">\(\beta_0\)</span>. In this model <span class="math inline">\(\beta_0\)</span> represents the expected amount of hormone remaining at zero hours for all three lots. Assuming that the devices from the three lots start with the same amount of hormone, on average, and that any differences are due to measurement error or random differences in how the devices are filled that do not systematically vary between lots, such a model may be reasonable. Now consider the estimates of the change in the expected amount of hormone remaining after one additional hour of use for each lot.</p>
+<pre class="r"><code>trtools::contrast(m,
+  a = list(Lot = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;), hrs = 2),
+  b = list(Lot = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;), hrs = 1),
+  cnames = c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;))</code></pre>
+<pre><code>  estimate       se    lower    upper  tvalue df    pvalue
+A -0.07728 0.005146 -0.08792 -0.06663 -15.016 23 2.238e-13
+B -0.05566 0.003142 -0.06216 -0.04916 -17.714 23 6.696e-15
+C -0.05722 0.007423 -0.07258 -0.04187  -7.709 23 8.045e-08</code></pre>
+<p>We can also do this using the <code>emtrends</code> function from the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>emtrends(m, ~Lot, var = &quot;hrs&quot;)</code></pre>
+<pre><code> Lot hrs.trend      SE df lower.CL upper.CL
+ A     -0.0773 0.00515 23  -0.0879  -0.0666
+ B     -0.0557 0.00314 23  -0.0622  -0.0492
+ C     -0.0572 0.00742 23  -0.0726  -0.0419
+
+Confidence level used: 0.95 </code></pre>
+<p>Note that these estimates are the same as those for <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and <span class="math inline">\(\beta_3\)</span>. In this model, those parameters equal the rate of change in the expected amount of hormone remaining for devices from each lot. You can also use the <code>pairs</code> function from the <strong>emmeans</strong> package to compare these parameters.</p>
+<pre class="r"><code>pairs(emtrends(m, ~Lot, var = &quot;hrs&quot;), infer = TRUE, adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast estimate      SE df lower.CL upper.CL t.ratio p.value
+ A - B    -0.02161 0.00414 23  -0.0302 -0.01305  -5.219  &lt;.0001
+ A - C    -0.02005 0.00591 23  -0.0323 -0.00783  -3.395  0.0025
+ B - C     0.00156 0.00607 23  -0.0110  0.01412   0.257  0.7994
+
+Confidence level used: 0.95 </code></pre>
+<p>So we can see, for example, that the differences in the rates of change are statistically significant when comparing lots <em>A</em> and <em>B</em> and when comparing lots <em>A</em> and <em>C</em>, but not when comparing lots <em>B</em> and <em>C</em>. The <code>contrast</code> function can also do this, but it is a bit more tedious.</p></li>
+</ol>
+</div>
+<div id="daphnia-survey" class="section level2">
+<h2>Daphnia Survey</h2>
+<p>The data in the data frame <code>daphniastrat</code> from the <strong>trtools</strong> package are from a survey of daphnia (water fleas) in a fresh water lake.<a href="#fn9" class="footnote-ref" id="fnref9"><sup>9</sup></a> Researchers obtained one-liter samples of water from three depth layers: the <em>epilimnion</em> (the warmer surface layer), the <em>thermocline</em> (the middle layer between the warmer and colder layers), and the <em>hypolimnion</em> (the colder bottom layer). The number of daphnia within each water sample was then recorded. A plot of the raw data is shown below.</p>
+<pre class="r"><code>library(ggplot2)
+library(trtools)
+p &lt;- ggplot(daphniastrat, aes(x = layer, y = count)) + theme_minimal() + 
+  geom_dotplot(binaxis = &quot;y&quot;, stackdir = &quot;center&quot;) + 
+  labs(x = &quot;Layer&quot;, y = &quot;Number of Daphnia&quot;)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-37-1.png" width="100%" style="display: block; margin: auto;" /> Some descriptive statistics of the number of daphnia for each layer can be obtained as follows using the <strong>dplyr</strong> package.</p>
+<pre class="r"><code>library(dplyr)
+daphniastrat %&gt;% group_by(layer) %&gt;% 
+  summarize(mean = mean(count), sd = sd(count), samples = n())</code></pre>
+<pre><code># A tibble: 3 x 4
+  layer        mean    sd samples
+  &lt;fct&gt;       &lt;dbl&gt; &lt;dbl&gt;   &lt;int&gt;
+1 epilimnion  19.5   3.58      20
+2 thermocline 11.3   4.08      10
+3 hypolimnion  1.73  1.91      15</code></pre>
+<p>The following concern inferences about the daphnia within each layer and in the entire lake.</p>
+<ol style="list-style-type: decimal">
+<li><p>Specify a linear model using the <code>lm</code> function with count as the response variable and layer as the explanatory variable. Report the parameter estimates using the <code>summary</code> function. Let <span class="math inline">\(\mu_e\)</span>, <span class="math inline">\(\mu_t\)</span>, and <span class="math inline">\(\mu_h\)</span> represent the expected number of daphnia in one liter of water sampled from the epilimnion, thermocline, and hypolimnion layers, respectively. If we assume simple random sampling of the one liter samples from each layer, then <span class="math inline">\(\mu_e\)</span>, <span class="math inline">\(\mu_t\)</span>, and <span class="math inline">\(\mu_h\)</span> then also represent the mean number of daphnia for epilimnion, thermocline, and hypolimnion layers, respectively (i.e., the daphnia density in each layer). Write each of these parameters as a function of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and/or <span class="math inline">\(\beta_2\)</span>.</p>
+<p><strong>Solution</strong>: We can specify the model and obtain the parameter estimates as follows.</p>
+<pre class="r"><code>m &lt;- lm(count ~ layer, data = daphniastrat)
+summary(m)$coefficients</code></pre>
+<pre><code>                 Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)         19.50     0.7271  26.820 4.727e-28
+layerthermocline    -8.20     1.2593  -6.512 7.293e-08
+layerhypolimnion   -17.77     1.1106 -15.997 1.784e-19</code></pre>
+<p>Note that we can write the model case-wise as <span class="math display">\[
+   E(Y_i) = 
+   \begin{cases}
+   \beta_0, &amp; \text{if the $i$-th water sample is from the epilimnion layer}, \\
+   \beta_0 + \beta_1, &amp; \text{if the $i$-th water sample is from the thermocline layer}, \\
+   \beta_0 + \beta_1, &amp; \text{if the $i$-th water sample is from the hypolimnion layer}.
+   \end{cases}
+ \]</span> This implies that <span class="math inline">\(\mu_e = \beta_0\)</span>, <span class="math inline">\(\mu_t = \beta_0 + \beta_1\)</span>, and <span class="math inline">\(\mu_h = \beta_0 + \beta_2\)</span>.</p></li>
+<li><p>The volumes of the epilimnion, thermocline, and hypolimnion layers are 100kL, 200kL, and 400kL, respectively, so the volume of the lake as a whole is 700kL or 700000 liters. The mean number of daphnia per liter for the whole lake, denoted here as <span class="math inline">\(\mu\)</span>, is therefore the weighted average of the mean number of daphnia per liter from each layer computed as <span class="math display">\[
+  \mu = \tfrac{1}{7}\mu_e + \tfrac{2}{7}\mu_t + \tfrac{4}{7}\mu_h.
+\]</span> The <em>total</em> number of daphnia in the lake, which we might represent as the parameter <span class="math inline">\(\tau\)</span>, is equal to 700000<span class="math inline">\(\mu\)</span>, so that <span class="math display">\[
+  \tau = 100000\mu_e + 200000\mu_t + 400000\mu_h.
+\]</span> In the previous problem you expressed <span class="math inline">\(\mu_e\)</span>, <span class="math inline">\(\mu_t\)</span>, and <span class="math inline">\(\mu_h\)</span> as functions of the parameters <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\beta_2\)</span>. In the expressions for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> above, substitute <span class="math inline">\(\mu_e\)</span>, <span class="math inline">\(\mu_t\)</span>, and <span class="math inline">\(\mu_h\)</span> with the corresponding function of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\beta_2\)</span>, and then simplify the expressions so that <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are then written as linear combinations of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\beta_2\)</span>. Then use the <code>lincon</code> function to compute estimates of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> as well as confidence intervals for these parameters and the standard errors of the estimators.<a href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a></p>
+<p><strong>Solution</strong>: Note that <span class="math display">\[
+   \mu = \beta_0 + \tfrac{2}{7}\beta_1 + \tfrac{4}{7}\beta_2,
+ \]</span> and <span class="math display">\[
+   \tau = 700000\beta_0 + \tfrac{1400000}{7}\beta_1 + \tfrac{2800000}{7}\beta_2 = 700000\beta_0 + 200000\beta_1 + 400000\beta_2.
+ \]</span> So we can estimate <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> using <code>lincon</code> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(1, 2/7, 4/7))</code></pre>
+<pre><code>              estimate    se lower upper tvalue df    pvalue
+(1,2/7,4/7),0    7.005 0.572  5.85 8.159  12.25 42 1.907e-15</code></pre>
+<pre class="r"><code>lincon(m, a = c(700000, 200000, 400000)) </code></pre>
+<pre><code>                      estimate     se   lower   upper tvalue df    pvalue
+(7e+05,2e+05,4e+05),0  4903333 400431 4095230 5711437  12.25 42 1.907e-15</code></pre>
+<p>Note that you can also have R do the multiplication for you for the coefficients for <span class="math inline">\(\tau\)</span>.</p>
+<pre class="r"><code>lincon(m, a = 700000 * c(1, 2/7, 4/7))</code></pre>
+<pre><code>                      estimate     se   lower   upper tvalue df    pvalue
+(7e+05,2e+05,4e+05),0  4903333 400431 4095230 5711437  12.25 42 1.907e-15</code></pre>
+<p>Inferences for <span class="math inline">\(\mu\)</span> can also be obtained using the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>levels(daphniastrat$layer) # checking the order of the levels</code></pre>
+<pre><code>[1] &quot;epilimnion&quot;  &quot;thermocline&quot; &quot;hypolimnion&quot;</code></pre>
+<pre class="r"><code>emmeans(m, ~1, weights = c(1/7, 2/7, 4/7))</code></pre>
+<pre><code> 1       emmean    SE df lower.CL upper.CL
+ overall      7 0.572 42     5.85     8.16
+
+Results are averaged over the levels of: layer 
+Confidence level used: 0.95 </code></pre>
+<p>We cannot use this approach to estimate <span class="math inline">\(\tau\)</span> because the <code>weights</code> argument for the <code>emmeans</code> function will normalize the weights so that they sum to one. But since <span class="math inline">\(\tau = 700000\mu\)</span> you could obtain these inferences “by hand” by multiplying the estimate, standard error, and confidence interval limits by 700000. The <code>contrast</code> function from the <strong>trtools</strong> package will also allow you to make inferences concerning <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> by specifying a transformation function to take the estimates of <span class="math inline">\(\mu_e\)</span>, <span class="math inline">\(\mu_t\)</span>, and <span class="math inline">\(\mu_h\)</span>. This requires a little bit of R programming.</p>
+<pre class="r"><code>f &lt;- function(mu) {
+  1/7 * mu[1] + 2/7 * mu[2] + 4/7 * mu[3]    
+}
+trtools::contrast(m, 
+  a = list(layer = c(&quot;epilimnion&quot;,&quot;thermocline&quot;,&quot;hypolimnion&quot;)), tf = f)</code></pre>
+<pre><code> estimate    se lower upper tvalue df    pvalue
+    7.005 0.572  5.85 8.159  12.25 42 1.907e-15</code></pre>
+<p>Here the argument <code>tf</code> allows me to specify a “transformation function” to make inferences about a function of whatever <code>contrast</code> would produce (here the estimated expected number of daphnia for each layer). This is maybe a little easier than using <code>lincon</code>, but more work than using <code>emmeans</code>. A benefit of using <code>contrast</code> like this is that it is fairly powerful since the user can specify other kinds of transformation functions.</p></li>
+<li><p>In the previous problem you estimated the total number of daphnia in the lake. Now consider the problem of estimating the total number of daphnia <em>in each layer</em>. The total number of daphnia in the epilimnion layer is <span class="math inline">\(\tau_e\)</span> = 100000<span class="math inline">\(\mu_e\)</span>. Similarly, the total number of daphnia in the thermocline and hypolimnion layers are <span class="math inline">\(\tau_t\)</span> = 200000<span class="math inline">\(\mu_t\)</span> and <span class="math inline">\(\tau_h\)</span> = 400000<span class="math inline">\(\mu_h\)</span>, respectively. Write <span class="math inline">\(\tau_e\)</span>, <span class="math inline">\(\tau_t\)</span>, and <span class="math inline">\(\tau_h\)</span> as linear combinations of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\beta_2\)</span>, and use the <code>lincon</code> function produce an estimate, standard error, and confidence interval for each parameter.</p>
+<p><strong>Solution</strong>: From above we have that <span class="math inline">\(\tau_e\)</span> = 100000<span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\tau_t\)</span> = 200000<span class="math inline">\(\beta_0\)</span> + 200000<span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\tau_h\)</span> = 400000<span class="math inline">\(\beta_0\)</span> + 400000<span class="math inline">\(\beta_2\)</span>. These can be estimated as follows.</p>
+<pre class="r"><code>lincon(m, a = c(100000, 0, 0))</code></pre>
+<pre><code>              estimate    se   lower   upper tvalue df    pvalue
+(1e+05,0,0),0  1950000 72706 1803274 2096726  26.82 42 4.727e-28</code></pre>
+<pre class="r"><code>lincon(m, a = c(200000, 200000, 0))</code></pre>
+<pre><code>                  estimate     se   lower   upper tvalue df    pvalue
+(2e+05,2e+05,0),0  2260000 205643 1844996 2675004  10.99 42 6.221e-14</code></pre>
+<pre class="r"><code>lincon(m, a = c(400000, 0, 400000))</code></pre>
+<pre><code>                  estimate     se lower   upper tvalue df  pvalue
+(4e+05,0,4e+05),0   693333 335813 15635 1371031  2.065 42 0.04517</code></pre>
+<p>This can also be done using <code>contrast</code> by programming a transformation function.</p>
+<pre class="r"><code>f &lt;- function(mu) {
+  c(100000*mu[1], 200000*mu[2], 400000*mu[3])
+}
+trtools::contrast(m, 
+  a = list(layer = c(&quot;epilimnion&quot;,&quot;thermocline&quot;,&quot;hypolimnion&quot;)), 
+  tf = f, delta = TRUE)</code></pre>
+<pre><code> estimate     se   lower   upper tvalue df    pvalue
+  1950000  72706 1803274 2096726 26.820 42 4.727e-28
+  2260000 205643 1844996 2675004 10.990 42 6.221e-14
+   693333 335813   15635 1371031  2.065 42 4.517e-02</code></pre>
+<p>The <code>delta = TRUE</code> argument here is required here for a technical reason to overcome a limitation of the <code>contrast</code> function to understand certain kinds of transformation functions.</p></li>
+</ol>
+</div>
+<div id="germination-of-orobanche-seeds" class="section level2">
+<h2>Germination of Orobanche Seeds</h2>
+<p>Crowder (1978) featured data from an experiment concerning the parasitic plant <em>Orobanche aegyptiaca</em> (Egyptian broomrape).<a href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a> Plates of seeds of two genotypes (<em>O. aegyptiaca 73</em> and <em>O. aegyptiaca 75</em>) were randomly assigned to be exposed to extract from either bean or cucumber plants (as parasitic plants, the seeds remain dormant until stimulated by the presence of a host plant). The number of germinating seeds out of the number of seeds on the plate was then recorded.<a href="#fn12" class="footnote-ref" id="fnref12"><sup>12</sup></a> The data are in a data frame called <code>crowder.seeds</code> in the package <strong>agridat</strong>.</p>
+<pre class="r"><code>library(ggplot2)
+library(agridat)
+
+crowder.seeds$y &lt;- crowder.seeds$germ / crowder.seeds$n # creating response variable
+
+p &lt;- ggplot(crowder.seeds, aes(y = y, x = extract)) + theme_minimal() + 
+  geom_point(alpha = 0.5) + facet_wrap(~ gen) +
+  labs(x = &quot;Extract Type&quot;, y = &quot;Proportion Germinated&quot;)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-46-1.png" width="100%" style="display: block; margin: auto;" /> This is a <em>randomized block design</em> where the blocking variable is the genotype and the randomized treatment is extract type. In a classic analysis of variance (ANOVA) of these data, one might investigate the “main effect” of the treatment and perhaps that of the blocking variable, and also the “interaction” between the treatment and blocking variables. Tests of the main effects and interaction are sometimes reported in an ANOVA table like the following.</p>
+<pre><code>Anova Table (Type III tests)
+
+Response: y
+            Sum Sq Df F value  Pr(&gt;F)    
+(Intercept)   4.62  1  229.81 2.6e-11 ***
+gen           0.11  1    5.55  0.0308 *  
+extract       0.31  1   15.37  0.0011 ** 
+gen:extract   0.05  1    2.64  0.1228    
+Residuals     0.34 17                    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>But unfortunately for students (and some researchers) the understanding of what is a “main effect” or “interaction” are not always well understood. They understand the computational details but not actually what they are testing. But what is really meant by a “main effect” or “interaction” can be made more clear by carefully examining the quantities and hypotheses involved.</p>
+<ol style="list-style-type: decimal">
+<li><p>Consider the following linear model.</p>
+<pre class="r"><code>m &lt;- lm(y ~ gen + extract + gen:extract, data = crowder.seeds)
+summary(m)$coefficients</code></pre>
+<pre><code>                       Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)             0.32603    0.06339  5.1435 8.125e-05
+genO75                  0.04537    0.08964  0.5062 6.192e-01
+extractcucumber         0.14249    0.08964  1.5895 1.304e-01
+genO75:extractcucumber  0.20150    0.12411  1.6237 1.228e-01</code></pre>
+<p>The model has the form <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3},
+\]</span> where <span class="math inline">\(Y_i\)</span> is the proportion of germinating seeds for the <span class="math inline">\(i\)</span>-th observation. How are <span class="math inline">\(x_{i1}\)</span>, <span class="math inline">\(x_{i2}\)</span>, and <span class="math inline">\(x_{i3}\)</span> defined in this model? That is, how would you determine their values for a given observation? Finally, write the model case-wise to show how the expected proportion of germinating seeds can be written as a function of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and/or <span class="math inline">\(\beta_3\)</span>. Note that there are <em>four</em> cases: the O73 genotype exposed to bean extract, the O75 genotype exposed to cucumber extract, the O75 genotype exposed to bean extract, and the O75 genotype exposed to cucumber extract.</p>
+<p><strong>Solution</strong>: From the output we can see that <span class="math inline">\(x_{i1}\)</span> is an indicator variable for genotype O75 so that <span class="math display">\[
+ x_{i1} = 
+ \begin{cases}
+   1, &amp; \text{if the $i$-th observation is for genotype O75}, \\
+   0, &amp; \text{otherwise},
+ \end{cases}
+ \]</span> and <span class="math inline">\(x_{i2}\)</span> is an indicator variable for cucumber extract so that <span class="math display">\[
+ x_{i2} = 
+ \begin{cases}
+   1, &amp; \text{if the $i$-th observation is for cucumber extract}, \\
+   0, &amp; \text{otherwise}.
+ \end{cases}
+ \]</span> Finally <span class="math inline">\(x_{i3} = x_{i1}x_{i2}\)</span> so that <span class="math display">\[
+ x_{i3} = 
+ \begin{cases}
+   1, &amp; \text{if the $i$-th observation is for genotype O75 and cucumber extract}, \\
+   0, &amp; \text{otherwise}.
+ \end{cases}
+ \]</span> We can write the model case-wise as <span class="math display">\[
+ E(Y_i) = 
+ \begin{cases}
+   \beta_0, &amp; \text{if the $i$-th observation is for genotype O73 and bean extract}, \\
+   \beta_0 + \beta_1, &amp; \text{if the $i$-th observation is for genotype O75 and bean extract}, \\
+   \beta_0 + \beta_2, &amp; \text{if the $i$-th observation is for genotype O73 and cucumber extract}, \\
+   \beta_0 + \beta_1 + \beta_2 + \beta_3, &amp; \text{if the $i$-th observation is for genotype O75 and cucumber extract}.
+ \end{cases}
+ \]</span></p></li>
+<li><p>Let <span class="math inline">\(\mu_{73,b}\)</span> denote the expected proportion of seeds of the O73 genotype when exposed to the bean extract. Similarly let <span class="math inline">\(\mu_{73,c}\)</span>, <span class="math inline">\(\mu_{75,b}\)</span>, and <span class="math inline">\(\mu_{75,c}\)</span> denote expected proportion of seeds germinating corresponding to the other three combinations of genotype and extract type. Provide estimates of each of these four expected values with standard errors and confidence intervals using both <code>lincon</code> and <code>contrast</code>.<a href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a></p>
+<p><strong>Solution</strong>: Note that from the previous problem we can see that <span class="math display">\[\begin{align*}
+   \mu_{73,b} &amp; = \beta_0, \\
+   \mu_{75,b} &amp; = \beta_0 + \beta_1, \\
+   \mu_{73,c} &amp; = \beta_0 + \beta_2, \\
+   \mu_{75,c} &amp; = \beta_0 + \beta_1 + \beta_2 + \beta_3.
+ \end{align*}\]</span> We can estimate these quantities using <code>lincon</code> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(1,0,0,0)) # O73 &amp; bean</code></pre>
+<pre><code>            estimate      se  lower  upper tvalue df    pvalue
+(1,0,0,0),0    0.326 0.06339 0.1923 0.4598  5.143 17 8.125e-05</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,1,0,0)) # O75 &amp; bean</code></pre>
+<pre><code>            estimate      se  lower  upper tvalue df    pvalue
+(1,1,0,0),0   0.3714 0.06339 0.2377 0.5051  5.859 17 1.894e-05</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,0,1,0)) # O73 &amp; cucumber</code></pre>
+<pre><code>            estimate      se  lower  upper tvalue df    pvalue
+(1,0,1,0),0   0.4685 0.06339 0.3348 0.6023  7.391 17 1.054e-06</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,1,1,1)) # O75 &amp; cucumber</code></pre>
+<pre><code>            estimate      se  lower  upper tvalue df    pvalue
+(1,1,1,1),0   0.7154 0.05786 0.5933 0.8375  12.36 17 6.367e-10</code></pre>
+<p>And here is how to do it using <code>contrast</code>.</p>
+<pre class="r"><code>trtools::contrast(m,
+  a = list(gen = c(&quot;O73&quot;,&quot;O75&quot;,&quot;O73&quot;,&quot;O75&quot;), 
+    extract = c(&quot;bean&quot;,&quot;bean&quot;,&quot;cucumber&quot;,&quot;cucumber&quot;)), 
+  cnames = c(&quot;O73 &amp; bean&quot;, &quot;O75 &amp; bean&quot;, &quot;O73 &amp; cucumber&quot;, &quot;O75 &amp; cucumber&quot;))</code></pre>
+<pre><code>               estimate      se  lower  upper tvalue df    pvalue
+O73 &amp; bean       0.3260 0.06339 0.1923 0.4598  5.143 17 8.125e-05
+O75 &amp; bean       0.3714 0.06339 0.2377 0.5051  5.859 17 1.894e-05
+O73 &amp; cucumber   0.4685 0.06339 0.3348 0.6023  7.391 17 1.054e-06
+O75 &amp; cucumber   0.7154 0.05786 0.5933 0.8375 12.363 17 6.367e-10</code></pre>
+<p>Here are several ways this can be done with the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>emmeans(m, ~ gen*extract)</code></pre>
+<pre><code> gen extract  emmean     SE df lower.CL upper.CL
+ O73 bean      0.326 0.0634 17    0.192    0.460
+ O75 bean      0.371 0.0634 17    0.238    0.505
+ O73 cucumber  0.469 0.0634 17    0.335    0.602
+ O75 cucumber  0.715 0.0579 17    0.593    0.838
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>emmeans(m, ~ gen | extract)</code></pre>
+<pre><code>extract = bean:
+ gen emmean     SE df lower.CL upper.CL
+ O73  0.326 0.0634 17    0.192    0.460
+ O75  0.371 0.0634 17    0.238    0.505
+
+extract = cucumber:
+ gen emmean     SE df lower.CL upper.CL
+ O73  0.469 0.0634 17    0.335    0.602
+ O75  0.715 0.0579 17    0.593    0.838
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>emmeans(m, ~ extract | gen)</code></pre>
+<pre><code>gen = O73:
+ extract  emmean     SE df lower.CL upper.CL
+ bean      0.326 0.0634 17    0.192    0.460
+ cucumber  0.469 0.0634 17    0.335    0.602
+
+gen = O75:
+ extract  emmean     SE df lower.CL upper.CL
+ bean      0.371 0.0634 17    0.238    0.505
+ cucumber  0.715 0.0579 17    0.593    0.838
+
+Confidence level used: 0.95 </code></pre>
+<p>Note that these all provide the same information, but the latter two can be used when estimating marginal means (as shown below) or pairwise comparisons of the levels of one factor within the levels of a second factor (sometimes called “simple effects”). Here are the estimates simple effects.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ gen | extract), infer = TRUE)</code></pre>
+<pre><code>extract = bean:
+ contrast  estimate     SE df lower.CL upper.CL t.ratio p.value
+ O73 - O75  -0.0454 0.0896 17   -0.234   0.1438  -0.506  0.6192
+
+extract = cucumber:
+ contrast  estimate     SE df lower.CL upper.CL t.ratio p.value
+ O73 - O75  -0.2469 0.0858 17   -0.428  -0.0658  -2.877  0.0105
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~ extract | gen), infer = TRUE)</code></pre>
+<pre><code>gen = O73:
+ contrast        estimate     SE df lower.CL upper.CL t.ratio p.value
+ bean - cucumber   -0.142 0.0896 17   -0.332   0.0466  -1.590  0.1304
+
+gen = O75:
+ contrast        estimate     SE df lower.CL upper.CL t.ratio p.value
+ bean - cucumber   -0.344 0.0858 17   -0.525  -0.1629  -4.008  0.0009
+
+Confidence level used: 0.95 </code></pre>
+<p>Also if you wanted to do pairwise comparisons among all <em>four</em> treatment conditions you could do it this way.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ gen*extract), infer = TRUE, adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast                    estimate     SE df lower.CL upper.CL t.ratio p.value
+ O73 bean - O75 bean          -0.0454 0.0896 17   -0.234   0.1438  -0.506  0.6192
+ O73 bean - O73 cucumber      -0.1425 0.0896 17   -0.332   0.0466  -1.590  0.1304
+ O73 bean - O75 cucumber      -0.3894 0.0858 17   -0.570  -0.2083  -4.537  0.0003
+ O75 bean - O73 cucumber      -0.0971 0.0896 17   -0.286   0.0920  -1.083  0.2938
+ O75 bean - O75 cucumber      -0.3440 0.0858 17   -0.525  -0.1629  -4.008  0.0009
+ O73 cucumber - O75 cucumber  -0.2469 0.0858 17   -0.428  -0.0658  -2.876  0.0105
+
+Confidence level used: 0.95 </code></pre></li>
+<li><p>So-called “main effects” are based on what are sometimes called <em>marginal means</em> — i.e., the mean expected value obtained by averaging over the levels of the other factor(s). The marginal means for the two extract types are <span class="math display">\[
+\mu_b = \frac{\mu_{O73,b} + \mu_{O75,b}}{2} \ \ \ \text{and} \ \ \
+\mu_c = \frac{\mu_{O73,c} + \mu_{O75,c}}{2},
+\]</span> and the marginal means for the two genotypes are <span class="math display">\[
+\mu_{O73} = \frac{\mu_{O73,b} + \mu_{O73,c}}{2} \ \ \ \text{and} \ \ \
+\mu_{O75} = \frac{\mu_{O75,b} + \mu_{O75,c}}{2}.
+\]</span> Based on your results from the previous problem, write <span class="math inline">\(\mu_b\)</span>, <span class="math inline">\(\mu_c\)</span>, <span class="math inline">\(\mu_{O73}\)</span>, and <span class="math inline">\(\mu_{O75}\)</span> as linear combinations of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and <span class="math inline">\(\beta_3\)</span> by replacing each <span class="math inline">\(\mu\)</span> with the corresponding function of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and/or <span class="math inline">\(\beta_3\)</span> and simplifying. Use the <code>lincon</code> function to estimate the four marginal means.<a href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a></p>
+<p><strong>Solution</strong>: The marginal means for the extract types can be written as <span class="math display">\[
+   \mu_b = \frac{\beta_0 + \beta_0 + \beta_1}{2} = \beta_0 + \tfrac{1}{2}\beta_1,
+ \]</span> and <span class="math display">\[
+   \mu_c = \frac{\beta_0 + \beta_2 + \beta_0 + \beta_1 + \beta_2 + \beta_3}{2} = \beta_0 + \tfrac{1}{2}\beta_1 + \beta_2 + \tfrac{1}{2}\beta_3. 
+ \]</span> These can be estimated using <code>lincon</code> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(1, 0.5, 0, 0))</code></pre>
+<pre><code>              estimate      se  lower  upper tvalue df    pvalue
+(1,1/2,0,0),0   0.3487 0.04482 0.2542 0.4433   7.78 17 5.323e-07</code></pre>
+<pre class="r"><code>lincon(m, a = c(1, 0.5, 1, 0.5))</code></pre>
+<pre><code>                estimate      se  lower  upper tvalue df    pvalue
+(1,1/2,1,1/2),0    0.592 0.04291 0.5014 0.6825  13.79 17 1.161e-10</code></pre>
+<p>Here is how these can be estimated using the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>emmeans(m, ~ extract)</code></pre>
+<pre><code> extract  emmean     SE df lower.CL upper.CL
+ bean      0.349 0.0448 17    0.254    0.443
+ cucumber  0.592 0.0429 17    0.501    0.682
+
+Results are averaged over the levels of: gen 
+Confidence level used: 0.95 </code></pre>
+<p>The marginal means for genotype can be written as <span class="math display">\[
+   \mu_{\text{O73}} = \frac{\beta_0 + \beta_0 + \beta_2}{2} = \beta_0 + \tfrac{1}{2}\beta_2,
+ \]</span> and <span class="math display">\[
+   \mu_{O75} = \frac{\beta_0 + \beta_1 + \beta_0 + \beta_1 + \beta_2 + \beta_3}{2} = \beta_0 + \beta_1 + \tfrac{1}{2}\beta_2 + \tfrac{1}{2}\beta_3.
+ \]</span> We can estimate these using <code>lincon</code> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(1,0,0.5,0))</code></pre>
+<pre><code>              estimate      se  lower  upper tvalue df    pvalue
+(1,0,1/2,0),0   0.3973 0.04482 0.3027 0.4918  8.864 17 8.799e-08</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,1,0.5,0.5))</code></pre>
+<pre><code>                estimate      se  lower  upper tvalue df    pvalue
+(1,1,1/2,1/2),0   0.5434 0.04291 0.4529 0.6339  12.66 17 4.402e-10</code></pre>
+<p>Here is how these can be estimated using the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>emmeans(m, ~ gen)</code></pre>
+<pre><code> gen emmean     SE df lower.CL upper.CL
+ O73  0.397 0.0448 17    0.303    0.492
+ O75  0.543 0.0429 17    0.453    0.634
+
+Results are averaged over the levels of: extract 
+Confidence level used: 0.95 </code></pre></li>
+<li><p>The main effect of extract type is defined in terms of the marginal means for extract type. It is defined as <span class="math inline">\(\mu_c - \mu_b\)</span> (or <span class="math inline">\(\mu_b - \mu_c)\)</span>, and the null hypothesis for a test of the main effect could be stated as <span class="math inline">\(H_0\!: \mu_c - \mu_b = 0\)</span>. Similarly the main effect of genotype is defined as <span class="math inline">\(\mu_{O75} - \mu_{O73}\)</span> (or <span class="math inline">\(\mu_{O73} - \mu_{O75}\)</span>), and the null hypothesis for a test of the main effect could be stated as <span class="math inline">\(H_0\!: \mu_{O75} - \mu_{O73} = 0\)</span>. Using your results from the previous problem, write <span class="math inline">\(\mu_c - \mu_b\)</span> and <span class="math inline">\(\mu_{O75} - \mu_{O73}\)</span> as linear combinations of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and/or <span class="math inline">\(\beta_3\)</span>. Also report the result of a test of the null hypothesis for each main effect using the <code>lincon</code> function. If you do this correctly the squared <em>t</em> test statistics and the p-values reported by <code>lincon</code> should match those shown in the ANOVA table above shown in the <code>gen</code> and <code>extract</code> rows.</p>
+<p><strong>Solution</strong>: The main effect of extract type can be written as <span class="math display">\[
+   \mu_c - \mu_b = \beta_0 + \tfrac{1}{2}\beta_1 + \beta_2 + \tfrac{1}{2}\beta_3 - \left(\beta_0 + \tfrac{1}{2}\beta_1\right) = 
+   \beta_2 + \tfrac{1}{2}\beta_3.
+ \]</span> We can estimate this with <code>lincon</code> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(0,0,1,0.5))</code></pre>
+<pre><code>              estimate      se  lower  upper tvalue df   pvalue
+(0,0,1,1/2),0   0.2432 0.06205 0.1123 0.3742   3.92 17 0.001103</code></pre>
+<p>The main effect for genotype can be written as <span class="math display">\[
+   \mu_{\text{O75}} - \mu_{\text{O73}} =
+   \beta_0 + \beta_1 + \tfrac{1}{2}\beta_2 + \tfrac{1}{2}\beta_3 - \left(\beta_0 + \tfrac{1}{2}\beta_2 \right) = \beta_1 + \tfrac{1}{2}\beta_3.
+ \]</span> This can be estimated using <code>lincon</code> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(0,1,0,0.5))</code></pre>
+<pre><code>              estimate      se   lower upper tvalue df  pvalue
+(0,1,0,1/2),0   0.1461 0.06205 0.01521 0.277  2.355 17 0.03081</code></pre>
+<p>Inferences for these main effects can also be obtained using the <strong>emmeans</strong> package, although the direction of subtraction is not necessarily the same.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ extract), infer = TRUE)</code></pre>
+<pre><code> contrast        estimate     SE df lower.CL upper.CL t.ratio p.value
+ bean - cucumber   -0.243 0.0621 17   -0.374   -0.112  -3.920  0.0011
+
+Results are averaged over the levels of: gen 
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~ gen), infer = TRUE)</code></pre>
+<pre><code> contrast  estimate     SE df lower.CL upper.CL t.ratio p.value
+ O73 - O75   -0.146 0.0621 17   -0.277  -0.0152  -2.355  0.0308
+
+Results are averaged over the levels of: extract 
+Confidence level used: 0.95 </code></pre>
+<p>Since each main effect involves only a single linear combination, the <em>t</em> test statistic can be used. But for the main effect of a factor with more than two levels the null hypothesis involves two or more linear combinations and the <em>F</em> test statistic must be used. This can be done using the <code>test</code> function from <strong>emmeans</strong> (see the example from lecture with the <code>ToothGrowth</code> data).</p></li>
+<li><p>The definition of an “interaction” in a linear model is that the differences among the expected values over one factor do not depend on the level of the other factor. The null hypothesis for the interaction could be written as <span class="math display">\[
+  H_0\!: \mu_{075,c} - \mu_{075,b} = \mu_{073,c} - \mu_{073,b}
+\]</span> or, equivalently, <span class="math display">\[
+  H_0\!: \mu_{075,c} - \mu_{075,b} - \mu_{073,c} + \mu_{073,b} = 0.
+\]</span> Write <span class="math inline">\(\mu_{075,c} - \mu_{075,b} - \mu_{073,c} + \mu_{073,b}\)</span> as a linear combination of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and <span class="math inline">\(\beta_3\)</span> by replacing each <span class="math inline">\(\mu\)</span> or each difference between <span class="math inline">\(\mu\)</span>’s with a function of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span>, and/or <span class="math inline">\(\beta_3\)</span> you found earlier and simplifying. Finally report the results of a test of this null hypothesis using <code>lincon</code>. If you do this correctly the squared <em>t</em> test statistic and the p-value reported by <code>lincon</code> should match those shown in the ANOVA table above shown in the <code>gen:extract</code> row.</p>
+<p><strong>Solution</strong>: The null hypothesis can be written as <span class="math inline">\(\beta_3\)</span> = 0 after simplifying the linear combination. This can be tested using <code>lincon</code> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(0,0,0,1))</code></pre>
+<pre><code>            estimate     se    lower  upper tvalue df pvalue
+(0,0,0,1),0   0.2015 0.1241 -0.06034 0.4633  1.624 17 0.1228</code></pre>
+<p>But note that this test is also given in the output from <code>summary</code>.</p>
+<pre class="r"><code>summary(m)$coefficients</code></pre>
+<pre><code>                       Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)             0.32603    0.06339  5.1435 8.125e-05
+genO75                  0.04537    0.08964  0.5062 6.192e-01
+extractcucumber         0.14249    0.08964  1.5895 1.304e-01
+genO75:extractcucumber  0.20150    0.12411  1.6237 1.228e-01</code></pre></li>
+<li><p>Suppose the model was specified <em>without</em> an interaction as follows.</p>
+<pre class="r"><code>m &lt;- lm(y ~ gen + extract, data = crowder.seeds)
+summary(m)$coefficients</code></pre>
+<pre><code>                Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)       0.2735    0.05692   4.804 0.000142
+genO75            0.1505    0.06475   2.324 0.032004
+extractcucumber   0.2476    0.06475   3.824 0.001242</code></pre>
+<p>The model is now <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2}.
+\]</span> Repeat problems 2, 3, and 4 with this model, but noting in each case that the parameters are now just <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, and <span class="math inline">\(\beta_2\)</span> (i.e., there is no <span class="math inline">\(\beta_3\)</span> parameter for this model). <strong>Note</strong>: This problem is <em>extra credit</em> for students enrolled in Stat 436, but is <em>required</em> for students in Stat 516.</p>
+<p><strong>Solution</strong>: Because of the way the model is parameterized, removing the interaction from the model is effectively equivalent to setting <span class="math inline">\(\beta_3\)</span> = 0. So we can write <span class="math display">\[\begin{align*}
+   \mu_{73,b} &amp; = \beta_0, \\
+   \mu_{75,b} &amp; = \beta_0 + \beta_1, \\
+   \mu_{73,c} &amp; = \beta_0 + \beta_2, \\
+   \mu_{75,c} &amp; = \beta_0 + \beta_1 + \beta_2.
+ \end{align*}\]</span> These can be estimated using <code>lincon</code> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(1,0,0)) # O73 &amp; bean</code></pre>
+<pre><code>          estimate      se  lower upper tvalue df   pvalue
+(1,0,0),0   0.2735 0.05692 0.1539 0.393  4.804 18 0.000142</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,1,0)) # O75 &amp; bean</code></pre>
+<pre><code>          estimate      se  lower  upper tvalue df    pvalue
+(1,1,0),0    0.424 0.05692 0.3044 0.5436  7.449 18 6.671e-07</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,0,1)) # O73 &amp; cucumber</code></pre>
+<pre><code>          estimate      se  lower  upper tvalue df    pvalue
+(1,0,1),0   0.5211 0.05692 0.4015 0.6407  9.155 18 3.413e-08</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,1,1)) # O75 &amp; cucumber</code></pre>
+<pre><code>          estimate      se  lower  upper tvalue df   pvalue
+(1,1,1),0   0.6716 0.05347 0.5593 0.7839  12.56 18 2.41e-10</code></pre>
+<pre class="r"><code>trtools::contrast(m,
+  a = list(gen = c(&quot;O73&quot;,&quot;O75&quot;,&quot;O73&quot;,&quot;O75&quot;), 
+    extract = c(&quot;bean&quot;,&quot;bean&quot;,&quot;cucumber&quot;,&quot;cucumber&quot;)), 
+  cnames = c(&quot;O73 &amp; bean&quot;, &quot;O75 &amp; bean&quot;, &quot;O73 &amp; cucumber&quot;, &quot;O75 &amp; cucumber&quot;))</code></pre>
+<pre><code>               estimate      se  lower  upper tvalue df    pvalue
+O73 &amp; bean       0.2735 0.05692 0.1539 0.3930  4.804 18 1.420e-04
+O75 &amp; bean       0.4240 0.05692 0.3044 0.5436  7.449 18 6.671e-07
+O73 &amp; cucumber   0.5211 0.05692 0.4015 0.6407  9.155 18 3.413e-08
+O75 &amp; cucumber   0.6716 0.05347 0.5593 0.7839 12.561 18 2.410e-10</code></pre>
+<p>The marginal means for extract type can be estimated as follows.</p>
+<pre class="r"><code>lincon(m, a = c(1,0.5,0)) # O73</code></pre>
+<pre><code>            estimate      se  lower  upper tvalue df    pvalue
+(1,1/2,0),0   0.3487 0.04681 0.2504 0.4471  7.449 18 6.669e-07</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,0.5,1)) # O75</code></pre>
+<pre><code>            estimate      se  lower  upper tvalue df    pvalue
+(1,1/2,1),0   0.5963 0.04473 0.5024 0.6903  13.33 18 9.115e-11</code></pre>
+<pre class="r"><code>emmeans(m, ~ extract)</code></pre>
+<pre><code> extract  emmean     SE df lower.CL upper.CL
+ bean      0.349 0.0468 18    0.250    0.447
+ cucumber  0.596 0.0447 18    0.502    0.690
+
+Results are averaged over the levels of: gen 
+Confidence level used: 0.95 </code></pre>
+<p>And the marginal means for genotype can be estimated as follows.</p>
+<pre class="r"><code>lincon(m, a = c(1,0,0.5)) # bean</code></pre>
+<pre><code>            estimate      se  lower  upper tvalue df    pvalue
+(1,0,1/2),0   0.3973 0.04681 0.2989 0.4956  8.486 18 1.047e-07</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,1,0.5)) # cucumber</code></pre>
+<pre><code>            estimate      se  lower  upper tvalue df    pvalue
+(1,1,1/2),0   0.5478 0.04473 0.4538 0.6418  12.25 18 3.639e-10</code></pre>
+<pre class="r"><code>emmeans(m, ~ gen)</code></pre>
+<pre><code> gen emmean     SE df lower.CL upper.CL
+ O73  0.397 0.0468 18    0.299    0.496
+ O75  0.548 0.0447 18    0.454    0.642
+
+Results are averaged over the levels of: extract 
+Confidence level used: 0.95 </code></pre>
+<p>The main effects for extract type and genotype reduce to <span class="math inline">\(\beta_2\)</span> and <span class="math inline">\(\beta_1\)</span>, respectively. Inferences for these parameters are given by <code>summary</code>, but we can also get them from <code>lincon</code> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(0,0,1)) # extract</code></pre>
+<pre><code>          estimate      se  lower  upper tvalue df   pvalue
+(0,0,1),0   0.2476 0.06475 0.1116 0.3837  3.824 18 0.001242</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,1,0)) # genotype</code></pre>
+<pre><code>          estimate      se   lower  upper tvalue df pvalue
+(0,1,0),0   0.1505 0.06475 0.01447 0.2865  2.324 18  0.032</code></pre>
+<p>Of course, the <strong>emmeans</strong> package can be used to make inferences about marginal means and main effects using the same syntax as for the model with the interaction. One thing that is worth noting is that in a model like this without an interaction, the simple effects (i.e., the pairwise differences for the levels of one factor within the levels of the other) <em>equal</em> the main effects. Consider, for example, the simple and main effects for extract type.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ extract | gen), infer = TRUE)</code></pre>
+<pre><code>gen = O73:
+ contrast        estimate     SE df lower.CL upper.CL t.ratio p.value
+ bean - cucumber   -0.248 0.0648 18   -0.384   -0.112  -3.824  0.0012
+
+gen = O75:
+ contrast        estimate     SE df lower.CL upper.CL t.ratio p.value
+ bean - cucumber   -0.248 0.0648 18   -0.384   -0.112  -3.824  0.0012
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~ extract), infer = TRUE)</code></pre>
+<pre><code> contrast        estimate     SE df lower.CL upper.CL t.ratio p.value
+ bean - cucumber   -0.248 0.0648 18   -0.384   -0.112  -3.824  0.0012
+
+Results are averaged over the levels of: gen 
+Confidence level used: 0.95 </code></pre></li>
+</ol>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Bumpus, H. C. (1898). Eleventh lecture. The elimination of the unfit as illustrated by the introduced sparrow, Passer domesticus. (A fourth contribution to the study of variation.) Biological Lectures: Woods Hole Marine Biological Laboratory, 209–225.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>I find dot plots to be useful sometimes for showing the distribution of a quantitative variable rather than a histogram or box plot, particularly when there are relatively few observations. They can be a bit tricky sometimes to specify when using the <strong>ggplot2</strong> package, but you’ll see some examples that you can copy from my lectures and homework assignments.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>This is one easy way to change the labels of the categories/levels of a categorical/factor variable. You can also just change the categories/levels of an existing variable, and I may show you an example of that later. Note that the original variable <code>survived</code> is what is sometimes called a “logical” that takes on values of either <code>TRUE</code> or <code>FALSE</code>. Unlike the values of a categorical variable or factor, the values of a logical variable are not put in quotes.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>The <strong>dplyr</strong> package is extraordinarily useful for manipulating data, sometimes in combination with the <strong>tidyr</strong> package.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Here the function responsible for printing the output is automatically computing what it determines to be the number of significant digits to display. But you can override this with, say, <code>options(pillar.sigfig = 5)</code> to display five significant digits.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>The concept of “population mean” is used more often in introductory classes where the population might be viewed as a real or conceptual set of observations. In a survey it might refer to a large but finite collection of things on which we make observations. But in an observational study like this the populations are perhaps best thought of as the hypothetical and infinite set of observations from which we are “sampling” when we make our observations.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>Using this “pooled” estimate assumes that the “population variance” of humerus length is the same for both populations (i.e., <span class="math inline">\(\sigma_y^2 = \sigma_n^2\)</span>). An alternative approach (sometimes called <a href="https://en.wikipedia.org/wiki/Welch%27s_t-test">Welch’s <em>t</em>-test</a>) that does not make this assumption replaces <span class="math display">\[
+s_p\sqrt{1/n_y + 1/n_n}
+\]</span> with <span class="math display">\[
+\sqrt{s_y^2/n_y + s_n^2/n_n},
+\]</span> and modifies the degrees of freedom. This approach is also often covered in introductory statistics courses. The linear models we are using now assume that the variance stays constant and so is consistent with the assumption that <span class="math inline">\(\sigma_y^2 = \sigma_n^2\)</span>, but we will later discuss how to deal with situations where this assumption is not reasonable.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>In an introductory statistics class you would have learned how to compute a confidence interval for a single population mean as <span class="math inline">\(\bar{y} \pm ts/\sqrt{n}\)</span>. Here we are essentially doing the same thing, except for each group, and replacing <span class="math inline">\(s\)</span> by <span class="math inline">\(s_p\)</span> and using a degrees of freedom of <span class="math inline">\(n_y + n_n - 2\)</span>. Here the model uses <em>both</em> samples to estimate one standard deviation for both populations.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>The original cited source for these data is a textbook on survey sampling. The data may not be real.<a href="#fnref9" class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p>For students familiar with survey sampling theory, the estimators of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> being used here are equivalent to estimators used for stratified random sampling designs. The standard errors, however, are not quite the same. The main reason is that here we are implicitly assuming that the population variances in each layer (i.e., <span class="math inline">\(\sigma^2_e\)</span>, <span class="math inline">\(\sigma^2_t\)</span>, and <span class="math inline">\(\sigma^2_h\)</span>) are equal, which is usually not assumed in stratified random sampling. We will learn how to relax this assumption later. Another issue is that we are not taking into account sampling without replacement from a finite population, but given the large volume of each layer relative to the number of liters sampled any such correction would be negligible.<a href="#fnref10" class="footnote-back">↩︎</a></p></li>
+<li id="fn11"><p>Crowder, M. J. (1978). Beta-binomial ANOVA for proportions. <em>Applied Statistics</em>, <em>27</em>, 34-37.<a href="#fnref11" class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>Later this semester we will learn about some alternative approaches to modeling proportions as response variables.<a href="#fnref12" class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>Note that in the level names <code>O75</code> and <code>O73</code> of the <code>gen</code> factor the <code>O</code> is a capital letter “O” and not a zero.<a href="#fnref13" class="footnote-back">↩︎</a></p></li>
+<li id="fn14"><p>People sometimes confuse these estimates with the means that would be obtained by simply averaging the observations within each level of each each factor. These are the same only if the number of observations in each combination of levels that are averaged are <em>equal</em>. Otherwise they will depend on the sample sizes, which is usually undesirable. However in some cases people will estimate marginal means as weighted averages in observational studies to reflect the relative number of units in each combination of levels within a population.<a href="#fnref14" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

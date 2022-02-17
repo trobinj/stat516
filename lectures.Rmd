@@ -59,7 +59,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Assumptions of (non)linear regression](lecture-02-14-2022.html).
 
-`r i <- i + 1; d[i]` [Assumptions of (non)linear regresssion --- continued](lecture-02-16-2022.html).
+`r i <- i + 1; d[i]` [Assumptions of (non)linear regresssion --- continued](lecture-02-16-2022.html). The [solutions](hw1-solutions.html) to the first homework assignment are now available. 
 
 `r i <- i + 1; d[i]` 
  
