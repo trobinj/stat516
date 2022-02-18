@@ -288,9 +288,9 @@ plot(p)</code></pre>
 CancerSurvival$yhat &lt;- predict(m)
 CancerSurvival$rest &lt;- rstudent(m)
 
-p &lt;- ggplot(CancerSurvival, aes(x = yhat, y = rest, color = Organ))
-p &lt;- p + geom_point(alpha = 0.5) + theme_minimal()
-p &lt;- p + labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;)
+p &lt;- ggplot(CancerSurvival, aes(x = yhat, y = rest, color = Organ)) +
+  geom_point(alpha = 0.5) + theme_minimal() + 
+  labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;)
 plot(p)</code></pre>
 <p><img src="lecture-02-18-2022_files/figure-html/unnamed-chunk-2-2.png" width="100%" style="display: block; margin: auto;" /> A model for <em>log</em> time might exhibit something closer to homoscedasticity.</p>
 <pre class="r"><code>p &lt;- ggplot(CancerSurvival, aes(x = Organ, y = log(Survival))) +
@@ -389,11 +389,11 @@ CancerSurvival %&gt;% group_by(Organ) %&gt;%
 <pre><code># A tibble: 5 × 3
   Organ    variance      weight
   &lt;fct&gt;       &lt;dbl&gt;       &lt;dbl&gt;
-1 Breast   1535038. 0.000000651
-2 Bronchus   44041. 0.0000227  
+1 Bronchus   44041. 0.0000227  
+2 Stomach   119930. 0.00000834 
 3 Colon     182473. 0.00000548 
 4 Ovary    1206875. 0.000000829
-5 Stomach   119930. 0.00000834 </code></pre>
+5 Breast   1535038. 0.000000651</code></pre>
 <p>We can use the following to compute weights and add them to the data frame.</p>
 <pre class="r"><code>CancerSurvival &lt;- CancerSurvival %&gt;% 
    group_by(Organ) %&gt;% mutate(w = 1/var(Survival))
@@ -427,12 +427,12 @@ OrganColon     245.82      229.6  1.0704 0.2887820 -213.70  705.3
 OrganOvary     672.75      317.9  2.1160 0.0385749   36.56 1308.9
 OrganBreast   1184.32      259.1  4.5713 0.0000253  665.91 1702.7</code></pre>
 <pre class="r"><code>cbind(summary(m.wls)$coefficients, confint(m.wls))</code></pre>
-<pre><code>              Estimate Std. Error t value  Pr(&gt;|t|)   2.5 % 97.5 %
-(Intercept)     1395.9      373.6  3.7367 0.0004228   648.4 2143.4
-OrganBronchus  -1184.3      377.0 -3.1413 0.0026291 -1938.7 -429.9
-OrganColon      -938.5      387.7 -2.4209 0.0185772 -1714.2 -162.8
-OrganOvary      -511.6      583.7 -0.8765 0.3843401 -1679.5  656.4
-OrganStomach   -1109.9      385.7 -2.8776 0.0055718 -1881.7 -338.1</code></pre>
+<pre><code>             Estimate Std. Error t value  Pr(&gt;|t|)   2.5 % 97.5 %
+(Intercept)    211.59       50.9  4.1571 0.0001057  109.74  313.4
+OrganStomach    74.41      108.7  0.6846 0.4963078 -143.10  291.9
+OrganColon     245.82      115.4  2.1296 0.0373858   14.85  476.8
+OrganOvary     672.75      451.4  1.4904 0.1414343 -230.45 1575.9
+OrganBreast   1184.32      377.0  3.1413 0.0026291  429.92 1938.7</code></pre>
 <pre class="r"><code>organs &lt;- unique(CancerSurvival$Organ)
 trtools::contrast(m.ols, a = list(Organ = organs), cnames = organs)</code></pre>
 <pre><code>         estimate    se   lower  upper tvalue df    pvalue
@@ -474,9 +474,9 @@ contrast(emmeans(m.wls, ~ Organ), &quot;trt.vs.ctrl&quot;, ref = &quot;Breast&qu
    reverse = TRUE, adjust = &quot;none&quot;, infer = TRUE)</code></pre>
 <pre><code> contrast          estimate  SE df lower.CL upper.CL t.ratio p.value
  Breast - Bronchus     1184 377 59      430     1939   3.141  0.0026
+ Breast - Stomach      1110 386 59      338     1882   2.878  0.0056
  Breast - Colon         938 388 59      163     1714   2.421  0.0186
  Breast - Ovary         512 584 59     -656     1680   0.876  0.3843
- Breast - Stomach      1110 386 59      338     1882   2.878  0.0056
 
 Confidence level used: 0.95 </code></pre>
 <p>Another approach is to assume that the variance of the response variable is some function of its expected response, and thus the weights are a function of the expected response. With right-skewed response variables one common functional relationship is that <span class="math display">\[

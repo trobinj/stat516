@@ -64,9 +64,9 @@ m <- lm(Survival ~ Organ, data = CancerSurvival)
 CancerSurvival$yhat <- predict(m)
 CancerSurvival$rest <- rstudent(m)
 
-p <- ggplot(CancerSurvival, aes(x = yhat, y = rest, color = Organ))
-p <- p + geom_point(alpha = 0.5) + theme_minimal()
-p <- p + labs(x = "Predicted Value", y = "Studentized Residual")
+p <- ggplot(CancerSurvival, aes(x = yhat, y = rest, color = Organ)) +
+  geom_point(alpha = 0.5) + theme_minimal() + 
+  labs(x = "Predicted Value", y = "Studentized Residual")
 plot(p)
 ```
 A model for *log* time might exhibit something closer to homoscedasticity.
@@ -157,8 +157,7 @@ plot(p)
 ```
 There are a couple of ways we could go with these data. One is that since we have a categorical explanatory variable with multiple observations per category, we could *estimate* the variance of $Y_i$ of each organ, and then set the weights to the reciprocals of these estimated variances.
 ```{r, echo = FALSE}
-rm(CancerSurvival)
-data(CancerSurvival)
+CancerSurvival <- CancerSurvival %>% select(-yhat, -rest)
 ```
 ```{r}
 library(dplyr)
