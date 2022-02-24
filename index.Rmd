@@ -11,9 +11,7 @@ This site contains material for Dr. Johnson's *Applied Regression Modeling* cour
 
 <center>
 
-![](heteroscedasticity.jpg)
-
-My variant of one of the many versions of the cover art for the album [Synchronicity](https://en.wikipedia.org/wiki/Synchronicity_(The_Police_album)) by [The Police](https://en.wikipedia.org/wiki/The_Police).
+![https://xkcd.com/2311](http://imgs.xkcd.com/comics/confidence_interval.png)
 
 </center>
 

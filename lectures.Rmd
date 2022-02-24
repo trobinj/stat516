@@ -69,21 +69,21 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Dealing with heteroscedasticity: iteratively weighted least squares, parametric models, and robust standard errors](lecture-02-23-2022.html).
 
+`r i <- i + 1; d[i]` [In-class exercise on nonlinear regression and dealing with heteroscedasticity](lecture-02-25-2022.html). 
+ 
+***
+
+`r i <- i + 1; d[i]` Release of second homework assignment.
+
+`r i <- i + 1; d[i]` 
+
 `r i <- i + 1; d[i]` 
  
 ***
 
-`r i <- i + 1; d[i]` Tentative date of release of second homework assignment.
-
 `r i <- i + 1; d[i]` 
 
-`r i <- i + 1; d[i]` 
- 
-***
-
-`r i <- i + 1; d[i]` 
-
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` Due date for second homework assignment.
 
 `r i <- i + 1; d[i]` 
  

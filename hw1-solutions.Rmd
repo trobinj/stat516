@@ -47,7 +47,7 @@ A famous [lecture](https://amornithhistory.org/2018/03/05/professor-bumpus-and-h
 library(trtools)
 library(ggplot2)
 
-bumpus$survived <- factor(bumpus$survival, 
+bumpus$survived <- factor(bumpus$survival,
   levels = c(TRUE,FALSE), labels = c("yes","no"))
 
 p <- ggplot(bumpus, aes(x = survived, y = humerus)) + theme_minimal() + 
