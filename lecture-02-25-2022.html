@@ -346,7 +346,23 @@ and try to guess their approximate values. Remember that <span
 class="math inline">\(\theta_1\)</span> is the asymptote and <span
 class="math inline">\(\theta_2\)</span> is the concentration at which
 the (expected) reaction rate is half way between zero and the
-asymptote.</p></li>
+asymptote.</p>
+<p><strong>Solution</strong>: We might estimate the nonlinear model as
+follows, using the figure to guess starting values for <span
+class="math inline">\(\theta_1\)</span> and <span
+class="math inline">\(\theta_2\)</span>.</p>
+<pre class="r"><code>m &lt;- nls(rate ~ theta1 * conc / (theta2 + conc), data = Puromycin,
+  start = list(theta1 = 200, theta2 = 0.1))
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>        Estimate Std. Error t value  Pr(&gt;|t|)      2.5%     97.5%
+theta1 190.80620    8.76458  21.770 6.835e-16 172.68402 210.97021
+theta2   0.06039    0.01077   5.608 1.449e-05   0.03981   0.08881</code></pre>
+<p>We can plot the model as follows by “adding” to the code above.</p>
+<pre class="r"><code>d &lt;- data.frame(conc = seq(0, 1.2, length = 100))
+d$yhat &lt;- predict(m, newdata = d)
+p &lt;- p + geom_line(aes(y = yhat), data = d, linetype = 2)
+plot(p)</code></pre>
+<p><img src="lecture-02-25-2022_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" /></p></li>
 <li><p>Now consider a linear model that will assume a linear
 relationship between reaction rate and concentration that is different
 for treated versus untreated cells (i.e., an “interaction” between
@@ -400,7 +416,7 @@ p &lt;- ggplot(Puromycin, aes(x = conc, y = rate, color = state)) +
     y = &quot;Reaction Rate (counts/min)&quot;, color = &quot;Cell State&quot;) + 
   theme_minimal() + theme(legend.position = c(0.8,0.2))
 plot(p)</code></pre>
-<p><img src="lecture-02-25-2022_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-02-25-2022_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" />
 Since there are only two levels of <code>state</code> we could also use
 the <code>ifelse</code> function to produce the same results as using
 the indicator variable.</p>
@@ -422,7 +438,66 @@ class="math inline">\(\theta_1\)</span> and <span
 class="math inline">\(\theta_2\)</span> parameters can depend on the
 state. Estimate this model using the <code>nls</code> function, noting
 that there are many different ways that this model could be
-parameterized. Plot the model as well with the raw data.</p></li>
+parameterized. Plot the model as well with the raw data.</p>
+<p><strong>Solution</strong>: Here is one way we might specify such a
+model.</p>
+<pre class="r"><code>m1 &lt;- nls(rate ~ ifelse(state == &quot;treated&quot;, theta1t * conc / (theta2t + conc), 
+  theta1u * conc / (theta2u + conc)), data = Puromycin,
+  start = list(theta1t = 200, theta2t = 0.1, theta1u = 200, theta2u = 0.1))
+cbind(summary(m1)$coefficients, confint(m1))</code></pre>
+<pre><code>         Estimate Std. Error t value  Pr(&gt;|t|)      2.5%     97.5%
+theta1t 212.68373   6.608094  32.185 4.876e-18 198.88883 227.45563
+theta2t   0.06412   0.007877   8.141 1.293e-07   0.04856   0.08354
+theta1u 160.28001   6.896011  23.242 2.041e-15 145.85285 176.28021
+theta2u   0.04771   0.008281   5.761 1.496e-05   0.03159   0.06966</code></pre>
+<p>This model can be written as <span class="math display">\[
+E(Y_i) =
+   \begin{cases}
+   \theta_{1t}x_i/(\theta_{2t} + x_i), &amp; \text{if the $i$-th
+observation is of treated cells}, \\
+   \theta_{1u}x_i/(\theta_{2u} + x_i), &amp; \text{if the $i$-th
+observation is of untreated cells}.
+   \end{cases}
+\]</span> An alternative paramterization that includes a parameter for
+the “effect” of treating the cells is <span class="math display">\[
+E(Y_i) =
+   \begin{cases}
+   (\theta_1 + \delta_1)x_i/(\theta_2 + \delta_2 + x_i), &amp; \text{if
+the $i$-th observation is of treated cells}, \\
+   \theta_1x_i/(\theta_2 + x_i), &amp; \text{if the $i$-th observation
+is of untreated cells}.
+   \end{cases}
+\]</span> Note that we can establish a relationship between the
+parameters in the two models: <span class="math inline">\(\theta_1 =
+\theta_{1u}\)</span>, <span class="math inline">\(\theta_2 =
+\theta_{2u}\)</span>, <span class="math inline">\(\delta_1 = \theta_{1t}
+- \theta_{1u}\)</span> and <span class="math inline">\(\delta_2 =
+\theta_{2t} - \theta_{2u}\)</span>. This latter model can be estimated
+as follows.</p>
+<pre class="r"><code>m2 &lt;- nls(rate ~ ifelse(state == &quot;treated&quot;, 
+  (theta1 + delta1) * conc / (theta2 + delta2 + conc), 
+  theta1 * conc / (theta2 + conc)), data = Puromycin,
+  start = list(theta1 = 200, theta2 = 0.1, delta1 = 0, delta2 = 0))
+cbind(summary(m2)$coefficients, confint(m2))</code></pre>
+<pre><code>        Estimate Std. Error t value  Pr(&gt;|t|)      2.5%     97.5%
+theta1 160.28000   6.896011  23.242 2.041e-15 145.85285 176.28021
+theta2   0.04771   0.008281   5.761 1.496e-05   0.03159   0.06966
+delta1  52.40373   9.551014   5.487 2.713e-05  31.33677  73.09295
+delta2   0.01641   0.011429   1.436 1.672e-01  -0.01043   0.04187</code></pre>
+<p>There are several other ways we might parameterize the model and
+specify it in <code>nls</code>. But for plotting purposes the
+parameterization does not matter.</p>
+<pre class="r"><code>d &lt;- expand.grid(conc = seq(0, 1.2, length = 100), state = c(&quot;treated&quot;,&quot;untreated&quot;))
+d$yhat &lt;- predict(m1, newdata = d)
+
+p &lt;- ggplot(Puromycin, aes(x = conc, y = rate, color = state)) +
+  geom_point() + geom_line(aes(y = yhat), data = d) + 
+  labs(x = &quot;Substrate Concentration (ppm)&quot;, 
+    y = &quot;Reaction Rate (counts/min)&quot;) + 
+  labs(color = &quot;Cell State&quot;) + 
+  theme_minimal() + theme(legend.position = c(0.8,0.2))
+plot(p)</code></pre>
+<p><img src="lecture-02-25-2022_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" /></p></li>
 <li><p>There are several potentially useful inferences we might make
 here. One is the values of the two parameters for the Michaelis-Menten
 model <em>for each state</em>. Another is the difference in the
@@ -431,11 +506,69 @@ parameterized in the previous question, some of these could be found
 simply by using <code>summary</code> and <code>confint</code>, while
 others might require using <code>lincon</code> unless the model is
 reparameterized. Produce estimates, standard errors, and confidence
-intervals for the six quantities described above.</p></li>
+intervals for the six quantities described above.</p>
+<p><strong>Solution</strong>: First consider inferences for the two
+parameters of the Micahelis-Menten model for each treatment condition.
+These are the parameters of the first parameterization used above.</p>
+<pre class="r"><code>cbind(summary(m1)$coefficients, confint(m1))</code></pre>
+<pre><code>         Estimate Std. Error t value  Pr(&gt;|t|)      2.5%     97.5%
+theta1t 212.68373   6.608094  32.185 4.876e-18 198.88883 227.45563
+theta2t   0.06412   0.007877   8.141 1.293e-07   0.04856   0.08354
+theta1u 160.28001   6.896011  23.242 2.041e-15 145.85285 176.28021
+theta2u   0.04771   0.008281   5.761 1.496e-05   0.03159   0.06966</code></pre>
+<p>If we were using the second parameterization, we could obtain
+estimates of the parameters from the untreated cells from
+<code>summary</code> and <code>confint</code>, but would have to use
+something like <code>lincon</code> to to estimate a function of the
+model parameters. Recall the relationships between the parameters in the
+two models: <span class="math inline">\(\theta_1 = \theta_{1u}\)</span>,
+<span class="math inline">\(\theta_2 = \theta_{2u}\)</span>, <span
+class="math inline">\(\delta_1 = \theta_{1t} - \theta_{1u}\)</span> and
+<span class="math inline">\(\delta_2 = \theta_{2t} -
+\theta_{2u}\)</span>. Thus <span class="math inline">\(\theta_{1t} =
+\theta_1 + \delta\)</span> and <span class="math inline">\(\theta_{2t} =
+\theta_2 + \delta_2\)</span>.</p>
+<pre class="r"><code>cbind(summary(m2)$coefficients, confint(m2))</code></pre>
+<pre><code>        Estimate Std. Error t value  Pr(&gt;|t|)      2.5%     97.5%
+theta1 160.28000   6.896011  23.242 2.041e-15 145.85285 176.28021
+theta2   0.04771   0.008281   5.761 1.496e-05   0.03159   0.06966
+delta1  52.40373   9.551014   5.487 2.713e-05  31.33677  73.09295
+delta2   0.01641   0.011429   1.436 1.672e-01  -0.01043   0.04187</code></pre>
+<pre class="r"><code>lincon(m2, a = c(1, 0, 1, 0)) # theta1t = theta1 + delta1</code></pre>
+<pre><code>            estimate    se lower upper tvalue df    pvalue
+(1,0,1,0),0    212.7 6.608 198.9 226.5  32.19 19 4.876e-18</code></pre>
+<pre class="r"><code>lincon(m2, a = c(0, 1, 0, 1)) # theta2t = theta2 + delta2</code></pre>
+<pre><code>            estimate       se   lower   upper tvalue df    pvalue
+(0,1,0,1),0  0.06412 0.007877 0.04763 0.08061  8.141 19 1.293e-07</code></pre>
+<p>Now if we want to estimate the difference in the parameters of the
+Michaelis-Menten model between the treated and untreated states, we
+could get that from the second parameterization because those
+differences are <span class="math inline">\(\delta_1\)</span> and <span
+class="math inline">\(\delta_2\)</span>.</p>
+<pre class="r"><code>cbind(summary(m2)$coefficients, confint(m2))</code></pre>
+<pre><code>        Estimate Std. Error t value  Pr(&gt;|t|)      2.5%     97.5%
+theta1 160.28000   6.896011  23.242 2.041e-15 145.85285 176.28021
+theta2   0.04771   0.008281   5.761 1.496e-05   0.03159   0.06966
+delta1  52.40373   9.551014   5.487 2.713e-05  31.33677  73.09295
+delta2   0.01641   0.011429   1.436 1.672e-01  -0.01043   0.04187</code></pre>
+<p>But if we were using the first parameterization we would again need
+to use something like <code>lincon</code> since <span
+class="math inline">\(\delta_1 = \theta_{1t} - \theta_{1u}\)</span> and
+<span class="math inline">\(\delta_2 = \theta_{2t} -
+\theta_{2u}\)</span>.</p>
+<pre class="r"><code>lincon(m1, a = c(1,0,-1,0)) # delta1 = theta1t - theta1u</code></pre>
+<pre><code>             estimate    se lower upper tvalue df    pvalue
+(1,0,-1,0),0     52.4 9.551 32.41 72.39  5.487 19 2.713e-05</code></pre>
+<pre class="r"><code>lincon(m1, a = c(0,1,0,-1)) # delta2 = theta2t - theta2u</code></pre>
+<pre><code>             estimate      se     lower   upper tvalue df pvalue
+(0,1,0,-1),0  0.01641 0.01143 -0.007508 0.04033  1.436 19 0.1672</code></pre>
+<p>Note that when estimating the same quantity we obtain the same
+estimates and standard errors from either parameterization from
+<code>summary</code> and <code>lincon</code>. The confidence intervals,
+however, are slightly different because <code>confint</code> and
+<code>lincon</code> use different methods of obtaining approximate
+confidence intervals. ## Heteroscedasticity in the Daphnia Data</p></li>
 </ol>
-</div>
-<div id="heteroscedasticity-in-the-daphnia-data" class="section level2">
-<h2>Heteroscedasticity in the Daphnia Data</h2>
 <p>An example from <a href="hw1-solutions.html">you first homework
 assignment</a> featured data from a survey of water fleas where the
 number of water fleas were counted in one liter samples of water taken
@@ -446,7 +579,7 @@ p &lt;- ggplot(daphniastrat, aes(x = layer, y = count)) +
   geom_dotplot(binaxis = &quot;y&quot;, binwidth = 1, stackdir = &quot;center&quot;) + 
   labs(x = &quot;Layer&quot;, y = &quot;Number of Daphnia&quot;) + theme_minimal()
 plot(p)</code></pre>
-<p><img src="lecture-02-25-2022_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-02-25-2022_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" />
 We used the following linear model for these data.</p>
 <pre class="r"><code>m &lt;- lm(count ~ layer, data = daphniastrat)
 summary(m)$coefficients</code></pre>
@@ -462,7 +595,7 @@ p &lt;- ggplot(daphniastrat, aes(x = yhat, y = rest, color = layer)) +
   geom_count() + theme_minimal() + 
   labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;, color = &quot;Layer&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-02-25-2022_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-02-25-2022_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" />
 Note that <code>geom_count</code> is a variant of
 <code>geom_point</code> that makes the point size proportional to the
 number of points at a particular position, which is useful here.</p>
@@ -507,7 +640,18 @@ described above. The sample standard deviations can be computed and used
 to add weights to the data frame using functions from the
 <strong>dplyr</strong> package as demonstrated with the
 <code>CancerSurvival</code> data in lecture on <a
-href="lecture-02-18-2022.html">February 18th</a>.</p></li>
+href="lecture-02-18-2022.html">February 18th</a>.</p>
+<p><strong>Solution</strong>: First we compute the weights using
+functions from the <strong>dplyr</strong> package.</p>
+<pre class="r"><code>library(dplyr)
+daphniastrat &lt;- daphniastrat %&gt;% group_by(layer) %&gt;% mutate(w = 1 / var(count))</code></pre>
+<p>Then we estimate the model using weighted least squares.</p>
+<pre class="r"><code>m &lt;- lm(count ~ layer, data = daphniastrat, weights = w)
+summary(m)$coefficients</code></pre>
+<pre><code>                 Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)         19.50     0.7997  24.385 2.035e-26
+layerthermocline    -8.20     1.5190  -5.398 2.896e-06
+layerhypolimnion   -17.77     0.9392 -18.918 3.617e-22</code></pre></li>
 <li><p>Assuming again that the variance of the counts vary by layer so
 that <span class="math display">\[
   \text{Var}(Y_i) =
@@ -526,13 +670,132 @@ class="math inline">\(\beta_1\)</span>, and <span
 class="math inline">\(\beta_3\)</span>) and the three variances above
 <em>simultaneously</em>. Do this using the <code>gls</code> function
 from the <strong>nlme</strong> package as demonstrated in lecture on <a
-href="lecture-02-23-2022.html">February 23rd</a>.</p></li>
+href="lecture-02-23-2022.html">February 23rd</a>.</p>
+<p><strong>Solution</strong>: Here is how we would estimate this
+model.</p>
+<pre class="r"><code>library(nlme) # for gls function
+m &lt;- gls(count ~ layer, data = daphniastrat, 
+  weights = varIdent(form = ~ 1 | layer), method = &quot;ML&quot;)
+summary(m)</code></pre>
+<pre><code>Generalized least squares fit by maximum likelihood
+  Model: count ~ layer 
+  Data: daphniastrat 
+    AIC   BIC logLik
+  235.1 245.9 -111.5
+
+Variance function:
+ Structure: Different standard deviations per stratum
+ Formula: ~1 | layer 
+ Parameter estimates:
+ epilimnion thermocline hypolimnion 
+     1.0000      1.1115      0.5286 
+
+Coefficients:
+                  Value Std.Error t-value p-value
+(Intercept)       19.50    0.8068  24.170       0
+layerthermocline  -8.20    1.5030  -5.456       0
+layerhypolimnion -17.77    0.9452 -18.796       0
+
+ Correlation: 
+                 (Intr) lyrthr
+layerthermocline -0.537       
+layerhypolimnion -0.854  0.458
+
+Standardized residuals:
+    Min      Q1     Med      Q3     Max 
+-1.6261 -0.5937 -0.1434  0.4303  3.0123 
+
+Residual standard error: 3.486 
+Degrees of freedom: 45 total; 42 residual</code></pre>
+<p>The model above was estimated using <em>maximum likelihood</em> (ML).
+But another method is to use what is called <em>restricted maximum
+likelihood</em> (REML) which is the default method. It is interesting to
+note that for this model, this REML effectively equivalent to the
+approach used in the previous problem.</p>
+<pre class="r"><code>library(nlme) # for gls function
+m &lt;- gls(count ~ layer, data = daphniastrat, 
+  weights = varIdent(form = ~ 1 | layer), method = &quot;ML&quot;)
+summary(m) </code></pre>
+<pre><code>Generalized least squares fit by maximum likelihood
+  Model: count ~ layer 
+  Data: daphniastrat 
+    AIC   BIC logLik
+  235.1 245.9 -111.5
+
+Variance function:
+ Structure: Different standard deviations per stratum
+ Formula: ~1 | layer 
+ Parameter estimates:
+ epilimnion thermocline hypolimnion 
+     1.0000      1.1115      0.5286 
+
+Coefficients:
+                  Value Std.Error t-value p-value
+(Intercept)       19.50    0.8068  24.170       0
+layerthermocline  -8.20    1.5030  -5.456       0
+layerhypolimnion -17.77    0.9452 -18.796       0
+
+ Correlation: 
+                 (Intr) lyrthr
+layerthermocline -0.537       
+layerhypolimnion -0.854  0.458
+
+Standardized residuals:
+    Min      Q1     Med      Q3     Max 
+-1.6261 -0.5937 -0.1434  0.4303  3.0123 
+
+Residual standard error: 3.486 
+Degrees of freedom: 45 total; 42 residual</code></pre>
+<p>We will discuss maximum likelihood and perhaps restricted maximum
+likelihood later in the course.</p></li>
 <li><p>With counts it is often assumed that the variance is proportional
 to the expected response — i.e., <span
 class="math inline">\(\text{Var}(Y_i) \propto E(Y_i)\)</span>. Assuming
 that is true here, estimate the model using <em>iteratively weighted
 least squares</em> as was demonstrated in lecture on <a
-href="lecture-02-23-2022.html">February 23rd</a>.</p></li>
+href="lecture-02-23-2022.html">February 23rd</a>.</p>
+<p><strong>Solution</strong>: We can program the iteratively weighted
+least squares algorithm as follows.</p>
+<pre class="r"><code>daphniastrat$w &lt;- 1
+for (i in 1:5) {
+  m &lt;- lm(count ~ layer, data = daphniastrat, weights = w)
+  print(coef(m))
+  daphniastrat$w &lt;- 1 / predict(m)
+}</code></pre>
+<pre><code>     (Intercept) layerthermocline layerhypolimnion 
+           19.50            -8.20           -17.77 
+     (Intercept) layerthermocline layerhypolimnion 
+           19.50            -8.20           -17.77 
+     (Intercept) layerthermocline layerhypolimnion 
+           19.50            -8.20           -17.77 
+     (Intercept) layerthermocline layerhypolimnion 
+           19.50            -8.20           -17.77 
+     (Intercept) layerthermocline layerhypolimnion 
+           19.50            -8.20           -17.77 </code></pre>
+<pre class="r"><code>summary(m)</code></pre>
+<pre><code>
+Call:
+lm(formula = count ~ layer, data = daphniastrat, weights = w)
+
+Weighted Residuals:
+   Min     1Q Median     3Q    Max 
+-1.874 -0.684 -0.113  0.340  4.000 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)         19.50       1.13   17.24  &lt; 2e-16 ***
+layerthermocline    -8.20       1.66   -4.93  1.3e-05 ***
+layerhypolimnion   -17.77       1.20  -14.85  &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.15 on 42 degrees of freedom
+Multiple R-squared:  0.86,  Adjusted R-squared:  0.853 
+F-statistic:  128 on 2 and 42 DF,  p-value: &lt;2e-16</code></pre>
+<p>Note how the estimates do not change. For this particular model the
+algorithm only needs to go through one iteration to compute the weights.
+This is because the predicted values do not depend on the weights in
+this particular model.</p></li>
 </ol>
 </div>
 <div class="footnotes footnotes-end-of-document">
