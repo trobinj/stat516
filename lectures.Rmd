@@ -73,7 +73,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` [Introduction to Poisson regression](lecture-02-28-2022.html). Release of second homework assignment.
+`r i <- i + 1; d[i]` [Introduction to Poisson regression](lecture-02-28-2022.html). The [second homework assignment](hw2.html) is now available.
 
 `r i <- i + 1; d[i]` 
 
