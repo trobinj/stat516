@@ -270,7 +270,8 @@ we can say that $E(Y_a)$ is about 20\% *smaller* than $E(Y_b)$.
 ```{r}
 exp(cbind(coef(m), confint(m)))
 ```
-The expected number of daphnia per liter in the epilimnion layer is estimated to be about 100%(1.73-1) = 73% more than in the thermocline layer. And because 100%(0.15-1) = -85% we estimate that the the expected number of daphia per liter in the hypolimnion layer is 85% less than it is in the thermocline layer. 
+The expected number of daphnia per liter in the epilimnion layer is estimated to be about 100%(1.73-1) = 73% more than in the thermocline layer. And because 100%(0.15-1) = -85% we estimate that the the expected number of daphia per liter in the hypolimnion layer is 85% less than it is in the thermocline layer.
+
 ## Contrasts With Log Link Functions
 
 With a log link function a "contrast" as produced by the `contrast` function has the general form 
