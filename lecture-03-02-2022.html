@@ -643,10 +643,10 @@ the estimates and the confidence intervals.</p>
 <pre class="r"><code>contrast(m,
     a = list(layer = c(&quot;epilimnion&quot;,&quot;thermocline&quot;)),
     b = list(layer = &quot;hypolimnion&quot;),
-    cnames = c(&quot;epil/hypo&quot;,&quot;therm/hypo&quot;))</code></pre>
-<pre><code>           estimate     se lower upper tvalue  df    pvalue
-epil/hypo     2.420 0.2025 2.023 2.817 11.950 Inf 6.519e-33
-therm/hypo    1.875 0.2175 1.448 2.301  8.619 Inf 6.745e-18</code></pre>
+    cnames = c(&quot;epil vs hypo&quot;,&quot;therm vs hypo&quot;))</code></pre>
+<pre><code>              estimate     se lower upper tvalue  df    pvalue
+epil vs hypo     2.420 0.2025 2.023 2.817 11.950 Inf 6.519e-33
+therm vs hypo    1.875 0.2175 1.448 2.301  8.619 Inf 6.745e-18</code></pre>
 <pre class="r"><code>contrast(m,
     a = list(layer = c(&quot;epilimnion&quot;,&quot;thermocline&quot;)),
     b = list(layer = &quot;hypolimnion&quot;),

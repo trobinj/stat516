@@ -289,7 +289,7 @@ So applying the exponential function to contrasts allows us to interpret them as
 contrast(m,
     a = list(layer = c("epilimnion","thermocline")),
     b = list(layer = "hypolimnion"),
-    cnames = c("epil/hypo","therm/hypo"))
+    cnames = c("epil vs hypo","therm vs hypo"))
 contrast(m,
     a = list(layer = c("epilimnion","thermocline")),
     b = list(layer = "hypolimnion"),
