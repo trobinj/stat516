@@ -13,7 +13,7 @@
 
 <title>Nonlinear Regression and Heteroscedasticity</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.12/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
@@ -60,6 +60,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -80,6 +81,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -232,7 +236,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -403,7 +407,7 @@ and <code>Dose</code> as follows.</p>
 <pre class="r"><code>library(dplyr)
 S.alba %&gt;% group_by(Herbicide, Dose) %&gt;% 
   summarize(drymatter = mean(DryMatter))</code></pre>
-<pre><code># A tibble: 15 × 3
+<pre><code># A tibble: 15 x 3
 # Groups:   Herbicide [2]
    Herbicide   Dose drymatter
    &lt;fct&gt;      &lt;int&gt;     &lt;dbl&gt;
@@ -547,7 +551,7 @@ coins &lt;- jevons %&gt;% uncount(n) %&gt;%
 standard deviations as the original data.</p>
 <pre class="r"><code>coins %&gt;% group_by(Age) %&gt;% 
   summarize(n = n(), meanweight = mean(Weight), sdweight = sd(Weight))</code></pre>
-<pre><code># A tibble: 5 × 4
+<pre><code># A tibble: 5 x 4
     Age     n meanweight sdweight
   &lt;int&gt; &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;
 1     1   123       7.97   0.0141
@@ -612,14 +616,14 @@ decades old}.
 \]</span> There are a couple of different ways to account for this kind
 of variance structure. One is to use <em>weighted</em> least squares
 where the weights are estimated as the reciprocals of the sample
-standard deviations. We discussed how to compute these weights using
-functions from the <strong>dplyr</strong> package. Another approach is
-to use a parametric model where the five variances are effectively
-estimated from the data. We discussed how to do this with using the
-<code>gls</code> function from the <strong>nlme</strong> package. Use
-both of these approaches and for each show the parameter estimates and
-their standard errors as given by <code>summary</code>, and use either
-the <code>contrast</code> function or functions from the
+variances. We discussed how to compute these weights using functions
+from the <strong>dplyr</strong> package. Another approach is to use a
+parametric model where the five variances are effectively estimated from
+the data. We discussed how to do this with using the <code>gls</code>
+function from the <strong>nlme</strong> package. Use both of these
+approaches and for each show the parameter estimates and their standard
+errors as given by <code>summary</code>, and use either the
+<code>contrast</code> function or functions from the
 <strong>emmeans</strong> package to produce estimates, standard errors,
 and confidence intervals for (a) the expected weight of coins from each
 age group and (b) the difference in the expected weight between the the

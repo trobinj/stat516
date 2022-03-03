@@ -12,7 +12,7 @@ header-includes:
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "tikz"))
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
 ```
 
 ```{r, echo = FALSE}
@@ -179,7 +179,7 @@ Y_i =
   \sigma_5^2, & \text{if the $i$-th observation is of a coin five decades old}.
 \end{cases}
 $$
-There are a couple of different ways to account for this kind of variance structure. One is to use *weighted* least squares where the weights are estimated as the reciprocals of the sample standard deviations. We discussed how to compute these weights using functions from the **dplyr** package. Another approach is to use a parametric model where the five variances are effectively estimated from the data. We discussed how to do this with using the `gls` function from the **nlme** package. Use both of these approaches and for each show the parameter estimates and their standard errors as given by `summary`, and use either the `contrast` function or functions from the **emmeans** package to produce estimates, standard errors, and confidence intervals for (a) the expected weight of coins from each age group and (b) the difference in the expected weight between the the newest coins, just as you did in the previous problem.[^glsdf]
+There are a couple of different ways to account for this kind of variance structure. One is to use *weighted* least squares where the weights are estimated as the reciprocals of the sample variances. We discussed how to compute these weights using functions from the **dplyr** package. Another approach is to use a parametric model where the five variances are effectively estimated from the data. We discussed how to do this with using the `gls` function from the **nlme** package. Use both of these approaches and for each show the parameter estimates and their standard errors as given by `summary`, and use either the `contrast` function or functions from the **emmeans** package to produce estimates, standard errors, and confidence intervals for (a) the expected weight of coins from each age group and (b) the difference in the expected weight between the the newest coins, just as you did in the previous problem.[^glsdf]
 
 0. Compare the estimates and standard errors for estimating the model parameters as well as the expected weight and differences in expected weight when accounting for heteroscedasticity as you did in the last problem, and when not accounting for heteroscedasticity as you did in the first problem. Discuss briefly how failing to account heteroscedasticity (i.e., incorrectly assuming homoscedasticity) may affect your inferences. 
 
