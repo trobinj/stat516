@@ -247,7 +247,7 @@ where $P_i$ and $d_i$ are the $i$-th observations of the proportion of dead beet
 $$
   \text{Var}(P_i) = E(P_i)[1-E(P_i)]/m_i,
 $$
-where $m_i$ is the number of exposed beetles for the $i$-th observation. Since $E(P_i)$ is unknown it can be estimated as the predicted value $\hat{Y_i}$. Use an iteratively weighted least squares algorithm with weights implied by the variance above to estimate the model shown above and show the parameter estimates and standard errors using `summary`. You should find that the parameter estimates will be equal to or very close to those obtained using the `glm` function above, but the standard errors will be somewhat different. 
+where $m_i$ is the number of exposed beetles for the $i$-th observation. Since $E(P_i)$ is unknown it can be estimated as the predicted value $\hat{Y_i}$. Use an iteratively weighted least squares algorithm with weights implied by the variance above to estimate the nonlinear model shown above and show the parameter estimates and standard errors using `summary`. You should find that the parameter estimates will be equal to or very close to those obtained using the `glm` function above, but the standard errors will be somewhat different. 
 
 [^layers]: Note that when using `ggplot` the *order* that you specify the various geometric objects matters. For example, if `geom_line` appears before `geom_label_repel` then the point labels will be shown in front of rather than behind the curve.
 
