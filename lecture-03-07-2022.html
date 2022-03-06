@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Monday, Mar 7</title>
+
+<script src="site_libs/header-attrs-2.12/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Monday, Mar 7</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-03-07-2022.pdf">PDF</a> copy
+of this lecture.</p>
+<div id="proportions-as-response-variables" class="section level2">
+<h2>Proportions as Response Variables</h2>
+<p>Consider the following data from an experiment that exposed batches
+of beetles to carbon disulphide.</p>
+<pre class="r"><code>library(trtools) 
+library(ggplot2)
+library(ggrepel)
+
+bliss$proportion &lt;- paste(bliss$dead, &quot;/&quot;, bliss$exposed, sep = &quot;&quot;)
+
+p &lt;- ggplot(bliss, aes(x = concentration, y = dead/exposed)) +
+  geom_point() + ylim(0, 1) + theme_minimal() + 
+  geom_label_repel(aes(label = proportion), box.padding = 0.75) + 
+  labs(x = &quot;Concentration of Carbon Disulphide (mg/liter)&quot;,
+    y = &quot;Proportion of Beetles Dying&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-03-07-2022_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
+The interest here is in modeling the <em>proportion</em> of dead beetles
+as a response variable.</p>
+<p>A proportion <span class="math inline">\(Y_i\)</span> can be defined
+as <span class="math inline">\(Y_i = C_i/m_i\)</span> where <span
+class="math inline">\(C_i\)</span> is a count and <span
+class="math inline">\(m_i\)</span> is a total so that <span
+class="math inline">\(C_i = 0, 1, \dots, m_i\)</span> and <span
+class="math inline">\(Y_i = 0, 1/m_i, 2/m_i, \dots, 1\)</span>. Note
+that proportions are not quite the same as rates. Proportions are
+bounded between zero and one, but rates are only bounded below by
+zero.</p>
+<ol style="list-style-type: decimal">
+<li><p>Proportions may require nonlinear models because <span
+class="math inline">\(0 \le E(Y_i) \le 1\)</span>.</p></li>
+<li><p>Proportions tend to exhibit heteroscedasticty with variance
+depending on <span class="math inline">\(E(Y_i)\)</span> and <span
+class="math inline">\(m_i\)</span>. The variance of <span
+class="math inline">\(Y_i\)</span> tends to be smaller as <span
+class="math inline">\(E(Y_i)\)</span> gets closer to zero or one, and is
+inversely proportional to <span
+class="math inline">\(m_i\)</span>.</p></li>
+<li><p>Non-normal discrete distribution.</p></li>
+</ol>
+</div>
+<div id="the-binomial-distribution" class="section level2">
+<h2>The Binomial Distribution</h2>
+<p>Assume <span class="math inline">\(m\)</span> independent “trials”
+with a probability of a “success” on each trial of <span
+class="math inline">\(p\)</span> (and thus the probability of a
+“failure” is <span class="math inline">\(1-p\)</span>). The number of
+successes then has a <em>binomial distribution</em> such that <span
+class="math display">\[
+  P(C = c) = \binom{m}{c}p^c(1-p)^{m-c}
+\]</span> where <span class="math display">\[
+  \binom{m}{c} = \frac{m!}{c!(m-c)!}.
+\]</span> The possible values of <span class="math inline">\(C\)</span>
+are <span class="math inline">\(0, 1, \dots, m\)</span>. Note that <span
+class="math inline">\(\binom{m}{c}\)</span> is the number of outcomes
+where we can have a count of <span class="math inline">\(c\)</span> out
+of <span class="math inline">\(m\)</span>, and <span
+class="math inline">\(p^c(1-p)^{m-c}\)</span> is the probability of each
+of these outcomes.</p>
+<strong>Example</strong>: Suppose that the probability of observing a
+seed germinate under certain conditions is 0.2, and we observe four
+seeds. Let <span class="math inline">\(C\)</span> be the number of seeds
+that germinate. Then <span class="math inline">\(m\)</span> = 4 and
+<span class="math inline">\(p\)</span> = 0.2. The probability that, say,
+<span class="math inline">\(C\)</span> = 3 is then <span
+class="math display">\[
+  P(C = 3) =
+\underbrace{\frac{4!}{3!(4-3)!}}_{4}\underbrace{0.2^3(1-0.2)^{4-3}}_{0.0064}
+= 0.0246.
+\]</span> There are four outcomes that give three successes, and each of
+these outcomes has a probability of 0.0064.
+<table class="table table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+Outcome
+</th>
+<th style="text-align:center;">
+Probability
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+SSSF
+</td>
+<td style="text-align:center;">
+<span class="math inline">\(0.2 \times 0.2 \times 0.2 \times
+0.8\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+SSFS
+</td>
+<td style="text-align:center;">
+<span class="math inline">\(0.2 \times 0.2 \times 0.2 \times
+0.8\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+SFSS
+</td>
+<td style="text-align:center;">
+<span class="math inline">\(0.2 \times 0.2 \times 0.2 \times
+0.8\)</span>
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+FSSS
+</td>
+<td style="text-align:center;">
+<span class="math inline">\(0.2 \times 0.2 \times 0.2 \times
+0.8\)</span>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The proportion is obtained as <span class="math inline">\(Y =
+C/m\)</span>.</p>
+<p>The figures below show several binomial distributions for different
+values of <span class="math inline">\(m\)</span> and <span
+class="math inline">\(p\)</span>.
+<img src="lecture-03-07-2022_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
+The figures below show the distributions of the proportion <span
+class="math inline">\(C/m\)</span>.
+<img src="lecture-03-07-2022_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
+It can be shown that <span class="math display">\[
+  E(C) = mp \ \ \ \text{and} \ \ \ \text{Var}(C) = mp(1-p).
+\]</span> Then for the <em>proportion</em> <span class="math inline">\(Y
+= C/m\)</span> it follows that <span class="math display">\[
+  E(Y) = p \ \ \ \text{and} \ \ \ \text{Var}(Y) = p(1-p)/m.
+\]</span> This is because <span class="math inline">\(E(Y) = E(C/m) =
+E(C)/m = mp/m = p\)</span> and <span class="math inline">\(\text{Var}(Y)
+= \text{Var}(C/m) = \text{Var}(C)/m^2 = mp(1-p)/m^2 = p(1-p)/m\)</span>.
+Note that the variance is at its maximum when <span
+class="math inline">\(p\)</span> = 0.5 and gets smaller as <span
+class="math inline">\(p\)</span> moves away from 0.5 toward <span
+class="math inline">\(p\)</span> = 0 or <span
+class="math inline">\(p\)</span> = 1.
+<img src="lecture-03-07-2022_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" />
+An important special case of the binomial distribution is the
+<em>Bernoulli distribution</em> where <span class="math inline">\(m =
+1\)</span> so that <span class="math inline">\(C = 0,1\)</span> and
+<span class="math inline">\(Y = 0,1\)</span>.</p>
+</div>
+<div id="binomial-generalized-linear-models" class="section level2">
+<h2>Binomial Generalized Linear Models</h2>
+<p>Assume that each <span class="math inline">\(C_1, C_2, \dots,
+C_n\)</span> has a binomial distribution with parameters <span
+class="math inline">\(p_1, p_2, \dots, p_n\)</span> and <span
+class="math inline">\(m_1, m_2, \dots, m_n\)</span>, respectively, but
+<span class="math inline">\(m_1, m_2, \dots, m_n\)</span> are
+observed/known). A binomial GLM will then specify the expected value of
+<span class="math inline">\(Y_i = C_i/m_i\)</span> as <span
+class="math display">\[
+  g[E(Y_i)] = \eta_i \ \ \ \text{or} \ \ \ E(Y_i) = g^{-1}(\eta_i),
+\]</span> where <span class="math inline">\(\eta_i = \beta_0 + \beta_1
+x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}\)</span>.</p>
+<p>Recall that <span class="math inline">\(E(Y_i) = p_i\)</span> so we
+are effectively specifying a model for the <em>probability of a
+success</em>. The variance of <span class="math inline">\(Y_i\)</span>
+is then <span class="math display">\[
+  \text{Var}(Y_i) = E(Y_i)[1-E(Y_i)]/m_i = p_i(1-p_i)/m_i,
+\]</span> so that <span class="math inline">\(0 \le \text{Var}(Y_i) \le
+0.25m_i\)</span>. Like rates, it is preferable to <em>not</em> model
+proportions as response variables without accounting for the denominator
+<span class="math inline">\(m_i\)</span> since it affects the
+variance.</p>
+</div>
+<div id="logistic-regression" class="section level2">
+<h2>Logistic Regression</h2>
+<p>Logistic regression is a binomial generalized linear model that uses
+a “logit” link function such that <span class="math display">\[
+  g[E(Y_i)] = \log\left[\frac{E(Y_i)}{1-E(Y_i)}\right] =
+\log\left(\frac{p_i}{1-p_i}\right),
+\]</span> and therefore <span class="math display">\[
+  E(Y_i) = \frac{e^{\eta_i}}{1+e^{\eta_i}} \ \ \ \text{or} \ \ \ p_i =
+\frac{e^{\eta_i}}{1+e^{\eta_i}},
+\]</span> where again <span class="math inline">\(\eta_i = \beta_0 +
+\beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}\)</span>. Note
+that this guarantees that <span class="math inline">\(0 &lt; E(Y_i) &lt;
+1\)</span>.</p>
+<p><strong>Example</strong>: Consider again the <code>bliss</code> data.
+The <code>glm</code> function can be used to estimate the logistic
+regression model where <span class="math display">\[
+  E(Y_i) = \frac{e^{\eta_i}}{1 + e^{\eta_i}},
+\]</span> where <span class="math inline">\(\eta_i = \beta_0 + \beta_1
+x_i\)</span> and <span class="math inline">\(x_i\)</span> is the
+concentration for the <span class="math inline">\(i\)</span>-th
+observation (i.e., the <span class="math inline">\(i\)</span>-th batch
+of beetles).</p>
+<pre class="r"><code>m &lt;- glm(cbind(dead, exposed - dead) ~  concentration, 
+  family = binomial(link = logit), data = bliss)
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)    2.5 %   97.5 %
+(Intercept)   -14.8084    1.28976  -11.48 1.633e-30 -17.4785 -12.4089
+concentration   0.2492    0.02138   11.65 2.250e-31   0.2095   0.2935</code></pre>
+<p>Here the two variables in <code>cbind</code> are <em>the number of
+times the event occurred</em> (i.e., <span
+class="math inline">\(C_i\)</span>) and <em>the number of times the
+event did not occur</em> (i.e., <span
+class="math inline">\(m_i-C_i\)</span>). If the variables had been
+<code>dead</code> and <code>alive</code>, representing the number of
+dead and alive beetles, respectively, then we’d write
+<code>cbind(dead, alive)</code>. Also for <code>family = binomial</code>
+the logit link function is the default so you can use
+<code>family = binomial</code> for logistic regression.</p>
+<pre class="r"><code>d &lt;- data.frame(concentration = seq(49, 77, length = 1000))
+d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
+
+p &lt;- ggplot(bliss, aes(x = concentration, y = dead/exposed)) + 
+  geom_point() + ylim(0, 1) + theme_minimal() + 
+  geom_line(aes(y = yhat), data = d) + 
+  geom_label_repel(aes(label = proportion), box.padding = 0.75) +
+  labs(x = &quot;Concentration of Carbon Disulphide (mg/liter)&quot;,
+    y = &quot;Proportion of Beetles Dying&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-03-07-2022_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" />
+Predicted probabilities, with confidence intervals, can also be obtained
+using <code>contrast</code> or <code>glmint</code>. Note that the
+function <span class="math inline">\(e^x/(1+e^x)\)</span> is known to R
+as <code>plogis</code>.</p>
+<pre class="r"><code>trtools::contrast(m, list(concentration = c(50,60,70)), 
+  cnames = c(&quot;50 mg/liter&quot;,&quot;60 mg/liter&quot;,&quot;70 mg/liter&quot;), tf = plogis)</code></pre>
+<pre><code>            estimate   lower  upper
+50 mg/liter  0.08707 0.05512 0.1349
+60 mg/liter  0.53539 0.47121 0.5984
+70 mg/liter  0.93299 0.89490 0.9579</code></pre>
+<pre class="r"><code>trtools::glmint(m, newdata = data.frame(concentration = c(50,60,70)))</code></pre>
+<pre><code>      fit     low    upp
+1 0.08707 0.05512 0.1349
+2 0.53539 0.47121 0.5984
+3 0.93299 0.89490 0.9579</code></pre>
+<pre class="r"><code>d &lt;- data.frame(concentration = seq(49, 77, length = 1000))
+d &lt;- cbind(d, trtools::glmint(m, newdata = d))
+head(d)</code></pre>
+<pre><code>  concentration     fit     low    upp
+1         49.00 0.06920 0.04201 0.1119
+2         49.03 0.06965 0.04233 0.1125
+3         49.06 0.07010 0.04266 0.1131
+4         49.08 0.07056 0.04299 0.1137
+5         49.11 0.07102 0.04332 0.1143
+6         49.14 0.07148 0.04365 0.1149</code></pre>
+<pre class="r"><code>p &lt;- ggplot(bliss, aes(x = concentration, y = dead/exposed)) + 
+  geom_point() + ylim(0, 1) + theme_minimal() + 
+  geom_line(aes(y = fit), data = d) + 
+  geom_line(aes(y = low), data = d, color = grey(0.75)) +
+  geom_line(aes(y = upp), data = d, color = grey(0.75)) +
+  geom_label_repel(aes(label = proportion), box.padding = 0.75) +
+  labs(x = &quot;Concentration of Carbon Disulphide (mg/liter)&quot;,
+    y = &quot;Proportion of Beetles Dying&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-03-07-2022_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="parameter-and-contrast-interpretation-odds-ratios"
+class="section level2">
+<h2>Parameter and Contrast Interpretation: Odds Ratios</h2>
+<p>A logistic regression model can be written as <span
+class="math display">\[
+  \frac{p_i}{1-p_i} = \exp(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} +
+\cdots + \beta_k x_{ik})
+\]</span> where <span class="math inline">\(p_i/(1-p_i)\)</span> is the
+<em>odds</em> of the event. The <em>odds</em> is simply the ratio of the
+probability of the event occurring (<span
+class="math inline">\(p_i\)</span>) to the probability of the event not
+occurring (<span class="math inline">\(1-p_i\)</span>).</p>
+Odds are sometimes stated in “fractional form” as two numbers separated
+by a colon or other character (e.g., an odds of 1.5 might be written as
+“3:2” or “three to two”).
+<table class="table table-hover" style="width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="empty-cells: hide;border-bottom:hidden;" colspan="1">
+</th>
+<th style="border-bottom:hidden;padding-bottom:0; padding-left:3px;padding-right:3px;text-align: center; " colspan="2">
+<div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Odds
+</div>
+</th>
+</tr>
+<tr>
+<th style="text-align:center;">
+Probability
+</th>
+<th style="text-align:center;">
+Numeric
+</th>
+<th style="text-align:center;">
+Fractional
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+0.01
+</td>
+<td style="text-align:center;">
+0.01
+</td>
+<td style="text-align:center;">
+1:99
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.1
+</td>
+<td style="text-align:center;">
+0.11
+</td>
+<td style="text-align:center;">
+1:9
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.25
+</td>
+<td style="text-align:center;">
+0.33
+</td>
+<td style="text-align:center;">
+1:3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1/3
+</td>
+<td style="text-align:center;">
+0.50
+</td>
+<td style="text-align:center;">
+1:2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.4
+</td>
+<td style="text-align:center;">
+0.67
+</td>
+<td style="text-align:center;">
+2:3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.5
+</td>
+<td style="text-align:center;">
+1.00
+</td>
+<td style="text-align:center;">
+1:1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.6
+</td>
+<td style="text-align:center;">
+1.50
+</td>
+<td style="text-align:center;">
+3:2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2/3
+</td>
+<td style="text-align:center;">
+2.00
+</td>
+<td style="text-align:center;">
+2:1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.75
+</td>
+<td style="text-align:center;">
+3.00
+</td>
+<td style="text-align:center;">
+3:1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.9
+</td>
+<td style="text-align:center;">
+9.00
+</td>
+<td style="text-align:center;">
+9:1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.99
+</td>
+<td style="text-align:center;">
+99.00
+</td>
+<td style="text-align:center;">
+99:1
+</td>
+</tr>
+</tbody>
+</table>
+<p>It is important to note that probabilities and odds are related but
+not equal.
+<img src="lecture-03-07-2022_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" />
+Let <span class="math inline">\(O_i\)</span> be the odds for the <span
+class="math inline">\(i\)</span>-th observation. Then <span
+class="math inline">\(O_i = p_i/(1-p_i)\)</span> and <span
+class="math inline">\(p_i = O_i/(1 + O_i)\)</span>. Note that while
+<span class="math inline">\(0 \le p_i \le 1\)</span> but <span
+class="math inline">\(0 \le O_i \le \infty\)</span>.</p>
+<p>We can write a logistic regression model in terms of the
+<em>odds</em> of an event as <span class="math display">\[
+    O_i = \exp(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots +
+\beta_k x_{ik}),
+\]</span> or <span class="math display">\[
+    O_i = e^{\beta_0}e^{\beta_1x_{i1}}e^{\beta_2x_{i2}}\cdots
+e^{\beta_kx_{ik}}.
+\]</span> Here we can use <code>contrast</code> to make inferences about
+the <em>odds</em> of death.</p>
+<pre class="r"><code>trtools::contrast(m, list(concentration = c(50,60,70)), 
+  cnames = c(&quot;50 mg/liter&quot;,&quot;60 mg/liter&quot;,&quot;70 mg/liter&quot;), tf = exp)</code></pre>
+<pre><code>            estimate   lower   upper
+50 mg/liter  0.09538 0.05833  0.1559
+60 mg/liter  1.15232 0.89110  1.4901
+70 mg/liter 13.92222 8.51430 22.7650</code></pre>
+<p>We can even plot the estimated odds of death.</p>
+<pre class="r"><code>d &lt;- data.frame(concentration = seq(49, 77, length = 1000))
+d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
+d$odds &lt;- d$yhat / (1 - d$yhat)
+
+p &lt;- ggplot(d, aes(x = concentration, y = odds))
+p &lt;- p + geom_line() + theme_minimal()
+p &lt;- p + labs(x = &quot;Concentration of Carbon Disulphide (mg/liter)&quot;,
+  y = &quot;Odds of Beetles Dying&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-03-07-2022_files/figure-html/unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" />
+The model for the odds is “log-linear” like the model for expected
+counts in Poisson regression. To interpret the parameters of a logistic
+regression model, we can use <em>odds ratios</em> which are similar to
+rate ratios in Poisson regression.</p>
+<div id="odds-ratio-quantitative-explanatory-variable"
+class="section level3">
+<h3>Odds Ratio: Quantitative Explanatory Variable</h3>
+<p>Suppose we have the logistic regression model <span
+class="math display">\[
+  O_i = \exp(\beta_0 + \beta_1 x) = e^{\beta_0}e^{\beta_1x},
+\]</span> were <span class="math inline">\(x_i\)</span> is a
+quantitative explanatory variable. Consider the odds at <span
+class="math inline">\(x\)</span> and <span
+class="math inline">\(x+1\)</span> for arbitrary <span
+class="math inline">\(x\)</span>, <span class="math display">\[
+  O_a = e^{\beta_0}e^{\beta_1(x+1)} \ \ \ \text{and} \ \ \ O_b =
+e^{\beta_0}e^{\beta_1x}.
+\]</span> Then the <em>odds ratio</em> is <span class="math display">\[
+  \frac{O_a}{O_b} =
+\frac{e^{\beta_0}e^{\beta_1(x+1)}}{e^{\beta_0}e^{\beta_1x}} =
+  \frac{e^{\beta_0}e^{\beta_1x}e^{\beta_1}}{e^{\beta_0}e^{\beta_1x}} =
+e^{\beta_1}
+  \Leftrightarrow O_a = O_be^{\beta_1},
+\]</span> so that an increase <span class="math inline">\(x\)</span> by
+one unit changes the odds by a factor of <span
+class="math inline">\(e^{\beta_1}\)</span>. Also, we can compute the
+percent change in the odds as <span class="math display">\[
+  100\% \times [O_a/O_b - 1],
+\]</span> where <span class="math inline">\(O_a/O_b =
+e^{\beta_1}\)</span> is the odds ratio. Again, the sign tells us if this
+is a percent increase or decrease in the odds.</p>
+<p><strong>Example</strong>: Consider again the model for the
+<code>bliss</code> data.</p>
+<pre class="r"><code>cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)    2.5 %   97.5 %
+(Intercept)   -14.8084    1.28976  -11.48 1.633e-30 -17.4785 -12.4089
+concentration   0.2492    0.02138   11.65 2.250e-31   0.2095   0.2935</code></pre>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                            2.5 %    97.5 %
+(Intercept)   3.705e-07 2.566e-08 4.082e-06
+concentration 1.283e+00 1.233e+00 1.341e+00</code></pre>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(concentration = 2), 
+  b = list(concentration = 1))</code></pre>
+<pre><code> estimate lower upper
+    1.283  1.23 1.338</code></pre>
+<p>An odds ratio is then simply the ratio of the odds at two different
+values of an explanatory variable. We could compute the odds ratio, for
+example, for an increase of 1, 5, 10, and 20 mg/liter.</p>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(concentration = c(1,5,10,20)),
+  b = list(concentration = 0),
+  cnames = c(&quot;+1 mg/liter&quot;, &quot;+5 mg/liter&quot;, &quot;+10 mg/liter&quot;, &quot;+20 mg/liter&quot;))</code></pre>
+<pre><code>             estimate  lower   upper
++1 mg/liter     1.283  1.230   1.338
++5 mg/liter     3.476  2.819   4.286
++10 mg/liter   12.082  7.945  18.372
++20 mg/liter  145.971 63.126 337.540</code></pre>
+<p>Suppose that we model instead the probability of <em>survival</em>
+rather than death.</p>
+<pre class="r"><code>m &lt;- glm(cbind(exposed - dead, dead) ~ concentration, 
+  family = binomial, data = bliss)
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)   2.5 %  97.5 %
+(Intercept)    14.8084    1.28976   11.48 1.633e-30 12.4089 17.4785
+concentration  -0.2492    0.02138  -11.65 2.250e-31 -0.2935 -0.2095</code></pre>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                            2.5 %    97.5 %
+(Intercept)   2.699e+06 2.450e+05 3.898e+07
+concentration 7.794e-01 7.456e-01 8.110e-01</code></pre>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(concentration = 2), 
+  b = list(concentration = 1))</code></pre>
+<pre><code> estimate  lower  upper
+   0.7794 0.7475 0.8128</code></pre>
+<p>Note the “symmetry” of logistic regression. Whether we model the
+probability of the event or its complement is just a matter of
+parameterization.</p>
+</div>
+<div id="odds-ratio-categorical-explanatory-variable"
+class="section level3">
+<h3>Odds Ratio: Categorical Explanatory Variable</h3>
+<p>Suppose we have the model <span class="math display">\[
+  O_i = \exp(\beta_0 + \beta_1 x) = e^{\beta_0}e^{\beta_1x},
+\]</span> were <span class="math inline">\(x\)</span> is an indicator
+variable so that <span class="math display">\[
+  x =
+  \begin{cases}
+    1, &amp; \text{if the observation is from group $a$}, \\
+    0, &amp; \text{if the observation is from group $b$},
+  \end{cases}
+\]</span> so that the model can be written as <span
+class="math display">\[
+  O_i =
+  \begin{cases}
+    e^{\beta_0}e^{\beta_1}, &amp; \text{if the observation is from group
+$a$}, \\
+    e^{\beta_0},            &amp; \text{if the observation is from group
+$b$}.
+  \end{cases}
+\]</span> So we can write the odds as <span class="math display">\[
+  O_a = e^{\beta_0}e^{\beta_1} \ \ \ \text{and} \ \ \ O_b = e^{\beta_0}.
+\]</span> The <em>odds ratio</em> is then <span class="math display">\[
+\frac{O_a}{O_b} = \frac{e^{\beta_0}e^{\beta_1}}{e^{\beta_0}} =
+e^{\beta_1} \ \ \ \text{or} \ \ \
+\frac{O_b}{O_a} = \frac{e^{\beta_0}}{e^{\beta_0}e^{\beta_1}} =
+\frac{1}{e^{\beta_1}} = e^{-\beta_1}.
+\]</span> So the odds for group <span class="math inline">\(a\)</span>
+is <span class="math inline">\(e^{\beta_1}\)</span> times that for group
+<span class="math inline">\(b\)</span>, and the odds for group <span
+class="math inline">\(b\)</span> is <span
+class="math inline">\(e^{-\beta_1} = 1/e^{\beta_1}\)</span> times that
+for group <span class="math inline">\(a\)</span>. We can compute how
+much larger (or smaller) <span class="math inline">\(O_a\)</span> is
+relative to <span class="math inline">\(O_b\)</span> with <span
+class="math display">\[
+  100\% \times [O_a/O_b - 1],
+\]</span> where <span class="math inline">\(O_a/O_b =
+e^{\beta_1}\)</span> is the odds ratio. The sign tells us if <span
+class="math inline">\(O_a\)</span> is a percent larger or smaller than
+<span class="math inline">\(O_b\)</span>.</p>
+<p><strong>Example</strong>: Consider the following data from a study
+that investigated the effect of non-indigenous brook trout on the
+survival of salmon.</p>
+<pre class="r"><code>library(abd) # for BrookTrout data
+BrookTrout$proportion &lt;- paste(BrookTrout$salmon.survived, &quot;/&quot;,
+    BrookTrout$salmon.released, sep = &quot;&quot;)
+p &lt;- ggplot(BrookTrout, aes(x = trout, y = salmon.survived/salmon.released))
+p &lt;- p + geom_point() + ylim(0, 0.5) + coord_flip() + theme_minimal()
+p &lt;- p + geom_label_repel(aes(label = proportion), box.padding = 0.75)
+p &lt;- p + labs(x = &quot;Presence/Absence of Brook Trout&quot;,
+    y = &quot;Proportion of Released Salmon Surviving&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-03-07-2022_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>m &lt;- glm(cbind(salmon.survived, salmon.released - salmon.survived) ~ trout,
+  data = BrookTrout, family = binomial)
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>             Estimate Std. Error z value   Pr(&gt;|z|)   2.5 %   97.5 %
+(Intercept)   -1.2997    0.03668 -35.435 5.001e-275 -1.3721 -1.22826
+troutpresent  -0.1396    0.05188  -2.691  7.124e-03 -0.2413 -0.03793</code></pre>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                     2.5 % 97.5 %
+(Intercept)  0.2726 0.2536 0.2928
+troutpresent 0.8697 0.7856 0.9628</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(trout = &quot;present&quot;), b = list(trout = &quot;absent&quot;), tf = exp)</code></pre>
+<pre><code> estimate  lower  upper
+   0.8697 0.7856 0.9628</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(trout = &quot;absent&quot;), b = list(trout = &quot;present&quot;), tf = exp)</code></pre>
+<pre><code> estimate lower upper
+     1.15 1.039 1.273</code></pre>
+<p>Recall that estimated probabilities can be computed using
+<code>contrast</code> with <code>tf = plogis</code>.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(trout = c(&quot;present&quot;,&quot;absent&quot;)), 
+    tf = plogis, cnames = c(&quot;prob @ present&quot;,&quot;prob @ absent&quot;))</code></pre>
+<pre><code>               estimate  lower  upper
+prob @ present   0.1917 0.1808 0.2030
+prob @ absent    0.2142 0.2024 0.2266</code></pre>
+<p>Similarly the estimated odds can be computed if
+<code>tf = exp</code>.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(trout = c(&quot;present&quot;,&quot;absent&quot;)), 
+    tf = exp, cnames = c(&quot;odds @ present&quot;,&quot;odds @ absent&quot;))</code></pre>
+<pre><code>               estimate  lower  upper
+odds @ present   0.2371 0.2206 0.2548
+odds @ absent    0.2726 0.2537 0.2929</code></pre>
+<p>The odds ratios are then simply a ratio of these odds.</p>
+<p><strong>Example</strong>: Consider the following study of the
+germination of five varieties of soybean seeds. Note that each
+observation was the number of seeds that <em>failed</em> to germinate
+out of 100 seeds.</p>
+<pre class="r"><code>head(faraway::soybean)</code></pre>
+<pre><code>  variety replicate failure
+1   check         1       8
+2   check         2      10
+3   check         3      12
+4   check         4      13
+5   check         5      11
+6  arasan         1       2</code></pre>
+<pre class="r"><code>p &lt;- ggplot(faraway::soybean, aes(x = variety, y = (100-failure)/100))
+p &lt;- p + geom_point() + theme_classic()
+p &lt;- p + labs(x = &quot;Soybean Variety&quot;, y = &quot;Proportion Germinated&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-03-07-2022_files/figure-html/unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>m &lt;- glm(cbind(100 - failure, failure) ~ variety, family = binomial, data = faraway::soybean)
+exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                         2.5 %  97.5 %
+(Intercept)    15.1290 10.7107 22.2134
+varietycheck    0.5459  0.3412  0.8594
+varietyfermate  1.0735  0.6361  1.8167
+varietysemesan  0.9354  0.5616  1.5542
+varietyspergon  0.7400  0.4531  1.1972</code></pre>
+<pre class="r"><code># compute odds ratio of germination for arasan, fermate, semesan, and spergon versus check
+trtools::contrast(m, tf = exp,
+  a = list(variety = c(&quot;arasan&quot;,&quot;fermate&quot;,&quot;semesan&quot;,&quot;spergon&quot;)),
+  b = list(variety = &quot;check&quot;),
+  cnames = c(&quot;arasan/check&quot;,&quot;fermate/check&quot;,&quot;semesan/check&quot;,&quot;spergon/check&quot;))</code></pre>
+<pre><code>              estimate  lower upper
+arasan/check     1.832 1.1560 2.902
+fermate/check    1.966 1.2297 3.145
+semesan/check    1.713 1.0902 2.693
+spergon/check    1.355 0.8849 2.076</code></pre>
+</div>
+</div>
+<div id="aggregated-versus-binary-responses" class="section level2">
+<h2>Aggregated Versus Binary Responses</h2>
+<p>Suppose the observations in the <code>bliss</code> data were for
+individual beetles.</p>
+<pre class="r"><code>blissbin &lt;- bliss %&gt;% mutate(alive = exposed - dead) %&gt;% 
+  select(concentration, dead, alive) %&gt;% 
+  pivot_longer(cols = c(dead,alive), names_to = &quot;state&quot;, values_to = &quot;count&quot;) %&gt;%
+  uncount(count)
+head(blissbin)</code></pre>
+<pre><code># A tibble: 6 x 2
+  concentration state
+          &lt;dbl&gt; &lt;chr&gt;
+1          49.1 dead 
+2          49.1 dead 
+3          49.1 alive
+4          49.1 alive
+5          49.1 alive
+6          49.1 alive</code></pre>
+<p>We can specify the response variable as follows.</p>
+<pre class="r"><code>m &lt;- glm(state == &quot;dead&quot; ~ concentration, family = binomial, data = blissbin)
+summary(m)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)   -14.8084    1.28972  -11.48 1.627e-30
+concentration   0.2492    0.02138   11.65 2.241e-31</code></pre>
+<p>Of if the response variable is binary we can specify the model as
+follows.</p>
+<pre class="r"><code>blissbin &lt;- blissbin %&gt;% mutate(y = ifelse(state == &quot;dead&quot;, 1, 0))
+m &lt;- glm(y ~ concentration, family = binomial, data = blissbin)
+summary(m)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)   -14.8084    1.28972  -11.48 1.627e-30
+concentration   0.2492    0.02138   11.65 2.241e-31</code></pre>
+<pre class="r"><code>m &lt;- glm(cbind(y, 1-y) ~ concentration, family = binomial, data = blissbin)
+summary(m)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)   -14.8084    1.28972  -11.48 1.627e-30
+concentration   0.2492    0.02138   11.65 2.241e-31</code></pre>
+<p>Note that our parameter estimates and other inferences are the same
+as what we obtained with the aggregated data.</p>
+<pre class="r"><code>head(bliss)</code></pre>
+<pre><code>  concentration dead exposed proportion
+1         49.06    2      29       2/29
+2         49.06    4      30       4/30
+3         52.99    7      30       7/30
+4         52.99    6      30       6/30
+5         56.91    9      28       9/28
+6         56.91    9      34       9/34</code></pre>
+<pre class="r"><code>m &lt;- glm(cbind(dead, exposed - dead) ~ concentration, 
+  family = binomial, data = bliss)</code></pre>
+<p>It is usually not necessary to transform aggregate data into binary
+data, but it is sometimes useful to transform binary data into aggregate
+data. Here is how that can be done. Note that any explanatory variables
+(separated by commas) are listed in <code>group_by</code> and the
+response variable is listed in <code>count</code>.</p>
+<pre class="r"><code>blissagg &lt;- blissbin %&gt;% group_by(concentration) %&gt;% count(state) %&gt;% 
+  pivot_wider(names_from = state, values_from = n, values_fill = 0)
+blissagg</code></pre>
+<pre><code># A tibble: 8 x 3
+# Groups:   concentration [8]
+  concentration alive  dead
+          &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
+1          49.1    53     6
+2          53.0    47    13
+3          56.9    44    18
+4          60.8    28    28
+5          64.8    11    52
+6          68.7     6    53
+7          72.6     1    61
+8          76.5     0    60</code></pre>
+<pre class="r"><code>m &lt;- glm(cbind(dead, alive) ~ concentration, family = binomial, data = blissagg)
+summary(m)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)   -14.8084    1.28976  -11.48 1.633e-30
+concentration   0.2492    0.02138   11.65 2.250e-31</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
