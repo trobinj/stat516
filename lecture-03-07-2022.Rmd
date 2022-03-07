@@ -52,6 +52,7 @@ library(ggplot2)
 library(ggrepel)
 
 bliss$proportion <- paste(bliss$dead, "/", bliss$exposed, sep = "")
+bliss
 
 p <- ggplot(bliss, aes(x = concentration, y = dead/exposed)) +
   geom_point() + ylim(0, 1) + theme_minimal() + 

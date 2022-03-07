@@ -284,8 +284,25 @@ library(ggplot2)
 library(ggrepel)
 
 bliss$proportion &lt;- paste(bliss$dead, &quot;/&quot;, bliss$exposed, sep = &quot;&quot;)
-
-p &lt;- ggplot(bliss, aes(x = concentration, y = dead/exposed)) +
+bliss</code></pre>
+<pre><code>   concentration dead exposed proportion
+1          49.06    2      29       2/29
+2          49.06    4      30       4/30
+3          52.99    7      30       7/30
+4          52.99    6      30       6/30
+5          56.91    9      28       9/28
+6          56.91    9      34       9/34
+7          60.84   14      27      14/27
+8          60.84   14      29      14/29
+9          64.76   23      30      23/30
+10         64.76   29      33      29/33
+11         68.69   29      31      29/31
+12         68.69   24      28      24/28
+13         72.61   29      30      29/30
+14         72.61   32      32      32/32
+15         76.54   29      29      29/29
+16         76.54   31      31      31/31</code></pre>
+<pre class="r"><code>p &lt;- ggplot(bliss, aes(x = concentration, y = dead/exposed)) +
   geom_point() + ylim(0, 1) + theme_minimal() + 
   geom_label_repel(aes(label = proportion), box.padding = 0.75) + 
   labs(x = &quot;Concentration of Carbon Disulphide (mg/liter)&quot;,
@@ -941,7 +958,7 @@ individual beetles.</p>
   pivot_longer(cols = c(dead,alive), names_to = &quot;state&quot;, values_to = &quot;count&quot;) %&gt;%
   uncount(count)
 head(blissbin)</code></pre>
-<pre><code># A tibble: 6 x 2
+<pre><code># A tibble: 6 × 2
   concentration state
           &lt;dbl&gt; &lt;chr&gt;
 1          49.1 dead 
@@ -989,7 +1006,7 @@ response variable is listed in <code>count</code>.</p>
 <pre class="r"><code>blissagg &lt;- blissbin %&gt;% group_by(concentration) %&gt;% count(state) %&gt;% 
   pivot_wider(names_from = state, values_from = n, values_fill = 0)
 blissagg</code></pre>
-<pre><code># A tibble: 8 x 3
+<pre><code># A tibble: 8 × 3
 # Groups:   concentration [8]
   concentration alive  dead
           &lt;dbl&gt; &lt;int&gt; &lt;int&gt;
