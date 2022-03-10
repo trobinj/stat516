@@ -85,7 +85,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Interpretation of logistic regression models using odds ratios](lecture-03-09-2022.html). 
 
-`r i <- i + 1; d[i]` Due date for second homework assignment (5:00 PM).
+`r i <- i + 1; d[i]` [Using **emmeans** with logistic and Poisson regression, the relationship between logistic and Poisson regression, separation](lecture-03-11-2022.html). Due date for second homework assignment (5:00 PM).
  
 ***
 
