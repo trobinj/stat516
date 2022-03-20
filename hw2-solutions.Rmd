@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "1
 options(digits = 4, width = 90)
 ```
 
-`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](hw2.pdf) copy of this homework assignment.", sep = ""), "")`
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](hw2-solutions.pdf) copy of this homework assignment.", sep = ""), "")`
 
 ## Modeling the Potency of Two Herbicides
 
