@@ -1,6 +1,6 @@
 ---
 title: "Nonlinear Regression and Heteroscedasticity"
-subtitle: Statistics 516, Homework 2
+subtitle: Statistics 516, Homework 2 (Solutions)
 output:
   html_document:
     theme: readable
