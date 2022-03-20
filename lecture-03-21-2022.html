@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Monday, Mar 21</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Monday, Mar 21</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-03-21-2022.pdf">PDF</a> copy
+of this lecture.</p>
+<div id="likelihood-functions" class="section level2">
+<h2>Likelihood Functions</h2>
+<p>The <em>likelihood function</em> computes the <em>likelihood</em> of
+<span class="math inline">\(y_1, y_2, \dots, y_n\)</span> as a function
+of all unknown parameters. If the distribution of the response variable
+is <em>discrete</em> then the likelihood is the same as the
+<em>probability</em> of <span class="math inline">\(y_1, y_2, \dots,
+y_n\)</span>.</p>
+<p><strong>Example</strong>: Suppose <span
+class="math inline">\(Y_i\)</span> has a Poisson distribution such that
+<span class="math display">\[
+  P(Y_i = y) = \frac{\lambda_i^ye^{-\lambda_i}}{y!}
+\]</span> where <span class="math display">\[
+  \lambda_i = \exp(\beta_0 + \beta_1 x_i),
+\]</span> so that the model for <span class="math inline">\(Y_i\)</span>
+is a <em>Poisson regression model</em>. The likelihood function is then
+<span class="math display">\[
+  L(\beta_0,\beta_1) = \frac{\lambda_1^{y_1}e^{-\lambda_1}}{y_1!} \times
+  \frac{\lambda_2^{y_2}e^{-\lambda_2}}{y_2!} \times \cdots \times
+  \frac{\lambda_n^{y_n}e^{-\lambda_n}}{y_n!},
+\]</span> or <span class="math display">\[
+  L(\beta_0,\beta_1) = \prod_{i=1}^n
+\frac{\lambda_i^{y_i}e^{-\lambda_i}}{y_i!},
+\]</span> where, again, <span class="math display">\[
+  \lambda_i = \exp(\beta_0 + \beta_1 x_i).
+\]</span></p>
+<p><strong>Example</strong>: Suppose <span
+class="math inline">\(Y_i\)</span> has a <em>binomial</em> distribution
+such that <span class="math display">\[
+    P(Y_i = y) = \frac{m_i!}{y_i!(m_i-y_i)!}p_i^y(1-p_i)^{m_i-y},
+\]</span> where <span class="math display">\[
+    p_i = \frac{e^{\beta_0+\beta_1x_i}}{1 + e^{\beta_0+\beta_1x_i}},
+\]</span> so that the model for <span class="math inline">\(Y_i\)</span>
+is a <em>logistic regression model</em>. The likelihood function is then
+<span class="math display">\[
+    L(\beta_0,\beta_1) =
+\frac{m_1!}{y_1!(m_1-y_1)!}p_1^{y_1}(1-p_1)^{m_1-y_1} \times
+    \frac{m_2!}{y_2!(m_2-y_2)!}p_2^{y_2}(1-p_2)^{m_2-y_2} \times \cdots
+\times
+    \frac{m_n!}{y_n!(m_n-y_n)!}p_n^{y_n}(1-p_n)^{m_n-y_n}
+\]</span> or <span class="math display">\[
+    L(\beta_0,\beta_1) = \prod_{i=1}^n
+\frac{m_i!}{y_i!(m_i-y_i)!}p_i^{y_i}(1-p_i)^{m_i-y_i},
+\]</span> where, again, <span class="math display">\[
+    p_i = \frac{e^{\beta_0+\beta_1x_i}}{1 + e^{\beta_0+\beta_1x_i}}.
+\]</span></p>
+<p>Note: If the response variable is <em>discrete</em> as it is in
+Poisson and logistic regression, then the likelihood function gives the
+<em>probability</em> of the observed responses as a function of the
+model parameters.</p>
+<p><strong>Example</strong>: Suppose <span
+class="math inline">\(Y_i\)</span> has a normal distribution where the
+probability density function of <span class="math inline">\(Y_i\)</span>
+is <span class="math display">\[
+  f(y) = \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{(y-\mu_i)^2}{2\sigma^2}},
+\]</span> where <span class="math display">\[
+  \mu_i = \beta_0 + \beta_1 x_i,
+\]</span> so that the model for <span class="math inline">\(Y_i\)</span>
+is a normal linear regression model. The likelihood function is then
+<span class="math display">\[
+  L(\beta_0,\beta_1,\sigma^2) = \prod_{i=1}^n
+  \frac{1}{\sqrt{2\pi\sigma^2}}e^{-\frac{(y_i-\mu_i)^2}{2\sigma^2}}.
+\]</span> Frequently we use the log of the likelihood function or the
+<em>log-likelihood function</em>.</p>
+<p><strong>Example</strong>: The log-likelihood for the Poisson
+regression model above is <span class="math display">\[
+  \log L(\beta_0,\beta_1) = \sum_{i=1}^n
+\log\left(\frac{\lambda_i^{y_i}e^{-\lambda_i}}{y_i!} \right) =
+\sum_{i=1}^n y_i\log(\lambda_i) - \sum_{i=1}^n \lambda_i - \sum_{i=1}^n
+\log(y_i!).
+\]</span> <strong>Example</strong>: The log-likelihood for the normal
+regression model above is <span class="math display">\[
+  \log L(\beta_0,\beta_1,\sigma^2) =
+  -\frac{n}{2}\log(2\pi) - n\log(\sigma) -
+  \frac{1}{2\sigma^2}\sum_{i=1}^n(y_i - \mu_i)^2.
+\]</span></p>
+</div>
+<div id="maximum-likelihood-estimation" class="section level2">
+<h2>Maximum Likelihood Estimation</h2>
+<p>The maximum likelihood estimates (MLE) of the model parameters is
+those values of the parameters that <em>maximize the likelihood of the
+data</em> — i.e., the parameter values that make the values of <span
+class="math inline">\(y_1, y_2, \dots, y_n\)</span> we observed the most
+likely values to have occurred. Finding these estimates is a
+<em>optimization</em> problem — i.e., find the values of the parameters
+that maximize the likelihood (or log-likelihood).</p>
+<p><strong>Example</strong>: In the normal linear model above, <em>it
+can be shown that</em> the MLEs of <span
+class="math inline">\(\beta_0\)</span> and <span
+class="math inline">\(\beta_1\)</span> are those values that
+<em>minimize</em> <span class="math display">\[
+  \sum_{i=1}^n (y_i - \mu_i)^2
+\]</span> where <span class="math inline">\(\mu_i = \beta_0 + \beta_1
+x_i\)</span>. So the MLEs are also the <em>least squares</em>
+estimators. But the MLE of <span class="math inline">\(\sigma^2\)</span>
+is <span class="math display">\[  
+  \hat\sigma^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n}
+\]</span> where <span class="math inline">\(\hat{y}_i = \hat\beta_0 +
+\hat\beta_1 x_i\)</span>. But we typically use the unbiased estimator
+<span class="math display">\[  
+  \hat\sigma^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n-p},
+\]</span> where <span class="math inline">\(p\)</span> is the number of
+<span class="math inline">\(\beta_j\)</span> parameters (<span
+class="math inline">\(p = 2\)</span> in the model above).</p>
+<p>Except in the case of normal linear models and a few very simple
+nonlinear models, MLEs must be found <em>numerically</em> using
+<em>iterative</em> algorithms (similar to those used in nonlinear
+regression).</p>
+</div>
+<div id="inference-based-on-maximum-likelihood" class="section level2">
+<h2>Inference Based On Maximum Likelihood</h2>
+<p>It is usually not possible to determine an <em>exact</em> method of
+estimating the standard error of a MLE, computing a confidence interval
+based on ML, or conducting a significance test based on ML. However
+there exist several <em>asymptotic</em> methods that give approximate
+results.</p>
+<ol style="list-style-type: decimal">
+<li><p>Likelihood ratio tests and profile likelihood confidence
+intervals.</p></li>
+<li><p>Wald tests and confidence intervals.</p></li>
+<li><p>Score (Lagrange multiplier) tests (not discussed).</p></li>
+</ol>
+<div id="likelihood-ratio-tests" class="section level3">
+<h3>Likelihood Ratio Tests</h3>
+<p>The likelihood ratio test statistic is <span class="math display">\[
+2\log\left(L/L_n\right) = 2\log(L) - 2\log(L_n) \stackrel{a}{\sim}
+\chi^2_{(r)},
+\]</span> where <span class="math inline">\(L\)</span> and <span
+class="math inline">\(L_n\)</span> are the likelihood functions for the
+model and the null model, respectively, evaluated at the MLEs, and <span
+class="math inline">\(r\)</span> is the degrees of freedom.</p>
+<p><strong>Example</strong>: Consider the Poisson regression model for
+<code>ceriodaphniastrain</code> and the null hypothesis that there is no
+difference in the expected number of daphnia between the two strains
+when controlling for dose.</p>
+<pre class="r"><code>library(trtools) # for ceriodaphniastrain data
+ceriodaphniastrain$strain &lt;- factor(ceriodaphniastrain$strain, labels = c(&quot;a&quot;,&quot;b&quot;))
+
+m &lt;- glm(count ~ strain + concentration, family = poisson, data = ceriodaphniastrain)
+m.null &lt;- glm(count ~ concentration, family = poisson, data = ceriodaphniastrain)
+
+anova(m.null, m, test = &quot;LRT&quot;) # has very little to do with ANOVA</code></pre>
+<pre><code>Analysis of Deviance Table
+
+Model 1: count ~ concentration
+Model 2: count ~ strain + concentration
+  Resid. Df Resid. Dev Df Deviance Pr(&gt;Chi)    
+1        68      119.0                         
+2        67       86.4  1     32.6  1.1e-08 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The “residual deviance” (or just “deviance”) is related to the
+log-likelihood of the model. It is defined as <span
+class="math display">\[
+D = 2\log L_s - 2\log L \ge 0,
+\]</span> where <span class="math inline">\(L\)</span> and <span
+class="math inline">\(L_s\)</span> are the likelihoods of the model in
+question and a “saturated” model, respectively. The saturated model is a
+“best possible” model where each unique combination of covariate values
+is a distinct level of a factor. Thus the deviance can be viewed in a
+way as the “lack of fit” of the model to the data. The residual deviance
+can sometimes be obtained using the <code>summary</code> or
+<code>deviance</code> functions.</p>
+<pre class="r"><code>summary(m)  # shows residual deviance</code></pre>
+<pre><code>
+Call:
+glm(formula = count ~ strain + concentration, family = poisson, 
+    data = ceriodaphniastrain)
+
+Deviance Residuals: 
+   Min      1Q  Median      3Q     Max  
+-2.680  -0.677   0.153   0.679   2.077  
+
+Coefficients:
+              Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)     4.4546     0.0391  113.82  &lt; 2e-16 ***
+strainb        -0.2750     0.0484   -5.68  1.3e-08 ***
+concentration  -1.5431     0.0466  -33.11  &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 1359.381  on 69  degrees of freedom
+Residual deviance:   86.376  on 67  degrees of freedom
+AIC: 416
+
+Number of Fisher Scoring iterations: 4</code></pre>
+<pre class="r"><code>deviance(m) # extracts only residual deviance</code></pre>
+<pre><code>[1] 86.38</code></pre>
+<p>The likelihood ratio test statistic can be expressed in terms of the
+(residual) deviance of the model and the null model. <span
+class="math display">\[
+  \underbrace{2(\log_s - \log L_n)}_{D_n} - \underbrace{2(\log_s - \log
+L)}_{D} =
+  2 \log L - 2 \log L_n \stackrel{a}{\sim} \chi^2_{(r)},
+\]</span> where <span class="math inline">\(D\)</span> and <span
+class="math inline">\(D_n\)</span> are the deviance of the model and
+null model, respectively. The degrees of freedom (<span
+class="math inline">\(r\)</span>) is the <em>difference</em> in the
+residual degrees of freedom between the two models. The residual degrees
+of freedom equal <span class="math inline">\(n\)</span> minus the number
+of parameters for the expected response.</p>
+<p>The following shows how the deviance relates to what is done by
+<code>anova</code>.</p>
+<pre class="r"><code>anova(m.null, m, test = &quot;LRT&quot;)</code></pre>
+<pre><code>Analysis of Deviance Table
+
+Model 1: count ~ concentration
+Model 2: count ~ strain + concentration
+  Resid. Df Resid. Dev Df Deviance Pr(&gt;Chi)    
+1        68      119.0                         
+2        67       86.4  1     32.6  1.1e-08 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre class="r"><code>deviance(m)      # (residual) deviance of model</code></pre>
+<pre><code>[1] 86.38</code></pre>
+<pre class="r"><code>deviance(m.null) # (residual) deviance of null model</code></pre>
+<pre><code>[1] 119</code></pre>
+<pre class="r"><code>deviance(m.null) - deviance(m) # test statistic</code></pre>
+<pre><code>[1] 32.62</code></pre>
+<p>Note: For models where <span class="math inline">\(Y_i\)</span> is
+assumed to have a normal distribution, residual deviance essentially
+becomes the residual (error) sums of squares. Some in some sense the
+“analysis of deviance” can be viewed as a generalization of the
+“analysis of variance” in linear models.</p>
+</div>
+<div id="profile-likelihood-confidence-intervals"
+class="section level3">
+<h3>Profile Likelihood Confidence Intervals</h3>
+<p>Consider a significance test with hypotheses <span
+class="math inline">\(H_0\!: \theta = \theta_0\)</span> versus <span
+class="math inline">\(H_a\!: \theta \neq \theta_0\)</span> where <span
+class="math inline">\(\theta\)</span> is some parameter of the model. A
+confidence interval <span
+class="math inline">\((\theta_l,\theta_h)\)</span> for <span
+class="math inline">\(\theta\)</span> can be used to conduct the
+test.</p>
+<ol style="list-style-type: decimal">
+<li><p>If <span class="math inline">\(\theta_0\)</span> is in <span
+class="math inline">\((\theta_l, \theta_h)\)</span>, do not reject <span
+class="math inline">\(H_0\)</span>.</p></li>
+<li><p>If <span class="math inline">\(\theta_0\)</span> is not in <span
+class="math inline">\((\theta_l, \theta_h)\)</span>, reject <span
+class="math inline">\(H_0\)</span></p></li>
+</ol>
+<p>Thus a confidence interval for <span
+class="math inline">\(\theta\)</span> can be <em>defined</em> as <em>all
+the values of <span class="math inline">\(\theta_0\)</span> that are not
+rejected by a test</em> of <span class="math inline">\(H_0\!: \theta =
+\theta_0\)</span> versus <span class="math inline">\(H_a\!: \theta \neq
+\theta_0\)</span>.</p>
+<p>A <em>profile likelihood confidence interval</em> is a confidence
+interval based on the likelihood ratio test. It is the set/range of all
+values of a parameter that would not be rejected by the likelihood ratio
+test.</p>
+<p><strong>Example</strong>: Consider again the
+<code>ceriodaphniastrain</code> data.</p>
+<pre class="r"><code>confint(m)</code></pre>
+<pre><code>Waiting for profiling to be done...</code></pre>
+<pre><code>               2.5 %  97.5 %
+(Intercept)    4.377  4.5306
+strainb       -0.370 -0.1803
+concentration -1.635 -1.4522</code></pre>
+<p>For <code>glm</code> objects (and some others we will talk about in
+the future) <code>confint</code> will compute profile likelihood
+confidence intervals by default. A similar approach is used by
+<code>nls</code>, and <code>glm</code> when using quasi-likelihood (more
+on that later), but is based on a <span class="math inline">\(F\)</span>
+test statistic.</p>
+</div>
+<div id="wald-tests-and-confidence-intervals" class="section level3">
+<h3>Wald Tests and Confidence Intervals</h3>
+<p>Wald tests and confidence intervals are based on the fact that MLEs
+have approximately normal sampling distributions. The Wald <em>test
+statistic</em> for a parameter <span
+class="math inline">\(\beta_j\)</span> is <span class="math display">\[
+    z = \frac{\hat{\beta}_j -
+\beta_j}{\widehat{\text{SE}}(\hat{\beta}_j)} \stackrel{a}{\sim}
+\text{N(0,1)} \ \ \ \text{or} \ \ \ z^2 = \left[\frac{\hat{\beta}_j -
+\beta_j}{\widehat{\text{SE}}(\hat{\beta}_j)}\right]^2 \stackrel{a}{\sim}
+\chi^2_{(1)},
+\]</span> where <span class="math inline">\(\beta_j\)</span> is the
+value hypothesized by the null (frequently <span
+class="math inline">\(\beta_j = 0\)</span>). The Wald confidence
+interval for <span class="math inline">\(\beta_j\)</span> is <span
+class="math display">\[
+  \hat{\beta}_j \pm z \times \widehat{\text{SE}}(\hat{\beta}_j).
+\]</span> We can also apply this to a linear combinations of parameters
+by replacing <span class="math inline">\(\beta_j\)</span> and <span
+class="math inline">\(\hat\beta_j\)</span> with <span
+class="math inline">\(\ell\)</span> and <span
+class="math inline">\(\hat\ell\)</span>, respectively.</p>
+<p>Note: In some cases a <span
+class="math inline">\(t\)</span>-distribution is used as the approximate
+distribution of a Wald test statistic, and is also used when calibrating
+a confidence interval. In generalized linear models this usually happens
+for models in which we need to estimate the <em>dispersion
+parameter</em>. We <em>do not</em> need to estimate the dispersion
+parameter for Poisson or binomial/logistic regression.</p>
+<p><strong>Example</strong>: Consider again the
+<code>ceriodaphniastrain</code> data. Wald test statistics are reported
+by <code>summary</code>, <code>contrast</code>, <code>lincon</code>, and
+<code>glmint</code>, and Wald confidence intervals are reported by
+<code>contrast</code>, <code>lincon</code>, and <code>glmint</code>.</p>
+<pre class="r"><code>summary(m)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value   Pr(&gt;|z|)
+(Intercept)      4.455    0.03914 113.819  0.000e+00
+strainb         -0.275    0.04837  -5.684  1.313e-08
+concentration   -1.543    0.04660 -33.111 2.057e-240</code></pre>
+<pre class="r"><code>lincon(m)</code></pre>
+<pre><code>              estimate      se   lower   upper  tvalue  df     pvalue
+(Intercept)      4.455 0.03914  4.3779  4.5313 113.819 Inf  0.000e+00
+strainb         -0.275 0.04837 -0.3698 -0.1802  -5.684 Inf  1.313e-08
+concentration   -1.543 0.04660 -1.6344 -1.4517 -33.111 Inf 2.057e-240</code></pre>
+<pre class="r"><code>contrast(m,
+  a = list(strain = &quot;a&quot;, concentration = c(0,1,2)), 
+  b = list(strain = &quot;b&quot;, concentration = c(0,1,2)),
+  cnames = c(&quot;0%&quot;,&quot;1%&quot;,&quot;2%&quot;))</code></pre>
+<pre><code>   estimate      se  lower  upper tvalue  df    pvalue
+0%    0.275 0.04837 0.1802 0.3698  5.684 Inf 1.313e-08
+1%    0.275 0.04837 0.1802 0.3698  5.684 Inf 1.313e-08
+2%    0.275 0.04837 0.1802 0.3698  5.684 Inf 1.313e-08</code></pre>
+<pre class="r"><code>contrast(m, tf = exp,
+  a = list(strain = &quot;a&quot;, concentration = c(0,1,2)), 
+  b = list(strain = &quot;b&quot;, concentration = c(0,1,2)),
+  cnames = c(&quot;0%&quot;,&quot;1%&quot;,&quot;2%&quot;))</code></pre>
+<pre><code>   estimate lower upper
+0%    1.316 1.197 1.447
+1%    1.316 1.197 1.447
+2%    1.316 1.197 1.447</code></pre>
+</div>
+<div id="likelihood-ratio-versus-wald" class="section level3">
+<h3>Likelihood Ratio Versus Wald</h3>
+<p>The two methods are equivalent <em>asymptotically</em> and tend to
+produce relatively similar results for larger <span
+class="math inline">\(n\)</span>, but for smaller <span
+class="math inline">\(n\)</span> they may produce somewhat different
+results.</p>
+<ol style="list-style-type: decimal">
+<li><p>Likelihood ratio tests/intervals are generally more accurate than
+Wald tests/intervals. The latter assumes that the sampling distribution
+of the estimator is normal, whereas likelihood ratio tests/intervals
+assume that some monotonic function of the estimator has a normal
+distribution.</p></li>
+<li><p>Likelihood ratio tests/intervals are a bit more computationally
+expensive and difficult to program in the case of functions of model
+parameters (e.g., linear combinations where we use <code>lincon</code>,
+<code>contrast</code>, or <code>emmeans</code>).</p></li>
+<li><p>Wald tests/intervals can be used in cases where a likelihood
+function is not specified because we do not or cannot assume a
+particular distribution for the response variable.</p></li>
+</ol>
+</div>
+</div>
+<div id="assumptions" class="section level2">
+<h2>Assumptions</h2>
+<p>For inferences based on maximum likelihood to be correct, we are
+assuming we have the correct likelihood function. It is useful to note
+three aspects of the likelihood function where we need to be
+correct.</p>
+<ol style="list-style-type: decimal">
+<li><p>The <em>distribution</em> of the response variable.</p></li>
+<li><p>The <em>relationship</em> between the parameter(s) of the
+distribution and the explanatory variable(s).</p></li>
+<li><p>The <em>independence</em> of the <span
+class="math inline">\(n\)</span> observations.</p></li>
+</ol>
+<p>Interestingly, for GLMs the distribution actually isn’t something
+that we need to be correct about, provided that we are correct about the
+following:</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(E(Y_i)\)</span> is related to the
+explanatory variables in the assumed way — e.g., <span
+class="math inline">\(g[E(Y_i)] = \beta_0 + \beta_1 x_{i1} + \cdots +
+\beta_k x_{ik}\)</span>.</p></li>
+<li><p><span class="math inline">\(\text{Var}(Y_i)\)</span> depends on
+<span class="math inline">\(E(Y_i)\)</span> in the assumed away — i.e.,
+through the <em>variance structure</em> <span
+class="math inline">\(\text{Var}(Y_i) = \phi
+V[E(Y_i)]\)</span>.</p></li>
+<li><p>The observations are independent.</p></li>
+</ol>
+<p>When you specify a distribution via the <code>family</code> argument
+to the <code>glm</code> function, all that matters is the <em>variance
+structure</em> implied by that family.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

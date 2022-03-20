@@ -13,7 +13,7 @@
 
 <title>Statistics 436/516 (Applied Regression Modeling)</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
@@ -60,6 +60,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -80,6 +81,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -232,7 +236,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -274,11 +278,15 @@ spring semester of 2022.</p>
 <hr />
 <center>
 <div class="figure">
-<img src="https://imgs.xkcd.com/comics/control_group.png" alt="" />
-<p class="caption"><a href="https://xkcd.com/2576"
-class="uri">https://xkcd.com/2576</a></p>
+<img src="https://imgs.xkcd.com/comics/painbow_award.png" alt="" />
+<p class="caption"><a href="https://xkcd.com/2537"
+class="uri">https://xkcd.com/2537</a></p>
 </div>
 </center>
+<p>Note: If you want to use this color scale with
+<strong>ggplot2</strong> you can install the <strong>painbow</strong>
+package. See the <a href="https://github.com/steveharoz/painbow">GitHub
+repository</a> for the package for some examples.</p>
 <hr />
 <p>If you are interested in seeing the <a
 href="https://rmarkdown.rstudio.com">R Markdown</a> code I use to create
