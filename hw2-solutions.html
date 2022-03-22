@@ -357,7 +357,7 @@ and <code>Dose</code> as follows.</p>
 <pre class="r"><code>library(dplyr)
 S.alba %&gt;% group_by(Herbicide, Dose) %&gt;% 
   summarize(drymatter = mean(DryMatter))</code></pre>
-<pre><code># A tibble: 15 x 3
+<pre><code># A tibble: 15 × 3
 # Groups:   Herbicide [2]
    Herbicide   Dose drymatter
    &lt;fct&gt;      &lt;int&gt;     &lt;dbl&gt;
@@ -440,7 +440,7 @@ plot(p)</code></pre>
 <p><img src="hw2-solutions_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>S.alba %&gt;% group_by(Dose) %&gt;% 
   summarize(drymatter = mean(DryMatter))</code></pre>
-<pre><code># A tibble: 8 x 2
+<pre><code># A tibble: 8 × 2
    Dose drymatter
   &lt;int&gt;     &lt;dbl&gt;
 1     0     3.9  
@@ -532,7 +532,7 @@ delta     3.8424    0.07518  51.108 8.732e-52
 gamma_b   0.6810    0.09453   7.204 1.033e-09
 gamma_g   0.9038    0.17951   5.035 4.515e-06
 alpha_b  28.9821    2.07810  13.946 1.235e-20
-alpha_g  62.5509    6.38619   9.795 3.918e-14
+alpha_g  62.5509    6.38618   9.795 3.918e-14
 beta_b    4.9963    1.00048   4.994 5.253e-06
 beta_g    2.8203    0.66661   4.231 7.949e-05</code></pre>
 <p>Note that this code can get a little tedious. We can simplify it
@@ -556,7 +556,7 @@ delta     3.8424    0.07518  51.108 8.732e-52
 gamma_b   0.6810    0.09453   7.204 1.033e-09
 gamma_g   0.9038    0.17951   5.035 4.515e-06
 alpha_b  28.9821    2.07810  13.946 1.235e-20
-alpha_g  62.5509    6.38619   9.795 3.918e-14
+alpha_g  62.5509    6.38618   9.795 3.918e-14
 beta_b    4.9963    1.00048   4.994 5.253e-06
 beta_g    2.8203    0.66661   4.231 7.949e-05</code></pre>
 <p>Here is the plot.</p>
@@ -637,7 +637,7 @@ coins &lt;- jevons %&gt;% uncount(n) %&gt;%
 standard deviations as the original data.</p>
 <pre class="r"><code>coins %&gt;% group_by(Age) %&gt;% 
   summarize(n = n(), meanweight = mean(Weight), sdweight = sd(Weight))</code></pre>
-<pre><code># A tibble: 5 x 4
+<pre><code># A tibble: 5 × 4
     Age     n meanweight sdweight
   &lt;int&gt; &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;
 1     1   123       7.97   0.0141
@@ -787,7 +787,7 @@ from the <strong>trtools</strong> package would produce the same
 results.</p>
 <pre class="r"><code>emmeans(m.wls, ~ Age)</code></pre>
 <pre><code> Age emmean       SE  df lower.CL upper.CL
-   1  7.972 0.001270 269    7.970    7.975
+   1  7.973 0.001270 269    7.970    7.975
    2  7.950 0.002573 269    7.945    7.955
    3  7.928 0.006056 269    7.916    7.940
    4  7.896 0.009840 269    7.877    7.916
@@ -827,7 +827,7 @@ Coefficients:
 factor(Age)2 -0.022  0.002878      -8       0
 factor(Age)3 -0.045  0.006150      -7       0
 factor(Age)4 -0.076  0.009718      -8       0
-factor(Age)5 -0.099  0.010871      -9       0
+factor(Age)5 -0.100  0.010871      -9       0
 
  Correlation: 
              (Intr) fc(A)2 fc(A)3 fc(A)4
@@ -846,21 +846,21 @@ Degrees of freedom: 274 total; 269 residual</code></pre>
 and comparing the age groups with the first.</p>
 <pre class="r"><code>emmeans(m.gls, ~ Age)</code></pre>
 <pre><code> Age emmean       SE     df lower.CL upper.CL
-   1  7.972 0.001277 121.20    7.970    7.975
-   2  7.950 0.002580  78.09    7.945    7.955
-   3  7.928 0.006016  33.64    7.915    7.940
-   4  7.896 0.009634  17.49    7.876    7.916
-   5  7.873 0.010796  24.78    7.851    7.895
+   1  7.972 0.001277 122.89    7.970    7.975
+   2  7.950 0.002580  80.81    7.945    7.955
+   3  7.928 0.006016  33.15    7.915    7.940
+   4  7.896 0.009634  17.63    7.876    7.916
+   5  7.873 0.010796  24.88    7.851    7.895
 
 Degrees-of-freedom method: satterthwaite 
 Confidence level used: 0.95 </code></pre>
 <pre class="r"><code>emmeans::contrast(emmeans(m.gls, ~ Age), method = &quot;trt.vs.ctrl&quot;, 
   ref = 1, adjust = &quot;none&quot;, reverse = TRUE, infer = TRUE)</code></pre>
 <pre><code> contrast estimate      SE    df lower.CL upper.CL t.ratio p.value
- 1 - 2      0.0222 0.00288 117.1   0.0165   0.0279   7.713  &lt;.0001
- 1 - 3      0.0449 0.00615  36.7   0.0324   0.0574   7.301  &lt;.0001
- 1 - 4      0.0763 0.00972  18.1   0.0559   0.0967   7.851  &lt;.0001
- 1 - 5      0.0995 0.01087  25.5   0.0771   0.1219   9.153  &lt;.0001
+ 1 - 2      0.0222 0.00288 119.8   0.0165   0.0279   7.713  &lt;.0001
+ 1 - 3      0.0449 0.00615  36.2   0.0324   0.0574   7.301  &lt;.0001
+ 1 - 4      0.0763 0.00972  18.2   0.0559   0.0967   7.851  &lt;.0001
+ 1 - 5      0.0995 0.01087  25.6   0.0771   0.1219   9.153  &lt;.0001
 
 Degrees-of-freedom method: satterthwaite 
 Confidence level used: 0.95 </code></pre></li>
@@ -892,7 +892,7 @@ the expected weights.</p>
 Confidence level used: 0.95 </code></pre>
 <pre class="r"><code>emmeans(m.wls, ~ Age)</code></pre>
 <pre><code> Age emmean       SE  df lower.CL upper.CL
-   1  7.972 0.001270 269    7.970    7.975
+   1  7.973 0.001270 269    7.970    7.975
    2  7.950 0.002573 269    7.945    7.955
    3  7.928 0.006056 269    7.916    7.940
    4  7.896 0.009840 269    7.877    7.916
@@ -901,11 +901,11 @@ Confidence level used: 0.95 </code></pre>
 Confidence level used: 0.95 </code></pre>
 <pre class="r"><code>emmeans(m.gls, ~ Age)</code></pre>
 <pre><code> Age emmean       SE     df lower.CL upper.CL
-   1  7.972 0.001277 121.20    7.970    7.975
-   2  7.950 0.002580  78.09    7.945    7.955
-   3  7.928 0.006016  33.64    7.915    7.940
-   4  7.896 0.009634  17.49    7.876    7.916
-   5  7.873 0.010796  24.78    7.851    7.895
+   1  7.972 0.001277 122.89    7.970    7.975
+   2  7.950 0.002580  80.81    7.945    7.955
+   3  7.928 0.006016  33.15    7.915    7.940
+   4  7.896 0.009634  17.63    7.876    7.916
+   5  7.873 0.010796  24.88    7.851    7.895
 
 Degrees-of-freedom method: satterthwaite 
 Confidence level used: 0.95 </code></pre>
@@ -939,10 +939,10 @@ Confidence level used: 0.95 </code></pre>
 <pre class="r"><code>emmeans::contrast(emmeans(m.gls, ~ Age), method = &quot;trt.vs.ctrl&quot;, 
   ref = 1, adjust = &quot;none&quot;, reverse = TRUE, infer = TRUE)</code></pre>
 <pre><code> contrast estimate      SE    df lower.CL upper.CL t.ratio p.value
- 1 - 2      0.0222 0.00288 117.1   0.0165   0.0279   7.713  &lt;.0001
- 1 - 3      0.0449 0.00615  36.7   0.0324   0.0574   7.301  &lt;.0001
- 1 - 4      0.0763 0.00972  18.1   0.0559   0.0967   7.851  &lt;.0001
- 1 - 5      0.0995 0.01087  25.5   0.0771   0.1219   9.153  &lt;.0001
+ 1 - 2      0.0222 0.00288 119.8   0.0165   0.0279   7.713  &lt;.0001
+ 1 - 3      0.0449 0.00615  36.2   0.0324   0.0574   7.301  &lt;.0001
+ 1 - 4      0.0763 0.00972  18.2   0.0559   0.0967   7.851  &lt;.0001
+ 1 - 5      0.0995 0.01087  25.6   0.0771   0.1219   9.153  &lt;.0001
 
 Degrees-of-freedom method: satterthwaite 
 Confidence level used: 0.95 </code></pre>
@@ -1278,7 +1278,7 @@ follows.</p>
 summary(m)$coefficients</code></pre>
 <pre><code>        Estimate Std. Error t value  Pr(&gt;|t|)
 theta1 -0.000521  0.0007712 -0.6756 5.008e-01
-theta2  2.396756  0.3435804  6.9758 2.814e-10</code></pre>
+theta2  2.396756  0.3435803  6.9758 2.814e-10</code></pre>
 <p>Here is a fresh plot with the this estimated model.</p>
 <pre class="r"><code>d &lt;- data.frame(Lab = seq(0, 82))
 d$yhat &lt;- predict(m, newdata = d)
@@ -1405,7 +1405,7 @@ the inferences for that model.</p>
 summary(m)$coefficients</code></pre>
 <pre><code>        Estimate Std. Error t value  Pr(&gt;|t|)
 theta1 -0.000353  0.0005442 -0.6488 5.179e-01
-theta2  2.487143  0.3608460  6.8925 4.215e-10</code></pre></li>
+theta2  2.487142  0.3608460  6.8925 4.214e-10</code></pre></li>
 </ol>
 </div>
 <div id="anti-inflammatory-hormone-devices-revisited"

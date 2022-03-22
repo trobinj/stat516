@@ -1,0 +1,393 @@
+---
+output:
+  html_document:
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "03-23-2022"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+  - \usepackage{array}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+```{r packages, echo = FALSE}
+library(ggplot2)
+library(trtools)
+library(dplyr)
+library(tidyr)
+library(kableExtra)
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+```{r options, echo = FALSE}
+options(digits = 4, width = 90)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+
+## Overdispersion
+
+Overdispersion can occur for generalized linear models that assume a Poisson or binomial distribution for the response variable. 
+
+When we specify a distribution in a generalized linear model, what we are actually specifying is the *variance structure*
+$$
+  \text{Var}(Y_i) = \phi V[E(Y_i)],
+$$
+where $\phi$ is the *dispersion parameter* and $V$ is the *variance function*. 
+
+*Overdispersion* is when
+$$
+  \text{Var}(Y_i) > \phi V[E(Y_i)],
+$$
+and *underdispersion* is when
+$$
+  \text{Var}(Y_i) < \phi V[E(Y_i)].
+$$
+Overdispersion is fairly common in practice, but underdispersion is relatively rare.
+
+### Overdispersion in Poisson Regression
+
+If $Y_i$ has a *Poisson* distribution, then
+$$
+    \text{Var}(Y_i) = E(Y_i),
+$$
+so that it is implicitly assumed that $\phi = 1$ and $V(z) = z$. Overdispersion occurs if 
+$$
+    \text{Var}(Y_i) > E(Y_i).
+$$
+
+### Overdispersion in Binomial Regression
+
+If $C_i$ has a *binomial* distribution, and $Y_i = C_i/m_i$, then
+$$
+    \text{Var}(Y_i) = E(Y_i)[1-E(Y_i)]/m_i,
+$$
+so that it is implicitly assumed that $\phi = 1$ and $V(z) = z(1-z)/m_i$. Overdispersion occurs if 
+$$
+    \text{Var}(Y_i) > E(Y_i)[1-E(Y_i)]/m_i.
+$$
+
+In general, failing to account for overdispersion (or a misspefication of the variance structure in general) may yield incorrect standard errors (usually too small in the case of overdispersion), leading to incorrect test statistics and confidence intervals. 
+
+## Causes of Overdispersion
+
+1. Wrong assumed distribution for the response variable. 
+
+2. Unobserved explanatory variables that vary over observations.
+
+Note: A misspecified *mean structure* (e.g., failing to transform an explanatory variable or omitting a strong interaction) may appear as overdisperson.
+
+**Example**: Consider the following data from an experiment that investigated the proportion of rotifers of two species remaining in suspension in different solution densities after being put into a centrifuge.
+```{r}
+myrotifer <- trtools::rotifer
+
+p <- ggplot(myrotifer, aes(x = density, y = y/total)) + 
+  geom_point() + facet_wrap(~species) + 
+  labs(y = "Proportion of Rotifers\n Remaining in Suspension",
+    x = "Density of Solution") + theme_minimal()
+plot(p)
+```
+Logistic regression might be a reasonable model here.
+```{r, message = FALSE}
+m <- glm(cbind(y, total - y) ~ species * density,
+  family = binomial, data = myrotifer)
+
+d <- expand.grid(species = c("kc","pm"), density = seq(1.02, 1.07, length = 100))
+d$yhat <- predict(m, newdata = d, type = "response")
+
+p <- p + geom_line(aes(y = yhat), data = d)
+plot(p)
+```
+Do these data exhibit overdispersion for this model? 
+
+## Detection of Overdispersion
+
+Standardized residuals can be used to detect overdispersion. There are several types for GLMs.
+
+1. Pearson residuals. Pearson residuals are defined as
+$$
+\frac{y_i - \hat{y}_i}{\sqrt{\widehat{\text{Var}}(Y_i)}}.
+$$	
+Dividing a Pearson residual by another term to account for the variance $\hat{y}_i$ creates a *standardized* Pearson residual. These are obtained using `rstandard(m, type = "pearson")`. 
+
+2. Deviance residuals. The residual deviance can be decomposed into a per-observation contribution so that $D = \sum_{i=1}^n d_i$. Then the residual deviance is defined as
+$$
+  \text{sign}(y_i - \hat{y}_i)\sqrt{d_i},
+$$
+where 
+$$
+  \text{sign}(z) = 
+  \begin{cases}
+     1, & \text{if $z > 0$}, \\
+     0, & \text{if $z = 0$}, \\
+    -1, & \text{if $z < 0$}.
+  \end{cases}
+$$
+Dividing a deviance residual by another term to account for the variance $\hat{y}_i$ creates a *standardized* deviance residual. These are obtained using `rstandard(m, type = "deviance")`. A numerical approximation to these residuals obtained when omitting the observation can be obtained using `rstudent(m)`. 
+
+3. Studentized residuals. The function `rstudent` will produce *approximate* studentized residuals for GLMs.
+
+Comment: If the model is correct the residuals *might* be approximately normally distributed with a mean of zero and standard deviation of one (i.e., "standard normal"), so an excess of values greater than two (in absolute value) may indicate overdispersion or some other problem with the model. But with very *coarse* data (e.g., very small counts in a Poisson regression model or proportions with small $m_i$ in a logistic regression model), the distribution of these residuals is not approximately normal. 
+
+**Example**: Let's look at the residuals for the `rotifer` model.
+```{r, fig.height = 5}
+par(mfcol = c(1,3))
+plot(predict(m), rstandard(m, type = "pearson"), ylim = c(-10, 7), main = "Pearson")
+abline(h = c(-2,2), lty = 2)
+plot(predict(m), rstandard(m, type = "deviance"), ylim = c(-10, 7), main = "Deviance")
+abline(h = c(-2,2), lty = 2)
+plot(predict(m), rstudent(m), ylim = c(-10, 7), main = "Studentized")
+abline(h = c(-2,2), lty = 2)
+```
+Is there an explanation of the overdispersion? 
+
+Another metric is to compare the residual deviance to the residual degrees of freedom in a GLM with a response variable with either a Poisson or binomial distribution. If the model is (approximately) correct then the ratio of the residual deviance to the residual degrees of freedom is approximately one.
+
+**Example**: Consider the residual deviance and residual degrees of freedom for the rotifer model.
+```{r}
+summary(m)
+```
+If the model is correct and there is no overdispersion, the residual deviance has approximate a $\chi^2$ distribution with degrees of freedom equal to its degrees of freedom. We can use this as an informal test for overdispersion.
+```{r}
+f <- function(x) dchisq(x, 36)
+curve(f, from = 0, to = 500, n = 1000) 
+1 - pchisq(434.02, df = 36)
+```
+Residuals are more informative, but the residual deviance is a quick way to check to see if overdispersion may be an issue.
+
+Note: For logistic regression, overdispersion *cannot* be diagnosed in this way for *binary* data (and the residual deviance may not be reliable if the $m_i$ are very small). 
+
+**Example**: Let's look again a the Poisson regression model for the trawling data.
+```{r}
+library(COUNT)
+data(fishing)
+
+m <- glm(totabund ~ period * meandepth + offset(log(sweptarea)),
+  family = poisson, data = fishing)
+
+d <- expand.grid(sweptarea = 1, period = levels(fishing$period), 
+  meandepth = seq(800, 5000, length = 100))
+d$yhat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(fishing, aes(x = meandepth, y = totabund/sweptarea)) +
+  geom_point(alpha = 0.5) + facet_wrap(~ period) + theme_minimal() +
+  labs(x = "Mean Trawl Depth (meters)",
+    y = "Fish Caught Per Square Meter Trawled") + 
+  geom_line(aes(y = yhat), data = d)
+plot(p)
+```
+Might there be overdispersion here? 
+```{r}
+summary(m)
+fishing$eta <- predict(m)
+fishing$res <- rstudent(m)
+
+p <- ggplot(fishing, aes(x = eta, y = res)) + theme_minimal() +
+  geom_point(alpha = 0.25) + 
+  labs(x = "Predicted Value (log scale)", 
+    y = "Studentized Residual") + 
+  geom_hline(yintercept = c(-2, 2), linetype = 3)
+plot(p)
+```
+Overdispersion is not the only issue here. The variance of the residuals is not constant.
+  
+## Solutions to Overdispersion
+
+There are several potential solutions to overdispersion.
+
+1. Quasi-likelihood. Specify a variance structure other than the one implied by a specified distribution.
+
+2. Specify a different distribution (possibly outside the exponential family).
+
+3. Use a robust estimator of the standard errors.
+
+### Quasi-Likelihood Solutions to Overdispersion
+
+The Poisson and binomial distributions assume the variance structures
+$$
+  \text{Var}(Y_i) = \phi E(Y_i) \ \ \ \text{and} \ \ \ \text{Var}(Y_i) = \phi E(Y_i)[1 - E(Y_i)]/m_i,
+$$
+respectively, where the *dispersion parameter* is *fixed* at $\phi = 1$. One solution is to allow $\phi$ to be an unknown parameter to "relax" the variance structure and allow the variance to be larger than it would be for a Poisson or binomial distribution. The dispersion parameter can be estimated. R uses
+$$
+	\hat{\phi} = \frac{1}{n-p}\sum_{i=1}^n \frac{(y_i - \hat{y}_i)^2}{\mbox{V}(\hat{y}_i)},
+$$
+which is analogous to the estimate of $\sigma^2$ in a normal linear model. This is a quasi-likelihood approach because the variance structures with $\phi \neq 1$ do not correspond to a binomial or Poisson distribution. This kind of quasi-likelihood can be done with `glm` by using `quasipoisson` or `quasibinomial` instead of `poisson` or `binomial`, respectively, when specifying the `family` argument. 
+
+**Example**: Consider again the rotifer model.
+```{r, fig.height = 6}
+m.quasi <- glm(cbind(y, total - y) ~ species + density + species:density,
+  family = quasibinomial, data = myrotifer)
+plot(predict(m.quasi), rstudent(m.quasi), main = "Residual Plot")
+abline(h = c(-2,2), lty = 2)
+```
+Note: You **cannot** compare the residual deviance to the residual degrees of freedom as a diagnostic to determine if using quasi-likelihood was successful, but standardized residuals are still appropriate. 
+
+How does this impact our inferences?
+```{r, message = FALSE}
+m.binom <- glm(cbind(y, total - y) ~ species + density + species:density,
+  family = binomial, data = myrotifer)
+cbind(summary(m.binom)$coefficients, confint(m.binom))
+cbind(summary(m.quasi)$coefficients, confint(m.quasi))
+# odds ratios for effect of a 0.01 unit increase in density
+trtools::contrast(m.binom,
+  a = list(species = c("kc","pm"), density = 0.02),
+  b = list(species = c("kc","pm"), density = 0.01),
+  cnames = c("kc","pm"), tf = exp)
+# odds ratios for effect of a 0.01 unit increase in density
+trtools::contrast(m.quasi,
+  a = list(species = c("kc","pm"), density = 0.02),
+  b = list(species = c("kc","pm"), density = 0.01),
+  cnames = c("kc","pm"), tf = exp)
+```
+Note that point estimates are unchanged, but standard errors, tests, and confidence intervals are affected.
+
+**Example**: Now let's try the same approach with trawling data.
+```{r, fig.height = 6}
+m.quasi <- glm(totabund ~ period * meandepth + offset(log(sweptarea)),
+  family = quasipoisson, data = fishing)
+plot(predict(m.quasi), rstudent(m.quasi), main = "Residual Plot")
+abline(h = c(-2,2), lty = 2)
+```
+That was maybe somewhat less successful. Note the "megaphone" pattern. The assumed variance structure is
+$$
+  \text{Var}(Y_i) = \phi E(Y_i).
+$$
+We could relax this by assuming instead
+$$
+  \text{Var}(Y_i) = \phi E(Y_i)^p.
+$$
+for some $p > 1$. If $p$ = 1, 2, or 3 then we can use `quasi`. Here we are using it for $p$ = 2.
+```{r}
+m.quasi <- glm(totabund ~ period * meandepth + offset(log(sweptarea)),
+  family = quasi(link = "log", variance = "mu^2"), data = fishing)
+summary(m.quasi)$coefficients
+plot(predict(m.quasi), rstudent(m.quasi), main = "Residual Plot")
+abline(h = c(-2,2), lty = 2)
+```
+Note that `quasi(link = "log", variance = "mu")` is the same as `quasipoisson`. For more options consider `family = tweedie`. The `tweedie` family defines power functions for link and variance functions of the form
+$$
+  E(Y_i)^q = \eta_i \ \ \ \text{and} \ \ \ \text{Var}(Y_i) = \phi E(Y_i)^p,
+$$
+where $E(Y_i)^0 \equiv \log E(Y_i)$ when using `tweedie` (not mathematically of course --- this is just for interface purposes). For example, to replicate the quasi-likelihood model above we can use the following.
+```{r}
+library(statmod) # for tweedie "family" 
+m.tweedie <- glm(totabund ~ period * meandepth + offset(log(sweptarea)),
+  family = tweedie(link.power = 0, var.power = 2), data = fishing)
+summary(m.tweedie)$coefficients
+```
+The powers $p$ and $q$ are not required to be integers when using `tweedie`.
+
+Whether or not we use quasi-likelihood will affect the standard errors, as well as tests and confidence intervals. Failing to account for substantial overdispersion can result in biased standard errors, and thus incorrect tests and confidence intervals. Estimates of parameters (of functions thereof such as what we get from `contrast`) may or may not change, depending on the variance structure.
+```{r}
+m.poisson <- glm(totabund ~ period * meandepth + offset(log(sweptarea)),
+  family = poisson, data = fishing)
+# rate ratios for year
+trtools::contrast(m.poisson, 
+  a = list(sweptarea = 1, meandepth = c(1000,2000,3000,4000,5000), period = "2000-2002"),
+  b = list(sweptarea = 1, meandepth = c(1000,2000,3000,4000,5000), period = "1977-1989"),
+  cnames = c("1000m","2000m","3000m","4000m","5000m"), tf = exp)
+trtools::contrast(m.tweedie, 
+  a = list(sweptarea = 1, meandepth = c(1000,2000,3000,4000,5000), period = "2000-2002"),
+  b = list(sweptarea = 1, meandepth = c(1000,2000,3000,4000,5000), period = "1977-1989"),
+  cnames = c("1000m","2000m","3000m","4000m","5000m"), tf = exp)
+```
+
+## Inferences With Quasi-Likelihood
+
+Using quasi-likelihood instead of maximum likelihood changes how inferences are made in several ways.
+
+1. The standard errors are multiplied by $\sqrt{\hat\phi}$. If $\hat\phi > 1$ (which it probably is if overdispersion is present) then the standard errors will be larger (and thus failing to account for overdispersion leads us to usually underestimate them).
+
+2. Wald confidence intervals and tests for a single parameter or function of parameters are based on the $t$ distribution rather than the standard normal distribution. The $t$ distribution is believed to provide more accurate results, although it is still an approximation. 
+
+3. Using `confint` or `anova` use the $F$ distribution rather than the $\chi^2$ distribution. The underlying test statistic is similar to the $F$ test statistic used in normal linear models. When using `anova` you should use `test = "F"` rather than `test = "LRT"` if you are using quasi-likelihood.
+
+## Misspecified Mean Structures and Overdispersion
+
+A poorly specified *mean structure* may be mistaken for overdispersion.
+```{r}
+ceriodaphniastrain$strain <- factor(ceriodaphniastrain$strain, labels = c("a","b"))
+m <- glm(count ~ strain + sqrt(concentration), family = poisson, data = ceriodaphniastrain)
+summary(m)
+plot(predict(m), rstudent(m))
+m <- glm(count ~ strain + concentration, family = poisson, data = ceriodaphniastrain)
+summary(m)
+plot(predict(m), rstudent(m))
+```
+
+## Quasi-Likelihood and Nonlinear Regression
+
+Quasi-likelihood for a GLM is essentially the same as using (nonlinear) regression with iteratively weighted least squares to account for heteroscedasticity. The weights are
+$$
+    w_i = \frac{1}{V(\hat{y}_i)},
+$$
+where $V$ is the variance function. 
+
+**Example**: Consider the model for the trawling data where the variance is proportional to $E(Y_i)^2$. To estimate this model using iteratively weighted least squares we use weights of $w_i = 1/E(Y_i)^2$.  
+
+```{r}
+m.quasi <- glm(totabund ~ period * meandepth + offset(log(sweptarea)),
+  family = quasi(link = "log", variance = "mu^2"), data = fishing)
+summary(m.quasi)$coefficients
+
+fishing$w <- 1
+for (i in 1:10) {
+  m.iwls <- nls(totabund ~ exp(b0 + b1*(period == "2000-2002") + b2*meandepth + 
+    b3*(period == "2000-2002")*meandepth + log(sweptarea)), data = fishing,
+    start = list(b0 = -3, b1 = -0.6, b2 = 0, b3 = 0), weights = w)
+  fishing$w <- 1 / predict(m.iwls)^2
+}
+summary(m.iwls)$coefficients
+```
+
+**Example**: Consider the model for the rotifer data. Here the variance is proportional to $E(Y_i)[1 - E(Y_i)_i]$. To estimate this model using iteratively weighted least squares we use weights of
+$$
+  w_i = \frac{m_i}{E(Y_i)[1-E(Y_i)]}.
+$$
+```{r}
+m.binomial <- glm(cbind(y, total - y) ~ species * density, 
+  family = quasibinomial, data = myrotifer)
+summary(m.binomial)$coefficients
+
+myrotifer$w <- 1
+for (i in 1:20) {
+    m <- nls(y/total ~ plogis(b0 + b1*(species == "pm") + b2*density + 
+      b3*(species == "pm")*density), data = myrotifer, weights = w, 
+      start = list(b0 = -114, b1 = 4.6, b2 = 109, b3 = -3))
+    myrotifer$yhat <- predict(m)
+    myrotifer$w <- myrotifer$total / (myrotifer$yhat * (1 - myrotifer$yhat))
+}
+summary(m)$coefficients
+```
+Note that `plogis` is the function $e^x/(1 + e^x)$. The model can be written as
+$$
+  E(Y_i) = \frac{e^{\eta_i}}{1 + e^{\eta_i}} 
+$$
+where $Y_i$ is the observed *proportion*, and 
+$$
+  \eta_i = \beta_0 + \beta_1 s_i + \beta_2 d_i + \beta_3 s_i d_i,
+$$
+where $s_i$ is an indicator variable for the `pm` species, and $d_i$ is the density.
+
+Using iteratively weighted least squares is not necessary if we can use `quasi` or `tweedie`, but it is a useful option for cases where the variance structure is outside what can be done with `quasi` or `tweedie` (although one can *program* new variance structures).
+
+
