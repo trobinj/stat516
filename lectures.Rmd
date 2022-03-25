@@ -101,7 +101,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Overdispersion and quasi-likelihood](lecture-03-23-2022.html). 
 
-`r i <- i + 1; d[i]` [In-class exercise on Poisson and logistic regression](lecture-03-25-2022.html). Release date of third homework assignment.
+`r i <- i + 1; d[i]` [In-class exercise on Poisson and logistic regression](lecture-03-25-2022.html). The [third homework assignment](hw3.html) is now available.
  
 ***
 
@@ -113,7 +113,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` Third homework assignment due by 5:00 PM.
 
 `r i <- i + 1; d[i]` 
  
