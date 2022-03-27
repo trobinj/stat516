@@ -105,7 +105,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Modeling overdispersion, robust standard errors, and other generalized linear models](lecture-03-28-2022.html). 
 
 `r i <- i + 1; d[i]` 
 
