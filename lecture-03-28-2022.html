@@ -461,9 +461,8 @@ m &lt;- glm(cbind(y, total - y) ~ species + density + species:density,
 <p>Here are the parameter estimates and standard errors, with and
 without using the robust standard error estimates.</p>
 <pre class="r"><code>library(sandwich) # for the vcovHC function
-library(lmtest)   # for coeftest and coefci functions</code></pre>
-<pre><code>Warning: package &#39;lmtest&#39; was built under R version 4.1.3</code></pre>
-<pre class="r"><code>cbind(summary(m)$coefficients, confint(m))</code></pre>
+library(lmtest)   # for coeftest and coefci functions
+cbind(summary(m)$coefficients, confint(m))</code></pre>
 <pre><code>                  Estimate Std. Error  z value   Pr(&gt;|z|)    2.5 %   97.5 %
 (Intercept)       -114.352      4.034 -28.3454 9.534e-177 -122.420 -106.598
 speciespm            4.629      6.598   0.7016  4.830e-01   -8.464   17.431
@@ -595,9 +594,9 @@ data.</p>
 <pre class="r"><code>library(Stat2Data)
 data(CancerSurvival)
 CancerSurvival$Organ &lt;- with(CancerSurvival, reorder(Organ, Survival, mean))
-p &lt;- ggplot(CancerSurvival, aes(x = Organ, y = Survival))
-p &lt;- p + geom_jitter(height = 0, width = 0.25)
-p &lt;- p + labs(y = &quot;Survival Time (Days)&quot;) + theme_classic()
+p &lt;- ggplot(CancerSurvival, aes(x = Organ, y = Survival)) +
+  geom_jitter(height = 0, width = 0.25) + 
+  labs(y = &quot;Survival Time (Days)&quot;) + theme_classic()
 plot(p)</code></pre>
 <p><img src="lecture-03-28-2022_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" />
 A gamma model might be appropriate here. First consider a model with a
@@ -683,14 +682,19 @@ a log-linear model since we can write <span class="math display">\[
 \]</span> Because dry weight is continuous and positive, with the
 variability appearing to increase with the expected dry weight, we might
 specify a gamma distribution for dry weight.</p>
-<pre class="r"><code>d &lt;- subset(barnacle, DW &gt; 0) # remove observations of zero dry weight to avoid errors
-m &lt;- glm(DW ~ F + log(RC) + F:log(RC), family = Gamma(link = log), data = d)
+<pre class="r"><code>barnacle &lt;- subset(barnacle, DW &gt; 0) # remove observations of zero weight to avoid errors
+m &lt;- glm(DW ~ F + log(RC) + F:log(RC), family = Gamma(link = log), data = barnacle)
 summary(m)$coefficients</code></pre>
 <pre><code>              Estimate Std. Error  t value  Pr(&gt;|t|)
 (Intercept)   -8.06129    0.03898 -206.786 0.0000000
 Flens         -0.15688    0.05724   -2.741 0.0061837
 log(RC)        2.84234    0.01585  179.296 0.0000000
 Flens:log(RC)  0.07884    0.02315    3.405 0.0006744</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(F = c(&quot;barca&quot;,&quot;lens&quot;), RC = seq(2.3, 24, length = 100))
+d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
+p &lt;- p + geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-03-28-2022_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># effect of a 20% increase in RC
 contrast(m, tf = exp,
     a = list(F = c(&quot;barca&quot;,&quot;lens&quot;), RC = 6),
@@ -717,23 +721,25 @@ Note: Eliminating a couple of observations due to having a zero dry
 weight is not of much consequence here since there are so many
 observations. But if there were fewer observations this would not be a
 good idea. A better approach would be to just specify the same model
-using <code>quasi</code>.</p>
+using <code>quasi</code>. Note that using <code>quasi</code> with
+<code>variance = "mu^2"</code> is effectively equivalent to using
+<code>family = gamma</code>.</p>
 <pre class="r"><code>m &lt;- glm(DW ~ F + log(RC) + F:log(RC), data = barnacle,
   family = quasi(link = &quot;log&quot;, variance = &quot;mu^2&quot;))
 summary(m)$coefficients</code></pre>
 <pre><code>              Estimate Std. Error  t value  Pr(&gt;|t|)
-(Intercept)   -8.08064    0.03921 -206.083 0.0000000
-Flens         -0.16037    0.05753   -2.788 0.0053578
-log(RC)        2.84993    0.01595  178.656 0.0000000
-Flens:log(RC)  0.08018    0.02328    3.444 0.0005852</code></pre>
+(Intercept)   -8.06129    0.03898 -206.786 0.0000000
+Flens         -0.15688    0.05724   -2.741 0.0061837
+log(RC)        2.84234    0.01585  179.296 0.0000000
+Flens:log(RC)  0.07884    0.02315    3.405 0.0006744</code></pre>
 <pre class="r"><code># effect of a 20% increase in RC
 contrast(m, tf = exp,
     a = list(F = c(&quot;barca&quot;,&quot;lens&quot;), RC = 6),
     b = list(F = c(&quot;barca&quot;,&quot;lens&quot;), RC = 5), 
     cnames = c(&quot;barca&quot;,&quot;lens&quot;))</code></pre>
 <pre><code>      estimate lower upper
-barca    1.681 1.672 1.691
-lens     1.706 1.696 1.716</code></pre>
+barca    1.679 1.670 1.689
+lens     1.703 1.693 1.714</code></pre>
 <pre class="r"><code># comparing the two locations at different values of RC
 contrast(m, tf = exp,
     a = list(F = &quot;lens&quot;, RC = c(10,15,20)),
@@ -741,8 +747,8 @@ contrast(m, tf = exp,
     cnames = c(&quot;10mm&quot;,&quot;15mm&quot;,&quot;20mm&quot;))</code></pre>
 <pre><code>     estimate lower upper
 10mm    1.025 1.004 1.046
-15mm    1.058 1.034 1.084
-20mm    1.083 1.048 1.119</code></pre>
+15mm    1.058 1.034 1.083
+20mm    1.083 1.048 1.118</code></pre>
 <p>Checking the residuals.</p>
 <pre class="r"><code>plot(predict(m), rstudent(m), main = &quot;Residual Plot&quot;)
 abline(-2,0)

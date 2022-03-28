@@ -40,7 +40,6 @@ options(digits = 4, width = 90)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
-
 ## Distributions for Overdispersion
 
 One way to model overdispersion is to assume a model of the form
@@ -217,9 +216,9 @@ so the effects of explanatory variables and contrasts can be interpreted by appl
 library(Stat2Data)
 data(CancerSurvival)
 CancerSurvival$Organ <- with(CancerSurvival, reorder(Organ, Survival, mean))
-p <- ggplot(CancerSurvival, aes(x = Organ, y = Survival))
-p <- p + geom_jitter(height = 0, width = 0.25)
-p <- p + labs(y = "Survival Time (Days)") + theme_classic()
+p <- ggplot(CancerSurvival, aes(x = Organ, y = Survival)) +
+  geom_jitter(height = 0, width = 0.25) + 
+  labs(y = "Survival Time (Days)") + theme_classic()
 plot(p)
 ```
 A gamma model might be appropriate here. First consider a model with a log link function.  
@@ -280,9 +279,13 @@ $$
 $$
 Because dry weight is continuous and positive, with the variability appearing to increase with the expected dry weight, we might specify a gamma distribution for dry weight.
 ```{r}
-d <- subset(barnacle, DW > 0) # remove observations of zero dry weight to avoid errors
-m <- glm(DW ~ F + log(RC) + F:log(RC), family = Gamma(link = log), data = d)
+barnacle <- subset(barnacle, DW > 0) # remove observations of zero weight to avoid errors
+m <- glm(DW ~ F + log(RC) + F:log(RC), family = Gamma(link = log), data = barnacle)
 summary(m)$coefficients
+d <- expand.grid(F = c("barca","lens"), RC = seq(2.3, 24, length = 100))
+d$yhat <- predict(m, newdata = d, type = "response")
+p <- p + geom_line(aes(y = yhat), data = d)
+plot(p)
 # effect of a 20% increase in RC
 contrast(m, tf = exp,
     a = list(F = c("barca","lens"), RC = 6),
@@ -300,7 +303,7 @@ plot(predict(m), rstudent(m), main = "Residual Plot")
 abline(-2,0)
 abline(2,0)
 ```
-Note: Eliminating a couple of observations due to having a zero dry weight is not of much consequence here since there are so many observations. But if there were fewer observations this would not be a good idea. A better approach would be to just specify the same model using `quasi`.
+Note: Eliminating a couple of observations due to having a zero dry weight is not of much consequence here since there are so many observations. But if there were fewer observations this would not be a good idea. A better approach would be to just specify the same model using `quasi`. Note that using `quasi` with `variance = "mu^2"` is effectively equivalent to using `family = gamma`.  
 ```{r}
 m <- glm(DW ~ F + log(RC) + F:log(RC), data = barnacle,
   family = quasi(link = "log", variance = "mu^2"))
