@@ -284,7 +284,7 @@ m <- glm(DW ~ F + log(RC) + F:log(RC), family = Gamma(link = log), data = barnac
 summary(m)$coefficients
 d <- expand.grid(F = c("barca","lens"), RC = seq(2.3, 24, length = 100))
 d$yhat <- predict(m, newdata = d, type = "response")
-p <- p + geom_line(aes(y = yhat), data = d)
+p <- p + geom_line(aes(y = yhat), color = "red", data = d)
 plot(p)
 # effect of a 20% increase in RC
 contrast(m, tf = exp,

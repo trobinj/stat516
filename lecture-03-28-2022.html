@@ -692,7 +692,7 @@ log(RC)        2.84234    0.01585  179.296 0.0000000
 Flens:log(RC)  0.07884    0.02315    3.405 0.0006744</code></pre>
 <pre class="r"><code>d &lt;- expand.grid(F = c(&quot;barca&quot;,&quot;lens&quot;), RC = seq(2.3, 24, length = 100))
 d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
-p &lt;- p + geom_line(aes(y = yhat), data = d)
+p &lt;- p + geom_line(aes(y = yhat), color = &quot;red&quot;, data = d)
 plot(p)</code></pre>
 <p><img src="lecture-03-28-2022_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># effect of a 20% increase in RC
