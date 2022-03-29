@@ -358,7 +358,7 @@ the concentration of sodium bromide.</p>
 <pre class="r"><code>library(trtools)
 library(dplyr)
 nabr %&gt;% group_by(concentration) %&gt;% summarize(mean = mean(young))</code></pre>
-<pre><code># A tibble: 5 x 2
+<pre><code># A tibble: 5 × 2
   concentration  mean
           &lt;dbl&gt; &lt;dbl&gt;
 1           0   188. 
@@ -473,7 +473,7 @@ limitstudy &lt;- limits %&gt;%
   pivot_longer(cols = -day, names_to = c(&quot;.value&quot;, &quot;year&quot;), names_sep = &quot;_&quot;) %&gt;%
   mutate(limit = factor(limit, levels = c(0,1), labels = c(&quot;no&quot;,&quot;yes&quot;)))
 head(limitstudy)</code></pre>
-<pre><code># A tibble: 6 x 4
+<pre><code># A tibble: 6 × 4
   day   year  limit     y
   &lt;fct&gt; &lt;chr&gt; &lt;fct&gt; &lt;int&gt;
 1 1     1961  no        9
@@ -513,7 +513,7 @@ plot(p)</code></pre>
 The sample statistics show that the number of accidents was, on average,
 lower when speed limits were posted.</p>
 <pre class="r"><code>limitstudy %&gt;% group_by(year, limit) %&gt;% summarize(mean = mean(y))</code></pre>
-<pre><code># A tibble: 4 x 3
+<pre><code># A tibble: 4 × 3
 # Groups:   year [2]
   year  limit  mean
   &lt;chr&gt; &lt;fct&gt; &lt;dbl&gt;
@@ -783,7 +783,7 @@ id="fnref15"><sup>15</sup></a></p>
 combination of ulcer type, case or control status, and aspirin use.</p>
 <pre class="r"><code>library(dobson)
 ulcer</code></pre>
-<pre><code># A tibble: 8 x 4
+<pre><code># A tibble: 8 × 4
   ulcer    `case-control` aspirin  frequency
   &lt;chr&gt;    &lt;chr&gt;          &lt;chr&gt;        &lt;dbl&gt;
 1 gastric  control        non-user        62
@@ -801,7 +801,7 @@ library(tidyr)
 ulcer &lt;- dobson::ulcer %&gt;%
   pivot_wider(names_from = `case-control`, values_from = frequency)
 ulcer</code></pre>
-<pre><code># A tibble: 4 x 4
+<pre><code># A tibble: 4 × 4
   ulcer    aspirin  control  case
   &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt;
 1 gastric  non-user      62    39
@@ -814,7 +814,7 @@ of participants in the study for each combination of ulcer type and
 aspirin use that have an ulcer.</p>
 <pre class="r"><code>ulcer %&gt;% group_by(ulcer, aspirin) %&gt;% 
   mutate(proportion = case / (case + control))</code></pre>
-<pre><code># A tibble: 4 x 5
+<pre><code># A tibble: 4 × 5
 # Groups:   ulcer, aspirin [4]
   ulcer    aspirin  control  case proportion
   &lt;chr&gt;    &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt;      &lt;dbl&gt;
