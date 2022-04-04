@@ -11,23 +11,9 @@ This site contains material for Dr. Johnson's *Applied Regression Modeling* cour
 
 <center>
 
-![https://xkcd.com/2599](https://imgs.xkcd.com/comics/spacecraft_debris_odds_ratio.png)
+![https://xkcd.com/1260](http://imgs.xkcd.com/comics/ld50.png)
+
 </center>
-
-```{r, echo = FALSE}
-p0 <- 1e-09
-p1 <- 3e-09
-```
-
-Note that what might appear to be a large (and statistically significant) odds ratio does not necessarily imply a large increase in the odds or probability of an event. Suppose that the probability increases from `r format(p0, scientific = FALSE)` to `r format(p1, scientific = FALSE)`. That gives an odds ratio of
-$$
-\frac{`r p1`(1 - `r p1`)}{`r p0`(1 - `r p0`)} \approx `r p1*(1-p1)/(p0*(1-p0))`.
-$$
-So the odds is 3 times larger than it was before (a 200% increase), but the odds and the probability of the event is still very small. Another interesting fact is that an odds ratio very closely approximates what is called the *relative risk* or *risk ratio* which is the ratio of *probabilities* rather than odds. Here the relative risk is
-$$
-\frac{`r p1`}{`r p0`} = `r p1/p0`.
-$$
-So for very rare events an odds ratio can be viewed as (approximately) the relative risk, which is convenient because for many people the relative risk is more intuitive than the odds ratio.
 
 ***
 

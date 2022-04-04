@@ -113,7 +113,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` Third homework assignment due by 5:00 PM.
+`r i <- i + 1; d[i]` [The delta method](lecture-04-04-2022.html). Third homework assignment due by 5:00 PM.
 
 `r i <- i + 1; d[i]` 
  
