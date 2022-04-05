@@ -115,7 +115,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [The delta method](lecture-04-04-2022.html). Third homework assignment due by 5:00 PM.
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Introduction to survival analysis and accelerated failure time models](lecture-04-06-2022.html). 
  
 `r i <- i + 1; d[i]` 
  
