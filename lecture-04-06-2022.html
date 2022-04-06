@@ -320,7 +320,8 @@ the effect of normal versus extended chemotherapy on the survival of
 patients with acute myelogenous leukemia.</p>
 <pre class="r"><code>library(survival)
 
-leukemia$censored &lt;- factor(leukemia$status, labels = c(&quot;yes&quot;,&quot;no&quot;)) # right-censored?
+leukemia$censored &lt;- factor(leukemia$status, levels = c(0,1),
+  labels = c(&quot;yes&quot;,&quot;no&quot;)) # right-censored?
 leukemia</code></pre>
 <pre><code>   time status             x censored
 1     9      1    Maintained       no
