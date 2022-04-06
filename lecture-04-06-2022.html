@@ -651,8 +651,9 @@ Total time at risk: 7145
 Log-likelihood = -465, df = 7
 AIC = 944</code></pre>
 <p>A 1mm increase in thorax length is <em>huge</em>. How about a 0.1 mm
-increase in thorax length? One way to consider this is to change the
-units of thorax length from cm to mm.</p>
+increase in thorax length? We can do this by changing the units to
+<em>tenths of a mm</em>. One mm is ten tenths of a mm so multiplying
+length by 10 will put the units into tenths of a mm.</p>
 <pre class="r"><code>m &lt;- flexsurvreg(Surv(longevity) ~ activity + I(thorax*10), dist = &quot;lognormal&quot;, data = fruitfly)
 print(m)</code></pre>
 <pre><code>Call:

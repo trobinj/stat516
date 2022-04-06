@@ -256,7 +256,7 @@ exp(cbind(coef(m), confint(m)))
 m <- flexsurvreg(Surv(longevity) ~ activity + thorax, dist = "lognormal", data = fruitfly)
 print(m)
 ```
-A 1mm increase in thorax length is *huge*. How about a 0.1 mm increase in thorax length? One way to consider this is to change the units of thorax length from cm to mm. 
+A 1mm increase in thorax length is *huge*. How about a 0.1 mm increase in thorax length? We can do this by changing the units to *tenths of a mm*. One mm is ten tenths of a mm so multiplying length by 10 will put the units into tenths of a mm.
 ```{r}
 m <- flexsurvreg(Surv(longevity) ~ activity + I(thorax*10), dist = "lognormal", data = fruitfly)
 print(m)
