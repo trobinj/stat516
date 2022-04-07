@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Friday, Apr 8</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Friday, Apr 8</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-04-08-2022.pdf">PDF</a> copy
+of this lecture.</p>
+<div id="censoring-specification" class="section level2">
+<h2>Censoring Specification</h2>
+<p>Without much loss of generality we will limit the discussion here to
+right-censoring. We define an indicator variable <span
+class="math inline">\(D_i\)</span> such that <span
+class="math display">\[
+  D_i =
+  \begin{cases}
+   1, &amp; \text{if the $i$-th observation is not censored}, \\
+   0, &amp; \text{if the $i$-th observation is censored}.
+  \end{cases}
+\]</span> The variable <span class="math inline">\(D_i\)</span> can be
+viewed as another response variable which depends on the actual time to
+event, <span class="math inline">\(T_i\)</span>, as well as whatever is
+responsible for the censoring. In what follows we will let <span
+class="math inline">\(t_i\)</span> and <span
+class="math inline">\(d_i\)</span> denote observed values of <span
+class="math inline">\(T_i\)</span> and <span
+class="math inline">\(D_i\)</span> respectively.</p>
+<p>Let <span class="math inline">\(t_i\)</span> be the actual
+time-till-event if <span class="math inline">\(d_i = 1\)</span>, and the
+<em>lower-bound</em> on the time-till-event if <span
+class="math inline">\(d_i = 0\)</span> so that the <em>actual</em>
+time-till-event is <em>greater than or equal to</em> <span
+class="math inline">\(t_i\)</span>. Under certain assumptions about how
+censoring occurs, the likelihood function is <span
+class="math display">\[
+  L = \prod_{i=1}^n f(t_i)^{d_i}P(T_i \ge t_i)^{1-d_i}.
+\]</span> where <span class="math inline">\(f(t_i)\)</span> is the
+<em>probability density function</em> of <span
+class="math inline">\(T_i\)</span>, and <span
+class="math inline">\(P(T_i \ge t_i)\)</span> is the probability that
+<span class="math inline">\(T_i\)</span> is <em>at least</em> <span
+class="math inline">\(t_i\)</span> (this is also called the <em>survival
+function</em>). Note that <span class="math display">\[
+  f(t_i)^{d_i}P(T_i \ge t_i)^{1-d_i} =
+  \begin{cases}
+    f(t_i), &amp; \text{if $d_i = 1$ (i.e., not censored)}, \\
+    P(T_i \ge t_i), &amp; \text{if $d_i = 0$ (i.e., censored)},
+  \end{cases}
+\]</span> so the indicator variable <span
+class="math inline">\(d_i\)</span> simply selects the appropriate term
+for computing the likelihood of an observation depending on whether or
+not it was censored.</p>
+<div id="specification-of-right-censoring-in-surv"
+class="section level3">
+<h3>Specification of Right-Censoring in <code>Surv</code></h3>
+<p>For <em>right-censoring</em>, the response variable can be specified
+as <code>Surv(t,d)</code> where <code>t</code> is (a) the actual time to
+event if there is no censoring or (b) the lower bound on time to event
+if the observation is right-censored, and <code>d</code> is either an
+indicator variable (i.e., <code>0</code> or <code>1</code>) or a logical
+variable (i.e., <code>FALSE</code> or <code>TRUE</code>) where we have
+<code>d = 1</code> or <code>d = TRUE</code> if the observation is
+<em>not</em> censored.</p>
+<p><strong>Example</strong>: Consider an AFT model for the
+<code>leukemia</code> data.</p>
+<pre class="r"><code>library(survival) # for leukemia and survreg
+head(leukemia) # status=1 if remission ended at that time, status=0 if right-censored</code></pre>
+<pre><code>  time status          x
+1    9      1 Maintained
+2   13      1 Maintained
+3   13      0 Maintained
+4   18      1 Maintained
+5   23      1 Maintained
+6   28      0 Maintained</code></pre>
+<pre class="r"><code>m &lt;- survreg(Surv(time, status) ~ x, dist = &quot;lognormal&quot;, data = leukemia)
+summary(m)$table</code></pre>
+<pre><code>                 Value Std. Error       z         p
+(Intercept)     3.5789     0.2847 12.5712 3.039e-36
+xNonmaintained -0.7245     0.3803 -1.9049 5.679e-02
+Log(scale)     -0.1454     0.1695 -0.8576 3.911e-01</code></pre>
+<p>Alternatively suppose we had a variable <code>censored</code> that
+told us if the observation was censored or not.</p>
+<pre class="r"><code>leukemia$censored &lt;- factor(leukemia$status, labels = c(&quot;yes&quot;,&quot;no&quot;))
+head(leukemia)</code></pre>
+<pre><code>  time status          x censored
+1    9      1 Maintained       no
+2   13      1 Maintained       no
+3   13      0 Maintained      yes
+4   18      1 Maintained       no
+5   23      1 Maintained       no
+6   28      0 Maintained      yes</code></pre>
+<p>Then we specify the censoring as follows.</p>
+<pre class="r"><code>m &lt;- survreg(Surv(time, censored == &quot;no&quot;) ~ x, dist = &quot;lognormal&quot;, data = leukemia)
+summary(m)$table</code></pre>
+<pre><code>                 Value Std. Error       z         p
+(Intercept)     3.5789     0.2847 12.5712 3.039e-36
+xNonmaintained -0.7245     0.3803 -1.9049 5.679e-02
+Log(scale)     -0.1454     0.1695 -0.8576 3.911e-01</code></pre>
+<p>It is useful to note that we can see how <code>Surv</code> codes the
+response variable for censoring. This is useful if you want to verify
+that you have used <code>Surv</code> correctly.</p>
+<pre class="r"><code>leukemia$ysurv &lt;- Surv(leukemia$time, leukemia$censored == &quot;no&quot;)
+head(leukemia)</code></pre>
+<pre><code>  time status          x censored ysurv
+1    9      1 Maintained       no     9
+2   13      1 Maintained       no    13
+3   13      0 Maintained      yes   13+
+4   18      1 Maintained       no    18
+5   23      1 Maintained       no    23
+6   28      0 Maintained      yes   28+</code></pre>
+<p>As before, interpretation is facilitated by applying the exponential
+function to the parameter estimates.</p>
+<pre class="r"><code>exp(cbind(coef(m),confint(m)))</code></pre>
+<pre><code>                       2.5 % 97.5 %
+(Intercept)    35.8327 20.51 62.604
+xNonmaintained  0.4846  0.23  1.021</code></pre>
+<pre class="r"><code>leukemia$x &lt;- relevel(leukemia$x, ref = &quot;Nonmaintained&quot;)
+m &lt;- survreg(Surv(time, status) ~ x, dist = &quot;lognormal&quot;, data = leukemia)
+summary(m)$table</code></pre>
+<pre><code>              Value Std. Error       z         p
+(Intercept)  2.8544     0.2539 11.2415 2.550e-29
+xMaintained  0.7245     0.3803  1.9049 5.679e-02
+Log(scale)  -0.1454     0.1695 -0.8576 3.911e-01</code></pre>
+<pre class="r"><code>exp(cbind(coef(m),confint(m)))</code></pre>
+<pre><code>                     2.5 % 97.5 %
+(Intercept) 17.364 10.5563 28.561
+xMaintained  2.064  0.9793  4.349</code></pre>
+</div>
+</div>
+<div id="interval-censoring" class="section level2">
+<h2>Interval-Censoring</h2>
+<p><em>Interval censoring</em> occurs when <span
+class="math inline">\(T_i\)</span> is only known to be between two
+numbers such that <span class="math inline">\(a &lt; T_i &lt; b\)</span>
+where <span class="math inline">\(0 \le a &lt; b \le \infty\)</span>.
+Note that right-censoring is a special case where <span
+class="math inline">\(b = \infty\)</span>, and left-censoring is a
+special case where <span class="math inline">\(a = 0\)</span>.</p>
+<p><strong>Example</strong>: Consider the following data from a study of
+the time till cosmetic deterioration for breast cancer patients
+undergoing radiotherapy alone versus radiotherapy and chemotherapy.</p>
+<pre class="r"><code>library(coxinterval) # contains the cosmesis data frame
+head(cosmesis, 10)</code></pre>
+<pre><code>   left right treat
+1    45    NA    RT
+2     6    10    RT
+3     0     7    RT
+4    46    NA    RT
+5    46    NA    RT
+6     7    16    RT
+7    17    NA    RT
+8     7    14    RT
+9    37    44    RT
+10    0     8    RT</code></pre>
+<p>Note that these data include left-censoring, interval-censoring, and
+right-censoring).
+<img src="lecture-04-08-2022_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" />
+Using the <code>Surv</code> function to specify censoring requires that
+lower bounds of 0 and upper bounds of <span
+class="math inline">\(\infty\)</span> be replaced with
+<code>NA</code>.</p>
+<pre class="r"><code>cosmesis$left &lt;- ifelse(cosmesis$left == 0, NA, cosmesis$left)
+head(cosmesis, 10)</code></pre>
+<pre><code>   left right treat
+1    45    NA    RT
+2     6    10    RT
+3    NA     7    RT
+4    46    NA    RT
+5    46    NA    RT
+6     7    16    RT
+7    17    NA    RT
+8     7    14    RT
+9    37    44    RT
+10   NA     8    RT</code></pre>
+<pre class="r"><code>tail(cosmesis, 10)</code></pre>
+<pre><code>   left right treat
+85   14    19   RCT
+86    4     8   RCT
+87   34    NA   RCT
+88   30    36   RCT
+89   18    24   RCT
+90   16    60   RCT
+91   35    39   RCT
+92   21    NA   RCT
+93   11    20   RCT
+94   48    NA   RCT</code></pre>
+<p>It is also useful to note that you can accommodate an observation
+that is <em>not</em> censored by specifying <em>equal</em> left and
+right interval endpoints.</p>
+<p>We can verify the censoring specification by looking at what
+<code>Surv</code> produces.</p>
+<pre class="r"><code>cosmesis$y &lt;- with(cosmesis, Surv(left, right, type = &quot;interval2&quot;))
+head(cosmesis, 10)</code></pre>
+<pre><code>   left right treat        y
+1    45    NA    RT      45+
+2     6    10    RT [ 6, 10]
+3    NA     7    RT       7-
+4    46    NA    RT      46+
+5    46    NA    RT      46+
+6     7    16    RT [ 7, 16]
+7    17    NA    RT      17+
+8     7    14    RT [ 7, 14]
+9    37    44    RT [37, 44]
+10   NA     8    RT       8-</code></pre>
+<p>Now we can estimate an AFT model.</p>
+<pre class="r"><code>m &lt;- survreg(Surv(left, right, type = &quot;interval2&quot;) ~ treat,
+  dist = &quot;lognormal&quot;, data = cosmesis)
+summary(m)$table</code></pre>
+<pre><code>              Value Std. Error      z          p
+(Intercept)  3.5479     0.1542 23.013 3.450e-117
+treatRCT    -0.4210     0.2032 -2.072  3.827e-02
+Log(scale)  -0.1254     0.1095 -1.145  2.521e-01</code></pre>
+<p>Applying the exponential function helps interpret the effect of the
+treatment.</p>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                      2.5 %  97.5 %
+(Intercept) 34.7394 25.6800 46.9949
+treatRCT     0.6564  0.4408  0.9775</code></pre>
+<p>Using <code>flexsurvreg</code> produces the same information but in
+one output.</p>
+<pre class="r"><code>library(flexsurv)
+m &lt;- flexsurvreg(Surv(left, right, type = &quot;interval2&quot;) ~ treat, 
+  dist = &quot;lognormal&quot;, data = cosmesis)
+print(m)</code></pre>
+<pre><code>Call:
+flexsurvreg(formula = Surv(left, right, type = &quot;interval2&quot;) ~ 
+    treat, data = cosmesis, dist = &quot;lognormal&quot;)
+
+Estimates: 
+          data mean  est      L95%     U95%     se       exp(est)  L95%     U95%   
+meanlog        NA     3.5479   3.2457   3.8500   0.1542       NA        NA       NA
+sdlog          NA     0.8821   0.7118   1.0933   0.0966       NA        NA       NA
+treatRCT   0.5106    -0.4210  -0.8192  -0.0228   0.2032   0.6564    0.4408   0.9775
+
+N = 94,  Events: 0,  Censored: 94
+Total time at risk: 2089
+Log-likelihood = -146.6, df = 3
+AIC = 299.2</code></pre>
+<p>Again, it is sometimes helpful for interpretation to change the
+reference level when dealing with categorical explanatory varaibles.</p>
+<pre class="r"><code>cosmesis$treat &lt;- relevel(cosmesis$treat, ref = &quot;RCT&quot;)
+m &lt;- flexsurvreg(Surv(left, right, type = &quot;interval2&quot;) ~ treat, 
+  dist = &quot;lognormal&quot;, data = cosmesis)
+print(m)</code></pre>
+<pre><code>Call:
+flexsurvreg(formula = Surv(left, right, type = &quot;interval2&quot;) ~ 
+    treat, data = cosmesis, dist = &quot;lognormal&quot;)
+
+Estimates: 
+         data mean  est     L95%    U95%    se      exp(est)  L95%    U95%  
+meanlog      NA     3.1269  2.8558  3.3980  0.1383      NA        NA      NA
+sdlog        NA     0.8821  0.7118  1.0933  0.0966      NA        NA      NA
+treatRT  0.4894     0.4210  0.0228  0.8192  0.2032  1.5235    1.0230  2.2688
+
+N = 94,  Events: 0,  Censored: 94
+Total time at risk: 2089
+Log-likelihood = -146.6, df = 3
+AIC = 299.2</code></pre>
+</div>
+<div id="survival-functions" class="section level2">
+<h2>Survival Functions</h2>
+<p>The <em>survival function</em> is <span class="math display">\[
+  S(t) = P(T \ge t),
+\]</span> i.e., the probability of a survival time of <em>at least <span
+class="math inline">\(t\)</span></em>. It is sometimes defined as <span
+class="math inline">\(S(t) = P(T &gt; t)\)</span> rather than <span
+class="math inline">\(S(t) = P(T \ge t)\)</span>, but if time is modeled
+as a continuous random variable this distinction does not matter.
+<img src="lecture-04-08-2022_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" />
+Another useful property of survival functions is that the area under the
+survival curve equals the expected survival time <span
+class="math inline">\(E(T_i)\)</span>, assuming <span
+class="math inline">\(S(0) = 0\)</span> (i.e., no events have happened
+at time zero) and <span class="math inline">\(S(\infty) = 1\)</span>
+(i.e., events eventually do happen).</p>
+</div>
+<div id="survival-functions-and-aft-models" class="section level2">
+<h2>Survival Functions and AFT Models</h2>
+<p><strong>Technical Explanation</strong>: Accelerated failure time
+models can be interpreted in terms of effects on survival functions. Let
+<span class="math display">\[
+  T_b = e^{\beta_0}e^{\beta_1 x_{1}}e^{\beta_2 x_{2}} \cdots e^{\beta_k
+x_{k}}e^{\sigma \epsilon},
+\]</span> and let <span class="math inline">\(T_a =
+e^{\beta_1}T_b\)</span> as before where <span
+class="math inline">\(T_a\)</span> and <span
+class="math inline">\(T_b\)</span> are the survival times when the first
+explanatory variable assumes values of <span
+class="math inline">\(x_a\)</span> and <span
+class="math inline">\(x_b\)</span>, respectively. The survival functions
+for <span class="math inline">\(T_a\)</span> and <span
+class="math inline">\(T_b\)</span> are then <span
+class="math display">\[
+    S_a(t) = P(T_a \ge t) \ \ \text{and} \ \ S_b(t) = P(T_b \ge t),
+\]</span> respectively. These survival functions are related because
+<span class="math display">\[
+    S_b(t) = P(T_b \ge t) = P(e^{\beta_1}T_b \ge e^{\beta_1}t) = P(T_a
+\ge e^{\beta_1}t) = S_a(e^{\beta_1}t).
+\]</span> That is, <span class="math inline">\(S_b(t) =
+S_a(e^{\beta_1}t)\)</span> and also <span
+class="math inline">\(S_b(t/e^{\beta_1}) = S_a(t)\)</span>. So we can
+say the following.</p>
+<ol style="list-style-type: decimal">
+<li><p>The probability of survival past <span
+class="math inline">\(t\)</span> at <span
+class="math inline">\(x_b\)</span> equals the probability of survival
+past <span class="math inline">\(e^{\beta_1}t\)</span> at <span
+class="math inline">\(x_a\)</span>.</p></li>
+<li><p>The probability of survival past <span
+class="math inline">\(t\)</span> at <span
+class="math inline">\(x_a\)</span> equals the probability of survival
+past <span class="math inline">\(t/e^{\beta_1}\)</span> at <span
+class="math inline">\(x_b\)</span>.</p></li>
+</ol>
+<p>It can also be shown that we can “order” the survival
+functions/probabilities from an AFT model because <span
+class="math display">\[\begin{align*}
+    \beta_j &gt; 0 \Leftrightarrow e^{\beta_j} &gt; 1 \Leftrightarrow
+S_b(t) &lt; S_a(t), \\
+    \beta_j &lt; 0 \Leftrightarrow e^{\beta_j} &lt; 1 \Leftrightarrow
+S_b(t) &gt; S_a(t).
+\end{align*}\]</span> Note that with an AFT model the survival functions
+at two different values of an explanatory variable do not cross.</p>
+<p>In an AFT model the explanatory variables can be viewed as
+“compressing” or “stretching” time which has the effect of “horizontally
+compressing/stretching” the survival function. Assume <span
+class="math inline">\(T_i = e^{\beta_0}e^{\beta_1 x_{i1}} \cdots
+e^{\beta_k x_{ik}}e^{\sigma \epsilon_i}\)</span> and let <span
+class="math inline">\(S_i(t)\)</span> be the survival function of <span
+class="math inline">\(T_i\)</span>. Then <span class="math display">\[
+    S_i(t) = P(T_i \ge t)
+           = P(e^{\beta_0}e^{\beta_1 x_{i1}} \cdots e^{\beta_k
+x_{ik}}e^{\sigma \epsilon_i} \ge t)
+           = P[e^{\beta_0}e^{\sigma \epsilon_i} \ge t/(e^{\beta_1
+x_{i1}} \cdots e^{\beta_k x_{ik}})].
+\]</span> If all <span class="math inline">\(x_{ij} = 0\)</span> then
+<span class="math inline">\(T_i =
+e^{\beta_0}e^{\sigma\epsilon_i}\)</span> with a “baseline” survival
+function <span class="math inline">\(S_0(t) =
+P(e^{\beta_0}e^{\sigma\epsilon_i} \ge t)\)</span>. Then <span
+class="math display">\[
+    S_i(t) = S_0[t/(e^{\beta_1 x_{i1}} \cdots e^{\beta_k x_{ik}})] \ \ \
+\text{and} \ \ \
+    S_i(te^{\beta_1 x_{i1}} \cdots e^{\beta_k x_{ik}}) = S_0(t).
+\]</span> So the explanatory variables effectively “horizontally”
+compress or stretch a (hypothetical) baseline survival function. Also in
+terms of the actual times, if <span class="math inline">\(T_0 =
+e^{\beta_0}e^{\sigma\epsilon}\)</span> represents a “baseline” survival
+time when all <span class="math inline">\(x_{ij} = 0\)</span>, the <span
+class="math display">\[
+  T_i = e^{\beta_1 x_{i1}} \cdots e^{\beta_k x_{ik}}T_0,
+\]</span> so that again the values of the explanatory variables have the
+effect of “stretching” or “compressing” time time scale.</p>
+<p><strong>Example</strong>: Recall the AFT model for the
+<code>lifespan</code> data where the model is <span
+class="math display">\[
+  \log T_i  = \beta_0 + \beta_1 x_i,
+\]</span> where <span class="math inline">\(x_i\)</span> is an indicator
+variable such that <span class="math inline">\(x_i\)</span> = 1 if the
+species is human (so <span class="math inline">\(x_a\)</span> = 1 in the
+above discussion), and <span class="math inline">\(x_i\)</span> = 0 if
+the species is dog (so <span class="math inline">\(x_b\)</span> = 0 in
+the above discussion). The estimate of <span
+class="math inline">\(\beta_1\)</span> was <span
+class="math inline">\(\hat\beta_1\)</span> <span
+class="math inline">\(\approx\)</span> 1.946 so that <span
+class="math inline">\(e^{\hat\beta_1}\)</span> <span
+class="math inline">\(\approx\)</span> 7. The “baseline” survival
+function is the survival function for dogs, which we can write as <span
+class="math inline">\(S_d(t)\)</span>. The survival function for humans
+is then <span class="math inline">\(S_h(7t)\)</span>. For example, we
+estimate that the probability that a dog lives for 10 or more years
+equals the probability that a human will live for 70 or more years
+because <span class="math inline">\(S_d(t) = S_h(7t)\)</span> where
+<span class="math inline">\(t\)</span> = 10. The survival function of a
+human is obtained by “stretching” the survival function of a dog by a
+factor of 7.</p>
+<p>If we re-parameters the model so that <span
+class="math inline">\(x_i\)</span> = 1 if the species is <em>dog</em>,
+then we have that <span class="math inline">\(\hat\beta_1\)</span> <span
+class="math inline">\(\approx\)</span> 1/7, so that the “baseline”
+survival function is for humans, and we have that <span
+class="math inline">\(S_h(t) = S_d(t/7)\)</span>. We can also say that
+we estimate that the probability that a human lives to be 35 or more
+equals the probability that a dog lives to be 5 or more because <span
+class="math inline">\(S_d(t/7) = S_h(t)\)</span> where <span
+class="math inline">\(t\)</span> = 35. The survival function of a dog is
+obtained by “compressing” the survival function of a human by a factor
+of 1/7.
+<img src="lecture-04-08-2022_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>Example</strong>: Recall the AFT model for the
+<code>motors</code> data where the model is <span
+class="math display">\[
+  \log T_i = \beta_0 + \beta_1 x_i,
+\]</span> where <span class="math inline">\(x_i\)</span> is temperature.
+The estimate of <span class="math inline">\(\beta_1\)</span> was <span
+class="math inline">\(\hat\beta_1\)</span> <span
+class="math inline">\(\approx\)</span> -0.047 so that <span
+class="math inline">\(e^{\hat\beta_1} \approx 0.95\)</span>. Thus <span
+class="math inline">\(S_{x+1}(0.95t) = S_x(t)\)</span> where the
+subscript of <span class="math inline">\(x\)</span> represents
+temperature. Increasing by one degree “compresses” the survival function
+by a factor of about 0.95 (i.e., 5%).</p>
+<p><img src="lecture-04-08-2022_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="plotting-estimated-survival-functions" class="section level2">
+<h2>Plotting Estimated Survival Functions</h2>
+<p>Estimating and plotting survival functions is relatively easy using
+<code>flexsurvreg</code> objects. Here the <code>summary</code> function
+behaves more like <code>predict</code> for other model objects produced
+by <code>lm</code>, <code>nls</code>, and <code>glm</code>.</p>
+<p><strong>Example</strong>: The estimated survival functions for the
+AFT model for the <code>lifespan</code> data can be computed/plotted as
+follows.</p>
+<pre class="r"><code>library(trtools) # for lifespan data
+m &lt;- flexsurvreg(Surv(years) ~ species, dist = &quot;lognormal&quot;, data = lifespan)
+ 
+d &lt;- data.frame(species = c(&quot;dog&quot;,&quot;human&quot;))
+d &lt;- summary(m, newdata = d, t = seq(0, 100, by = 0.5), type = &quot;survival&quot;, tidy = TRUE)
+head(d)</code></pre>
+<pre><code>  time    est    lcl    ucl species
+1  0.0 1.0000 1.0000 1.0000     dog
+2  0.5 1.0000 1.0000 1.0000     dog
+3  1.0 0.9999 0.9999 0.9999     dog
+4  1.5 0.9989 0.9985 0.9993     dog
+5  2.0 0.9953 0.9937 0.9965     dog
+6  2.5 0.9869 0.9835 0.9898     dog</code></pre>
+<pre class="r"><code>tail(d)</code></pre>
+<pre><code>     time    est    lcl    ucl species
+397  97.5 0.2611 0.2400 0.2818   human
+398  98.0 0.2583 0.2374 0.2790   human
+399  98.5 0.2556 0.2348 0.2762   human
+400  99.0 0.2529 0.2322 0.2734   human
+401  99.5 0.2502 0.2295 0.2707   human
+402 100.0 0.2475 0.2269 0.2680   human</code></pre>
+<pre class="r"><code>p &lt;- ggplot(d, aes(x = time, y = est)) + 
+  geom_line(aes(linetype = species)) + 
+  labs(x = &quot;Time (years)&quot;, y = &quot;S(t)&quot;, linetype = &quot;Species&quot;) + 
+  theme_minimal() + theme(legend.position = c(0.8,0.8))
+plot(p)</code></pre>
+<p><img src="lecture-04-08-2022_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>Example</strong>: Survival functions at different
+temperatures based on the AFT model for the <code>motors</code> data can
+be computed/plotted as follows.</p>
+<pre class="r"><code>library(MASS) # for motors data frame
+m &lt;- flexsurvreg(Surv(time, cens) ~ temp, dist = &quot;lognormal&quot;, data = motors)
+
+d &lt;- data.frame(temp = c(150,175,200))
+d &lt;- summary(m, newdata = d, t = seq(0, 10000, length = 100), 
+ type = &quot;survival&quot;, tidy = TRUE)
+
+p &lt;- ggplot(d, aes(x = time, y = est, linetype = factor(temp))) + 
+  geom_line() + theme_minimal() + 
+  labs(x = &quot;Time (Hours)&quot;, y = &quot;S(t)&quot;, linetype = &quot;Temperature (C)&quot;) 
+plot(p)</code></pre>
+<p><img src="lecture-04-08-2022_files/figure-html/unnamed-chunk-19-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p &lt;- ggplot(d, aes(x = time, y = est)) + 
+  geom_line() + facet_wrap(~ temp, nrow = 1) + 
+  geom_ribbon(aes(ymin = lcl, ymax = ucl), alpha = 0.1) +
+  labs(x = &quot;Time (Hours)&quot;, y = &quot;S(t)&quot;) + theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-04-08-2022_files/figure-html/unnamed-chunk-19-2.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

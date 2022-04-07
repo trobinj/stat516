@@ -1,0 +1,354 @@
+---
+output:
+  html_document:
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "04-08-2022"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+header-includes:
+  - \usepackage{array}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+library(kableExtra)
+library(trtools)
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+```{r options, echo = FALSE}
+options(digits = 4, width = 90)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+## Censoring Specification
+
+Without much loss of generality we will limit the discussion here to right-censoring. We define an indicator variable $D_i$ such that 
+$$
+  D_i = 
+  \begin{cases}
+   1, & \text{if the $i$-th observation is not censored}, \\
+   0, & \text{if the $i$-th observation is censored}.
+  \end{cases}
+$$
+The variable $D_i$ can be viewed as another response variable which depends on the actual time to event, $T_i$, as well as whatever is responsible for the censoring. In what follows we will let $t_i$ and $d_i$ denote observed values of $T_i$ and $D_i$ respectively. 
+
+Let $t_i$ be the actual time-till-event if $d_i = 1$, and the *lower-bound* on the time-till-event if $d_i = 0$ so that the *actual* time-till-event is *greater than or equal to* $t_i$. Under certain assumptions about how censoring occurs, the likelihood function is
+$$
+  L = \prod_{i=1}^n f(t_i)^{d_i}P(T_i \ge t_i)^{1-d_i}.
+$$
+where $f(t_i)$ is the *probability density function* of $T_i$, and $P(T_i \ge t_i)$ is the probability that $T_i$ is *at least* $t_i$ (this is also called the *survival function*). Note that 
+$$
+  f(t_i)^{d_i}P(T_i \ge t_i)^{1-d_i} = 
+  \begin{cases}
+    f(t_i), & \text{if $d_i = 1$ (i.e., not censored)}, \\
+    P(T_i \ge t_i), & \text{if $d_i = 0$ (i.e., censored)},
+  \end{cases}
+$$
+so the indicator variable $d_i$ simply selects the appropriate term for computing the likelihood of an observation depending on whether or not it was censored. 
+
+### Specification of Right-Censoring in `Surv`
+
+For *right-censoring*, the response variable can be specified as `Surv(t,d)` where `t` is (a) the actual time to event if there is no censoring or (b) the lower bound on time to event if the observation is right-censored, and `d` is either an indicator variable (i.e., `0` or `1`) or a logical variable (i.e., `FALSE` or `TRUE`) where we have `d = 1` or `d = TRUE` if the observation is *not* censored.
+
+**Example**: Consider an AFT model for the `leukemia` data.
+```{r, warning = FALSE}
+library(survival) # for leukemia and survreg
+head(leukemia) # status=1 if remission ended at that time, status=0 if right-censored
+m <- survreg(Surv(time, status) ~ x, dist = "lognormal", data = leukemia)
+summary(m)$table
+```
+Alternatively suppose we had a variable `censored` that told us if the observation was censored or not.
+```{r}
+leukemia$censored <- factor(leukemia$status, labels = c("yes","no"))
+head(leukemia)
+```
+Then we specify the censoring as follows.
+```{r}
+m <- survreg(Surv(time, censored == "no") ~ x, dist = "lognormal", data = leukemia)
+summary(m)$table
+```
+It is useful to note that we can see how `Surv` codes the response variable for censoring. This is useful if you want to verify that you have used `Surv` correctly.
+```{r}
+leukemia$ysurv <- Surv(leukemia$time, leukemia$censored == "no")
+head(leukemia)
+```
+As before, interpretation is facilitated by applying the exponential function to the parameter estimates.
+```{r}
+exp(cbind(coef(m),confint(m)))
+leukemia$x <- relevel(leukemia$x, ref = "Nonmaintained")
+m <- survreg(Surv(time, status) ~ x, dist = "lognormal", data = leukemia)
+summary(m)$table
+exp(cbind(coef(m),confint(m)))
+```
+
+## Interval-Censoring
+
+*Interval censoring* occurs when $T_i$ is only known to be between two numbers such that $a < T_i < b$ where $0 \le a < b \le \infty$. Note that right-censoring is a special case where $b = \infty$, and left-censoring is a special case where $a = 0$. 
+
+**Example**: Consider the following data from a study of the time till cosmetic deterioration for breast cancer patients undergoing radiotherapy alone versus radiotherapy and chemotherapy.
+```{r, message = FALSE, warning = FALSE}
+library(coxinterval) # contains the cosmesis data frame
+head(cosmesis, 10)
+```
+Note that these data include left-censoring, interval-censoring, and right-censoring).
+```{r, echo = FALSE, message = FALSE, warning = FALSE, fig.height = 7}
+cosmesis$left <- ifelse(cosmesis$left == 0, NA, cosmesis$left)
+cosmesis$lwr <- ifelse(is.na(cosmesis$left), 0, cosmesis$left)
+cosmesis$upp <- ifelse(is.na(cosmesis$right), 65, cosmesis$right)
+cosmesis$obs <- factor(1:94)
+levels(cosmesis$treat) <- c("Radiotherapy Only", "Radiotherapy + Chemotherapy")
+p <- ggplot(cosmesis, aes(y = obs))
+p <- p + geom_segment(aes(x = lwr, xend = upp, y = obs, yend = obs))
+p <- p + geom_segment(aes(x = lwr, xend = upp, y = obs, yend = obs),
+  data = subset(cosmesis, upp == 65), arrow = arrow(length = unit(0.05, "cm")))
+p <- p + geom_point(aes(x = left), shape = 21, fill = "white", size = rel(1))
+p <- p + geom_point(aes(x = right), shape = 21, fill = "white", size = rel(1))
+p <- p + xlim(0, 65)
+p <- p + facet_grid(treat ~ ., scales = "free", space = "free")
+p <- p + xlab("Time Till Cosmetic Deterioration (months)") + ylab("")
+p <- p + theme_minimal()
+p <- p + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
+plot(p)
+rm(cosmesis)
+```
+Using the `Surv` function to specify censoring requires that lower bounds of 0 and upper bounds of $\infty$ be replaced with `NA`.
+```{r}
+cosmesis$left <- ifelse(cosmesis$left == 0, NA, cosmesis$left)
+head(cosmesis, 10)
+tail(cosmesis, 10)
+```
+It is also useful to note that you can accommodate an observation that is *not* censored by specifying *equal* left and right interval endpoints.  
+
+We can verify the censoring specification by looking at what `Surv` produces. 
+```{r}
+cosmesis$y <- with(cosmesis, Surv(left, right, type = "interval2"))
+head(cosmesis, 10)
+```
+Now we can estimate an AFT model.
+```{r}
+m <- survreg(Surv(left, right, type = "interval2") ~ treat,
+  dist = "lognormal", data = cosmesis)
+summary(m)$table
+```
+Applying the exponential function helps interpret the effect of the treatment.
+```{r}
+exp(cbind(coef(m), confint(m)))
+```
+Using `flexsurvreg` produces the same information but in one output. 
+```{r}
+library(flexsurv)
+m <- flexsurvreg(Surv(left, right, type = "interval2") ~ treat, 
+  dist = "lognormal", data = cosmesis)
+print(m)
+```
+Again, it is sometimes helpful for interpretation to change the reference level when dealing with categorical explanatory varaibles.
+```{r}
+cosmesis$treat <- relevel(cosmesis$treat, ref = "RCT")
+m <- flexsurvreg(Surv(left, right, type = "interval2") ~ treat, 
+  dist = "lognormal", data = cosmesis)
+print(m)
+```
+
+## Survival Functions
+
+The *survival function* is
+$$
+  S(t) = P(T \ge t),
+$$
+i.e., the probability of a survival time of *at least $t$*. It is sometimes defined as $S(t) = P(T > t)$ rather than $S(t) = P(T \ge t)$, but if time is modeled as a continuous random variable this distinction does not matter. 
+```{r, echo = FALSE, fig.height = 6}
+t <- seq(0, 10.5, length = 1000)
+m <- 1
+s <- 1
+y <- 1 - plnorm(t, m, s)
+plot(t, y, type = "l", bty = "n", xlab = "t", ylab = "S(t)", ylim = c(0,1), 
+  xaxt = "n", yaxt = "n", main = "Survival Function")
+axis(1, at = 0:10)
+axis(2, at = seq(0, 1, by = 0.1))
+t <- c(1,5,10)
+y <- 1 - plnorm(t, m, s)
+for (i in 1:length(t)) {
+  lines(c(t[i],t[i]), c(0,y[i]), lty = 3)
+  lines(c(0,t[i]),c(y[i],y[i]), lty = 3)
+}
+```
+Another useful property of survival functions is that the area under the survival curve equals the expected survival time $E(T_i)$, assuming $S(0) = 0$ (i.e., no events have happened at time zero) and $S(\infty) = 1$ (i.e., events eventually do happen). 
+
+## Survival Functions and AFT Models
+
+**Technical Explanation**: Accelerated failure time models can be interpreted in terms of effects on survival functions. Let
+$$
+  T_b = e^{\beta_0}e^{\beta_1 x_{1}}e^{\beta_2 x_{2}} \cdots e^{\beta_k x_{k}}e^{\sigma \epsilon},
+$$
+and let $T_a = e^{\beta_1}T_b$ as before where $T_a$ and $T_b$ are the survival times when the first explanatory variable assumes values of $x_a$ and $x_b$, respectively. The survival functions for $T_a$ and $T_b$ are then
+$$
+	S_a(t) = P(T_a \ge t) \ \ \text{and} \ \ S_b(t) = P(T_b \ge t),
+$$
+respectively. These survival functions are related because
+$$
+	S_b(t) = P(T_b \ge t) = P(e^{\beta_1}T_b \ge e^{\beta_1}t) = P(T_a \ge e^{\beta_1}t) = S_a(e^{\beta_1}t).
+$$
+That is, $S_b(t) = S_a(e^{\beta_1}t)$ and also $S_b(t/e^{\beta_1}) = S_a(t)$. So we can say the following.
+
+1. The probability of survival past $t$ at $x_b$ equals the probability of survival past $e^{\beta_1}t$ at $x_a$.
+
+2. The probability of survival past $t$ at $x_a$ equals the probability of survival past $t/e^{\beta_1}$ at $x_b$.  
+
+It can also be shown that we can "order" the survival functions/probabilities from an AFT model because
+\begin{align*}
+	\beta_j > 0 \Leftrightarrow e^{\beta_j} > 1 \Leftrightarrow S_b(t) < S_a(t), \\
+	\beta_j < 0 \Leftrightarrow e^{\beta_j} < 1 \Leftrightarrow S_b(t) > S_a(t).
+\end{align*}
+Note that with an AFT model the survival functions at two different values of an explanatory variable do not cross. 
+
+In an AFT model the explanatory variables can be viewed as "compressing" or "stretching" time which has the effect of "horizontally compressing/stretching" the survival function. Assume $T_i = e^{\beta_0}e^{\beta_1 x_{i1}} \cdots e^{\beta_k x_{ik}}e^{\sigma \epsilon_i}$ and let $S_i(t)$ be the survival function of $T_i$. Then
+$$
+	S_i(t) = P(T_i \ge t)
+	       = P(e^{\beta_0}e^{\beta_1 x_{i1}} \cdots e^{\beta_k x_{ik}}e^{\sigma \epsilon_i} \ge t) 
+	       = P[e^{\beta_0}e^{\sigma \epsilon_i} \ge t/(e^{\beta_1 x_{i1}} \cdots e^{\beta_k x_{ik}})]. 
+$$
+If all $x_{ij} = 0$ then $T_i = e^{\beta_0}e^{\sigma\epsilon_i}$ with a "baseline" survival function $S_0(t) = P(e^{\beta_0}e^{\sigma\epsilon_i} \ge t)$. Then
+$$
+	S_i(t) = S_0[t/(e^{\beta_1 x_{i1}} \cdots e^{\beta_k x_{ik}})] \ \ \ \text{and} \ \ \ 
+	S_i(te^{\beta_1 x_{i1}} \cdots e^{\beta_k x_{ik}}) = S_0(t).
+$$
+So the explanatory variables effectively "horizontally" compress or stretch a (hypothetical) baseline survival function. Also in terms of the actual times, if $T_0 = e^{\beta_0}e^{\sigma\epsilon}$ represents a "baseline" survival time when all $x_{ij} = 0$, the 
+$$
+  T_i = e^{\beta_1 x_{i1}} \cdots e^{\beta_k x_{ik}}T_0,
+$$
+so that again the values of the explanatory variables have the effect of "stretching" or "compressing" time time scale. 
+
+**Example**: Recall the AFT model for the `lifespan` data where the model is 
+$$
+  \log T_i  = \beta_0 + \beta_1 x_i,
+$$
+where $x_i$ is an indicator variable such that $x_i$ = 1 if the species is human (so $x_a$ = 1 in the above discussion), and $x_i$ = 0 if the species is dog (so $x_b$ = 0 in the above discussion). The estimate of $\beta_1$ was $\hat\beta_1$ $\approx$ 1.946 so that $e^{\hat\beta_1}$ $\approx$ 7. The "baseline" survival function is the survival function for dogs, which we can write as $S_d(t)$. The survival function for humans is then $S_h(7t)$. For example, we estimate that the probability that a dog lives for 10 or more years equals the probability that a human will live for 70 or more years because $S_d(t) = S_h(7t)$ where $t$ = 10. The survival function of a human is obtained by "stretching" the survival function of a dog by a factor of 7.
+
+If we re-parameters the model so that $x_i$ = 1 if the species is *dog*, then we have that $\hat\beta_1$ $\approx$ 1/7, so that the "baseline" survival function is for humans, and we have that $S_h(t) = S_d(t/7)$. We can also say that we estimate that the probability that a human lives to be 35 or more equals the probability that a dog lives to be 5 or more because $S_d(t/7) = S_h(t)$ where $t$ = 35. The survival function of a dog is obtained by "compressing" the survival function of a human by a factor of 1/7.
+```{r, echo = FALSE, fig.height = 6}
+x <- seq(0, 100, length = 1000)
+b0 <- 2.25
+b1 <- log(7)
+scale <- 0.6
+
+y.d <- 1 - plnorm(x, b0, scale)
+y.h <- 1 - plnorm(x, b0 + b1, scale)
+
+plot(x, y.d, type = "l", bty = "n", xaxt = "n", yaxt = "n",
+  xlab = "t", ylab = "S(t)", main = "Survival Functions for Humans and Dogs")
+lines(x, y.h, type = "l")
+
+axis(1, at = c(0, 5, 10, 35, 70, 100), cex.axis = 0.8)
+axis(2, at = c(0, 1, 1-plnorm(5,b0,scale), 1-plnorm(10,b0,scale)),
+  labels = c(0.0, 1.0, round(1-plnorm(5,b0,scale), 2), round(1-plnorm(10,b0,scale),2)))
+
+lines(c(5,5), c(-10, 1 - plnorm(5, b0, scale)), lty = 3)
+lines(c(35,35), c(-10, 1 - plnorm(5, b0, scale)), lty = 3)
+lines(c(-10,35), 1-c(plnorm(5,b0,scale),plnorm(5,b0,scale)), lty = 3)
+
+lines(c(10,10), c(-10, 1 - plnorm(10, b0, scale)), lty = 3)
+lines(c(70,70), c(-10, 1 - plnorm(10, b0, scale)), lty = 3)
+lines(c(-10,70), 1-c(plnorm(10,b0,scale),plnorm(10,b0,scale)), lty = 3)
+
+text(85, .45, "humans")
+text(85, .05, "dogs")
+```
+
+**Example**: Recall the AFT model for the `motors` data where the model is 
+$$
+  \log T_i = \beta_0 + \beta_1 x_i,
+$$
+where $x_i$ is temperature. The estimate of $\beta_1$ was $\hat\beta_1$ $\approx$ -0.047 so that $e^{\hat\beta_1} \approx 0.95$. Thus $S_{x+1}(0.95t) = S_x(t)$ where the subscript of $x$ represents temperature. Increasing by one degree "compresses" the survival function by a factor of about 0.95 (i.e., 5%). 
+
+```{r, echo = FALSE, fig.height = 6}
+b0 <- 16.49154898
+b1 <- -0.04654115
+scale <- 0.6260169
+
+x <- seq(0, 2000, length = 1000)
+
+temp <- c(200,201)
+
+y.1 <- 1 - plnorm(x, b0 + b1*temp[1], scale)
+y.2 <- 1 - plnorm(x, b0 + b1*temp[2], scale)
+
+plot(x, y.1, type = "l", bty = "n", xaxt = "n", yaxt = "n", ylim = c(0,1),
+     xlab = "t", ylab = "S(t)", main = "Survival Functions at Two Temperatures")
+lines(x, y.2, type = "l")
+
+t <- c(1000, 1000*exp(b1))
+
+axis(1)
+axis(2)
+axis(1, at = t, labels = NA)
+axis(2, at = 1 - plnorm(t, b0 + b1*temp, scale), labels = NA)
+
+lines(c(1000,1000), c(0, 1 - plnorm(t[1], b0 + b1*temp[1], scale)), lty = 3)
+lines(c(1000,1000)*exp(b1), c(0, 1 - plnorm(t[2], b0 + b1*temp[2], scale)), lty = 3)
+lines(c(0, 1000), c(1-plnorm(t[1], b0 + b1*temp[1], scale), 1-plnorm(t[1], b0 + b1*temp[1], scale)), lty = 3)
+
+text(1500, .48, "200C")
+text(1300, .42, "201C")
+```
+
+## Plotting Estimated Survival Functions
+
+Estimating and plotting survival functions is relatively easy using `flexsurvreg` objects. Here the `summary` function behaves more like `predict` for other model objects produced by `lm`, `nls`, and `glm`.
+
+**Example**: The estimated survival functions for the AFT model for the `lifespan` data can be computed/plotted as follows.
+```{r}
+library(trtools) # for lifespan data
+m <- flexsurvreg(Surv(years) ~ species, dist = "lognormal", data = lifespan)
+ 
+d <- data.frame(species = c("dog","human"))
+d <- summary(m, newdata = d, t = seq(0, 100, by = 0.5), type = "survival", tidy = TRUE)
+head(d)
+tail(d)
+
+p <- ggplot(d, aes(x = time, y = est)) + 
+  geom_line(aes(linetype = species)) + 
+  labs(x = "Time (years)", y = "S(t)", linetype = "Species") + 
+  theme_minimal() + theme(legend.position = c(0.8,0.8))
+plot(p)
+```
+
+**Example**: Survival functions at different temperatures based on the AFT model for the `motors` data can be computed/plotted as follows.
+```{r, message = FALSE, warning = FALSE}
+library(MASS) # for motors data frame
+m <- flexsurvreg(Surv(time, cens) ~ temp, dist = "lognormal", data = motors)
+
+d <- data.frame(temp = c(150,175,200))
+d <- summary(m, newdata = d, t = seq(0, 10000, length = 100), 
+ type = "survival", tidy = TRUE)
+
+p <- ggplot(d, aes(x = time, y = est, linetype = factor(temp))) + 
+  geom_line() + theme_minimal() + 
+  labs(x = "Time (Hours)", y = "S(t)", linetype = "Temperature (C)") 
+plot(p)
+
+p <- ggplot(d, aes(x = time, y = est)) + 
+  geom_line() + facet_wrap(~ temp, nrow = 1) + 
+  geom_ribbon(aes(ymin = lcl, ymax = ucl), alpha = 0.1) +
+  labs(x = "Time (Hours)", y = "S(t)") + theme_minimal()
+plot(p)
+```
