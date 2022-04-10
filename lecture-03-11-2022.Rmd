@@ -43,6 +43,7 @@ options(digits = 4, width = 90)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
+<!-- Introduce using emtrends to estimate rate and odds ratios, along with the pairs function to compare them. Note that you need to have type = "response" and tran = "log" (for odds ratios at least) to do this. -->
 
 ## Using the **emmeans** Package for Poisson and Logistic Regression
 
