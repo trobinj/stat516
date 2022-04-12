@@ -1,0 +1,454 @@
+---
+output:
+  html_document:
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "04-13-2022"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+header-includes:
+  - \usepackage{array}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+library(kableExtra)
+library(trtools)
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+```{r options, echo = FALSE}
+options(digits = 4, width = 90)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+
+## Proportional Hazards and the Survival Function
+
+Let $h_0(t)$ and $S_0(t)$ be the "baseline" hazard and survival functions (i.e., the function when all $x_{j} = 0$). If the proportional hazards assumption hold so that
+$$
+	h(t) = h_0(t)e^{\beta_1 x_{1}}e^{\beta_2 x_{2}} \cdots e^{\beta_k x_{k}},
+$$
+then it can be shown that
+$$
+	S(t) = S_0(t)^{\eta} \ \ \text{where} \ \  \eta = e^{\beta_1 x_{1}}e^{\beta_2 x_{2}} \cdots e^{\beta_k x_{k}}.
+$$
+Thus the effect of increasing $x_{j}$ in a proportional hazards model can be summarized as follows.
+
+1. If $\beta_j > 0$ then $S(t)$ will be *decreased* as $x_{j}$ increases, as will $E(T)$.
+
+2. If $\beta_j < 0$ then $S(t)$ will be *increased* as $x_{j}$ increases, as will $E(T)$.
+
+Note: The signs of the $\beta_j$ parameters will be *opposite* of what they are in a equivalent accelerated failure time model.
+
+**Example**: Consider again a proportional hazards model for the `motors` data.
+
+```{r, message = FALSE, warning = FALSE}
+library(flexsurv)
+m <- flexsurvreg(Surv(time, cens) ~ temp, dist = "weibullPH", data = MASS::motors)
+print(m)
+```
+```{r, echo = FALSE, fig.width = 9, fig.height = 12}
+m <- flexsurvreg(Surv(time, cens) ~ temp, dist = "weibull", data = MASS::motors)
+
+# create plot of hazard functions
+d <- summary(m, newdata = data.frame(temp = seq(120, 150, by = 10)),
+  t = seq(0, 100000, length = 1000), type = "hazard", tidy = TRUE, ci = FALSE)
+
+p <- ggplot(d, aes(x = time, y = est))
+p <- p + geom_line(aes(linetype = factor(temp))) + theme_classic()
+p <- p + labs(x = "Time", y = "h(t)", linetype = "Temperature")
+p <- p + theme(legend.position = c(0.1, 0.5))
+p <- p + ggtitle("Hazard Functions")
+p.h <- p
+
+# create plot of survival functions
+d <- summary(m, newdata = data.frame(temp = seq(120, 150, by = 10)),
+  t = seq(0, 100000, length = 1000), type = "survival", tidy = TRUE, ci = FALSE)
+
+p <- ggplot(d, aes(x = time, y = est))
+p <- p + geom_line(aes(linetype = factor(temp))) + theme_classic()
+p <- p + labs(x = "Time", y = "S(t)", linetype = "Temperature")
+p <- p + theme(legend.position = c(0.9, 0.7)) + ylim(0,1)
+p <- p + ggtitle("Survival Functions")
+p.s <- p
+
+d <- summary(m, newdata = data.frame(temp = seq(120, 150, by = 10)),
+  t = seq(0, 100000, length = 1000), tidy = TRUE, ci = FALSE,
+  fn = function(t, ...) dweibull(t, ...))
+
+p <- ggplot(d, aes(x = time, y = est))
+p <- p + geom_line(aes(linetype = factor(temp))) + theme_classic()
+p <- p + labs(x = "Time", y = "f(t)", linetype = "Temperature")
+p <- p + theme(legend.position = c(0.9, 0.7))
+p <- p + ggtitle("Probability Density Functions")
+p.d <- p
+
+# put the plots together into one plot
+cowplot::plot_grid(p.h, p.s, p.d, align = "v", ncol = 1)
+```
+
+## Semi-Parametric (Cox) Proportional Hazards Model
+
+A proportional hazards model assumes
+$$
+	h_i(t) = h_0(t)e^{\beta_1 x_{i1}}e^{\beta_2 x_{i2}} \cdots e^{\beta_k x_{ik}},
+$$
+where again $h_0(t)$ is the "baseline" proportional hazards function. The functional form of $h_0(t)$ and thus $h_i(t)$ depends on the distribution of $T_i$. 
+
+1. A *parametric* proportional hazards model assumes a particular distribution and functional form of $h_0(t)$. 
+
+2. The *semi-parametric* proportional hazards model does not assume a particular distribution or functional form for $h_0(t)$.
+
+The *marginal* or *partial* likelihood function permits maximum likelihood estimation of $\beta_1, \beta_2, \dots, \beta_k$ *without* assuming a particular distribution. It is based only on the *rank order* of the times. 
+
+Comments about semi-parametric proportional hazards models.
+
+1. Right-censoring can be easily handled with this model. But other types of censoring require additional assumptions.
+
+2. Estimation of hazard and survival functions relies on a semi-parametric approach. 
+
+3. Stratification can be used when hazard functions are proportional within but not between strata.
+
+The function `coxph` from the **survival** package will estimate a Cox proportional hazards model.
+
+**Example**: Consider a Cox proportional hazards model for the `motors` data.
+```{r}
+library(survival) # for coxph function
+m <- coxph(Surv(time, cens) ~ temp, data = MASS::motors)
+summary(m)
+```
+We can plot estimated survival functions from a `coxph` model object.
+```{r, fig.height = 6}
+d <- data.frame(temp = c(150,170,190,220))
+
+# plot estimated survival functions
+plot(survfit(m, newdata = d), bty = "n", lty = 1:4, xlab = "Time (Hours)", ylab = "S(t)")
+
+# add a legend
+legend(6500, 0.7, legend = c("150C", "170C", "190C", "220C"), lty = 1:4, bty = "n")
+
+# add a title
+title("Estimated Survival Functions")
+```
+
+A common non-parametric estimator of a survival function is the Kaplan-Meier estimator, but it is largely limited to cases where you have a categorical explanatory variable with multiple times observed per category.
+
+## Discrete Survival Time Models
+
+Discrete survival time models treat time-to-event as a discrete random variable rather than a continuous random variable. This is done for one of two reasons. 
+
+1. Time is actually continuous, but we treat it as discrete for convenience/simplicity, or because the observations are interval-censored (with common intervals, e.g., week, month, year). 
+
+2. The "time" is actually a count of "attempts" of an event (e.g., number of cycles until pregnancy, number of times to take a test until it is passed, number of times a machine is run until it fails). 
+
+For discrete time, the probability density, survival, and hazard functions are analogous to what they are for continuous time, but simpler because all of them give probabilities.
+
+1. The *probability mass function* is $f(t) = P(T = t)$. This gives the probability that the event will happen at time $t$.
+
+2. The *survival function* is, as before, $S(t) = P(T \ge t)$. This gives the probability that the event will happen at time $t$ or later.
+
+3. The *hazard function* is $h(t) = P(T = t|T \ge t)$. This gives the probability that the event will happen at time $t$ *given* that it has not yet happened (i.e., the probability that it will happen at time $t$ given that the unit has "survived" to that point). 
+
+**Technical Details**: Note that $f(t)$, $S(t)$, and $h(t)$ are related because $h(t) = f(t)/S(t)$. Also we can define $f(t)$ entirely in terms of $h(t)$. Consider that if a unit survives to time $t$, the probability that it *will not* survive past time $t$ is 
+$$
+  h(t) = P(T = t|T \ge t),
+$$
+and the probability that it *will* survive past time $t$ is 
+$$
+  1 - h(t) = 1 - P(T = t|T \ge t) = P(T > t|T \ge t).
+$$
+So we can write $f(t)$ in terms of $h(t)$ as follows.
+
+1. For observations that *are not* right-censored at time $t$, 
+\begin{align*}
+f(1) & = h(1), \\
+f(2) & = [1 - h(1)]h(2), \\
+f(3) & = [1 - h(1)][1 - h(2)]h(3), \\ 
+f(4) & = [1 - h(1)][1 - h(2)][1 - h(3)]h(4), \\
+f(5) & = [1 - h(1)][1 - h(2)][1 - h(3)][1 - h(4)]h(5),
+\end{align*}
+and so on. In general for non-censored discrete times
+$$
+f(t) = 
+\begin{cases}
+	h(t), & \text{if $t = 1$}, \\
+	h(t)\prod_{j=1}^{t-1}[1-h(j)], & \text{if $t > 1$},
+\end{cases}
+$$
+Note that $1 - h(t) = 1 - P(T = t|T \ge t) = P(T > t|T \ge t)$. 
+
+2. For observations that *are* right-censored at time $t$,
+\begin{align*}
+f(1) & = [1 - h(1)], \\
+f(2) & = [1 - h(1)][1 - h(2)], \\
+f(3) & = [1 - h(1)][1 - h(2)][1 - h(3)], \\ 
+f(4) & = [1 - h(1)][1 - h(2)][1 - h(3)][1 - h(4)], \\
+f(5) & = [1 - h(1)][1 - h(2)][1 - h(3)][1 - h(4)][1 - h(5)],
+\end{align*}
+and so on. In general for right-censored discrete times
+$$
+f(t) = \prod_{j=1}^{t}[1-h(j)].
+$$
+Note that $1 - h(t) = 1 - P(T = t|T \ge t) = P(T > t|T \ge t)$. 
+
+### Discrete Survival Models as Binary Regression Models
+
+Discrete survival time models can be expressed as *binary* regression models. We can model the probability that a unit will not survive past time $t$ *given* that it survived to time $t$, or we can model the probability that it will survive past time *given* that it survived to time $t$. 
+
+Suppose we code time-till-event with positive integers. For every $T$ we define a set of binary responses such that if $T=t$ then we have $t$ binary responses, $Y_1, Y_2, \dots, Y_t$, such that
+$$
+  Y_t = 
+  \begin{cases}
+    1, & \text{if the event occurs at time $t$ (i.e., $T = t$)}, \\
+    0, & \text{if the event occurs after time $t$ (i.e., $T > t$)}.
+  \end{cases}
+$$  
+Note that if $T$ is right-censored then we let $T=t$ where $t$ is the last time we know the event had not failed, but $Y_t = 0$.
+
+**Example**: The observed event times are $T = t$ where $t$ = 1, 2, 3, 4, or 5. Then we define $Y_1, Y_2, \dots, Y_5$ as follows.
+
+```{r, echo = FALSE}
+x.obs <- matrix("", 5, 6)
+x.obs[lower.tri(x.obs, diag = TRUE)] <- 0
+x.obs[,1] <- 1:5
+diag(x.obs[,-1]) <- rep(1,5)
+x.obs <- as.data.frame(x.obs)
+colnames(x.obs) <- c("$t$", "$Y_1$", "$Y_2$", "$Y_3$", "$Y_4$", "$Y_5$")
+library(knitr)
+ktbl(x.obs)
+```
+
+**Example**: $T$ is censored such that $T > t$ where $t$ = 1, 2, 3, 4, or 5. Then we define $Y_1, Y_2, \dots, Y_5$ as follows.
+ 
+```{r, echo = FALSE}
+x.obs <- matrix("", 5, 6)
+x.obs[lower.tri(x.obs, diag = TRUE)] <- 0
+x.obs[,1] <- 1:5
+diag(x.obs[,-1]) <- 0
+x.obs <- as.data.frame(x.obs)
+colnames(x.obs) <- c("$t$", "$Y_1$", "$Y_2$", "$Y_3$", "$Y_4$", "$Y_5$")
+library(knitr)
+ktbl(x.obs)
+```
+
+Not: If time is discrete due to interval-censoring the *maximum possible time* does not need a binary variable.
+
+The distribution of $T$ can be stated in terms of the $Y_t$. It follows that $h(t) = P(Y_t = 1)$ and $1-h(t) = 1 - P(Y_t = 1) = P(Y_t = 0)$, so if $T$ is not censored then
+$$
+f(t) = 
+\begin{cases}
+	P(Y_1 = 1), & \text{if $t = 1$}, \\
+	P(Y_t = 1)\prod_{j=1}^{t-1}P(Y_t = 0), & \text{if $t > 1$},
+\end{cases}
+$$
+and if $T$ is censored such that $T > t$ then 
+$$
+  f(t) = \prod_{j=1}^t P(Y_t = 0).
+$$
+To make this a regression model we could relate the hazard function to one or more explanatory variables, but this is the same thing as relating the probability that $Y_t = 1$ to one or more explanatory variables, and this is basically a binary regression model!
+
+**Example**: Consider the following data from a study comparing mothers who smoke to those who do not with respect to the number of menstrual cycles until pregnancy. 
+```{r}
+library(trtools) # for the cycles data 
+p <- ggplot(cycles, aes(x = cycles, y = 1.0 * ..density..)) 
+p <- p + facet_wrap(~ mother)
+p <- p + geom_histogram(binwidth = 1, center = 1, color = "black", fill = grey(0.85))
+p <- p + scale_x_continuous(breaks = 1:13, labels = c(1:12,"13+"))
+p <- p + labs(x = "Number of Cycles Until Pregnancy",
+  y = "Relative Frequency") + theme_minimal()
+plot(p)
+```
+Note: Using `w * ..density..` computes the relative frequency for the `y` aesthetic, where `w` is the bar width.
+
+It is important to note that all reported values of 13 cycles are actually right-censored and so represent 13 *or more* cycles. The observed censoring times are between 1 and 12 cycles, with all recorded cycles of 13 representing right-censored observations only known to be *more than 12 cycles*. We need to create an indicator variable for *observed* times and to change values of 13 to 12 since that was the last observed time.
+```{r}
+cycles$status <- ifelse(cycles$cycles == 13, 0, 1)
+cycles$cycles <- ifelse(cycles$cycles == 13, 12, cycles$cycles)
+```
+Here are some observations of observed (i.e., not censored) times.
+```{r, echo = FALSE}
+set.seed(101)
+tmp <- subset(cycles, status == 1)
+tmp[sample(1:nrow(tmp), 5),]
+```
+Here are some observations of censored times.
+```{r, echo = FALSE}
+set.seed(101)
+tmp <- subset(cycles, status == 0)
+tmp[sample(1:nrow(tmp), 5),]
+```
+The function `dsurvbin` from the **trtools** package helps convert a data frame with a discrete time-till-event into a format with binary variables as discussed above (a similar function is available in the **discSurv** package).
+```{r}
+cycles.bin <- dsurvbin(cycles, y = "cycles", event = "status")
+```
+So depending on the number of cycles up to twelve indicator variable are created *for each observational unit*. For example, here is an observation where pregnancy occurred after *three* cycles.
+```{r, echo = FALSE}
+head(subset(cycles.bin, cycles == 3), 3)
+```
+And here is a unit where pregnancy occurred after *five* cycles.
+```{r, echo = FALSE}
+head(subset(cycles.bin, cycles == 5), 5)
+```
+And here is a unit where pregnancy occurred after *twelve* cycles.
+```{r, echo = FALSE}
+head(subset(cycles.bin, cycles == 12 & status == 1), 12)
+```
+But for comparison, here is a unit where pregnancy was right-censored and is only known to have occurred *after twelve cycles*.
+```{r, echo = FALSE}
+head(subset(cycles.bin, cycles == 12 & status == 0), 12)
+```
+Let $P(Y_{it} = 1) = \pi_{it}$ be the probability that the $i$-th observation will become pregnant on the $t$-th cycle *given* that they did not become pregnant on an earlier cycle. We could consider a logistic regression model such that
+$$
+  \pi_{it} = \frac{e^{\eta_i}}{1 + e^{\eta_i}} \ \ \text{where} \ \ 
+  \eta_i = \beta_0 + \beta_1 x_i,
+$$
+where $x_i = 1$ if the mother is a non-smoker, and $x_i = 0$ if the mother is a smoker. We can estimate this model like any other binary regression model.
+```{r, message = FALSE}
+m <- glm(y ~ mother, family = binomial, data = cycles.bin)
+cbind(summary(m)$coefficients, confint(m))
+# odds ratio (odds of pregnancy of a non-smoker versus a smoker)
+exp(cbind(coef(m), confint(m)))
+# estimated probabilities of pregnancy
+d <- data.frame(mother = c("nonsmoker","smoker"))
+cbind(d, glmint(m, newdata = d))
+margeff(m, 
+ a = list(mother = "nonsmoker"),
+ b = list(mother = "smoker"))
+margeff(m, type = "percent",
+ a = list(mother = "nonsmoker"),
+ b = list(mother = "smoker"))
+```
+Note that with this model the hazard function is "flat" --- i.e., the probability of pregnancy each cycle (given pregnancy has not yet happened) is the same.[^geometric] This is reasonable here, but in other cases we might expect there to be time-varying effects (e.g., season or temperature in animals), which can be handled easily since we can let an explanatory variable vary over time (recorded as `t` in the data frame). Although over a longer time span we might consider a model where the hazard function decreases due to age.
+
+[^geometric]: In such cases we say that the number of trials until something happens has a *geometric* distribution.
+
+**Example**: Consider the following data on the grade when adolescent males first experience sexual intercourse. 
+```{r}
+firstsex <- read.table("https://stats.idre.ucla.edu/stat/examples/alda/firstsex.csv", 
+    sep = ",", header = TRUE)
+head(firstsex)
+```
+There is right-censoring (i.e., boys who did not experience sex by the 12th grade). We need a proper status variable for that.
+```{r}
+firstsex$status <- ifelse(firstsex$censor == 1, 0, 1)
+```
+One key explanatory variable is whether or not a boy experienced a "parenting transition" prior to the 7th grade. The variable is `pt` but is a binary variable. We'll convert it to a factor with clear level labels.
+```{r}
+firstsex$pt <- factor(firstsex$pt, labels = c("no","yes"))
+```
+We can verify that these changes were done correctly.
+```{r}
+head(firstsex)
+```
+Now we need to transform the data to create indicator variables for whether or not a boy experienced sex for the first time in a given grade.
+```{r}
+library(trtools) 
+firstsex <- dsurvbin(firstsex, "time", "status")
+head(firstsex)
+```
+Here is a boy who first had sex in the 9th grade.
+```{r}
+subset(firstsex, id == 1)
+```
+Here is a boy who first had sex in the 12th grade.
+```{r}
+subset(firstsex, id == 5)
+```
+Here is a boy who did not first have sex by the 12th grade (but may have first had sex later --- i.e., right-censored).
+```{r}
+subset(firstsex, id == 3)
+```
+First consider a model for a flat/constant hazard function $h(t) = P(T=t|T \ge t)$, where here $T$ is grade. However we will let the hazard rate depend on whether or not there was a parenting transition.
+```{r}
+m <- glm(y ~ pt, family = binomial, data = firstsex)
+summary(m)$coefficients
+
+d <- expand.grid(t = c("7","8","9","10","11","12"), pt = c("no","yes"))
+d$yhat <- predict(m, newdata = d, type = "response")
+
+library(ggrepel) # for geom_label_repel
+p <- ggplot(d, aes(x = t, y = yhat, color = pt)) + theme_classic()
+p <- p + geom_point() + geom_line(aes(group = pt)) + ylim(0, 0.5)
+p <- p + geom_label_repel(aes(label = round(yhat,2)),
+    box.padding = 0.75, show.legend = FALSE)
+p <- p + labs(x = "Grade", y = "Hazard Function", color = "Parenting\nTransition")
+p <- p + theme(legend.position = c(0.2,0.8))
+plot(p)
+# odds ratio
+contrast(m, tf = exp,
+    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
+    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    cnames = paste("Grade", 7:12))
+# marginal effect (difference)
+trtools::margeff(m,
+    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
+    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    cnames = paste("Grade", 7:12))
+# marginal effect (factor)
+trtools::margeff(m, type = "factor",
+    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
+    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    cnames = paste("Grade", 7:12))
+# marginal effect (percent)
+trtools::margeff(m, type = "percent",
+    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
+    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    cnames = paste("Grade", 7:12))
+```
+Now consider a model where the hazard rate is not necessarily constant over grades. This can be done by including an "effect" for time/grade.
+```{r}
+m <- glm(y ~ pt + t, family = binomial, data = firstsex)
+summary(m)$coefficients
+
+d <- expand.grid(t = c("7","8","9","10","11","12"), pt = c("no","yes"))
+d$yhat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(d, aes(x = t, y = yhat, color = pt)) + theme_classic()
+p <- p + geom_point() + geom_line(aes(group = pt)) + ylim(0, 0.5)
+p <- p + geom_label_repel(aes(label = round(yhat,2)), 
+    box.padding = 0.75, show.legend = FALSE)
+p <- p + labs(x = "Grade", y = "Hazard Function", color = "Parenting\nTransition")
+p <- p + theme(legend.position = c(0.2,0.8))
+plot(p)
+# odds ratio
+contrast(m, tf = exp,
+    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
+    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    cnames = paste("Grade", 7:12))
+# discrete marginal effect
+margeff(m,
+    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
+    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    cnames = paste("Grade", 7:12))
+# discrete marginal effect (factor)
+margeff(m, type = "factor",
+    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
+    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    cnames = paste("Grade", 7:12))
+# marginal effect (percent)
+margeff(m, type = "percent",
+    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
+    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    cnames = paste("Grade", 7:12))
+```
+
+

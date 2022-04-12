@@ -123,7 +123,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Hazard functions, proportional hazards models](lecture-04-11-2022.html). The [solutions](hw3-solutions.html) for the third homework assignment are now available.
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Proportional hazards models, discrete survival models](lecture-04-13-2022.html).
 
 `r i <- i + 1; d[i]` 
  
