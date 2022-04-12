@@ -302,7 +302,8 @@ plot(p)
 Note: Using `w * ..density..` computes the relative frequency for the `y` aesthetic, where `w` is the bar width.
 
 It is important to note that all reported values of 13 cycles are actually right-censored and so represent 13 *or more* cycles. The observed censoring times are between 1 and 12 cycles, with all recorded cycles of 13 representing right-censored observations only known to be *more than 12 cycles*. We need to create an indicator variable for *observed* times and to change values of 13 to 12 since that was the last observed time.
-```{r}
+```{r, echo = -1}
+cycles <- trtools::cycles
 cycles$status <- ifelse(cycles$cycles == 13, 0, 1)
 cycles$cycles <- ifelse(cycles$cycles == 13, 12, cycles$cycles)
 ```
@@ -320,7 +321,6 @@ tmp[sort(sample(1:nrow(tmp), 5)),]
 ```
 The function `dsurvbin` from the **trtools** package helps convert a data frame with a discrete time-till-event into a format with binary variables as discussed above (a similar function is available in the **discSurv** package).
 ```{r}
-cycles$subject <- 1:nrow(cycles) # just for clarity
 cycles.bin <- dsurvbin(cycles, y = "cycles", event = "status")
 ```
 So depending on the number of cycles up to twelve indicator variable are created *for each observational unit*. For example, here is a mother where pregnancy occurred after *three* cycles.
@@ -339,23 +339,45 @@ But for comparison, here is a mother where pregnancy was right-censored and is o
 ```{r, echo = FALSE}
 head(subset(cycles.bin, cycles == 12 & status == 0), 12)
 ```
-Let $P(Y_{it} = 1) = \pi_{it}$ be the probability that the $i$-th mother will become pregnant on the $t$-th cycle *given* that they did not become pregnant on an earlier cycle. We could consider a logistic regression model such that
-$$
-  \pi_{it} = \frac{e^{\eta_i}}{1 + e^{\eta_i}} \ \ \text{where} \ \ 
-  \eta_i = \beta_0 + \beta_1 x_i,
-$$
-where $x_i = 1$ if the mother is a non-smoker, and $x_i = 0$ if the mother is a smoker. We can estimate this model like any other binary regression model.
+
+**Note**: Here's a way to rearrange the data using tools from the `dplyr` package. 
+```{r}
+cycles.bin <- trtools::cycles %>% 
+  mutate(status = ifelse(cycles == 13, 0, 1)) %>% 
+  mutate(cycles = ifelse(cycles == 13, 12, cycles)) %>%
+  mutate(unit = 1:n()) %>% uncount(cycles, .remove = FALSE) %>%
+  arrange(unit) %>% group_by(unit) %>% mutate(t = 1:n()) %>%
+  mutate(y = ifelse(t < cycles | status == 0, 0, 1))
+```
+
+Now consider a logistic regression model for the binary response variable `y`. This model effectively estimates the hazard rate (i.e., probability of pregnancy) under given circumstances (e.g., whether or not the mother is a smoker). 
 ```{r, message = FALSE}
 m <- glm(y ~ mother, family = binomial, data = cycles.bin)
 cbind(summary(m)$coefficients, confint(m))
-# odds ratio (odds of pregnancy of a non-smoker versus a smoker)
+```
+Odds ratio for smoking.
+```{r}
 exp(cbind(coef(m), confint(m)))
-# estimated probabilities of pregnancy
-d <- data.frame(mother = c("nonsmoker","smoker"))
-cbind(d, glmint(m, newdata = d))
+trtools::contrast(m, tf = exp,
+  a = list(mother = "nonsmoker"),
+  b = list(mother = "smoker"))
+trtools::contrast(m, tf = exp,
+  a = list(mother = "smoker"),
+  b = list(mother = "nonsmoker"))
+```
+Estimated probabilities of pregnancy on any given cycles.
+```{r}
+trtools::contrast(m, a = list(mother = c("nonsmoker","smoker")),
+  tf = plogis, cnames = c("nonsmoker","smoker"))
+```
+Estimated difference in probabilities of pregnancy between nonsmokers and smokers.
+```{r}
 margeff(m, 
  a = list(mother = "nonsmoker"),
  b = list(mother = "smoker"))
+```
+Percent change in probability of pregnancy. 
+```{r}
 margeff(m, type = "percent",
  a = list(mother = "nonsmoker"),
  b = list(mother = "smoker"))

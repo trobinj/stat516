@@ -826,87 +826,99 @@ cycles$cycles &lt;- ifelse(cycles$cycles == 13, 12, cycles$cycles)</code></pre>
 package helps convert a data frame with a discrete time-till-event into
 a format with binary variables as discussed above (a similar function is
 available in the <strong>discSurv</strong> package).</p>
-<pre class="r"><code>cycles$subject &lt;- 1:nrow(cycles) # just for clarity
-cycles.bin &lt;- dsurvbin(cycles, y = &quot;cycles&quot;, event = &quot;status&quot;)</code></pre>
+<pre class="r"><code>cycles.bin &lt;- dsurvbin(cycles, y = &quot;cycles&quot;, event = &quot;status&quot;)</code></pre>
 <p>So depending on the number of cycles up to twelve indicator variable
 are created <em>for each observational unit</em>. For example, here is a
 mother where pregnancy occurred after <em>three</em> cycles.</p>
-<pre><code>    cycles mother status subject unit t y
-541      3 smoker      1      46   46 1 0
-542      3 smoker      1      46   46 2 0
-543      3 smoker      1      46   46 3 1</code></pre>
+<pre><code>    cycles mother status unit t y
+541      3 smoker      1   46 1 0
+542      3 smoker      1   46 2 0
+543      3 smoker      1   46 3 1</code></pre>
 <p>And here is a mother where pregnancy occurred after <em>five</em>
 cycles.</p>
-<pre><code>    cycles mother status subject unit t y
-793      5 smoker      1      67   67 1 0
-794      5 smoker      1      67   67 2 0
-795      5 smoker      1      67   67 3 0
-796      5 smoker      1      67   67 4 0
-797      5 smoker      1      67   67 5 1</code></pre>
+<pre><code>    cycles mother status unit t y
+793      5 smoker      1   67 1 0
+794      5 smoker      1   67 2 0
+795      5 smoker      1   67 3 0
+796      5 smoker      1   67 4 0
+797      5 smoker      1   67 5 1</code></pre>
 <p>And here is a mother where pregnancy occurred after <em>twelve</em>
 cycles.</p>
-<pre><code>     cycles mother status subject unit  t y
-1081     12 smoker      1      91   91  1 0
-1082     12 smoker      1      91   91  2 0
-1083     12 smoker      1      91   91  3 0
-1084     12 smoker      1      91   91  4 0
-1085     12 smoker      1      91   91  5 0
-1086     12 smoker      1      91   91  6 0
-1087     12 smoker      1      91   91  7 0
-1088     12 smoker      1      91   91  8 0
-1089     12 smoker      1      91   91  9 0
-1090     12 smoker      1      91   91 10 0
-1091     12 smoker      1      91   91 11 0
-1092     12 smoker      1      91   91 12 1</code></pre>
+<pre><code>     cycles mother status unit  t y
+1081     12 smoker      1   91  1 0
+1082     12 smoker      1   91  2 0
+1083     12 smoker      1   91  3 0
+1084     12 smoker      1   91  4 0
+1085     12 smoker      1   91  5 0
+1086     12 smoker      1   91  6 0
+1087     12 smoker      1   91  7 0
+1088     12 smoker      1   91  8 0
+1089     12 smoker      1   91  9 0
+1090     12 smoker      1   91 10 0
+1091     12 smoker      1   91 11 0
+1092     12 smoker      1   91 12 1</code></pre>
 <p>But for comparison, here is a mother where pregnancy was
 right-censored and is only known to have occurred (if it occurred)
 <em>after twelve cycles</em>.</p>
-<pre><code>     cycles mother status subject unit  t y
-1117     12 smoker      0      94   94  1 0
-1118     12 smoker      0      94   94  2 0
-1119     12 smoker      0      94   94  3 0
-1120     12 smoker      0      94   94  4 0
-1121     12 smoker      0      94   94  5 0
-1122     12 smoker      0      94   94  6 0
-1123     12 smoker      0      94   94  7 0
-1124     12 smoker      0      94   94  8 0
-1125     12 smoker      0      94   94  9 0
-1126     12 smoker      0      94   94 10 0
-1127     12 smoker      0      94   94 11 0
-1128     12 smoker      0      94   94 12 0</code></pre>
-<p>Let <span class="math inline">\(P(Y_{it} = 1) = \pi_{it}\)</span> be
-the probability that the <span class="math inline">\(i\)</span>-th
-mother will become pregnant on the <span
-class="math inline">\(t\)</span>-th cycle <em>given</em> that they did
-not become pregnant on an earlier cycle. We could consider a logistic
-regression model such that <span class="math display">\[
-  \pi_{it} = \frac{e^{\eta_i}}{1 + e^{\eta_i}} \ \ \text{where} \ \
-  \eta_i = \beta_0 + \beta_1 x_i,
-\]</span> where <span class="math inline">\(x_i = 1\)</span> if the
-mother is a non-smoker, and <span class="math inline">\(x_i = 0\)</span>
-if the mother is a smoker. We can estimate this model like any other
-binary regression model.</p>
+<pre><code>     cycles mother status unit  t y
+1117     12 smoker      0   94  1 0
+1118     12 smoker      0   94  2 0
+1119     12 smoker      0   94  3 0
+1120     12 smoker      0   94  4 0
+1121     12 smoker      0   94  5 0
+1122     12 smoker      0   94  6 0
+1123     12 smoker      0   94  7 0
+1124     12 smoker      0   94  8 0
+1125     12 smoker      0   94  9 0
+1126     12 smoker      0   94 10 0
+1127     12 smoker      0   94 11 0
+1128     12 smoker      0   94 12 0</code></pre>
+<p><strong>Note</strong>: Here’s a way to rearrange the data using tools
+from the <code>dplyr</code> package.</p>
+<pre class="r"><code>cycles.bin &lt;- trtools::cycles %&gt;% 
+  mutate(status = ifelse(cycles == 13, 0, 1)) %&gt;% 
+  mutate(cycles = ifelse(cycles == 13, 12, cycles)) %&gt;%
+  mutate(unit = 1:n()) %&gt;% uncount(cycles, .remove = FALSE) %&gt;%
+  arrange(unit) %&gt;% group_by(unit) %&gt;% mutate(t = 1:n()) %&gt;%
+  mutate(y = ifelse(t &lt; cycles | status == 0, 0, 1))</code></pre>
+<p>Now consider a logistic regression model for the binary response
+variable <code>y</code>. This model effectively estimates the hazard
+rate (i.e., probability of pregnancy) under given circumstances (e.g.,
+whether or not the mother is a smoker).</p>
 <pre class="r"><code>m &lt;- glm(y ~ mother, family = binomial, data = cycles.bin)
 cbind(summary(m)$coefficients, confint(m))</code></pre>
 <pre><code>                Estimate Std. Error z value  Pr(&gt;|z|)   2.5 %  97.5 %
 (Intercept)      -1.2420     0.1177 -10.550 5.082e-26 -1.4779 -1.0158
 mothernonsmoker   0.5414     0.1304   4.151 3.312e-05  0.2894  0.8012</code></pre>
-<pre class="r"><code># odds ratio (odds of pregnancy of a non-smoker versus a smoker)
-exp(cbind(coef(m), confint(m)))</code></pre>
+<p>Odds ratio for smoking.</p>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
 <pre><code>                        2.5 % 97.5 %
 (Intercept)     0.2888 0.2281 0.3621
 mothernonsmoker 1.7185 1.3356 2.2283</code></pre>
-<pre class="r"><code># estimated probabilities of pregnancy
-d &lt;- data.frame(mother = c(&quot;nonsmoker&quot;,&quot;smoker&quot;))
-cbind(d, glmint(m, newdata = d))</code></pre>
-<pre><code>     mother    fit    low    upp
-1 nonsmoker 0.3317 0.3078 0.3565
-2    smoker 0.2241 0.1865 0.2667</code></pre>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(mother = &quot;nonsmoker&quot;),
+  b = list(mother = &quot;smoker&quot;))</code></pre>
+<pre><code> estimate lower upper
+    1.718 1.331 2.219</code></pre>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(mother = &quot;smoker&quot;),
+  b = list(mother = &quot;nonsmoker&quot;))</code></pre>
+<pre><code> estimate  lower  upper
+   0.5819 0.4506 0.7514</code></pre>
+<p>Estimated probabilities of pregnancy on any given cycles.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(mother = c(&quot;nonsmoker&quot;,&quot;smoker&quot;)),
+  tf = plogis, cnames = c(&quot;nonsmoker&quot;,&quot;smoker&quot;))</code></pre>
+<pre><code>          estimate  lower  upper
+nonsmoker   0.3317 0.3078 0.3565
+smoker      0.2241 0.1865 0.2667</code></pre>
+<p>Estimated difference in probabilities of pregnancy between nonsmokers
+and smokers.</p>
 <pre class="r"><code>margeff(m, 
  a = list(mother = &quot;nonsmoker&quot;),
  b = list(mother = &quot;smoker&quot;))</code></pre>
 <pre><code> estimate      se   lower  upper tvalue  df    pvalue
    0.1076 0.02396 0.06064 0.1546  4.491 Inf 7.093e-06</code></pre>
+<p>Percent change in probability of pregnancy.</p>
 <pre class="r"><code>margeff(m, type = &quot;percent&quot;,
  a = list(mother = &quot;nonsmoker&quot;),
  b = list(mother = &quot;smoker&quot;))</code></pre>
@@ -1010,7 +1022,7 @@ p &lt;- ggplot(d, aes(x = t, y = yhat, color = transition)) + theme_classic() +
    labs(x = &quot;Grade&quot;, y = &quot;Hazard Rate&quot;, color = &quot;Parenting\nTransition&quot;) +
    theme(legend.position = c(0.2,0.8))
 plot(p)</code></pre>
-<p><img src="lecture-04-13-2022_files/figure-html/unnamed-chunk-27-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-04-13-2022_files/figure-html/unnamed-chunk-32-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># odds ratio
 contrast(m, tf = exp,
     a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
@@ -1082,7 +1094,7 @@ p &lt;- ggplot(d, aes(x = t, y = yhat, color = transition)) + theme_classic() +
    labs(x = &quot;Grade&quot;, y = &quot;Hazard Rate&quot;, color = &quot;Parenting\nTransition&quot;) +
    theme(legend.position = c(0.2,0.8))
 plot(p)</code></pre>
-<p><img src="lecture-04-13-2022_files/figure-html/unnamed-chunk-28-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-04-13-2022_files/figure-html/unnamed-chunk-33-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># odds ratio
 contrast(m, tf = exp,
     a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
