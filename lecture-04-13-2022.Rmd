@@ -168,6 +168,26 @@ For discrete time, the probability density, survival, and hazard functions are a
 
 3. The *hazard function* is $h(t) = P(T = t|T \ge t)$. This gives the probability that the event will happen at time $t$ *given* that it has not yet happened (i.e., the probability that it will happen at time $t$ given that the unit has "survived" to that point). 
 
+It is important to not confused the probability mass function which gives the probability that the event will happen at time $t$, versus the hazard function which gives the probability that the event will happen at time $t$ *given* that it has not yet happened.
+
+**Example**: Suppose I have a fair ten-sided die. Let $t$ be the number of rolls until I get one. The figures below show the probability mass and hazard function.
+
+```{r, echo = FALSE}
+p <- 0.1
+
+d <- data.frame(y = 1:20) %>%
+  mutate(pmf = (1 - p)^(y-1) * p) %>% 
+  mutate(haz = p)
+
+pmf <- ggplot(d, aes(x = y, y = pmf)) + theme_minimal() + 
+  geom_point() + ylim(0, p) + ylab("Probability") + xlab("t") + ggtitle("Probability Mass Function")
+
+haz <- ggplot(d, aes(x = y, y = haz)) + theme_minimal() + 
+  geom_point() + ylim(0, p) + ylab("Hazard Rate") + xlab("t") + ggtitle("Hazard Function")
+
+cowplot::plot_grid(pmf, haz)
+```
+
 **Technical Details**: Note that $f(t)$, $S(t)$, and $h(t)$ are related because $h(t) = f(t)/S(t)$. Also we can define $f(t)$ entirely in terms of $h(t)$. Consider that if a unit survives to time $t$, the probability that it *will not* survive past time $t$ is 
 $$
   h(t) = P(T = t|T \ge t),
@@ -252,7 +272,7 @@ ktbl(x.obs)
 
 Not: If time is discrete due to interval-censoring the *maximum possible time* does not need a binary variable.
 
-The distribution of $T$ can be stated in terms of the $Y_t$. It follows that $h(t) = P(Y_t = 1)$ and $1-h(t) = 1 - P(Y_t = 1) = P(Y_t = 0)$, so if $T$ is not censored then
+**Technical Details**: The distribution of $T$ can be stated in terms of the $Y_t$. It follows that $h(t) = P(Y_t = 1)$ and $1-h(t) = 1 - P(Y_t = 1) = P(Y_t = 0)$, so if $T$ is not censored then
 $$
 f(t) = 
 \begin{cases}
@@ -264,17 +284,19 @@ and if $T$ is censored such that $T > t$ then
 $$
   f(t) = \prod_{j=1}^t P(Y_t = 0).
 $$
-To make this a regression model we could relate the hazard function to one or more explanatory variables, but this is the same thing as relating the probability that $Y_t = 1$ to one or more explanatory variables, and this is basically a binary regression model!
+
+**TLDR**: Many discrete time survival models can be estimated as binary regression models (e.g., logistic regression) where the response variable is an indicator variable for if the event happened at a given time. 
 
 **Example**: Consider the following data from a study comparing mothers who smoke to those who do not with respect to the number of menstrual cycles until pregnancy. 
 ```{r}
 library(trtools) # for the cycles data 
-p <- ggplot(cycles, aes(x = cycles, y = 1.0 * ..density..)) 
-p <- p + facet_wrap(~ mother)
-p <- p + geom_histogram(binwidth = 1, center = 1, color = "black", fill = grey(0.85))
-p <- p + scale_x_continuous(breaks = 1:13, labels = c(1:12,"13+"))
-p <- p + labs(x = "Number of Cycles Until Pregnancy",
-  y = "Relative Frequency") + theme_minimal()
+p <- ggplot(cycles, aes(x = cycles, y = 1.0 * ..density..)) +
+   facet_wrap(~ mother) + 
+   geom_histogram(binwidth = 1, center = 1, 
+      color = "black", fill = grey(0.85)) + 
+   scale_x_continuous(breaks = 1:13, labels = c(1:12,"13+")) + 
+   labs(x = "Number of Cycles Until Pregnancy",
+      y = "Relative Frequency") + theme_minimal()
 plot(p)
 ```
 Note: Using `w * ..density..` computes the relative frequency for the `y` aesthetic, where `w` is the bar width.
@@ -284,39 +306,40 @@ It is important to note that all reported values of 13 cycles are actually right
 cycles$status <- ifelse(cycles$cycles == 13, 0, 1)
 cycles$cycles <- ifelse(cycles$cycles == 13, 12, cycles$cycles)
 ```
-Here are some observations of observed (i.e., not censored) times.
+Here are some mothers of observed (i.e., not censored) times.
 ```{r, echo = FALSE}
 set.seed(101)
 tmp <- subset(cycles, status == 1)
-tmp[sample(1:nrow(tmp), 5),]
+tmp[sort(sample(1:nrow(tmp), 5)),]
 ```
-Here are some observations of censored times.
+Here are some mothers with censored times.
 ```{r, echo = FALSE}
 set.seed(101)
 tmp <- subset(cycles, status == 0)
-tmp[sample(1:nrow(tmp), 5),]
+tmp[sort(sample(1:nrow(tmp), 5)),]
 ```
 The function `dsurvbin` from the **trtools** package helps convert a data frame with a discrete time-till-event into a format with binary variables as discussed above (a similar function is available in the **discSurv** package).
 ```{r}
+cycles$subject <- 1:nrow(cycles) # just for clarity
 cycles.bin <- dsurvbin(cycles, y = "cycles", event = "status")
 ```
-So depending on the number of cycles up to twelve indicator variable are created *for each observational unit*. For example, here is an observation where pregnancy occurred after *three* cycles.
+So depending on the number of cycles up to twelve indicator variable are created *for each observational unit*. For example, here is a mother where pregnancy occurred after *three* cycles.
 ```{r, echo = FALSE}
 head(subset(cycles.bin, cycles == 3), 3)
 ```
-And here is a unit where pregnancy occurred after *five* cycles.
+And here is a mother where pregnancy occurred after *five* cycles.
 ```{r, echo = FALSE}
 head(subset(cycles.bin, cycles == 5), 5)
 ```
-And here is a unit where pregnancy occurred after *twelve* cycles.
+And here is a mother where pregnancy occurred after *twelve* cycles.
 ```{r, echo = FALSE}
 head(subset(cycles.bin, cycles == 12 & status == 1), 12)
 ```
-But for comparison, here is a unit where pregnancy was right-censored and is only known to have occurred *after twelve cycles*.
+But for comparison, here is a mother where pregnancy was right-censored and is only known to have occurred (if it occurred) *after twelve cycles*.
 ```{r, echo = FALSE}
 head(subset(cycles.bin, cycles == 12 & status == 0), 12)
 ```
-Let $P(Y_{it} = 1) = \pi_{it}$ be the probability that the $i$-th observation will become pregnant on the $t$-th cycle *given* that they did not become pregnant on an earlier cycle. We could consider a logistic regression model such that
+Let $P(Y_{it} = 1) = \pi_{it}$ be the probability that the $i$-th mother will become pregnant on the $t$-th cycle *given* that they did not become pregnant on an earlier cycle. We could consider a logistic regression model such that
 $$
   \pi_{it} = \frac{e^{\eta_i}}{1 + e^{\eta_i}} \ \ \text{where} \ \ 
   \eta_i = \beta_0 + \beta_1 x_i,
@@ -353,7 +376,8 @@ firstsex$status <- ifelse(firstsex$censor == 1, 0, 1)
 ```
 One key explanatory variable is whether or not a boy experienced a "parenting transition" prior to the 7th grade. The variable is `pt` but is a binary variable. We'll convert it to a factor with clear level labels.
 ```{r}
-firstsex$pt <- factor(firstsex$pt, labels = c("no","yes"))
+firstsex$transition <- factor(firstsex$pt,
+   levels = c(0,1), labels = c("no","yes"))
 ```
 We can verify that these changes were done correctly.
 ```{r}
@@ -379,76 +403,75 @@ subset(firstsex, id == 3)
 ```
 First consider a model for a flat/constant hazard function $h(t) = P(T=t|T \ge t)$, where here $T$ is grade. However we will let the hazard rate depend on whether or not there was a parenting transition.
 ```{r}
-m <- glm(y ~ pt, family = binomial, data = firstsex)
+m <- glm(y ~ transition, family = binomial, data = firstsex)
 summary(m)$coefficients
 
-d <- expand.grid(t = c("7","8","9","10","11","12"), pt = c("no","yes"))
+d <- expand.grid(t = c("7","8","9","10","11","12"), transition = c("no","yes"))
 d$yhat <- predict(m, newdata = d, type = "response")
 
 library(ggrepel) # for geom_label_repel
-p <- ggplot(d, aes(x = t, y = yhat, color = pt)) + theme_classic()
-p <- p + geom_point() + geom_line(aes(group = pt)) + ylim(0, 0.5)
-p <- p + geom_label_repel(aes(label = round(yhat,2)),
-    box.padding = 0.75, show.legend = FALSE)
-p <- p + labs(x = "Grade", y = "Hazard Function", color = "Parenting\nTransition")
-p <- p + theme(legend.position = c(0.2,0.8))
+p <- ggplot(d, aes(x = t, y = yhat, color = transition)) + theme_classic() +
+   geom_point() + geom_line(aes(group = transition)) + ylim(0, 0.5) +
+   geom_label_repel(aes(label = round(yhat,2)),
+    box.padding = 0.75, show.legend = FALSE) + 
+   labs(x = "Grade", y = "Hazard Rate", color = "Parenting\nTransition") +
+   theme(legend.position = c(0.2,0.8))
 plot(p)
 # odds ratio
 contrast(m, tf = exp,
-    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
-    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    a = list(transition = "yes", t = c("7","8","9","10","11","12")),
+    b = list(transition = "no", t = c("7","8","9","10","11","12")),
     cnames = paste("Grade", 7:12))
 # marginal effect (difference)
 trtools::margeff(m,
-    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
-    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    a = list(transition = "yes", t = c("7","8","9","10","11","12")),
+    b = list(transition = "no", t = c("7","8","9","10","11","12")),
     cnames = paste("Grade", 7:12))
 # marginal effect (factor)
 trtools::margeff(m, type = "factor",
-    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
-    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    a = list(transition = "yes", t = c("7","8","9","10","11","12")),
+    b = list(transition = "no", t = c("7","8","9","10","11","12")),
     cnames = paste("Grade", 7:12))
 # marginal effect (percent)
 trtools::margeff(m, type = "percent",
-    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
-    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    a = list(transition = "yes", t = c("7","8","9","10","11","12")),
+    b = list(transition = "no", t = c("7","8","9","10","11","12")),
     cnames = paste("Grade", 7:12))
 ```
-Now consider a model where the hazard rate is not necessarily constant over grades. This can be done by including an "effect" for time/grade.
+Now consider a model where the hazard rate is not necessarily constant over grades. This can be done by including an "effect" for time (i.e., grade).
 ```{r}
-m <- glm(y ~ pt + t, family = binomial, data = firstsex)
+m <- glm(y ~ transition + t, family = binomial, data = firstsex)
 summary(m)$coefficients
 
-d <- expand.grid(t = c("7","8","9","10","11","12"), pt = c("no","yes"))
+d <- expand.grid(t = c("7","8","9","10","11","12"), transition = c("no","yes"))
 d$yhat <- predict(m, newdata = d, type = "response")
 
-p <- ggplot(d, aes(x = t, y = yhat, color = pt)) + theme_classic()
-p <- p + geom_point() + geom_line(aes(group = pt)) + ylim(0, 0.5)
-p <- p + geom_label_repel(aes(label = round(yhat,2)), 
-    box.padding = 0.75, show.legend = FALSE)
-p <- p + labs(x = "Grade", y = "Hazard Function", color = "Parenting\nTransition")
-p <- p + theme(legend.position = c(0.2,0.8))
+p <- ggplot(d, aes(x = t, y = yhat, color = transition)) + theme_classic() + 
+   geom_point() + geom_line(aes(group = transition)) + ylim(0, 0.5) +
+   geom_label_repel(aes(label = round(yhat,2)), 
+      box.padding = 0.75, show.legend = FALSE) + 
+   labs(x = "Grade", y = "Hazard Rate", color = "Parenting\nTransition") +
+   theme(legend.position = c(0.2,0.8))
 plot(p)
 # odds ratio
 contrast(m, tf = exp,
-    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
-    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    a = list(transition = "yes", t = c("7","8","9","10","11","12")),
+    b = list(transition = "no", t = c("7","8","9","10","11","12")),
     cnames = paste("Grade", 7:12))
 # discrete marginal effect
 margeff(m,
-    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
-    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    a = list(transition = "yes", t = c("7","8","9","10","11","12")),
+    b = list(transition = "no", t = c("7","8","9","10","11","12")),
     cnames = paste("Grade", 7:12))
 # discrete marginal effect (factor)
 margeff(m, type = "factor",
-    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
-    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    a = list(transition = "yes", t = c("7","8","9","10","11","12")),
+    b = list(transition = "no", t = c("7","8","9","10","11","12")),
     cnames = paste("Grade", 7:12))
 # marginal effect (percent)
 margeff(m, type = "percent",
-    a = list(pt = "yes", t = c("7","8","9","10","11","12")),
-    b = list(pt = "no", t = c("7","8","9","10","11","12")),
+    a = list(transition = "yes", t = c("7","8","9","10","11","12")),
+    b = list(transition = "no", t = c("7","8","9","10","11","12")),
     cnames = paste("Grade", 7:12))
 ```
-
 

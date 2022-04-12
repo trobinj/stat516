@@ -433,6 +433,17 @@ will happen at time <span class="math inline">\(t\)</span>
 it will happen at time <span class="math inline">\(t\)</span> given that
 the unit has “survived” to that point).</p></li>
 </ol>
+<p>It is important to not confused the probability mass function which
+gives the probability that the event will happen at time <span
+class="math inline">\(t\)</span>, versus the hazard function which gives
+the probability that the event will happen at time <span
+class="math inline">\(t\)</span> <em>given</em> that it has not yet
+happened.</p>
+<p><strong>Example</strong>: Suppose I have a fair ten-sided die. Let
+<span class="math inline">\(t\)</span> be the number of rolls until I
+get one. The figures below show the probability mass and hazard
+function.</p>
+<p><img src="lecture-04-13-2022_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><strong>Technical Details</strong>: Note that <span
 class="math inline">\(f(t)\)</span>, <span
 class="math inline">\(S(t)\)</span>, and <span
@@ -751,12 +762,13 @@ follows.</p>
 </table>
 <p>Not: If time is discrete due to interval-censoring the <em>maximum
 possible time</em> does not need a binary variable.</p>
-<p>The distribution of <span class="math inline">\(T\)</span> can be
-stated in terms of the <span class="math inline">\(Y_t\)</span>. It
-follows that <span class="math inline">\(h(t) = P(Y_t = 1)\)</span> and
-<span class="math inline">\(1-h(t) = 1 - P(Y_t = 1) = P(Y_t =
-0)\)</span>, so if <span class="math inline">\(T\)</span> is not
-censored then <span class="math display">\[
+<p><strong>Technical Details</strong>: The distribution of <span
+class="math inline">\(T\)</span> can be stated in terms of the <span
+class="math inline">\(Y_t\)</span>. It follows that <span
+class="math inline">\(h(t) = P(Y_t = 1)\)</span> and <span
+class="math inline">\(1-h(t) = 1 - P(Y_t = 1) = P(Y_t = 0)\)</span>, so
+if <span class="math inline">\(T\)</span> is not censored then <span
+class="math display">\[
 f(t) =
 \begin{cases}
     P(Y_1 = 1), &amp; \text{if $t = 1$}, \\
@@ -766,23 +778,24 @@ f(t) =
 that <span class="math inline">\(T &gt; t\)</span> then <span
 class="math display">\[
   f(t) = \prod_{j=1}^t P(Y_t = 0).
-\]</span> To make this a regression model we could relate the hazard
-function to one or more explanatory variables, but this is the same
-thing as relating the probability that <span class="math inline">\(Y_t =
-1\)</span> to one or more explanatory variables, and this is basically a
-binary regression model!</p>
+\]</span></p>
+<p><strong>TLDR</strong>: Many discrete time survival models can be
+estimated as binary regression models (e.g., logistic regression) where
+the response variable is an indicator variable for if the event happened
+at a given time.</p>
 <p><strong>Example</strong>: Consider the following data from a study
 comparing mothers who smoke to those who do not with respect to the
 number of menstrual cycles until pregnancy.</p>
 <pre class="r"><code>library(trtools) # for the cycles data 
-p &lt;- ggplot(cycles, aes(x = cycles, y = 1.0 * ..density..)) 
-p &lt;- p + facet_wrap(~ mother)
-p &lt;- p + geom_histogram(binwidth = 1, center = 1, color = &quot;black&quot;, fill = grey(0.85))
-p &lt;- p + scale_x_continuous(breaks = 1:13, labels = c(1:12,&quot;13+&quot;))
-p &lt;- p + labs(x = &quot;Number of Cycles Until Pregnancy&quot;,
-  y = &quot;Relative Frequency&quot;) + theme_minimal()
+p &lt;- ggplot(cycles, aes(x = cycles, y = 1.0 * ..density..)) +
+   facet_wrap(~ mother) + 
+   geom_histogram(binwidth = 1, center = 1, 
+      color = &quot;black&quot;, fill = grey(0.85)) + 
+   scale_x_continuous(breaks = 1:13, labels = c(1:12,&quot;13+&quot;)) + 
+   labs(x = &quot;Number of Cycles Until Pregnancy&quot;,
+      y = &quot;Relative Frequency&quot;) + theme_minimal()
 plot(p)</code></pre>
-<p><img src="lecture-04-13-2022_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-04-13-2022_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" />
 Note: Using <code>w * ..density..</code> computes the relative frequency
 for the <code>y</code> aesthetic, where <code>w</code> is the bar
 width.</p>
@@ -795,74 +808,75 @@ for <em>observed</em> times and to change values of 13 to 12 since that
 was the last observed time.</p>
 <pre class="r"><code>cycles$status &lt;- ifelse(cycles$cycles == 13, 0, 1)
 cycles$cycles &lt;- ifelse(cycles$cycles == 13, 12, cycles$cycles)</code></pre>
-<p>Here are some observations of observed (i.e., not censored)
-times.</p>
+<p>Here are some mothers of observed (i.e., not censored) times.</p>
 <pre><code>    cycles    mother status
-437      3 nonsmoker      1
 102      1 nonsmoker      1
 216      1 nonsmoker      1
-449      3 nonsmoker      1
-358      2 nonsmoker      1</code></pre>
-<p>Here are some observations of censored times.</p>
+358      2 nonsmoker      1
+437      3 nonsmoker      1
+449      3 nonsmoker      1</code></pre>
+<p>Here are some mothers with censored times.</p>
 <pre><code>    cycles    mother status
 576     12 nonsmoker      0
-581     12 nonsmoker      0
-584     12 nonsmoker      0
 577     12 nonsmoker      0
-582     12 nonsmoker      0</code></pre>
+581     12 nonsmoker      0
+582     12 nonsmoker      0
+584     12 nonsmoker      0</code></pre>
 <p>The function <code>dsurvbin</code> from the <strong>trtools</strong>
 package helps convert a data frame with a discrete time-till-event into
 a format with binary variables as discussed above (a similar function is
 available in the <strong>discSurv</strong> package).</p>
-<pre class="r"><code>cycles.bin &lt;- dsurvbin(cycles, y = &quot;cycles&quot;, event = &quot;status&quot;)</code></pre>
+<pre class="r"><code>cycles$subject &lt;- 1:nrow(cycles) # just for clarity
+cycles.bin &lt;- dsurvbin(cycles, y = &quot;cycles&quot;, event = &quot;status&quot;)</code></pre>
 <p>So depending on the number of cycles up to twelve indicator variable
-are created <em>for each observational unit</em>. For example, here is
-an observation where pregnancy occurred after <em>three</em> cycles.</p>
-<pre><code>    cycles mother status unit t y
-541      3 smoker      1   46 1 0
-542      3 smoker      1   46 2 0
-543      3 smoker      1   46 3 1</code></pre>
-<p>And here is a unit where pregnancy occurred after <em>five</em>
+are created <em>for each observational unit</em>. For example, here is a
+mother where pregnancy occurred after <em>three</em> cycles.</p>
+<pre><code>    cycles mother status subject unit t y
+541      3 smoker      1      46   46 1 0
+542      3 smoker      1      46   46 2 0
+543      3 smoker      1      46   46 3 1</code></pre>
+<p>And here is a mother where pregnancy occurred after <em>five</em>
 cycles.</p>
-<pre><code>    cycles mother status unit t y
-793      5 smoker      1   67 1 0
-794      5 smoker      1   67 2 0
-795      5 smoker      1   67 3 0
-796      5 smoker      1   67 4 0
-797      5 smoker      1   67 5 1</code></pre>
-<p>And here is a unit where pregnancy occurred after <em>twelve</em>
+<pre><code>    cycles mother status subject unit t y
+793      5 smoker      1      67   67 1 0
+794      5 smoker      1      67   67 2 0
+795      5 smoker      1      67   67 3 0
+796      5 smoker      1      67   67 4 0
+797      5 smoker      1      67   67 5 1</code></pre>
+<p>And here is a mother where pregnancy occurred after <em>twelve</em>
 cycles.</p>
-<pre><code>     cycles mother status unit  t y
-1081     12 smoker      1   91  1 0
-1082     12 smoker      1   91  2 0
-1083     12 smoker      1   91  3 0
-1084     12 smoker      1   91  4 0
-1085     12 smoker      1   91  5 0
-1086     12 smoker      1   91  6 0
-1087     12 smoker      1   91  7 0
-1088     12 smoker      1   91  8 0
-1089     12 smoker      1   91  9 0
-1090     12 smoker      1   91 10 0
-1091     12 smoker      1   91 11 0
-1092     12 smoker      1   91 12 1</code></pre>
-<p>But for comparison, here is a unit where pregnancy was right-censored
-and is only known to have occurred <em>after twelve cycles</em>.</p>
-<pre><code>     cycles mother status unit  t y
-1117     12 smoker      0   94  1 0
-1118     12 smoker      0   94  2 0
-1119     12 smoker      0   94  3 0
-1120     12 smoker      0   94  4 0
-1121     12 smoker      0   94  5 0
-1122     12 smoker      0   94  6 0
-1123     12 smoker      0   94  7 0
-1124     12 smoker      0   94  8 0
-1125     12 smoker      0   94  9 0
-1126     12 smoker      0   94 10 0
-1127     12 smoker      0   94 11 0
-1128     12 smoker      0   94 12 0</code></pre>
+<pre><code>     cycles mother status subject unit  t y
+1081     12 smoker      1      91   91  1 0
+1082     12 smoker      1      91   91  2 0
+1083     12 smoker      1      91   91  3 0
+1084     12 smoker      1      91   91  4 0
+1085     12 smoker      1      91   91  5 0
+1086     12 smoker      1      91   91  6 0
+1087     12 smoker      1      91   91  7 0
+1088     12 smoker      1      91   91  8 0
+1089     12 smoker      1      91   91  9 0
+1090     12 smoker      1      91   91 10 0
+1091     12 smoker      1      91   91 11 0
+1092     12 smoker      1      91   91 12 1</code></pre>
+<p>But for comparison, here is a mother where pregnancy was
+right-censored and is only known to have occurred (if it occurred)
+<em>after twelve cycles</em>.</p>
+<pre><code>     cycles mother status subject unit  t y
+1117     12 smoker      0      94   94  1 0
+1118     12 smoker      0      94   94  2 0
+1119     12 smoker      0      94   94  3 0
+1120     12 smoker      0      94   94  4 0
+1121     12 smoker      0      94   94  5 0
+1122     12 smoker      0      94   94  6 0
+1123     12 smoker      0      94   94  7 0
+1124     12 smoker      0      94   94  8 0
+1125     12 smoker      0      94   94  9 0
+1126     12 smoker      0      94   94 10 0
+1127     12 smoker      0      94   94 11 0
+1128     12 smoker      0      94   94 12 0</code></pre>
 <p>Let <span class="math inline">\(P(Y_{it} = 1) = \pi_{it}\)</span> be
 the probability that the <span class="math inline">\(i\)</span>-th
-observation will become pregnant on the <span
+mother will become pregnant on the <span
 class="math inline">\(t\)</span>-th cycle <em>given</em> that they did
 not become pregnant on an earlier cycle. We could consider a logistic
 regression model such that <span class="math display">\[
@@ -926,80 +940,81 @@ the 12th grade). We need a proper status variable for that.</p>
 “parenting transition” prior to the 7th grade. The variable is
 <code>pt</code> but is a binary variable. We’ll convert it to a factor
 with clear level labels.</p>
-<pre class="r"><code>firstsex$pt &lt;- factor(firstsex$pt, labels = c(&quot;no&quot;,&quot;yes&quot;))</code></pre>
+<pre class="r"><code>firstsex$transition &lt;- factor(firstsex$pt,
+   levels = c(0,1), labels = c(&quot;no&quot;,&quot;yes&quot;))</code></pre>
 <p>We can verify that these changes were done correctly.</p>
 <pre class="r"><code>head(firstsex)</code></pre>
-<pre><code>  id time censor  pt     pas status
-1  1    9      0  no  1.9789      1
-2  2   12      1 yes -0.5455      0
-3  3   12      1  no -1.4050      0
-4  5   12      0 yes  0.9742      1
-5  6   11      0  no -0.6356      1
-6  7    9      0 yes -0.2429      1</code></pre>
+<pre><code>  id time censor pt     pas status transition
+1  1    9      0  0  1.9789      1         no
+2  2   12      1  1 -0.5455      0        yes
+3  3   12      1  0 -1.4050      0         no
+4  5   12      0  1  0.9742      1        yes
+5  6   11      0  0 -0.6356      1         no
+6  7    9      0  1 -0.2429      1        yes</code></pre>
 <p>Now we need to transform the data to create indicator variables for
 whether or not a boy experienced sex for the first time in a given
 grade.</p>
 <pre class="r"><code>library(trtools) 
 firstsex &lt;- dsurvbin(firstsex, &quot;time&quot;, &quot;status&quot;)
 head(firstsex)</code></pre>
-<pre><code>  id time censor  pt     pas status unit t y
-1  1    9      0  no  1.9789      1    1 7 0
-2  1    9      0  no  1.9789      1    1 8 0
-3  1    9      0  no  1.9789      1    1 9 1
-7  2   12      1 yes -0.5455      0    2 7 0
-8  2   12      1 yes -0.5455      0    2 8 0
-9  2   12      1 yes -0.5455      0    2 9 0</code></pre>
+<pre><code>  id time censor pt     pas status transition unit t y
+1  1    9      0  0  1.9789      1         no    1 7 0
+2  1    9      0  0  1.9789      1         no    1 8 0
+3  1    9      0  0  1.9789      1         no    1 9 1
+7  2   12      1  1 -0.5455      0        yes    2 7 0
+8  2   12      1  1 -0.5455      0        yes    2 8 0
+9  2   12      1  1 -0.5455      0        yes    2 9 0</code></pre>
 <p>Here is a boy who first had sex in the 9th grade.</p>
 <pre class="r"><code>subset(firstsex, id == 1)</code></pre>
-<pre><code>  id time censor pt   pas status unit t y
-1  1    9      0 no 1.979      1    1 7 0
-2  1    9      0 no 1.979      1    1 8 0
-3  1    9      0 no 1.979      1    1 9 1</code></pre>
+<pre><code>  id time censor pt   pas status transition unit t y
+1  1    9      0  0 1.979      1         no    1 7 0
+2  1    9      0  0 1.979      1         no    1 8 0
+3  1    9      0  0 1.979      1         no    1 9 1</code></pre>
 <p>Here is a boy who first had sex in the 12th grade.</p>
 <pre class="r"><code>subset(firstsex, id == 5)</code></pre>
-<pre><code>   id time censor  pt    pas status unit  t y
-19  5   12      0 yes 0.9742      1    4  7 0
-20  5   12      0 yes 0.9742      1    4  8 0
-21  5   12      0 yes 0.9742      1    4  9 0
-22  5   12      0 yes 0.9742      1    4 10 0
-23  5   12      0 yes 0.9742      1    4 11 0
-24  5   12      0 yes 0.9742      1    4 12 1</code></pre>
+<pre><code>   id time censor pt    pas status transition unit  t y
+19  5   12      0  1 0.9742      1        yes    4  7 0
+20  5   12      0  1 0.9742      1        yes    4  8 0
+21  5   12      0  1 0.9742      1        yes    4  9 0
+22  5   12      0  1 0.9742      1        yes    4 10 0
+23  5   12      0  1 0.9742      1        yes    4 11 0
+24  5   12      0  1 0.9742      1        yes    4 12 1</code></pre>
 <p>Here is a boy who did not first have sex by the 12th grade (but may
 have first had sex later — i.e., right-censored).</p>
 <pre class="r"><code>subset(firstsex, id == 3)</code></pre>
-<pre><code>   id time censor pt    pas status unit  t y
-13  3   12      1 no -1.405      0    3  7 0
-14  3   12      1 no -1.405      0    3  8 0
-15  3   12      1 no -1.405      0    3  9 0
-16  3   12      1 no -1.405      0    3 10 0
-17  3   12      1 no -1.405      0    3 11 0
-18  3   12      1 no -1.405      0    3 12 0</code></pre>
+<pre><code>   id time censor pt    pas status transition unit  t y
+13  3   12      1  0 -1.405      0         no    3  7 0
+14  3   12      1  0 -1.405      0         no    3  8 0
+15  3   12      1  0 -1.405      0         no    3  9 0
+16  3   12      1  0 -1.405      0         no    3 10 0
+17  3   12      1  0 -1.405      0         no    3 11 0
+18  3   12      1  0 -1.405      0         no    3 12 0</code></pre>
 <p>First consider a model for a flat/constant hazard function <span
 class="math inline">\(h(t) = P(T=t|T \ge t)\)</span>, where here <span
 class="math inline">\(T\)</span> is grade. However we will let the
 hazard rate depend on whether or not there was a parenting
 transition.</p>
-<pre class="r"><code>m &lt;- glm(y ~ pt, family = binomial, data = firstsex)
+<pre class="r"><code>m &lt;- glm(y ~ transition, family = binomial, data = firstsex)
 summary(m)$coefficients</code></pre>
-<pre><code>            Estimate Std. Error z value  Pr(&gt;|z|)
-(Intercept)  -2.1493     0.1714 -12.539 4.553e-36
-ptyes         0.7131     0.2084   3.421 6.231e-04</code></pre>
-<pre class="r"><code>d &lt;- expand.grid(t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;), pt = c(&quot;no&quot;,&quot;yes&quot;))
+<pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)    -2.1493     0.1714 -12.539 4.553e-36
+transitionyes   0.7131     0.2084   3.421 6.231e-04</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;), transition = c(&quot;no&quot;,&quot;yes&quot;))
 d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
 
 library(ggrepel) # for geom_label_repel
-p &lt;- ggplot(d, aes(x = t, y = yhat, color = pt)) + theme_classic()
-p &lt;- p + geom_point() + geom_line(aes(group = pt)) + ylim(0, 0.5)
-p &lt;- p + geom_label_repel(aes(label = round(yhat,2)),
-    box.padding = 0.75, show.legend = FALSE)
-p &lt;- p + labs(x = &quot;Grade&quot;, y = &quot;Hazard Function&quot;, color = &quot;Parenting\nTransition&quot;)
-p &lt;- p + theme(legend.position = c(0.2,0.8))
+p &lt;- ggplot(d, aes(x = t, y = yhat, color = transition)) + theme_classic() +
+   geom_point() + geom_line(aes(group = transition)) + ylim(0, 0.5) +
+   geom_label_repel(aes(label = round(yhat,2)),
+    box.padding = 0.75, show.legend = FALSE) + 
+   labs(x = &quot;Grade&quot;, y = &quot;Hazard Rate&quot;, color = &quot;Parenting\nTransition&quot;) +
+   theme(legend.position = c(0.2,0.8))
 plot(p)</code></pre>
-<p><img src="lecture-04-13-2022_files/figure-html/unnamed-chunk-26-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-04-13-2022_files/figure-html/unnamed-chunk-27-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># odds ratio
 contrast(m, tf = exp,
-    a = list(pt = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    b = list(pt = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    b = list(transition = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
     cnames = paste(&quot;Grade&quot;, 7:12))</code></pre>
 <pre><code>         estimate lower upper
 Grade 7      2.04 1.356  3.07
@@ -1010,8 +1025,8 @@ Grade 11     2.04 1.356  3.07
 Grade 12     2.04 1.356  3.07</code></pre>
 <pre class="r"><code># marginal effect (difference)
 trtools::margeff(m,
-    a = list(pt = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    b = list(pt = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    b = list(transition = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
     cnames = paste(&quot;Grade&quot;, 7:12))</code></pre>
 <pre><code>         estimate      se   lower  upper tvalue  df    pvalue
 Grade 7   0.08774 0.02441 0.03991 0.1356  3.595 Inf 0.0003245
@@ -1022,8 +1037,8 @@ Grade 11  0.08774 0.02441 0.03991 0.1356  3.595 Inf 0.0003245
 Grade 12  0.08774 0.02441 0.03991 0.1356  3.595 Inf 0.0003245</code></pre>
 <pre class="r"><code># marginal effect (factor)
 trtools::margeff(m, type = &quot;factor&quot;,
-    a = list(pt = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    b = list(pt = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    b = list(transition = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
     cnames = paste(&quot;Grade&quot;, 7:12))</code></pre>
 <pre><code>         estimate     se lower upper tvalue  df    pvalue
 Grade 7      1.84 0.3331 1.188 2.493  5.526 Inf 3.274e-08
@@ -1034,8 +1049,8 @@ Grade 11     1.84 0.3331 1.188 2.493  5.526 Inf 3.274e-08
 Grade 12     1.84 0.3331 1.188 2.493  5.526 Inf 3.274e-08</code></pre>
 <pre class="r"><code># marginal effect (percent)
 trtools::margeff(m, type = &quot;percent&quot;,
-    a = list(pt = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    b = list(pt = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    b = list(transition = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
     cnames = paste(&quot;Grade&quot;, 7:12))</code></pre>
 <pre><code>         estimate    se lower upper tvalue  df  pvalue
 Grade 7     84.05 33.31 18.77 149.3  2.524 Inf 0.01162
@@ -1045,33 +1060,33 @@ Grade 10    84.05 33.31 18.77 149.3  2.524 Inf 0.01162
 Grade 11    84.05 33.31 18.77 149.3  2.524 Inf 0.01162
 Grade 12    84.05 33.31 18.77 149.3  2.524 Inf 0.01162</code></pre>
 <p>Now consider a model where the hazard rate is not necessarily
-constant over grades. This can be done by including an “effect” for
-time/grade.</p>
-<pre class="r"><code>m &lt;- glm(y ~ pt + t, family = binomial, data = firstsex)
+constant over grades. This can be done by including an “effect” for time
+(i.e., grade).</p>
+<pre class="r"><code>m &lt;- glm(y ~ transition + t, family = binomial, data = firstsex)
 summary(m)$coefficients</code></pre>
-<pre><code>            Estimate Std. Error z value  Pr(&gt;|z|)
-(Intercept)  -2.9943     0.3175  -9.431 4.072e-21
-ptyes         0.8736     0.2174   4.018 5.859e-05
-t8           -0.7058     0.4728  -1.493 1.355e-01
-t9            0.7132     0.3519   2.027 4.267e-02
-t10           1.1717     0.3452   3.394 6.887e-04
-t11           1.3401     0.3588   3.735 1.877e-04
-t12           1.8153     0.3674   4.941 7.780e-07</code></pre>
-<pre class="r"><code>d &lt;- expand.grid(t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;), pt = c(&quot;no&quot;,&quot;yes&quot;))
+<pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)    -2.9943     0.3175  -9.431 4.072e-21
+transitionyes   0.8736     0.2174   4.018 5.859e-05
+t8             -0.7058     0.4728  -1.493 1.355e-01
+t9              0.7132     0.3519   2.027 4.267e-02
+t10             1.1717     0.3452   3.394 6.887e-04
+t11             1.3401     0.3588   3.735 1.877e-04
+t12             1.8153     0.3674   4.941 7.780e-07</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;), transition = c(&quot;no&quot;,&quot;yes&quot;))
 d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
 
-p &lt;- ggplot(d, aes(x = t, y = yhat, color = pt)) + theme_classic()
-p &lt;- p + geom_point() + geom_line(aes(group = pt)) + ylim(0, 0.5)
-p &lt;- p + geom_label_repel(aes(label = round(yhat,2)), 
-    box.padding = 0.75, show.legend = FALSE)
-p &lt;- p + labs(x = &quot;Grade&quot;, y = &quot;Hazard Function&quot;, color = &quot;Parenting\nTransition&quot;)
-p &lt;- p + theme(legend.position = c(0.2,0.8))
+p &lt;- ggplot(d, aes(x = t, y = yhat, color = transition)) + theme_classic() + 
+   geom_point() + geom_line(aes(group = transition)) + ylim(0, 0.5) +
+   geom_label_repel(aes(label = round(yhat,2)), 
+      box.padding = 0.75, show.legend = FALSE) + 
+   labs(x = &quot;Grade&quot;, y = &quot;Hazard Rate&quot;, color = &quot;Parenting\nTransition&quot;) +
+   theme(legend.position = c(0.2,0.8))
 plot(p)</code></pre>
-<p><img src="lecture-04-13-2022_files/figure-html/unnamed-chunk-27-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-04-13-2022_files/figure-html/unnamed-chunk-28-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># odds ratio
 contrast(m, tf = exp,
-    a = list(pt = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    b = list(pt = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    b = list(transition = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
     cnames = paste(&quot;Grade&quot;, 7:12))</code></pre>
 <pre><code>         estimate lower upper
 Grade 7     2.396 1.564 3.668
@@ -1082,8 +1097,8 @@ Grade 11    2.396 1.564 3.668
 Grade 12    2.396 1.564 3.668</code></pre>
 <pre class="r"><code># discrete marginal effect
 margeff(m,
-    a = list(pt = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    b = list(pt = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    b = list(transition = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
     cnames = paste(&quot;Grade&quot;, 7:12))</code></pre>
 <pre><code>         estimate      se    lower   upper tvalue  df    pvalue
 Grade 7   0.05942 0.01848 0.023189 0.09565  3.214 Inf 1.307e-03
@@ -1094,8 +1109,8 @@ Grade 11  0.15365 0.04059 0.074099 0.23320  3.786 Inf 1.533e-04
 Grade 12  0.18901 0.04802 0.094884 0.28313  3.936 Inf 8.293e-05</code></pre>
 <pre class="r"><code># discrete marginal effect (factor)
 margeff(m, type = &quot;factor&quot;,
-    a = list(pt = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    b = list(pt = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    b = list(transition = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
     cnames = paste(&quot;Grade&quot;, 7:12))</code></pre>
 <pre><code>         estimate     se lower upper tvalue  df    pvalue
 Grade 7     2.246 0.4595 1.346 3.147  4.888 Inf 1.017e-06
@@ -1106,8 +1121,8 @@ Grade 11    1.957 0.3396 1.291 2.623  5.763 Inf 8.279e-09
 Grade 12    1.804 0.2793 1.256 2.351  6.458 Inf 1.058e-10</code></pre>
 <pre class="r"><code># marginal effect (percent)
 margeff(m, type = &quot;percent&quot;,
-    a = list(pt = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    b = list(pt = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
+    b = list(transition = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
     cnames = paste(&quot;Grade&quot;, 7:12))</code></pre>
 <pre><code>         estimate    se lower upper tvalue  df   pvalue
 Grade 7    124.61 45.95 34.55 214.7  2.712 Inf 0.006688
