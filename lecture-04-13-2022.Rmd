@@ -485,15 +485,5 @@ margeff(m,
     a = list(transition = "yes", t = c("7","8","9","10","11","12")),
     b = list(transition = "no", t = c("7","8","9","10","11","12")),
     cnames = paste("Grade", 7:12))
-# discrete marginal effect (factor)
-margeff(m, type = "factor",
-    a = list(transition = "yes", t = c("7","8","9","10","11","12")),
-    b = list(transition = "no", t = c("7","8","9","10","11","12")),
-    cnames = paste("Grade", 7:12))
-# marginal effect (percent)
-margeff(m, type = "percent",
-    a = list(transition = "yes", t = c("7","8","9","10","11","12")),
-    b = list(transition = "no", t = c("7","8","9","10","11","12")),
-    cnames = paste("Grade", 7:12))
 ```
 

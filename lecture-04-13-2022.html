@@ -1119,30 +1119,6 @@ Grade 9   0.10393 0.02824 0.048575 0.15928  3.680 Inf 2.334e-04
 Grade 10  0.13997 0.03622 0.068983 0.21095  3.865 Inf 1.112e-04
 Grade 11  0.15365 0.04059 0.074099 0.23320  3.786 Inf 1.533e-04
 Grade 12  0.18901 0.04802 0.094884 0.28313  3.936 Inf 8.293e-05</code></pre>
-<pre class="r"><code># discrete marginal effect (factor)
-margeff(m, type = &quot;factor&quot;,
-    a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    b = list(transition = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    cnames = paste(&quot;Grade&quot;, 7:12))</code></pre>
-<pre><code>         estimate     se lower upper tvalue  df    pvalue
-Grade 7     2.246 0.4595 1.346 3.147  4.888 Inf 1.017e-06
-Grade 8     2.318 0.4886 1.360 3.275  4.744 Inf 2.099e-06
-Grade 9     2.121 0.4077 1.322 2.920  5.203 Inf 1.957e-07
-Grade 10    2.006 0.3606 1.299 2.713  5.564 Inf 2.642e-08
-Grade 11    1.957 0.3396 1.291 2.623  5.763 Inf 8.279e-09
-Grade 12    1.804 0.2793 1.256 2.351  6.458 Inf 1.058e-10</code></pre>
-<pre class="r"><code># marginal effect (percent)
-margeff(m, type = &quot;percent&quot;,
-    a = list(transition = &quot;yes&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    b = list(transition = &quot;no&quot;, t = c(&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;10&quot;,&quot;11&quot;,&quot;12&quot;)),
-    cnames = paste(&quot;Grade&quot;, 7:12))</code></pre>
-<pre><code>         estimate    se lower upper tvalue  df   pvalue
-Grade 7    124.61 45.95 34.55 214.7  2.712 Inf 0.006688
-Grade 8    131.75 48.86 36.00 227.5  2.697 Inf 0.007001
-Grade 9    112.12 40.77 32.22 192.0  2.750 Inf 0.005954
-Grade 10   100.61 36.06 29.94 171.3  2.790 Inf 0.005267
-Grade 11    95.71 33.96 29.15 162.3  2.818 Inf 0.004830
-Grade 12    80.35 27.93 25.62 135.1  2.877 Inf 0.004009</code></pre>
 </div>
 </div>
 <div class="footnotes footnotes-end-of-document">
