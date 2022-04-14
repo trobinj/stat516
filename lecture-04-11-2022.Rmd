@@ -40,6 +40,8 @@ options(digits = 4, width = 90)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
+<!-- Note: Probably no need to cover ConvertWeibull since we can estimate a parametric proportional hazards model with flexsurvreg. -->
+
 ## Probability Density, Survival, and Hazard Functions
 
 Let $T$ be a continuous random variable that is time-till-event. Four related functions are used to describe the distribution of $T$. 
