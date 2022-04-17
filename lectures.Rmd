@@ -129,7 +129,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` Fourth homework assignment assigned.
+`r i <- i + 1; d[i]` [Proportional odds models](lecture-04-18-2022.html). Fourth homework assignment assigned.
 
 `r i <- i + 1; d[i]` 
 
