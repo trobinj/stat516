@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Over-dispersion and Quasi-likelihood, Marginal Effects, the Delta Method, and Survival Analysis</title>
+
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Over-dispersion and Quasi-likelihood,
+Marginal Effects, the Delta Method, and Survival Analysis</h1>
+<h3 class="subtitle">Statistics 516, Homework 4</h3>
+
+</div>
+
+
+<p>You can also download a <a href="hw4.pdf">PDF</a> copy of this
+homework assignment.</p>
+<p>This homework covers several topics including dealing with
+over-dispersion, marginal effects and the delta method, and survival
+models. Packages you will need to have installed include
+<strong>Stat2Data</strong>, <strong>SMPracticals</strong>,
+<strong>blmeco</strong>, <strong>Lock5Data</strong>, and
+<strong>flexsurv</strong>. You will also need the
+<strong>ggplot</strong>, <strong>tidyr</strong>, <strong>dplyr</strong>,
+and <strong>trtools</strong> package but you should have these installed
+already. Note that the <code>margeff</code>, <code>dmethod</code>, and
+<code>lincon</code> functions that you will be using are all in the
+<strong>trtools</strong> package.</p>
+<ol style="list-style-type: decimal">
+<li><p>This assignment is due by 5:00 PM on Wednesday, April 27th. Email
+me your homework at <a href="mailto:trjohns@uidaho.edu"
+class="email">trjohns@uidaho.edu</a>. If possible, save/export your
+homework as a PDF file. Late assignments will be penalized by 10% if
+turned-in within 12 hours of the deadline, and 10% more for each
+additional 12 hour interval.</p></li>
+<li><p>Your solutions must be <strong>typed</strong> and
+<strong>very</strong> neatly organized. I will not try to infer your
+solutions if they are not clearly presented. Mathematical expressions
+need not be typeset perfectly but they should be clear. You may
+substitute letters for symbols (e.g., b1 for <span
+class="math inline">\(\beta_1\)</span>) and use other shortcuts for
+mathematical notation if no meaning is lost.</p></li>
+<li><p>You must include with your solutions the relevant R output
+<strong>and</strong> R code that created them. Be sure that you provide
+sufficient code that I can replicate your results. Include both the code
+and the output within the text of your solutions (not in an appendix)
+using cut-and-paste. But edit your output so as to provide only that
+which is relevant to answering the questions. Use a monospace font
+(e.g., Courier or Monaco) for R code and output for clarity. Do not use
+a monospace font for text that is not R code or output.</p></li>
+<li><p>Plots from R Studio can be exported in various formats or
+directly to the clipboard using the “export” menu in the top-left part
+of the plot panel.</p></li>
+<li><p>It is permitted for you to discuss the homework with other
+students in the course. However your work including R code, output, and
+written answers must be your own.</p></li>
+<li><p>You are very welcome to ask me questions. I will be happy to
+clarify what I am asking in any of the questions and will provide you
+some help with solving problems by showing you how to work through
+similar problems from class. I will also be open to helping with any R
+problems. If you email me with a R question, it will usually be helpful
+for you to include enough of your R script so that I can replicate your
+issue. But please avoid saving all your questions for just before the
+assignment is due. I can usually respond quickly to questions, but I
+will sometimes need time to respond.</p></li>
+</ol>
+<div style="page-break-after: always;"></div>
+<div id="physiological-responses-of-shore-crabs-to-ship-noise"
+class="section level2">
+<h2>Physiological Responses of Shore Crabs to Ship Noise</h2>
+<p>The data in the data frame <code>CrabShip</code> in the
+<strong>Stat2Data</strong> package are from an experiment that
+investigated physiological responses of shore crabs (<em>Carcinus
+maenas</em>) to ship noise.<a href="#fn1" class="footnote-ref"
+id="fnref1"><sup>1</sup></a> Captive crabs were randomly assigned to one
+of two treatment groups. One group of crabs was exposed to a recording
+of 7.5 minutes of ship noise. The other group was exposed to a recording
+of 7.5 minutes of ambient harbor noise. The researchers observed the
+rate of oxygen consumption of each crab as well as its mass.<a
+href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> The plot
+below shows the data.</p>
+<pre class="r"><code>library(ggplot2)
+library(Stat2Data)
+data(CrabShip)
+p &lt;- ggplot(CrabShip, aes(x = Mass, y = Oxygen, color = Noise)) + 
+  geom_point() + theme_minimal() + theme(legend.position = c(0.1, 0.8)) +
+  labs(y = &quot;Oxygen Consumption (micromoles/hour)&quot;, x = &quot;Mass (g)&quot;)
+plot(p)</code></pre>
+<p><img src="hw4_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
+From the plot it appears that ship noise tends to increase oxygen
+consumption rate, and that larger crabs tend to have higher oxygen
+consumption rates. Assume that the goal is to model how ship noise
+affects oxygen consumption rate and how this depends on the mass of the
+crab. Suppose we model the data using the nonlinear regression model
+<span class="math display">\[
+  E(O_i) =
+  \begin{cases}
+    \beta_a m_i^\gamma, &amp; \text{if the noise source is ambient}, \\
+    \beta_s m_i^\gamma, &amp; \text{if the noise source is ship},
+  \end{cases}
+\]</span> where <span class="math inline">\(O_i\)</span> and <span
+class="math inline">\(m_i\)</span> are the oxygen consumption and mass
+for the <span class="math inline">\(i\)</span>-th observation,
+respectively, and <span class="math inline">\(\beta_a\)</span>, <span
+class="math inline">\(\beta_s\)</span>, and <span
+class="math inline">\(\gamma\)</span> are the parameters of the model.
+The model specifies that the expected oxygen consumption is proportional
+to a power transformation of mass, with the constant of proportionality
+depending on the treatment condition (i.e., noise source). To estimate
+this nonlinear model we can first estimate a linear model with <span
+class="math inline">\(\gamma\)</span> = 0.5 to get starting values for
+<span class="math inline">\(\beta_a\)</span> and <span
+class="math inline">\(\beta_s\)</span>, and then use these estimates as
+starting values in the nonlinear model.<a href="#fn3"
+class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<pre class="r"><code>library(dplyr)
+m_start &lt;- nls(Oxygen ~ case_when(
+    Noise == &quot;ambient&quot; ~ beta_a * Mass,
+    Noise == &quot;ship&quot;    ~ beta_s * Mass,
+  ), start = list(beta_a = 1, beta_s = 1), data = CrabShip)
+summary(m_start)$coefficients</code></pre>
+<pre><code>       Estimate Std. Error t value  Pr(&gt;|t|)
+beta_a    2.914     0.1739   16.76 2.093e-17
+beta_s    4.507     0.1875   24.04 4.746e-22</code></pre>
+<pre class="r"><code>m_final &lt;- nls(Oxygen ~ case_when(
+    Noise == &quot;ambient&quot; ~ beta_a * Mass^gamma,
+    Noise == &quot;ship&quot;    ~ beta_s * Mass^gamma
+  ), start = list(beta_a = 2.9, beta_s = 4.5, gamma = 0.5),
+  data = CrabShip)
+summary(m_final)$coefficients</code></pre>
+<pre><code>       Estimate Std. Error t value  Pr(&gt;|t|)
+beta_a  17.8658     7.5707   2.360 2.476e-02
+beta_s  26.3527    10.9220   2.413 2.193e-02
+gamma    0.5607     0.1036   5.411 6.615e-06</code></pre>
+<p>Here is a plot of the estimated model.</p>
+<pre class="r"><code>d &lt;- expand.grid(Noise = c(&quot;ambient&quot;,&quot;ship&quot;),
+  Mass = seq(0, 85, length = 500))
+d$yhat &lt;- predict(m_final, newdata = d)
+p &lt;- p + geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="hw4_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
+The model looks reasonable, but it is not easy to interpret in terms of
+the individual model parameters. But it may be useful to interpret the
+model in terms of linear and nonlinear <em>functions</em> of the model
+parameters. In what follows be sure you use the final model with the
+estimated <span class="math inline">\(\gamma\)</span> parameter (i.e.,
+<code>m_final</code>) and not the first model (i.e.,
+<code>m_start</code>) which was just a working model used to obtain
+starting values for the parameters.</p>
+<ol style="list-style-type: decimal">
+<li><p>For the noise source to affect the expected oxygen consumption we
+need <span class="math inline">\(\beta_s \neq \beta_a\)</span> or,
+equivalently, <span class="math inline">\(\beta_s - \beta_a =
+0\)</span>. So rejecting the null hypothesis that <span
+class="math inline">\(\beta_s - \beta_a = 0\)</span> will conclude a
+statistically significant effect of the noise treatment. This can be
+done several ways. The quantity <span class="math inline">\(\beta_s -
+\beta_a\)</span> is a linear function of the model parameters, so by
+estimating it with <code>lincon</code> you will get a test statistic for
+the test of the null hypothesis above. You can also estimate <span
+class="math inline">\(\beta_s - \beta_a\)</span> using the
+<code>dmethod</code> function which will provide the same inferences.<a
+href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a> Report
+output given by these two functions to verify that they give the same
+result. Another approach is to use a <span
+class="math inline">\(F\)</span> test statistic by using the
+<code>anova</code> function and specifying a null model. This is very
+similar to the likelihood ratio test but uses a different test statistic
+(the <code>test = "LRT"</code> is not needed for <code>anova</code> here
+as it will default to using the <span class="math inline">\(F\)</span>
+test statistic when applied to a <code>nls</code> object). The null
+model can be written as <span class="math display">\[
+  E(O_i) = \beta m^{\gamma},
+\]</span> since if <span class="math inline">\(\beta_s =
+\beta_a\)</span> then we can remove the subscript and just call the
+common parameter <span class="math inline">\(\beta\)</span>. Note that
+for your starting value of <span class="math inline">\(\beta\)</span>
+you could use the average of the estimates of <span
+class="math inline">\(\beta_s\)</span> and <span
+class="math inline">\(\beta_a\)</span>. Report the test statistic and
+p-value for this test.</p></li>
+<li><p>Suppose we want to estimate the difference in the expected oxygen
+consumption between the two treatment conditions. This can be written as
+<span class="math inline">\(\beta_sm^{\gamma} -
+\beta_am^{\gamma}\)</span> or <span class="math inline">\((\beta_s -
+\beta_a)m^{\gamma}\)</span>. Since this depends on the mass of the crab
+(<span class="math inline">\(m\)</span>), a useful approach might be to
+estimate the difference for an average crab. The mean crab mass in this
+study is about <span class="math inline">\(m\)</span> = 53 grams. There
+are a couple of ways that you can estimate this difference in R. One
+would be to estimate it as a discrete marginal effect using the
+<code>margeff</code> function, and another is to use the delta method
+with the <code>dmethod</code> function. Estimate this difference using
+both functions, being sure to report the estimate, standard error, and
+confidence interval. You should obtain the same result using these two
+functions.</p></li>
+<li><p>The marginal effect discussed in the previous problem can also be
+framed as a percent change or difference. This is defined as <span
+class="math display">\[
+  \frac{\beta_sm^{\gamma} - \beta_am^{\gamma}}{\beta_am^{\gamma}} \times
+100\%
+\]</span> which will tell us what percent larger the expected oxygen
+consumption is for a crab in the ship noise condition versus the ambient
+noise condition. Estimate this marginal effect for an average crab with
+a mass of 53 grams using the <code>margeff</code> function, and also
+estimate it using the <code>dmethod</code> function, being sure to
+report the estimate, standard error, and confidence interval from each
+function. You should obtain the same results using these two
+functions.</p></li>
+<li><p>Suppose a researcher was interested in how quickly the expected
+oxygen consumption increases with mass. The relationship is not linear
+so this rate of change depends on the mass of the crab. But we could
+estimate the rate of change for an average crab with a mass of <span
+class="math inline">\(m\)</span> = 53 grams. This is the “instantaneous”
+marginal effect of mass at a mass of <span
+class="math inline">\(m\)</span> = 53 grams. Estimate this quantity
+using the <code>margeff</code> function for each of the two treatment
+conditions. Report the estimates, standard errors, and confidence
+interval. Also estimate these quantities using the <code>dmethod</code>
+function by using the fact that the instantaneous marginal effects for
+mass for the ship and ambient conditions can be shown to be equal to
+<span class="math inline">\(\beta_s\gamma m^{\gamma - 1}\)</span> and
+<span class="math inline">\(\beta_a\gamma m^{\gamma - 1}\)</span>,
+respectively.<a href="#fn5" class="footnote-ref"
+id="fnref5"><sup>5</sup></a></p></li>
+</ol>
+</div>
+<div id="swedish-speed-limit-study-revisited" class="section level2">
+<h2>Swedish Speed Limit Study — Revisited</h2>
+<p>Recall the Swedish speed limit study from the <a
+href="hw3-solutions.html">previous homework assignment</a>. As in the
+previous homework the following will format the data for modeling.</p>
+<pre class="r"><code>library(SMPracticals)
+library(dplyr)
+library(tidyr)
+data(limits)
+
+limitstudy &lt;- limits %&gt;% 
+  rename(limit_1961 = lim1, limit_1962 = lim2, y_1961 = y1, y_1962 = y2) %&gt;%
+  pivot_longer(cols = -day, names_to = c(&quot;.value&quot;, &quot;year&quot;), names_sep = &quot;_&quot;) %&gt;%
+  mutate(limit = factor(limit, levels = c(0,1), labels = c(&quot;no&quot;,&quot;yes&quot;)))
+head(limitstudy)</code></pre>
+<pre><code># A tibble: 6 × 4
+  day   year  limit     y
+  &lt;fct&gt; &lt;chr&gt; &lt;fct&gt; &lt;int&gt;
+1 1     1961  no        9
+2 1     1962  no        9
+3 2     1961  no       11
+4 2     1962  no       20
+5 3     1961  no        9
+6 3     1962  no       15</code></pre>
+<p>Here is another way to visualize the data using a dot plot.</p>
+<pre class="r"><code>p &lt;- ggplot(limitstudy, aes(x = limit, y = y)) + 
+  theme_minimal() + geom_dotplot(binaxis = &quot;y&quot;, binwidth = 1, 
+    stackdir = &quot;center&quot;, position = position_dodge()) + 
+  labs(x = &quot;Speed Limit Posted&quot;, y = &quot;Number of Accidents&quot;) + 
+  facet_wrap(~ year)
+plot(p)</code></pre>
+<p><img src="hw4_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" />
+Here is the Poisson regression model you used in the previous homework
+assignment.</p>
+<pre class="r"><code>m &lt;- glm(y ~ limit + year, family = poisson, data = limitstudy)
+summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)  3.16513    0.02294 137.977 0.0000000
+limityes    -0.18893    0.03547  -5.327 0.0000001
+year1962    -0.06394    0.03335  -1.917 0.0551916</code></pre>
+<p>In what follows you will consider inferences based on this model
+while also dealing with possible over-dispersion.</p>
+<ol style="list-style-type: decimal">
+<li><p>Explain why the Poisson regression model specified above exhibits
+over-dispersion based on (a) a residual plot and (b) the residual
+deviance. Be sure to include the residual plot and the residual deviance
+in your answer.</p></li>
+<li><p>Poisson regression assumes that <span
+class="math inline">\(\text{Var}(Y_i) = E(Y_i)\)</span>. This is a
+property of the Poisson distribution. Over-dispersion is when <span
+class="math inline">\(\text{Var}(Y_i) &gt; E(Y_i)\)</span>. As we
+discussed in class, one approach to dealing with over-dispersion for
+Poisson regression is to use quasi-likelihood and relax the variance
+structure to <span class="math inline">\(\text{Var}(Y_i) = \phi
+E(Y_i)\)</span> where <span class="math inline">\(\phi\)</span> is a
+dispersion parameter which allows for some patterns of
+over-dispersion.<a href="#fn6" class="footnote-ref"
+id="fnref6"><sup>6</sup></a> Estimate the model above using this
+quasi-likelihood approach. Create a residual plot like you did in the
+previous problem and comment briefly if you think this quasi-likelihood
+approach was effective at dealing with over-dispersion. Report the
+estimates, standard errors, and confidence intervals for the model
+parameters. Compare these to what you obtained in the previous homework
+and discuss briefly what has (or has not) changed and how.</p></li>
+<li><p>In the previous homework assignment you estimated (a) the
+expected number of accidents with and without a posted speed limit each
+year and (b) the rate ratio for describing the relationship between
+whether or not a limit was posted and the expected number of accidents.
+Do this again but using the model you estimated in the previous problem
+using quasi-likelihood. Compare these estimates to what you obtained in
+the previous homework and discuss briefly what has (or has not) changed
+and how.</p></li>
+<li><p>The model can be written as <span class="math display">\[
+  \log E(Y_i) = \beta_0 + \beta_1 l_i + \beta_2 y_i,
+\]</span> where <span class="math inline">\(l_i\)</span> and <span
+class="math inline">\(y_i\)</span> are indicator variables for when a
+limit is posted and for when the year is 1962. The model can be written
+case-wise as <span class="math display">\[
+  \log E(Y_i) =
+  \begin{cases}
+\beta_0, &amp; \text{if there is no limit and the year is 1961}, \\
+\beta_0 + \beta_1, &amp; \text{if there is a limit and the year is
+1961}, \\
+\beta_0 + \beta_2, &amp; \text{if there is no limit and the year is
+1962}, \\
+\beta_0 + \beta_1 + \beta_2, &amp; \text{if there is a limit and the
+year is 1962}.
+  \end{cases}
+\]</span> We can also write the model case-wise as<br />
+<span class="math display">\[
+  E(Y_i) =
+  \begin{cases}
+e^{\beta_0}, &amp; \text{if there is no limit and the year is 1961}, \\
+e^{\beta_0}e^{\beta_1}, &amp; \text{if there is a limit and the year is
+1961}, \\
+e^{\beta_0}e^{\beta_2}, &amp; \text{if there is no limit and the year is
+1962}, \\
+e^{\beta_0}e^{\beta_1}e^{\beta_2}, &amp; \text{if there is a limit and
+the year is 1962}.
+  \end{cases}
+\]</span> Let <span class="math inline">\(\mu_{l,61}\)</span> and <span
+class="math inline">\(\mu_{n,61}\)</span> denote the expected number of
+accidents in 1961 when a limit was posted and when a limit was not
+posted, respectively. Similarly let <span
+class="math inline">\(\mu_{l,62}\)</span>, and <span
+class="math inline">\(\mu_{n,62}\)</span> be the same expectations but
+for 1962. We can see from the above that, for example, <span
+class="math inline">\(\mu_{l,61} = e^{\beta_0}e^{\beta_1}\)</span>.
+Earlier in the course we discussed marginal means and main effects for
+linear models. We can also define these for a nonlinear model such as
+this model. The marginal means for the expected number of accidents for
+when limits are posted and when they are not posted are defined as <span
+class="math display">\[
+  \mu_l = \frac{\mu_{l,61} + \mu_{l,62}}{2} \ \ \ \text{and} \ \ \
+  \mu_n = \frac{\mu_{n,61} + \mu_{n,62}}{2},
+\]</span> respectively. These are the average expected number of
+accidents for each limit condition. We can then define the main effect
+of the limit condition as <span class="math display">\[
+  \mu_l - \mu_n = \frac{\mu_{l,61} + \mu_{l,62}}{2} -
+  \frac{\mu_{n,61} + \mu_{n,62}}{2} = (\mu_{l,61} + \mu_{l,62} -
+\mu_{n,61} - \mu_{n,62})/2.
+\]</span> Estimate the two marginal means and the main effect for the
+limit condition using the <code>dmethod</code> function after writing
+them as functions of the model parameters <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, and <span
+class="math inline">\(\beta_2\)</span>.<a href="#fn7"
+class="footnote-ref" id="fnref7"><sup>7</sup></a> Be sure to report the
+estimates, standard errors, and confidence intervals for the two
+marginal means and for the main effect. <strong>Note</strong>: This
+problem is <em>extra credit</em> for students in Stat 436, but is
+<em>required</em> for students in Stat 516.</p></li>
+</ol>
+</div>
+<div id="presence-absence-of-little-owls-in-nest-boxes"
+class="section level2">
+<h2>Presence-Absence of Little Owls in Nest Boxes</h2>
+<p>The data frame <code>anoctua</code> in the <strong>blmeco</strong>
+package is from a study that investigated the placement of nest boxes
+for <a href="https://en.wikipedia.org/wiki/Little_owl">little owls</a>
+(<em>Athene noctua</em>) in central Germany.<a href="#fn8"
+class="footnote-ref" id="fnref8"><sup>8</sup></a></p>
+<pre class="r"><code>library(blmeco)
+data(anoctua)
+head(anoctua)</code></pre>
+<pre><code>  Id PA elevation
+1  1  1       223
+2  2  1       260
+3  3  1       243
+4  4  1       246
+5  5  1       176
+6  6  1       160</code></pre>
+<p>The variables that concern us are <code>PA</code> (an indicator
+variable for the presence of an owl in a given nest box) and elevation
+(in meters above sea level).<a href="#fn9" class="footnote-ref"
+id="fnref9"><sup>9</sup></a> The <code>Id</code> variable is just an
+integer identifier for each nest box. Assume that the owls tend to
+prefer nests at an elevation that is not too low and not too high. To
+model this we might use a polynomial logistic regression model.</p>
+<pre class="r"><code>m &lt;- glm(PA ~ elevation + I(elevation^2), family = binomial, data = anoctua)
+summary(m)$coefficients</code></pre>
+<pre><code>               Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)    -5.52928  1.194e+00  -4.631 3.645e-06
+elevation       0.06002  1.287e-02   4.664 3.103e-06
+I(elevation^2) -0.00016  3.276e-05  -4.886 1.031e-06</code></pre>
+<p>Such a model allows for the probability of a nest box being used to
+peak at a certain elevation and decrease as the elevation moves below
+and above that value. This can be seen in a plot of the model with the
+data, using what is called a rug plot to show the raw data.<a
+href="#fn10" class="footnote-ref" id="fnref10"><sup>10</sup></a></p>
+<pre class="r"><code>d &lt;- data.frame(elevation = seq(84, 618, length = 1000))
+d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
+
+p &lt;- ggplot(anoctua, aes(x = elevation, y = PA)) + theme_minimal() + 
+  geom_rug(data = subset(anoctua, PA == 0), alpha = 0.25, sides = &quot;b&quot;) + 
+  geom_rug(data = subset(anoctua, PA == 1), alpha = 0.25, sides = &quot;t&quot;) + 
+  geom_hline(yintercept = c(0, 1), alpha = 0.5) + 
+  labs(x = &quot;Elevation (meters)&quot;, y = &quot;Probability of Presence&quot;) + 
+  scale_x_continuous(breaks = seq(100, 700, by = 50)) + 
+  geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="hw4_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" />
+The “rugs” at the top and bottom of the plot show the elevations of nest
+boxes where owls were present and absent, respectively. In what follows
+you will use the delta method to obtain estimates of meaningful
+nonlinear functions of the parameters of this model. When specifying
+these functions, make use of parentheses to enforce the proper order of
+operations, use <code>exp</code> and <code>sqrt</code> for the functions
+<span class="math inline">\(\exp(x)\)</span> and <span
+class="math inline">\(\sqrt{x}\)</span>, respectively, and remember to
+use <code>*</code> for multiplication and <code>^</code> for
+exponentiation (other than <span class="math inline">\(e^x\)</span>).
+Also note that you can check your results against the figure to see if
+they look reasonable. This is a good way to catch some errors.</p>
+<ol style="list-style-type: decimal">
+<li><p>The logistic regression model estimated above can be written as
+<span class="math display">\[
+  E(Y) = \frac{e^\eta}{1+e^\eta},
+\]</span> where <span class="math display">\[
+  \eta = \beta_0 + \beta_1 x + \beta_2 x^2,
+\]</span> and where <span class="math inline">\(x\)</span> is elevation
+and <span class="math inline">\(Y\)</span> is the binary response
+variable so that <span class="math inline">\(E(Y)\)</span> is the
+probability that a nest box at a given elevation would be occupied.<a
+href="#fn11" class="footnote-ref" id="fnref11"><sup>11</sup></a> Let
+<span class="math inline">\(x_m\)</span> be the elevation at which the
+probability of presence is <em>maximized</em>. In <a
+href="lecture-04-04-2022.html">lecture</a> on April 4th there was an
+example where we found the percent hardwood that would maximize the
+expected tensile strength. Applying a similar argument we can show that
+the elevation that would maximize presence probability would also
+maximize <span class="math inline">\(\eta\)</span>. The argument is that
+<span class="math inline">\(x_m\)</span> solves the equation <span
+class="math display">\[
+  \frac{d(\beta_0 + \beta_1 x + \beta_2 x^2)}{dx} = 0
+\]</span> for <span class="math inline">\(x\)</span>. The solution is
+<span class="math display">\[
+  x_m = \frac{-\beta_1}{2\beta_2},
+\]</span> just like the example from lecture. The fact that this is a
+logistic regression model does not change this result since <span
+class="math inline">\(E(Y)\)</span> is a monotonic function of <span
+class="math inline">\(\eta\)</span> (i.e., <span
+class="math inline">\(\eta\)</span> is the log of the odds of presence,
+so whatever maximizes this will also maximize the probability of
+presence). Use the <code>dmethod</code> function to obtain estimate,
+standard error, and confidence interval for <span
+class="math inline">\(x_m\)</span>.</p></li>
+<li><p>Suppose we want to find the <em>two</em> values of elevation,
+<span class="math inline">\(x_l\)</span> and <span
+class="math inline">\(x_h\)</span>, such that the probability of
+presence is <em>at least</em> 0.25 for elevations between <span
+class="math inline">\(x_l\)</span> and <span
+class="math inline">\(x_h\)</span>. The figure below depicts these two
+values for the estimated model.
+<img src="hw4_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" />
+We can see that <span class="math inline">\(x_l\)</span> and <span
+class="math inline">\(x_h\)</span> are approximately 100 and 275 meters,
+respectively, but we need to express them as functions of the model
+parameters to obtain exact estimates as well as standard errors. This
+can be done by solving <span class="math display">\[
+  \log\left[\frac{0.25}{1-0.25}\right] = \beta_0 + \beta_1 x + \beta_2
+x^2
+\]</span> for <span class="math inline">\(x\)</span>, but note that
+there should be <em>two</em> values of <span
+class="math inline">\(x\)</span> that solve this equation: <span
+class="math inline">\(x_l\)</span> and <span
+class="math inline">\(x_h\)</span>.<a href="#fn12" class="footnote-ref"
+id="fnref12"><sup>12</sup></a> This is basically the problem of solving
+the quadratic equation <span class="math display">\[
+ax^2 + bx + c = 0
+\]</span> where <span class="math inline">\(a = \beta_2\)</span>, <span
+class="math inline">\(b = \beta_1\)</span>, and <span
+class="math inline">\(c = \beta_0 - \log(1/3)\)</span>. The solution is
+given by the <a
+href="https://en.wikipedia.org/wiki/Quadratic_formula">quadratic
+formula</a> <span class="math display">\[
+  x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.
+\]</span> Substituting <span class="math inline">\(a = \beta_2\)</span>,
+<span class="math inline">\(b = \beta_1\)</span>, and <span
+class="math inline">\(c = \beta_0 - \log(1/3)\)</span> we get <span
+class="math display">\[
+  x = \frac{-\beta_1 \pm \sqrt{\beta_1^2 - 4\beta_2[\beta_0 -
+\log(1/3)]}}{2\beta_2}.
+\]</span> Note that this equation gives <em>two</em> solutions for <span
+class="math inline">\(x\)</span>, <span
+class="math inline">\(x_l\)</span> and <span
+class="math inline">\(x_h\)</span>, by interpreting the operator “<span
+class="math inline">\(\pm\)</span>” as “<span
+class="math inline">\(+\)</span>” for one value and “<span
+class="math inline">\(-\)</span>” for the other value. Use the
+<code>dmethod</code> function to obtain estimates, standard errors, and
+confidence intervals for <span class="math inline">\(x_l\)</span> and
+<span class="math inline">\(x_h\)</span>.</p></li>
+<li><p>A quadratic logistic regression model will have a better fit to
+the data if we apply a logarithmic transformation to elevation so that
+<span class="math display">\[
+  \eta = \beta_0 + \beta_1\log(x) + \beta_2 \log(x)^2.
+\]</span> This can be seen by looking at the residual deviance of this
+model versus that without the transformation. This model can be
+estimated as follows.</p>
+<pre class="r"><code>m &lt;- glm(PA ~ log(elevation) + I(log(elevation)^2), family = binomial, data = anoctua)
+summary(m)$coefficients</code></pre>
+<pre><code>                    Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)         -190.528     30.643  -6.218 5.044e-10
+log(elevation)        74.294     11.878   6.255 3.979e-10
+I(log(elevation)^2)   -7.232      1.149  -6.295 3.067e-10</code></pre>
+<p>Some algebra will show that for this model we have that <span
+class="math display">\[
+  x_m = \exp\left(\frac{-\beta_1}{2\beta_2}\right)
+\]</span> and the solutions to <span class="math inline">\(x_l\)</span>
+and <span class="math inline">\(x_m\)</span> are given by <span
+class="math display">\[
+  x = \exp\left(\frac{-\beta_1 \pm \sqrt{\beta_1^2 - 4\beta_2[\beta_0 -
+\log(1/3)]}}{2\beta_2}\right).
+\]</span> Produce a plot of this new model like that shown in the
+previous problem. You do not need to include the horizontal and vertical
+dotted lines.<a href="#fn13" class="footnote-ref"
+id="fnref13"><sup>13</sup></a> Then use the <code>dmethod</code>
+function to obtain estimates, standard errors, and confidence intervals
+for <span class="math inline">\(x_m\)</span>, <span
+class="math inline">\(x_l\)</span>, and <span
+class="math inline">\(x_h\)</span>. <strong>Note</strong>: This problem
+is <em>extra credit</em> for students in Stat 436, but is
+<em>required</em> for students in Stat 516.</p></li>
+</ol>
+</div>
+<div id="reactions-of-lizards-to-fire-ants" class="section level2">
+<h2>Reactions of Lizards to Fire Ants</h2>
+<p>The data in the data frame <code>FireAnts</code> in the
+<strong>Lock5Data</strong> are from a study of the reactions of <a
+href="https://en.wikipedia.org/wiki/Eastern_fence_lizard">eastern fence
+lizards</a> (<em>Sceloporus undulatus</em>) to <a
+href="https://en.wikipedia.org/wiki/Red_imported_fire_ant">red imported
+fire ants</a> (<em>Solenopsis invicta</em>).<a href="#fn14"
+class="footnote-ref" id="fnref14"><sup>14</sup></a> The ants are native
+to South America but were <a
+href="https://en.wikipedia.org/wiki/Red_imported_fire_ants_in_the_United_States">unintentionally
+introduced to the southern United States</a> and are considered an
+invasive species. These ants are a challenge for the native lizards
+because they compete for the same nesting habitats, prey on lizard eggs,
+and their venom is toxic to the lizards. Studies like this one have
+shown that lizards that have been exposed to the ants have developed
+escape responses. In this study lizards were exposed to fire ants under
+controlled conditions, and the researchers observed two behavioral
+responses: number of twitches and how many seconds elapsed before the
+lizard would flee from the area. The lizards used in the study came from
+two different habitats: a habitat that had been invaded by fire ants and
+another that had not been invaded. One purpose of the study was to
+determine if prior exposure to fire ants resulted in behavioral changes
+in the lizards.</p>
+<p>Flee times recorded as 61 seconds in the data frame are actually
+right-censored at 60 seconds (i.e., the researcher did not wait more
+than one minute for the lizard to flee, so if the lizard did not flee
+after one minute we assume that the unrealized flee time would be more
+than one minute). For analysis it is useful to create variables to (a)
+indicate if an observation is censored or not and (b) show the actual
+flee time or 60 seconds if the flee time was right-censored. The
+following will create the new variables <code>censored</code> and
+<code>fleetime</code>.</p>
+<pre class="r"><code>library(Lock5Data)
+FireAnts$censored &lt;- ifelse(FireAnts$Flee == 61, &quot;yes&quot;, &quot;no&quot;)
+FireAnts$fleetime &lt;- ifelse(FireAnts$Flee == 61, 60, FireAnts$Flee)</code></pre>
+<p>You have often seen me use the <code>dplyr</code> and
+<code>tidyr</code> packages for data manipulation. Here is another way
+you can create the new variables.</p>
+<pre class="r"><code>library(dplyr)
+FireAnts &lt;- FireAnts %&gt;%
+  mutate(censored = ifelse(Flee == 61, &quot;yes&quot;, &quot;no&quot;)) %&gt;% 
+  mutate(fleetime = ifelse(Flee == 61, 60, Flee))</code></pre>
+<p>We can visualize the data as follows.</p>
+<pre class="r"><code>library(ggplot2)
+p &lt;- ggplot(FireAnts, aes(x = Habitat, y = fleetime, fill = censored)) +
+  geom_dotplot(aes(fill = censored), binwidth = 1, binaxis = &quot;y&quot;,
+    stackdir = &quot;center&quot;, method = &quot;histodot&quot;) +
+  scale_fill_manual(values = c(&quot;black&quot;, &quot;white&quot;)) +
+  theme_minimal() + coord_flip() +
+  labs(y = &quot;Seconds Elapsed Until Lizard Flees&quot;, fill = &quot;Censored?&quot;)
+plot(p)</code></pre>
+<p><img src="hw4_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" />
+Note that the open points at 60 seconds are all right-censored times and
+do not represent actual flee times.</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate an accelerated failure time model with time until the
+lizard flees (i.e., <code>fleetime</code>) as the response variable.
+Specify a Weibull distribution for the flee time, and be sure that you
+properly specify the right-censoring in the data by either creating a
+“status” variable or by using a logical statement with <code>==</code>
+in the <code>Surv</code> function.<a href="#fn15" class="footnote-ref"
+id="fnref15"><sup>15</sup></a> Use the <code>flexsurvreg</code> function
+from the <strong>flexsurv</strong> package. Report the parameter
+estimates, standard errors, and confidence intervals by using the
+<code>print</code> function with the model object created by
+<code>flexsurvreg</code> (recall that <code>summary</code> does not work
+the same with <code>flexsurvreg</code> objects as it does with
+<code>lm</code>, <code>nls</code>, and <code>glm</code>
+objects).</p></li>
+<li><p>Plot two estimated survival functions and two estimated hazard
+functions — one for each habitat — based on the model you estimated
+above. Plot this function over two minutes (120 seconds) starting at
+zero. You can use the option <code>B = 0</code> in the
+<code>summary</code> function to turn off calculation of the standard
+errors which can be computationally intensive and not necessary for your
+plots.</p></li>
+<li><p>The accelerated failure time model you estimated in the previous
+problem can be written as <span class="math display">\[
+\log T_i = \beta_0 + \beta_1 x_i + \sigma\epsilon_i
+\]</span> or <span class="math display">\[
+T_i = e^{\beta_0}e^{\beta_1 x_i}e^{\sigma\epsilon_i},
+\]</span> where <span class="math inline">\(T_i\)</span> and <span
+class="math inline">\(x_i\)</span> are time until the lizard flees and
+an indicator variable for the habitat, respectively, for the <span
+class="math inline">\(i\)</span>-th observation. Report an estimate and
+confidence interval for <span
+class="math inline">\(e^{\beta_1}\)</span>, and explain briefly how you
+would interpret its value in terms of time until the lizard flees for
+one habitat versus the other.</p></li>
+<li><p>As we discussed in class, an accelerated failure time model that
+specifies a Weibull distribution for time is also a proportional hazards
+model. However the parameterization for the proportional hazards model
+is different. A Weibull proportional hazards model can be estimated
+using <code>flexsurvreg</code> with <code>dist = "weibullPH"</code>.
+Estimate this model and report the parameter estimates, standard errors,
+and confidence intervals using the <code>print</code> function. Also
+give the hazard ratio for the effect of habitat and briefly interpret
+this hazard ratio in terms of how it characterizes the relationship
+between the hazard functions for the two habitats.</p></li>
+<li><p>Estimate a Poisson regression model with the number of twitches
+as the response variable and habitat as the explanatory variable.
+Estimate a rate ratio for habitat and write a sentence that properly
+interprets the value of this rate ratio in terms of the expected number
+of twitches.</p></li>
+</ol>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Source: Wale, M. A., Simpson, S. D., Radford, A. N.
+(2013). Size-dependent physiological responses of shore crabs to single
+and repeated playback of ship noise, <em>Biology Letters</em>,
+<em>9</em>, 20121194.<a href="#fnref1"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>The help file for the <code>CrabShip</code> data frame,
+view-able using either <code>help(CrabShip)</code> or
+<code>?CrabShip</code> once the <strong>Stat2Data</strong> package is
+loaded, labels the <code>Mass</code> variable incorrectly as oxygen
+uptake. This should be labeled as mass of the crab in grams.<a
+href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>To find a good initial value of <span
+class="math inline">\(\gamma\)</span> you can try estimating different
+linear models by specifying (not estimating) the value of gamma and then
+plotting the model with the data or the residuals against the predicted
+values until you get what looks like a good fit. Also note that <span
+class="math inline">\(\gamma^{0.5} = \sqrt{\gamma}\)</span> so this is
+essentially a square root transformation of mass.<a href="#fnref3"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>While the <code>dmethod</code> function is designed for
+situations where we want to make inferences about a <em>nonlinear</em>
+function of the model parameters, it does not require that the function
+be nonlinear. And one might argue that using the <code>dmethod</code>
+function is easier since the user only needs to specify an expression
+rather than work out the coefficients for a linear function of the model
+parameters.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>These are derivatives. Note that, for example, <span
+class="math display">\[
+  \frac{d}{dm}\beta_sm^{\gamma} = \beta_s\gamma m^{\gamma-1}.
+\]</span><a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Note that this is not the only way to use
+quasi-likelihood to deal with over-dispersion in Poisson regression.
+Another common approach is to specify the variance structure <span
+class="math inline">\(\text{Var}(Y_i) = \phi E(Y_i)^p\)</span> where
+<span class="math inline">\(p\)</span> is some specified value. We can
+view the variance structure <span class="math inline">\(\text{Var}(Y_i)
+= \phi E(Y_i)^p\)</span> as a special case where <span
+class="math inline">\(p\)</span> = 1. Recall that this can be specified
+when using the <code>glm</code> function with
+<code>family = quasipoisson</code>.<a href="#fnref6"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>Remember that the exponential function has the property
+that <span class="math inline">\(e^ae^b = e^{a+b}\)</span> which can
+also be written as <span class="math inline">\(\exp(a+b)\)</span>. You
+might find this useful when using the <code>exp</code> function in R.<a
+href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>Gottschalk, T. K., Ekschmitt, K., &amp; Wolters, V.
+(2011). Efficient placement of nest boxes for the little owl (<em>Athene
+noctua</em>). <em>Journal of Raptor Research</em>, <em>45(1)</em>,
+1–14.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>A model for these data based on just elevation will be a
+considerable oversimplification because the locations of the nest boxes
+varied in terms of several other important environmental variables.<a
+href="#fnref9" class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p>Plotting data with a binary response can be a bit
+tricky. One approach I sometimes use is to plot the binary responses
+using what is sometimes called a “rug plot” where each point is shown as
+a short line segment, with a “rug” at the top indicating the elevations
+of nest boxes with owls present, and another at the bottom indicating
+the elevations of nest boxes with no owl present. This works relatively
+well if there are not too many overlapping observations. Note how I use
+<code>subset</code> to select which observations to put into the top and
+bottom rugs.<a href="#fnref10" class="footnote-back">↩︎</a></p></li>
+<li id="fn11"><p>Recall that for a binary response variable <span
+class="math inline">\(E(Y) = P(Y = 1)\)</span>.<a href="#fnref11"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>Note that you can easily generalize this approach to
+probabilities other than 0.25.<a href="#fnref12"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>If you are curious, the horizontal line is drawn using
+<code>geom_hline(yintercept = 0.25, linetype = 3)</code> and the
+vertical lines are drawn using
+<code>geom_vline(xintercept = c(xl,xu), linetype = 3)</code> where
+<code>xl</code> and <code>xu</code> are the estimates of <span
+class="math inline">\(x_l\)</span> and <span
+class="math inline">\(x_h\)</span>, respectively.<a href="#fnref13"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn14"><p>Langkilde, T. (2009). Invasive fire ants alter behavior
+and morphology of native lizards. <em>Ecology</em>, <em>90(1)</em>,
+208–217.<a href="#fnref14" class="footnote-back">↩︎</a></p></li>
+<li id="fn15"><p>You will need to create this variable, noting that it
+should assume a value of one if the observation is <em>not</em>
+censored, and zero if the observation <em>is</em> censored. One way to
+do this would be to use the <code>ifelse</code> function. But another
+approach is to use the fact that <code>censored == no</code> will
+evaluate to one if the statement is true for an observation, and zero if
+the statement is false for an observation.<a href="#fnref15"
+class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
