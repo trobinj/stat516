@@ -1,0 +1,287 @@
+---
+output:
+  html_document:
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "04-20-2022"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+header-includes:
+  - \usepackage{array}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+library(kableExtra)
+library(trtools)
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+```{r options, echo = FALSE}
+options(digits = 4, width = 90)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+## The Multinomial Logit Model
+
+Recall that a logistic regression model can be written as 
+$$
+	\log\left[\frac{P(Y_i=1)}{1 - P(Y_i=1)}\right] = \beta_0 + \beta_1 x_{i1} + \dots + \beta_k x_{ik}.
+$$
+This can also be written as 
+$$
+	\log(\pi_{i2}/\pi_{i1}) = \beta_0 + \beta_1 x_{i1} + \dots + \beta_k x_{ik},
+$$ 
+or
+$$
+	\pi_{i2}/\pi_{i1} = e^{\beta_0}e^{\beta_1 x_{i1}} \cdots e^{\beta_k x_{ik}},
+$$
+where
+\begin{align*}
+	\pi_{i2} & = P(Y_i = 1), \\
+	\pi_{i1} & = P(Y_i = 0).
+\end{align*}
+Here the ratio of probabilities $\pi_{i2}/\pi_{i1}$ is the *odds* that $Y_i = 1$ rather than $Y_i = 0$. Note that odds are basically the probability of one event relative to that of another event. 
+
+Let $Y_i = 1, 2, \dots, R$ denote $R$ categories, but not necessarily ordered in any way, and let $\pi_{i1}, \pi_{i2}, \dots, \pi_{iR}$ denote the probability of each category. The *multinomial* logistic regression model can be written as
+\begin{align*}
+\log(\pi_{i2}/\pi_{i1}) & = \beta_0^{(2)} + \beta_1^{(2)} x_{i1} + \dots + \beta_k^{(2)} x_{ik}, \\ 
+\log(\pi_{i3}/\pi_{i1}) & = \beta_0^{(3)} + \beta_1^{(3)} x_{i1} + \dots + \beta_k^{(3)} x_{ik}, \\ 
+\ & \vdots \\
+\log(\pi_{iR}/\pi_{i1}) & = \beta_0^{(R)} + \beta_1^{(R)} x_{i1} + \dots + \beta_k^{(R)} x_{ik},
+\end{align*}
+for a system of $R-1$ equations. This can also be written as
+\begin{align*}
+\pi_{i2}/\pi_{i1} & = e^{\beta_0^{(2)}}e^{\beta_1^{(2)} x_{i1}} \cdots e^{\beta_k^{(2)} x_{ik}}, \\ 
+\pi_{i3}/\pi_{i1} & = e^{\beta_0^{(3)}}e^{\beta_1^{(3)} x_{i1}} \cdots e^{\beta_k^{(3)} x_{ik}}, \\ 
+\ & \vdots \\
+\pi_{iR}/\pi_{i1} & = e^{\beta_0^{(4)}}e^{\beta_1^{(4)} x_{i1}} \cdots e^{\beta_k^{(4)} x_{ik}},
+\end{align*}
+so that the model relates the *odds* of categories 2 through $R$ *relative to* the first category (often called a "baseline" or "reference" category). For example, $\pi_{i3}/\pi_{i1}$ is the odds of the third category versus the first category. Applying the exponential function to a parameter or contrast gives an *odds ratio* that concerns the change in this odds.
+
+Some algebra shows that the category probabilities can be written as
+\begin{align*}
+\pi_{i1} & = 1 - (\pi_{i2} + \pi_{i3} + \dots + \pi_{iR}), \\
+\pi_{i2} & = \frac{e^{\eta_{i2}}}{1 + e^{\eta_{i2}} + e^{\eta_{i3}} + \dots + e^{\eta_{iR}}} \\
+\pi_{i3} & = \frac{e^{\eta_{i3}}}{1 + e^{\eta_{i2}} + e^{\eta_{i3}} + \dots + e^{\eta_{iR}}} \\
+\ & \vdots \\
+\pi_{iR} & = \frac{e^{\eta_{ir}}}{1 + e^{\eta_{i2}} + e^{\eta_{i3}} + \dots + e^{\eta_{iR}}}
+\end{align*}
+where
+\begin{align*}
+	\eta_{i2} & = \beta_0^{(2)} + \beta_1^{(2)} x_{i1} + \dots + \beta_k^{(2)} x_{ik}, \\
+	\eta_{i3} & = \beta_0^{(3)} + \beta_1^{(3)} x_{i1} + \dots + \beta_k^{(3)} x_{ik}, \\
+	\ & \vdots \\
+	\eta_{iR} & = \beta_0^{(R)} + \beta_1^{(R)} x_{i1} + \dots + \beta_k^{(R)} x_{ik}.
+\end{align*}
+We can write this more compactly as
+$$
+	\pi_{ic} = \frac{e^{\eta_{ic}}}{1 + \sum_{t=2}^{K} e^{\eta_{it}}}
+$$
+or 
+$$
+	\pi_{ic} = \frac{e^{\eta_{ic}}}{\sum_{t=1}^{K} e^{\eta_{it}}},
+$$
+if we let $\eta_{i1} = 0$ since $e^0 = 1$. This is useful for computing and plotting estimated probabilities for each category of the response variable.
+
+**Example**: Let's consider again the `pneumo` data from the **VGAM** package. 
+```{r, message = FALSE}
+library(VGAM)
+m <- vglm(cbind(normal, mild, severe) ~ exposure.time, 
+  family = multinomial(refLevel = "normal"), data = pneumo)
+summary(m)
+```
+Note: The categories/levels of the response variable correspond to the order they are specified in `cbind`. 
+
+Odds ratios can be obtained in the usual way.
+```{r}
+exp(cbind(coef(m), confint(m)))
+```
+Here is another nice way to output the parameter estimates.
+```{r}
+t(coef(m, matrix = TRUE))
+```
+Then we can obtain odds ratio as follows.
+```{r}
+exp(t(coef(m, matrix = TRUE)))
+```
+
+Plotting the estimated category probabilities can be done as with previous models. First we create a data frame of estimated probabilities by exposure time and category.
+```{r}
+d <- data.frame(exposure.time = seq(5, 52, length = 100))
+d <- cbind(d, predict(m, newdata = d, type = "response"))
+head(d)
+library(tidyr) 
+d <- d %>% pivot_longer(cols = c(normal, mild, severe),
+  names_to = "condition", values_to = "probability")
+head(d)
+```
+Next I reorder the factor levels just for aesthetic purposes.
+```{r}
+d$condition <- factor(d$condition, levels = c("severe","mild","normal"))
+```
+And then finally we plot.
+```{r}
+p <- ggplot(d, aes(x = exposure.time, y = probability)) + 
+  geom_line(aes(linetype = condition)) + 
+  ylim(0, 1) + theme_minimal() + theme(legend.position = c(0.1, 0.6)) + 
+  labs(x = "Exposure (years)", y = "Probability", linetype = "Condition")
+plot(p)
+```
+
+**Example**: Consider the data frame `alligator` from the **EffectStars** package.
+```{r, message = FALSE}
+library(EffectStars)
+data(alligator)
+head(alligator)
+summary(alligator)
+```
+For illustration we will just consider just size and gender as explanatory variables.
+```{r}
+m <- vglm(Food ~ Gender + Size, data = alligator,
+  family = multinomial(refLevel = "bird"))
+summary(m)
+```
+To help interpret the output let's check the level order.
+```{r}
+levels(alligator$Food)
+```
+Extract parameter estimates and confidence intervals.
+```{r}
+cbind(coef(m), confint(m))
+t(coef(m, matrix = TRUE))
+```
+Compute odds ratios.
+```{r}
+exp(t(coef(m, matrix = TRUE)))
+```
+Note that we can change the reference/baseline category. This changes the model parameterization but does not change the estimated probabilities. 
+
+Joint tests of the parameters for each explanatory variable can be conducted (via a likelihood ratio test) using `anova`. 
+```{r}
+anova(m)
+```
+Note that for other models we should use `anova` by specifying a null model, but here the `anova` function does that automatically. 
+
+Here are the estimated probabilities.
+```{r}
+d <- expand.grid(Gender = c("female","male"), Size = c("<2.3",">2.3"))
+d <- cbind(d, predict(m, newdata = d, type = "response"))
+head(d)
+library(tidyr)
+d <- d %>% pivot_longer(cols = c(bird, fish, invert, other, rep),
+  names_to = "food", values_to = "probability")
+head(d)
+p <- ggplot(d, aes(x = food, y = probability)) + theme_minimal() + 
+  geom_point(aes(color = Gender)) + facet_wrap(~ Size) + 
+  labs(x = "Food", y = "Probability", color = "Gender")
+plot(p)
+```
+
+## Category-Specific Explanatory Variables
+
+The multinomial logit model can be extended when explanatory variables vary by *response category*. For example, consider the data frame `TravelMode` from the **AER** package.
+```{r, message = FALSE}
+library(AER)
+data(TravelMode)
+head(TravelMode, 8)
+```
+Here waiting time (`wait`), vehicle cost (`vcost`), and travel time (`travel`) vary by travel mode, but household income (`income`) varies only by the respondent. For simplicity let's only consider waiting time and income as explanatory variables. A multinomial logit model can then be written as
+\begin{align*}
+\log(\pi_{ia}/\pi_{ic}) & = \beta_0^{(a)} + \beta_1 (\text{wait}_i^{(a)} - \text{wait}_i^{(c)}) + \beta_2^{(a)} \text{income}_i, \\
+\log(\pi_{it}/\pi_{ic}) & = \beta_0^{(t)} + \beta_1 (\text{wait}_i^{(t)} - \text{wait}_i^{(c)}) + \beta_2^{(t)} \text{income}_i, \\
+\log(\pi_{ib}/\pi_{ic}) & = \beta_0^{(b)} + \beta_1 (\text{wait}_i^{(b)} - \text{wait}_i^{(c)}) + \beta_2^{(b)} \text{income}_i. \\
+\end{align*}
+If we define
+\begin{align*}
+  \eta_i^{(a)} & = \beta_0^{(a)} + \beta_1 (\text{wait}_i^{(a)} - \text{wait}_i^{(c)}) + \beta_2^{(a)} \text{income}_i, \\
+  \eta_i^{(t)} & = \beta_0^{(t)} + \beta_1 (\text{wait}_i^{(t)} - \text{wait}_i^{(c)}) + \beta_2^{(t)} \text{income}_i, \\
+  \eta_i^{(b)} & = \beta_0^{(b)} + \beta_1 (\text{wait}_i^{(b)} - \text{wait}_i^{(c)}) + \beta_2^{(b)} \text{income}_i,
+\end{align*}
+and $\eta_i^{(c)} = 0$, then we can write the category probabilities as
+\begin{align*}
+  \pi_{ia} & = \frac{e^{\eta_i^{(a)}}}{e^{\eta_i^{(a)}} + e^{\eta_i^{(t)}} + e^{\eta_i^{(b)}} + e^{\eta_i^{(c)}}}, \\
+  \pi_{it} & = \frac{e^{\eta_i^{(t)}}}{e^{\eta_i^{(a)}} + e^{\eta_i^{(t)}} + e^{\eta_i^{(b)}} + e^{\eta_i^{(c)}}}, \\
+  \pi_{ib} & = \frac{e^{\eta_i^{(b)}}}{e^{\eta_i^{(a)}} + e^{\eta_i^{(t)}} + e^{\eta_i^{(b)}} + e^{\eta_i^{(c)}}}, \\
+  \pi_{ic} & = \frac{e^{\eta_i^{(c)}}}{e^{\eta_i^{(a)}} + e^{\eta_i^{(t)}} + e^{\eta_i^{(b)}} + e^{\eta_i^{(c)}}}.
+\end{align*}
+The quantities $e^{\eta_i^{(a)}}$, $e^{\eta_i^{(b)}}$, $e^{\eta_i^{(b)}}$, and $e^{\eta_i^{(c)}}$ could be loosely interpreted as the relative value or "utility" of each response/choice to the respondent/chooser. 
+
+**Example**: The `mlogit` function from the **mlogit** package will estimate a multinomial logistic regression model of this type.[^vgam]  
+```{r, message = FALSE}
+library(mlogit)
+m <- mlogit(choice ~ wait | income, reflevel = "car", 
+  alt.var = "mode", chid.var = "individual", data = TravelMode)
+summary(m)
+cbind(coef(m), confint(m))
+exp(cbind(coef(m), confint(m)))
+```
+**Example**: Here the response variable is the choice of one of three types of soda. Note that the **PoEdata** package must be installed using `devtools::install_github("https://github.com/ccolonescu/PoEdata")`.
+```{r}
+library(dplyr)
+library(PoEdata) 
+data(cola)
+
+mycola <- cola %>% mutate(mode = rep(c("Pepsi","7-Up","Coke"), n()/3)) %>%
+   select(id, mode, choice, price, feature, display) %>%
+   mutate(feature = factor(feature, levels = 0:1, labels = c("no","yes"))) %>%
+   mutate(display = factor(display, levels = 0:1, labels = c("no","yes")))
+
+head(mycola)
+
+m <- mlogit(choice ~ price + feature + display | 1, data = mycola,
+   alt.var = "mode", chid.var = "id")
+summary(m)
+exp(cbind(coef(m), confint(m)))
+```
+
+**Example**: Consider the following data on choices of two options of traveling by train.
+```{r}
+library(mlogit)
+data(Train)
+head(Train)
+```
+There are multiple choices for each respondent (`id`), which can induce dependencies among the observations, but we will ignore that here. With only two choices the model reduces to logistic regression where we use the *differences* of the properties of the choices as explanatory variables.
+```{r}
+m <- glm(choice == "A" ~ I(price_A - price_B) + I(time_A - time_B),
+   family = binomial, data = Train)
+summary(m)$coefficients
+exp(cbind(coef(m), confint(m)))
+```
+The price is in cents of guilders and the time is in minutes. For interpretation let's convert the scale of these variables to guilders (equal to 100 cents) and hours (equal to 60 minutes). 
+```{r}
+m <- glm(choice == "A" ~ I((price_A - price_B)/100) + I((time_A - time_B)/60),
+   family = binomial, data = Train)
+summary(m)$coefficients
+exp(cbind(coef(m), confint(m)))
+```
+Here is how we would estimate this model using `mlogit`. The data first need to be reformatted which can be done using the `dfidx` function from the **mlogit** package.
+```{r}
+mytrain <- dfidx(Train, shape = "wide", choice = "choice", 
+   varying = 4:11, sep = "_")
+head(mytrain)
+m <- mlogit(choice ~ I(price/100) + I(time/60) | -1, data = mytrain)
+summary(m)
+```
+
+[^vgam]: This model can also be estimated using the `vglm` function from the **VGAM** package, although the syntax is very different.
+
+
