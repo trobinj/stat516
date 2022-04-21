@@ -7,7 +7,7 @@ output:
 
 ```{r, echo = FALSE, message = FALSE}
 library(lubridate)
-date <- "04-04-2022"
+date <- "04-06-2022"
 weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
 month <- month(mdy(date), label = TRUE)
 day <- day(mdy(date))
