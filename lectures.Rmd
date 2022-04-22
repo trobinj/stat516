@@ -133,7 +133,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Multinomial logit models](lecture-04-20-2022.html). 
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Marginal models and generalized estimating equations](lecture-04-22-2022.html).
  
 ***
 
