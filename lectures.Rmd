@@ -145,11 +145,15 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` Fifth homework assignment assigned. 
 
 `r i <- i + 1; d[i]` 
 
 `r i <- i + 1; d[i]` 
+
+*** 
+
+Monday, May 16. Fifth homework assignment due by 8:00 AM. 
 
 
 
