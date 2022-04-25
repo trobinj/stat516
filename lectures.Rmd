@@ -137,9 +137,9 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Fixed effects models](lecture-04-25-2022.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` Fourth homework assignment due by 5:00 PM.
 
 `r i <- i + 1; d[i]` 
  
