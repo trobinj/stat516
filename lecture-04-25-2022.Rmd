@@ -236,7 +236,7 @@ summary(m)
 ```
 The `clogit` function requires that the response is *binary*, so to apply it to the smoking cessation data we would need to reformat the data.
 ```{r}
-quitsmoke <- quitsmoke %>% mutate(noquit = total - quit) %>% select(-total) %>% 
+quitsmoke <- quitsmoke %>% mutate(noquit = total - quit) %>% dplyr::select(-total) %>% 
   pivot_longer(cols = c(quit, noquit), names_to = "outcome", values_to = "count")
 head(quitsmoke)
 quitsmoke <- quitsmoke %>% uncount(count) %>% mutate(y = ifelse(outcome == "quit", 1, 0))
@@ -316,7 +316,7 @@ Note how `rbind` makes the output a bit more compact. Nice feature.
 rbind(pairs(emmeans(m, ~ period | drug, type = "response"),
   reverse = TRUE, infer = TRUE), adjust = "none")
 ```
-I put `adjust = "none"` here because by putting all the inferences "together" with `rbind` the code assumes that I want to control for familywise Type I error rates (which maybe I do not). 
+I put `adjust = "none"` here because by putting all the inferences "together" with `rbind` the code assumes that I want to control for family-wise Type I error rates (which maybe I do not). 
 
 How do we compare the rate ratios between drugs? Here are a couple of approaches. 
 ```{r}
@@ -345,7 +345,7 @@ When there are more than two observations per level, conditional maximum likelih
 
 ### Limitations of the Fixed Effects Approach
 
-1. Some inferences may be impossible.
+1. Some inferences may be impossible. Meaningful inferences are largely limited to variables that vary *within* the levels of the fixed effect. 
 0. Possibly poor inferences in nonlinear or generalized linear models. 
 0. More computationally intensive (although there are workarounds). 
 

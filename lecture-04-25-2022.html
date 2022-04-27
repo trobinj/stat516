@@ -908,7 +908,7 @@ Score (logrank) test = 255  on 1 df,   p=&lt;2e-16</code></pre>
 <p>The <code>clogit</code> function requires that the response is
 <em>binary</em>, so to apply it to the smoking cessation data we would
 need to reformat the data.</p>
-<pre class="r"><code>quitsmoke &lt;- quitsmoke %&gt;% mutate(noquit = total - quit) %&gt;% select(-total) %&gt;% 
+<pre class="r"><code>quitsmoke &lt;- quitsmoke %&gt;% mutate(noquit = total - quit) %&gt;% dplyr::select(-total) %&gt;% 
   pivot_longer(cols = c(quit, noquit), names_to = &quot;outcome&quot;, values_to = &quot;count&quot;)
 head(quitsmoke)</code></pre>
 <pre><code># A tibble: 6 × 4
@@ -1123,7 +1123,7 @@ Intervals are back-transformed from the log scale
 Tests are performed on the log scale </code></pre>
 <p>I put <code>adjust = "none"</code> here because by putting all the
 inferences “together” with <code>rbind</code> the code assumes that I
-want to control for familywise Type I error rates (which maybe I do
+want to control for family-wise Type I error rates (which maybe I do
 not).</p>
 <p>How do we compare the rate ratios between drugs? Here are a couple of
 approaches.</p>
@@ -1188,7 +1188,9 @@ straight-forward fixed effects approach.</p>
 class="section level3">
 <h3>Limitations of the Fixed Effects Approach</h3>
 <ol style="list-style-type: decimal">
-<li>Some inferences may be impossible.</li>
+<li>Some inferences may be impossible. Meaningful inferences are largely
+limited to variables that vary <em>within</em> the levels of the fixed
+effect.</li>
 <li>Possibly poor inferences in nonlinear or generalized linear
 models.</li>
 <li>More computationally intensive (although there are
