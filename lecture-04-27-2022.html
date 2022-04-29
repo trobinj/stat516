@@ -13,7 +13,7 @@
 
 <title>Wednesday, Apr 27</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
@@ -437,12 +437,12 @@ running time for each route.</p>
 <pre class="r"><code>library(emmeans)
 
 emmeans(m, ~route)</code></pre>
-<pre><code> route  emmean     SE   df lower.CL upper.CL
- narrow   5.53 0.0572 24.2     5.42     5.65
- round    5.54 0.0572 24.2     5.42     5.66
- wide     5.46 0.0572 24.2     5.34     5.58
+<pre><code> route  emmean     SE  df asymp.LCL asymp.UCL
+ narrow   5.53 0.0572 Inf      5.42      5.65
+ round    5.54 0.0572 Inf      5.43      5.66
+ wide     5.46 0.0572 Inf      5.35      5.57
 
-Degrees-of-freedom method: kenward-roger 
+Degrees-of-freedom method: asymptotic 
 Confidence level used: 0.95 </code></pre>
 <pre class="r"><code>trtools::contrast(m, a = list(route = c(&quot;narrow&quot;,&quot;round&quot;,&quot;wide&quot;)),
   cnames = c(&quot;narrow&quot;,&quot;round&quot;,&quot;wide&quot;))</code></pre>
@@ -616,15 +616,9 @@ This means that the linear relationship between time and expected size
 varies over treatment conditions, but also trees — i.e., each tree has
 its own intercept and slope (rate).</p>
 <pre class="r"><code>m &lt;- lmer(exp(size) ~ treat * Time + (1 + Time | tree), data = Sitka)</code></pre>
-<pre><code>Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, : Model
-failed to converge with max|grad| = 2.20761 (tol = 0.002, component 1)</code></pre>
-<pre><code>Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, : Model is nearly unidentifiable: very large eigenvalue
- - Rescale variables?</code></pre>
 <p>Oh no! Models with random effects are cranky. But let’s take the
 advice of the warning and re-scale time from days to weeks.</p>
 <pre class="r"><code>m &lt;- lmer(exp(size) ~ treat * I(Time/7) + (1 + I(Time/7) | tree), data = Sitka)</code></pre>
-<pre><code>Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, : Model
-failed to converge with max|grad| = 0.0418627 (tol = 0.002, component 1)</code></pre>
 <p>That <em>probably</em> is not a problem. I suspect it is due to the
 very high correlation between the random intercept and slope parameters.
 But changing the optimizer seems to avoid the error.</p>
@@ -680,19 +674,19 @@ Now we can estimate and compare the (average) growth rates in the
 control and ozone conditions (per 100 days with <code>contrast</code>
 and per day with <code>emtrends</code>).</p>
 <pre class="r"><code>trtools::contrast(m,
-  a = list(Time = 250, treat = c(&quot;control&quot;,&quot;ozone&quot;)),
-  b = list(Time = 150, treat = c(&quot;control&quot;,&quot;ozone&quot;)),
+  a = list(Time = 2, treat = c(&quot;control&quot;,&quot;ozone&quot;)),
+  b = list(Time = 1, treat = c(&quot;control&quot;,&quot;ozone&quot;)),
   cnames = c(&quot;control&quot;,&quot;ozone&quot;))</code></pre>
-<pre><code>        estimate    se lower upper tvalue  df    pvalue
-control    250.9 24.38 203.1 298.7  10.29 Inf 7.718e-25
-ozone      172.1 16.59 139.6 204.6  10.37 Inf 3.227e-25</code></pre>
+<pre><code>        estimate     se lower upper tvalue  df    pvalue
+control    2.509 0.2438 2.031 2.987  10.29 Inf 7.718e-25
+ozone      1.721 0.1659 1.396 2.046  10.37 Inf 3.227e-25</code></pre>
 <pre class="r"><code>trtools::contrast(m,
-  a = list(Time = 250, treat = &quot;control&quot;),
-  b = list(Time = 150, treat = &quot;control&quot;),
-  u = list(Time = 250, treat = &quot;ozone&quot;),
-  v = list(Time = 150, treat = &quot;ozone&quot;))</code></pre>
-<pre><code> estimate    se lower upper tvalue  df   pvalue
-    78.81 29.49    21 136.6  2.672 Inf 0.007537</code></pre>
+  a = list(Time = 2, treat = &quot;control&quot;),
+  b = list(Time = 1, treat = &quot;control&quot;),
+  u = list(Time = 2, treat = &quot;ozone&quot;),
+  v = list(Time = 1, treat = &quot;ozone&quot;))</code></pre>
+<pre><code> estimate     se lower upper tvalue  df   pvalue
+   0.7881 0.2949  0.21 1.366  2.672 Inf 0.007537</code></pre>
 <pre class="r"><code>emtrends(m, ~ treat, var = &quot;Time&quot;, lmer.df = &quot;asymptotic&quot;)</code></pre>
 <pre><code> treat   Time.trend    SE  df asymp.LCL asymp.UCL
  control       2.51 0.244 Inf      2.03      2.99
@@ -916,7 +910,8 @@ head(leprosy)</code></pre>
   theme_minimal()
 plot(p)</code></pre>
 <p><img src="lecture-04-27-2022_files/figure-html/unnamed-chunk-27-1.png" width="100%" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>m &lt;- glmer(nBacilli ~ drug * period + (1 | id), family = poisson, data = leprosy)
+<pre class="r"><code>m &lt;- glmer(nBacilli ~ drug * period + (1 | id), 
+  family = poisson, data = leprosy)
 summary(m)</code></pre>
 <pre><code>Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) [glmerMod
 ]

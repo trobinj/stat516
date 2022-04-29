@@ -21,7 +21,7 @@ header-includes:
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"), warning = FALSE)
 ```
 
 ```{r packages, echo = FALSE}
@@ -224,14 +224,14 @@ plot(p)
 Now we can estimate and compare the (average) growth rates in the control and ozone conditions (per 100 days with `contrast` and per day with `emtrends`). 
 ```{r}
 trtools::contrast(m,
-  a = list(Time = 250, treat = c("control","ozone")),
-  b = list(Time = 150, treat = c("control","ozone")),
+  a = list(Time = 2, treat = c("control","ozone")),
+  b = list(Time = 1, treat = c("control","ozone")),
   cnames = c("control","ozone"))
 trtools::contrast(m,
-  a = list(Time = 250, treat = "control"),
-  b = list(Time = 150, treat = "control"),
-  u = list(Time = 250, treat = "ozone"),
-  v = list(Time = 150, treat = "ozone"))
+  a = list(Time = 2, treat = "control"),
+  b = list(Time = 1, treat = "control"),
+  u = list(Time = 2, treat = "ozone"),
+  v = list(Time = 1, treat = "ozone"))
 emtrends(m, ~ treat, var = "Time", lmer.df = "asymptotic")
 pairs(emtrends(m, ~ treat, var = "Time", 
   lmer.df = "asymptotic"), infer = TRUE)
@@ -319,7 +319,8 @@ p <- ggplot(leprosy, aes(x = drug, y = nBacilli, fill = period)) +
   labs(x = "Drug", y = "Number of Bacilli", fill = "Period") +
   theme_minimal()
 plot(p)
-m <- glmer(nBacilli ~ drug * period + (1 | id), family = poisson, data = leprosy)
+m <- glmer(nBacilli ~ drug * period + (1 | id), 
+  family = poisson, data = leprosy)
 summary(m)
 ```
 Estimated ratios for each drug.
