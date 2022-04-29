@@ -85,7 +85,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Interpretation of logistic regression models using odds ratios](lecture-03-09-2022.html). 
 
-`r i <- i + 1; d[i]` [Using **emmeans** with logistic and Poisson regression, the relationship between logistic and Poisson regression, separation](lecture-03-11-2022.html). Due date for second homework assignment (5:00 PM).
+`r i <- i + 1; d[i]` [Using **emmeans** with logistic and Poisson regression, the relationship between logistic and Poisson regression, separation](lecture-03-11-2022.html).
  
 ***
 
@@ -113,7 +113,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` [The delta method](lecture-04-04-2022.html). Third homework assignment due by 5:00 PM.
+`r i <- i + 1; d[i]` [The delta method](lecture-04-04-2022.html). 
 
 `r i <- i + 1; d[i]` [Introduction to survival analysis and accelerated failure time models](lecture-04-06-2022.html). 
  
@@ -139,9 +139,9 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Fixed effects models](lecture-04-25-2022.html).
 
-`r i <- i + 1; d[i]` [Random effects models](lecture-04-27-2022.html). Fourth homework assignment due by 5:00 PM.
+`r i <- i + 1; d[i]` [Random effects models](lecture-04-27-2022.html). 
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Random effects models --- continued](lecture-04-29-2022.html).
  
 ***
 
