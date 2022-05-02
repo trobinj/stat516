@@ -1,0 +1,349 @@
+---
+title: "Over-dispersion and Quasi-likelihood, Marginal Effects, the Delta Method, and Survival Analysis"
+subtitle: Statistics 516, Homework 4
+output:
+  html_document:
+    theme: readable
+  pdf_document: default
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{float}
+  - \usepackage{array}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "tikz"))
+```
+
+```{r, echo = FALSE}
+options(digits = 4, width = 90)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](hw4.pdf) copy of this homework assignment.", sep = ""), "")`
+
+This homework covers several topics including dealing with over-dispersion, marginal effects and the delta method, and survival models. Packages you will need to have installed include **Stat2Data**, **SMPracticals**, **blmeco**, **Lock5Data**, and **flexsurv**. You will also need the **ggplot**, **tidyr**, **dplyr**, and **trtools** package but you should have these installed already. Note that the `margeff`, `dmethod`, and `lincon` functions that you will be using are all in the **trtools** package. 
+
+1. This assignment is due by 5:00 PM on Wednesday, April 27th. Email me your homework at trjohns@uidaho.edu. If possible, save/export your homework as a PDF file. Late assignments will be penalized by 10% if turned-in within 12 hours of the deadline, and 10% more for each additional 12 hour interval. 
+
+0. Your solutions must be **typed** and **very** neatly organized. I will not try to infer your solutions if they are not clearly presented. Mathematical expressions need not be typeset perfectly but they should be clear. You may substitute letters for symbols (e.g., b1 for $\beta_1$) and use other shortcuts for mathematical notation if no meaning is lost. 
+
+0. You must include with your solutions the relevant R output **and** R code that created them. Be sure that you provide sufficient code that I can replicate your results. Include both the code and the output within the text of your solutions (not in an appendix) using cut-and-paste. But edit your output so as to provide only that which is relevant to answering the questions. Use a monospace font (e.g., Courier or Monaco) for R code and output for clarity. Do not use a monospace font for text that is not R code or output. 
+
+0. Plots from R Studio can be exported in various formats or directly to the clipboard using the "export" menu in the top-left part of the plot panel. 
+
+0. It is permitted for you to discuss the homework with other students in the course. However your work including R code, output, and written answers must be your own. 
+
+0. You are very welcome to ask me questions. I will be happy to clarify what I am asking in any of the questions and will provide you some help with solving problems by showing you how to work through similar problems from class. I will also be open to helping with any R problems. If you email me with a R question, it will usually be helpful for you to include enough of your R script so that I can replicate your issue. But please avoid saving all your questions for just before the assignment is due. I can usually respond quickly to questions, but I will sometimes need time to respond. 
+
+\pagebreak
+
+## Physiological Responses of Shore Crabs to Ship Noise
+
+The data in the data frame `CrabShip` in the **Stat2Data** package are from an experiment that investigated physiological responses of shore crabs (*Carcinus maenas*) to ship noise.[^crabshipsource] Captive crabs were randomly assigned to one of two treatment groups. One group of crabs was exposed to a recording of 7.5 minutes of ship noise. The other group was exposed to a recording of 7.5 minutes of ambient harbor noise. The researchers observed the rate of oxygen consumption of each crab as well as its mass.[^crabmass] The plot below shows the data.
+```{r}
+library(ggplot2)
+library(Stat2Data)
+data(CrabShip)
+p <- ggplot(CrabShip, aes(x = Mass, y = Oxygen, color = Noise)) + 
+  geom_point() + theme_minimal() + theme(legend.position = c(0.1, 0.8)) +
+  labs(y = "Oxygen Consumption (micromoles/hour)", x = "Mass (g)")
+plot(p)
+```
+From the plot it appears that ship noise tends to increase oxygen consumption rate, and that larger crabs tend to have higher oxygen consumption rates. Assume that the goal is to model how ship noise affects oxygen consumption rate and how this depends on the mass of the crab. Suppose we model the data using the nonlinear regression model
+$$
+  E(O_i) = 
+  \begin{cases}
+    \beta_a m_i^\gamma, & \text{if the noise source is ambient}, \\
+    \beta_s m_i^\gamma, & \text{if the noise source is ship},
+  \end{cases}
+$$
+where $O_i$ and $m_i$ are the oxygen consumption and mass for the $i$-th observation, respectively, and $\beta_a$, $\beta_s$, and $\gamma$ are the parameters of the model. The model specifies that the expected oxygen consumption is proportional to a power transformation of mass, with the constant of proportionality depending on the treatment condition (i.e., noise source). To estimate this nonlinear model we can first estimate a linear model with $\gamma$ = 0.5 to get starting values for $\beta_a$ and $\beta_s$, and then use these estimates as starting values in the nonlinear model.[^sqrt]
+```{r}
+library(dplyr)
+m_start <- nls(Oxygen ~ case_when(
+    Noise == "ambient" ~ beta_a * Mass,
+    Noise == "ship"    ~ beta_s * Mass,
+  ), start = list(beta_a = 1, beta_s = 1), data = CrabShip)
+summary(m_start)$coefficients
+m_final <- nls(Oxygen ~ case_when(
+    Noise == "ambient" ~ beta_a * Mass^gamma,
+    Noise == "ship"    ~ beta_s * Mass^gamma
+  ), start = list(beta_a = 2.9, beta_s = 4.5, gamma = 0.5),
+  data = CrabShip)
+summary(m_final)$coefficients
+```
+Here is a plot of the estimated model.
+```{r}
+d <- expand.grid(Noise = c("ambient","ship"),
+  Mass = seq(0, 85, length = 500))
+d$yhat <- predict(m_final, newdata = d)
+p <- p + geom_line(aes(y = yhat), data = d)
+plot(p)
+```
+The model looks reasonable, but it is not easy to interpret in terms of the individual model parameters. But it may be useful to interpret the model in terms of linear and nonlinear *functions* of the model parameters. In what follows be sure you use the final model with the estimated $\gamma$ parameter (i.e., `m_final`) and not the first model (i.e., `m_start`) which was just a working model used to obtain starting values for the parameters.
+
+1. For the noise source to affect the expected oxygen consumption we need $\beta_s \neq \beta_a$ or, equivalently, $\beta_s - \beta_a = 0$. So rejecting the null hypothesis that $\beta_s - \beta_a = 0$ will conclude a statistically significant effect of the noise treatment. This can be done several ways. The quantity $\beta_s - \beta_a$ is a linear function of the model parameters, so by estimating it with `lincon` you will get a test statistic for the test of the null hypothesis above. You can also estimate $\beta_s - \beta_a$ using the `dmethod` function which will provide the same inferences.[^dmethodlinear] Report output given by these two functions to verify that they give the same result. Another approach is to use a $F$ test statistic by using the `anova` function and specifying a null model. This is very similar to the likelihood ratio test but uses a different test statistic (the `test = "LRT"` is not needed for `anova` here as it will default to using the $F$ test statistic when applied to a `nls` object). The null model can be written as
+$$
+  E(O_i) = \beta m^{\gamma},
+$$
+since if $\beta_s = \beta_a$ then we can remove the subscript and just call the common parameter $\beta$. Note that for your starting value of $\beta$ you could use the average of the estimates of $\beta_s$ and $\beta_a$. Report the test statistic and p-value for this test.
+
+0. Suppose we want to estimate the difference in the expected oxygen consumption between the two treatment conditions. This can be written as $\beta_sm^{\gamma} - \beta_am^{\gamma}$ or $(\beta_s - \beta_a)m^{\gamma}$. Since this depends on the mass of the crab ($m$), a useful approach might be to estimate the difference for an average crab. The mean crab mass in this study is about $m$ = 53 grams. There are a couple of ways that you can estimate this difference in R. One would be to estimate it as a discrete marginal effect using the `margeff` function, and another is to use the delta method with the `dmethod` function. Estimate this difference using both functions, being sure to report the estimate, standard error, and confidence interval. You should obtain the same result using these two functions. 
+
+0. The marginal effect discussed in the previous problem can also be framed as a percent change or difference. This is defined as 
+$$
+  \frac{\beta_sm^{\gamma} - \beta_am^{\gamma}}{\beta_am^{\gamma}} \times 100\%
+$$
+which will tell us what percent larger the expected oxygen consumption is for a crab in the ship noise condition versus the ambient noise condition. Estimate this marginal effect for an average crab with a mass of 53 grams using the `margeff` function, and also estimate it using the `dmethod` function, being sure to report the estimate, standard error, and confidence interval from each function. You should obtain the same results using these two functions. 
+
+0. Suppose a researcher was interested in how quickly the expected oxygen consumption increases with mass. The relationship is not linear so this rate of change depends on the mass of the crab. But we could estimate the rate of change for an average crab with a mass of $m$ = 53 grams. This is the "instantaneous" marginal effect of mass at a mass of $m$ = 53 grams. Estimate this quantity using the `margeff` function for each of the two treatment conditions. Report the estimates, standard errors, and confidence interval. Also estimate these quantities using the `dmethod` function by using the fact that the instantaneous marginal effects for mass for the ship and ambient conditions can be shown to be equal to $\beta_s\gamma m^{\gamma - 1}$ and $\beta_a\gamma m^{\gamma - 1}$, respectively.[^crabshipderiv]
+
+[^crabshipderiv]: These are derivatives. Note that, for example, 
+$$
+  \frac{d}{dm}\beta_sm^{\gamma} = \beta_s\gamma m^{\gamma-1}.
+$$
+
+[^dmethodlinear]: While the `dmethod` function is designed for situations where we want to make inferences about a *nonlinear* function of the model parameters, it does not require that the function be nonlinear. And one might argue that using the `dmethod` function is easier since the user only needs to specify an expression rather than work out the coefficients for a linear function of the model parameters. 
+
+[^crabmass]: The help file for the `CrabShip` data frame, view-able using either `help(CrabShip)` or `?CrabShip` once the **Stat2Data** package is loaded, labels the `Mass` variable incorrectly as oxygen uptake. This should be labeled as mass of the crab in grams.  
+
+[^crabshipsource]: Source: Wale, M. A., Simpson, S. D., Radford, A. N. (2013). Size-dependent physiological responses of shore crabs to single and repeated playback of ship noise, *Biology Letters*, *9*, 20121194.
+
+[^sqrt]: To find a good initial value of $\gamma$ you can try estimating different linear models by specifying (not estimating) the value of gamma and then plotting the model with the data or the residuals against the predicted values until you get what looks like a good fit. Also note that $\gamma^{0.5} = \sqrt{\gamma}$ so this is essentially a square root transformation of mass.
+
+## Swedish Speed Limit Study --- Revisited
+
+Recall the Swedish speed limit study from the [previous homework assignment](hw3-solutions.html). As in the previous homework the following will format the data for modeling. 
+```{r}
+library(SMPracticals)
+library(dplyr)
+library(tidyr)
+data(limits)
+
+limitstudy <- limits %>% 
+  rename(limit_1961 = lim1, limit_1962 = lim2, y_1961 = y1, y_1962 = y2) %>%
+  pivot_longer(cols = -day, names_to = c(".value", "year"), names_sep = "_") %>%
+  mutate(limit = factor(limit, levels = c(0,1), labels = c("no","yes")))
+head(limitstudy)
+```
+Here is another way to visualize the data using a dot plot.
+```{r}
+p <- ggplot(limitstudy, aes(x = limit, y = y)) + 
+  theme_minimal() + geom_dotplot(binaxis = "y", binwidth = 1, 
+    stackdir = "center", position = position_dodge()) + 
+  labs(x = "Speed Limit Posted", y = "Number of Accidents") + 
+  facet_wrap(~ year)
+plot(p)
+```
+Here is the Poisson regression model you used in the previous homework assignment.
+```{r}
+m <- glm(y ~ limit + year, family = poisson, data = limitstudy)
+summary(m)$coefficients
+```
+In what follows you will consider inferences based on this model while also dealing with possible over-dispersion. 
+
+1. Explain why the Poisson regression model specified above exhibits over-dispersion based on (a) a residual plot and (b) the residual deviance. Be sure to include the residual plot and the residual deviance in your answer.
+
+0. Poisson regression assumes that $\text{Var}(Y_i) = E(Y_i)$. This is a property of the Poisson distribution. Over-dispersion is when $\text{Var}(Y_i) > E(Y_i)$. As we discussed in class, one approach to dealing with over-dispersion for Poisson regression is to use quasi-likelihood and relax the variance structure to $\text{Var}(Y_i) = \phi E(Y_i)$ where $\phi$ is a dispersion parameter which allows for some patterns of over-dispersion.[^quasilikelihood] Estimate the model above using this quasi-likelihood approach. Create a residual plot like you did in the previous problem and comment briefly if you think this quasi-likelihood approach was effective at dealing with over-dispersion. Report the estimates, standard errors, and confidence intervals for the model parameters. Compare these to what you obtained in the previous homework and discuss briefly what has (or has not) changed and how. 
+
+0. In the previous homework assignment you estimated (a) the expected number of accidents with and without a posted speed limit each year and (b) the rate ratio for describing the relationship between whether or not a limit was posted and the expected number of accidents. Do this again but using the model you estimated in the previous problem using quasi-likelihood. Compare these estimates to what you obtained in the previous homework and discuss briefly what has (or has not) changed and how. 
+
+0. The model can be written as
+$$
+  \log E(Y_i) = \beta_0 + \beta_1 l_i + \beta_2 y_i,
+$$
+where $l_i$ and $y_i$ are indicator variables for when a limit is posted and for when the year is 1962. The model can be written case-wise as
+$$
+  \log E(Y_i) = 
+  \begin{cases}
+    \beta_0, & \text{if there is no limit and the year is 1961}, \\
+    \beta_0 + \beta_1, & \text{if there is a limit and the year is 1961}, \\
+    \beta_0 + \beta_2, & \text{if there is no limit and the year is 1962}, \\
+    \beta_0 + \beta_1 + \beta_2, & \text{if there is a limit and the year is 1962}.
+  \end{cases}
+$$
+We can also write the model case-wise as  
+$$
+  E(Y_i) = 
+  \begin{cases}
+    e^{\beta_0}, & \text{if there is no limit and the year is 1961}, \\
+    e^{\beta_0}e^{\beta_1}, & \text{if there is a limit and the year is 1961}, \\
+    e^{\beta_0}e^{\beta_2}, & \text{if there is no limit and the year is 1962}, \\
+    e^{\beta_0}e^{\beta_1}e^{\beta_2}, & \text{if there is a limit and the year is 1962}.
+  \end{cases}
+$$
+Let $\mu_{l,61}$ and $\mu_{n,61}$ denote the expected number of accidents in 1961 when a limit was posted and when a limit was not posted, respectively. Similarly let $\mu_{l,62}$, and $\mu_{n,62}$ be the same expectations but for 1962. We can see from the above that, for example, $\mu_{l,61} = e^{\beta_0}e^{\beta_1}$. Earlier in the course we discussed marginal means and main effects for linear models. We can also define these for a nonlinear model such as this model. The marginal means for the expected number of accidents for when limits are posted and when they are not posted are defined as
+$$
+  \mu_l = \frac{\mu_{l,61} + \mu_{l,62}}{2} \ \ \ \text{and} \ \ \ 
+  \mu_n = \frac{\mu_{n,61} + \mu_{n,62}}{2},
+$$
+respectively. These are the average expected number of accidents for each limit condition. We can then define the main effect of the limit condition as
+$$
+  \mu_l - \mu_n = \frac{\mu_{l,61} + \mu_{l,62}}{2} -
+  \frac{\mu_{n,61} + \mu_{n,62}}{2} = (\mu_{l,61} + \mu_{l,62} - \mu_{n,61} - \mu_{n,62})/2.
+$$
+Estimate the two marginal means and the main effect for the limit condition using the `dmethod` function after writing them as functions of the model parameters $\beta_0$, $\beta_1$, and $\beta_2$.[^exp] Be sure to report the estimates, standard errors, and confidence intervals for the two marginal means and for the main effect. **Note**: This problem is *extra credit* for students in Stat 436, but is *required* for students in Stat 516.
+
+[^exp]: Remember that the exponential function has the property that $e^ae^b = e^{a+b}$ which can also be written as $\exp(a+b)$. You might find this useful when using the `exp` function in R. 
+
+[^quasilikelihood]: Note that this is not the only way to use quasi-likelihood to deal with over-dispersion in Poisson regression. Another common approach is to specify the variance structure $\text{Var}(Y_i) = \phi E(Y_i)^p$ where $p$ is some specified value. We can view the variance structure $\text{Var}(Y_i) = \phi E(Y_i)^p$ as a special case where $p$ = 1. Recall that this can be specified when using the `glm` function with `family = quasipoisson`. 
+
+## Presence-Absence of Little Owls in Nest Boxes
+
+The data frame `anoctua` in the **blmeco** package is from a study that investigated the placement of nest boxes for [little owls](https://en.wikipedia.org/wiki/Little_owl) (*Athene noctua*) in central Germany.[^owls]
+```{r}
+library(blmeco)
+data(anoctua)
+head(anoctua)
+```
+The variables that concern us are `PA` (an indicator variable for the presence of an owl in a given nest box) and elevation (in meters above sea level).[^owlsimplification] The `Id` variable is just an integer identifier for each nest box. Assume that the owls tend to prefer nests at an elevation that is not too low and not too high. To model this we might use a polynomial logistic regression model.
+```{r}
+m <- glm(PA ~ elevation + I(elevation^2), family = binomial, data = anoctua)
+summary(m)$coefficients
+```
+Such a model allows for the probability of a nest box being used to peak at a certain elevation and decrease as the elevation moves below and above that value. This can be seen in a plot of the model with the data, using what is called a rug plot to show the raw data.[^rugplot] 
+```{r}
+d <- data.frame(elevation = seq(84, 618, length = 1000))
+d$yhat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(anoctua, aes(x = elevation, y = PA)) + theme_minimal() + 
+  geom_rug(data = subset(anoctua, PA == 0), alpha = 0.25, sides = "b") + 
+  geom_rug(data = subset(anoctua, PA == 1), alpha = 0.25, sides = "t") + 
+  geom_hline(yintercept = c(0, 1), alpha = 0.5) + 
+  labs(x = "Elevation (meters)", y = "Probability of Presence") + 
+  scale_x_continuous(breaks = seq(100, 700, by = 50)) + 
+  geom_line(aes(y = yhat), data = d)
+plot(p)
+```
+The "rugs" at the top and bottom of the plot show the elevations of nest boxes where owls were present and absent, respectively. In what follows you will use the delta method to obtain estimates of meaningful nonlinear functions of the parameters of this model. When specifying these functions, make use of parentheses to enforce the proper order of operations, use `exp` and `sqrt` for the functions $\exp(x)$ and $\sqrt{x}$, respectively, and remember to use `*` for multiplication and `^` for exponentiation (other than $e^x$). Also note that you can check your results against the figure to see if they look reasonable. This is a good way to catch some errors. 
+
+1. The logistic regression model estimated above can be written as
+$$
+  E(Y) = \frac{e^\eta}{1+e^\eta},
+$$
+where
+$$
+  \eta = \beta_0 + \beta_1 x + \beta_2 x^2,
+$$
+and where $x$ is elevation and $Y$ is the binary response variable so that $E(Y)$ is the probability that a nest box at a given elevation would be occupied.[^prob] Let $x_m$ be the elevation at which the probability of presence is *maximized*. In [lecture](lecture-04-04-2022.html) on April 4th there was an example where we found the percent hardwood that would maximize the expected tensile strength. Applying a similar argument we can show that the elevation that would maximize presence probability would also maximize $\eta$. The argument is that $x_m$ solves the equation
+$$
+  \frac{d(\beta_0 + \beta_1 x + \beta_2 x^2)}{dx} = 0
+$$
+for $x$. The solution is
+$$
+  x_m = \frac{-\beta_1}{2\beta_2},
+$$
+just like the example from lecture. The fact that this is a logistic regression model does not change this result since $E(Y)$ is a monotonic function of $\eta$ (i.e., $\eta$ is the log of the odds of presence, so whatever maximizes this will also maximize the probability of presence). Use the `dmethod` function to obtain estimate, standard error, and confidence interval for $x_m$. 
+
+0. Suppose we want to find the *two* values of elevation, $x_l$ and $x_h$, such that the probability of presence is *at least* 0.25 for elevations between $x_l$ and $x_h$. The figure below depicts these two values for the estimated model.
+    ```{r, echo = FALSE}
+    b0 <- unname(coef(m))[1]
+    b1 <- unname(coef(m))[2]
+    b2 <- unname(coef(m))[3]
+    xl <- (-b1 + sqrt(b1^2 - 4*b2*(b0 - log(1/3))))/(2*b2)
+    xu <- (-b1 - sqrt(b1^2 - 4*b2*(b0 - log(1/3))))/(2*b2)
+
+    p <- p + geom_hline(yintercept = 0.25, linetype = 3) + 
+      geom_vline(xintercept = c(xl,xu), linetype = 3)
+    plot(p)
+    ```
+    We can see that $x_l$ and $x_h$ are approximately 100 and 275 meters, respectively, but we need to express them as functions of the model parameters to obtain exact estimates as well as standard errors. This can be done by solving
+$$
+  \log\left[\frac{0.25}{1-0.25}\right] = \beta_0 + \beta_1 x + \beta_2 x^2
+$$
+for $x$, but note that there should be *two* values of $x$ that solve this equation: $x_l$ and $x_h$.[^probsolve] This is basically the problem of solving the quadratic equation 
+$$
+ax^2 + bx + c = 0
+$$
+where $a = \beta_2$, $b = \beta_1$, and $c = \beta_0 - \log(1/3)$. The solution is given by the [quadratic formula](https://en.wikipedia.org/wiki/Quadratic_formula)
+$$
+  x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}. 
+$$
+Substituting $a = \beta_2$, $b = \beta_1$, and $c = \beta_0 - \log(1/3)$ we get
+$$
+  x = \frac{-\beta_1 \pm \sqrt{\beta_1^2 - 4\beta_2[\beta_0 - \log(1/3)]}}{2\beta_2}. 
+$$
+Note that this equation gives *two* solutions for $x$, $x_l$ and $x_h$, by interpreting the operator "$\pm$" as "$+$" for one value and "$-$" for the other value. Use the `dmethod` function to obtain estimates, standard errors, and confidence intervals for $x_l$ and $x_h$.  
+
+0. A quadratic logistic regression model will have a better fit to the data if we apply a logarithmic transformation to elevation so that
+$$
+  \eta = \beta_0 + \beta_1\log(x) + \beta_2 \log(x)^2.
+$$
+This can be seen by looking at the residual deviance of this model versus that without the transformation. This model can be estimated as follows.
+    ```{r}
+    m <- glm(PA ~ log(elevation) + I(log(elevation)^2), family = binomial, data = anoctua)
+    summary(m)$coefficients
+    ```
+Some algebra will show that for this model we have that
+$$
+  x_m = \exp\left(\frac{-\beta_1}{2\beta_2}\right)
+$$
+and the solutions to $x_l$ and $x_m$ are given by
+$$
+  x = \exp\left(\frac{-\beta_1 \pm \sqrt{\beta_1^2 - 4\beta_2[\beta_0 - \log(1/3)]}}{2\beta_2}\right). 
+$$
+Produce a plot of this new model like that shown in the previous problem. You do not need to include the horizontal and vertical dotted lines.[^lines] Then use the `dmethod` function to obtain estimates, standard errors, and confidence intervals for $x_m$, $x_l$, and $x_h$. **Note**: This problem is *extra credit* for students in Stat 436, but is *required* for students in Stat 516.
+
+[^probsolve]: Note that you can easily generalize this approach to probabilities other than 0.25.
+
+[^prob]: Recall that for a binary response variable $E(Y) = P(Y = 1)$.
+
+[^lines]: If you are curious, the horizontal line is drawn using `geom_hline(yintercept = 0.25, linetype = 3)` and the vertical lines are drawn using `geom_vline(xintercept = c(xl,xu), linetype = 3)` where `xl` and `xu` are the estimates of $x_l$ and $x_h$, respectively.
+
+[^owls]: Gottschalk, T. K., Ekschmitt, K., & Wolters, V. (2011). Efficient placement of nest boxes for the little owl (*Athene noctua*). *Journal of Raptor Research*, *45(1)*, 1--14.
+
+[^owlsimplification]: A model for these data based on just elevation will be a considerable oversimplification because the locations of the nest boxes varied in terms of several other important environmental variables.
+
+[^rugplot]: Plotting data with a binary response can be a bit tricky. One approach I sometimes use is to plot the binary responses using what is sometimes called a "rug plot" where each point is shown as a short line segment, with a "rug" at the top indicating the elevations of nest boxes with owls present, and another at the bottom indicating the elevations of nest boxes with no owl present. This works relatively well if there are not too many overlapping observations. Note how I use `subset` to select which observations to put into the top and bottom rugs.
+
+## Reactions of Lizards to Fire Ants
+
+The data in the data frame `FireAnts` in the **Lock5Data** are from a study of the reactions of [eastern fence lizards](https://en.wikipedia.org/wiki/Eastern_fence_lizard) (*Sceloporus undulatus*) to [red imported fire ants](https://en.wikipedia.org/wiki/Red_imported_fire_ant) (*Solenopsis invicta*).[^langkilde] The ants are native to South America but were [unintentionally introduced to the southern United States](https://en.wikipedia.org/wiki/Red_imported_fire_ants_in_the_United_States) and are considered an invasive species. These ants are a challenge for the native lizards because they compete for the same nesting habitats, prey on lizard eggs, and their venom is toxic to the lizards. Studies like this one have shown that lizards that have been exposed to the ants have developed escape responses. In this study lizards were exposed to fire ants under controlled conditions, and the researchers observed two behavioral responses: number of twitches and how many seconds elapsed before the lizard would flee from the area. The lizards used in the study came from two different habitats: a habitat that had been invaded by fire ants and another that had not been invaded. One purpose of the study was to determine if prior exposure to fire ants resulted in behavioral changes in the lizards. 
+
+Flee times recorded as 61 seconds in the data frame are actually right-censored at 60 seconds (i.e., the researcher did not wait more than one minute for the lizard to flee, so if the lizard did not flee after one minute we assume that the unrealized flee time would be more than one minute). For analysis it is useful to create variables to (a) indicate if an observation is censored or not and (b) show the actual flee time or 60 seconds if the flee time was right-censored. The following will create the new variables `censored` and `fleetime`.
+```{r}
+library(Lock5Data)
+FireAnts$censored <- ifelse(FireAnts$Flee == 61, "yes", "no")
+FireAnts$fleetime <- ifelse(FireAnts$Flee == 61, 60, FireAnts$Flee)
+```
+You have often seen me use the `dplyr` and `tidyr` packages for data manipulation. Here is another way you can create the new variables. 
+```{r}
+library(dplyr)
+FireAnts <- FireAnts %>%
+  mutate(censored = ifelse(Flee == 61, "yes", "no")) %>% 
+  mutate(fleetime = ifelse(Flee == 61, 60, Flee))
+```
+We can visualize the data as follows.
+```{r}
+library(ggplot2)
+p <- ggplot(FireAnts, aes(x = Habitat, y = fleetime, fill = censored)) +
+  geom_dotplot(aes(fill = censored), binwidth = 1, binaxis = "y",
+    stackdir = "center", method = "histodot") +
+  scale_fill_manual(values = c("black", "white")) +
+  theme_minimal() + coord_flip() +
+  labs(y = "Seconds Elapsed Until Lizard Flees", fill = "Censored?")
+plot(p)
+```
+Note that the open points at 60 seconds are all right-censored times and do not represent actual flee times. 
+
+1. Estimate an accelerated failure time model with time until the lizard flees (i.e., `fleetime`) as the response variable. Specify a Weibull distribution for the flee time, and be sure that you properly specify the right-censoring in the data by either creating a "status" variable or by using a logical statement with `==` in the `Surv` function.[^censorindicator] Use the `flexsurvreg` function from the **flexsurv** package. Report the parameter estimates, standard errors, and confidence intervals by using the `print` function with the model object created by `flexsurvreg` (recall that `summary` does not work the same with `flexsurvreg` objects as it does with `lm`, `nls`, and `glm` objects).  
+
+0. Plot two estimated survival functions and two estimated hazard functions --- one for each habitat --- based on the model you estimated above. Plot this function over two minutes (120 seconds) starting at zero. You can use the option `B = 0` in the `summary` function to turn off calculation of the standard errors which can be computationally intensive and not necessary for your plots. 
+
+0. The accelerated failure time model you estimated in the previous problem can be written as 
+$$
+\log T_i = \beta_0 + \beta_1 x_i + \sigma\epsilon_i
+$$ 
+or 
+$$
+T_i = e^{\beta_0}e^{\beta_1 x_i}e^{\sigma\epsilon_i},
+$$
+where $T_i$ and $x_i$ are time until the lizard flees and an indicator variable for the habitat, respectively, for the $i$-th observation. Report an estimate and confidence interval for $e^{\beta_1}$, and explain briefly how you would interpret its value in terms of time until the lizard flees for one habitat versus the other.
+
+0. As we discussed in class, an accelerated failure time model that specifies a Weibull distribution for time is also a proportional hazards model. However the parameterization for the proportional hazards model is different. A Weibull proportional hazards model can be estimated using `flexsurvreg` with `dist = "weibullPH"`. Estimate this model and report the parameter estimates, standard errors, and confidence intervals using the `print` function. Also give the hazard ratio for the effect of habitat and briefly interpret this hazard ratio in terms of how it characterizes the relationship between the hazard functions for the two habitats.
+
+0. Estimate a Poisson regression model with the number of twitches as the response variable and habitat as the explanatory variable. Estimate a rate ratio for habitat and write a sentence that properly interprets the value of this rate ratio in terms of the expected number of twitches. 
+
+[^censorindicator]: You will need to create this variable, noting that it should assume a value of one if the observation is *not* censored, and zero if the observation *is* censored. One way to do this would be to use the `ifelse` function. But another approach is to use the fact that `censored == "no"` will evaluate to one if the statement is true for an observation, and zero if the statement is false for an observation. 
+
+[^langkilde]: Langkilde, T. (2009). Invasive fire ants alter behavior and morphology of native lizards. *Ecology*, *90(1)*, 208--217. 

@@ -145,7 +145,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` Fifth homework assignment assigned. 
+`r i <- i + 1; d[i]` [Model fit and selection](lecture-05-02-2022.html). The [solutions](hw4-solutions.html) for the fourth homework assignment are now available. Fifth homework assignment assigned. 
 
 `r i <- i + 1; d[i]` 
 

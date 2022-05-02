@@ -40,6 +40,8 @@ options(digits = 4, width = 90)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
+<!-- To do: Clean this up by removing some of the redundant contrast and emmeans statements. Just include enough to be informative. These are not as necessary now given that emmeans is introduced earlier in the course. -->
+
 ## The Incidental Parameter Problem
 
 Some kinds of designs result in a "factor" with a relatively large number of levels, where each level corresponds to an experimental/observational unit. This can arise for a variety of reasons. Such designs include *repeated measures*, *longitudinal data*, *panel data*, *multilevel data*, *pseudo-replication*, *within-subjects factors*, *dependent samples*, and *clustered data* to name a few (these are not mutually exclusive). Having a factor with a large number of levels can cause complications. This is known in econometrics as the "incidental parameter problem."

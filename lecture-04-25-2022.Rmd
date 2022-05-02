@@ -40,6 +40,8 @@ options(digits = 4, width = 90)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
+<!-- This needs some reworking. A couple of things to do is to (a) point out how the fixed effects approach is limited to inferences that vary *within* units, and (b) maybe better explain conditional maximum likelihood via surrogate models. -->
+
 ## Fixed Effects Approach
 
 The fixed effects approach is to specify the many-leveled factor as we might normally do with a factor with fewer levels. The term "fixed effects" is used to distinguish it from the "random effects" approach which we will discuss later. The question then is if and how having such a factor compromises inferences. 
