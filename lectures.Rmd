@@ -147,9 +147,9 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Model fit and selection](lecture-05-02-2022.html). The [solutions](hw4-solutions.html) for the fourth homework assignment are now available. The [fifth homework assignment](hw5.html) is now available.
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Generalized additive models](lecture-05-04-2022.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` No lecture. I will be in my office during class time if you want to drop by and ask questions. 
 
 *** 
 
