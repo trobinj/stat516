@@ -401,20 +401,20 @@ m_final &lt;- nls(Oxygen ~ case_when(
   ), start = list(beta_a = 2.9, beta_s = 4.5, gamma = 0.5), 
   data = CrabShip)
 library(trtools)
-lincon(m_final, a = c(1, -1, 0))</code></pre>
-<pre><code>           estimate    se lower  upper tvalue df  pvalue
-(1,-1,0),0   -8.487 3.584 -15.8 -1.177 -2.368 31 0.02431</code></pre>
+lincon(m_final, a = c(-1, 1, 0))</code></pre>
+<pre><code>           estimate    se lower upper tvalue df  pvalue
+(-1,1,0),0    8.487 3.584 1.177  15.8  2.368 31 0.02431</code></pre>
 <pre class="r"><code>dmethod(m_final, pfunc = &quot;beta_s - beta_a&quot;, 
-  pname = c(&quot;beta_s&quot;, &quot;beta_a&quot;, &quot;gamma&quot;))</code></pre>
-<pre><code> estimate    se  lower  upper tvalue  df  pvalue
-   -8.487 3.584 -15.51 -1.462 -2.368 Inf 0.01789</code></pre>
+  pname = c(&quot;beta_a&quot;, &quot;beta_s&quot;, &quot;gamma&quot;))</code></pre>
+<pre><code> estimate    se lower upper tvalue  df  pvalue
+    8.487 3.584 1.462 15.51  2.368 Inf 0.01789</code></pre>
 <p>To make the test and confidence interval from <code>dmethod</code>
 agree with that from <code>lincon</code> we can manually set the degrees
 of freedom as follows.</p>
 <pre class="r"><code>dmethod(m_final, pfunc = &quot;beta_s - beta_a&quot;, 
-  pname = c(&quot;beta_s&quot;, &quot;beta_a&quot;, &quot;gamma&quot;), df = 31)</code></pre>
-<pre><code> estimate    se lower  upper tvalue df  pvalue
-   -8.487 3.584 -15.8 -1.177 -2.368 31 0.01789</code></pre>
+  pname = c(&quot;beta_a&quot;, &quot;beta_s&quot;, &quot;gamma&quot;), df = 31)</code></pre>
+<pre><code> estimate    se lower upper tvalue df  pvalue
+    8.487 3.584 1.177  15.8  2.368 31 0.01789</code></pre>
 <p>Unfortunately there is a bug in <code>dmethod</code> that only
 applies the specified degrees of freedom to the confidence interval and
 not the p-value calculation. That will be fixed soon in an update. Next
@@ -725,7 +725,7 @@ Confidence level used: 0.95
 Intervals are back-transformed from the log scale </code></pre>
 <p>And next the rate ratios for the effect of limits.</p>
 <pre class="r"><code>pairs(emmeans(m, ~limit|year, type = &quot;response&quot;), 
-  infer = TRUE, reverse = TRUE, infer = TRUE)</code></pre>
+  infer = TRUE, reverse = TRUE)</code></pre>
 <pre><code>year = 1961:
  contrast ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
  yes / no 0.828 0.0294 Inf     0.772     0.887    1  -5.327  &lt;.0001
@@ -738,7 +738,7 @@ Confidence level used: 0.95
 Intervals are back-transformed from the log scale 
 Tests are performed on the log scale </code></pre>
 <pre class="r"><code>pairs(emmeans(m.quasi, ~limit|year, type = &quot;response&quot;), 
-  infer = TRUE, reverse = TRUE, infer = TRUE)</code></pre>
+  infer = TRUE, reverse = TRUE)</code></pre>
 <pre><code>year = 1961:
  contrast ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
  yes / no 0.828 0.0539 Inf     0.729     0.941    1  -2.903  0.0037
@@ -755,7 +755,38 @@ same, but the standard errors are larger when using quasi-likelihood
 resulting in wider confidence intervals, test statistics that are
 smaller in absolute value, and thus larger p-values (similar to what we
 saw in the last problem). Again, failing to account for over-dispersion
-frequently results in underestimation of the standard errors.</p></li>
+frequently results in underestimation of the standard errors.</p>
+<p>Typically when using quasi-likelihood for a Poisson or logistic
+regression model we use a finite degrees of freedom based on the
+residual degrees of freedom. This is what is done by default by
+<code>summary</code> as well as <code>contrast</code>, but not by
+functions from the <strong>emmeans</strong> package. But you can
+manually specify the degrees of freedom using the <code>df</code>
+argument. Here is how you would do it here.</p>
+<pre class="r"><code>emmeans(m.quasi, ~limit*year, type = &quot;response&quot;, df = 181)</code></pre>
+<pre><code> limit year rate    SE  df lower.CL upper.CL
+ no    1961 23.7 0.997 181     21.8     25.7
+ yes   1961 19.6 1.292 181     17.2     22.3
+ no    1962 22.2 1.168 181     20.0     24.7
+ yes   1962 18.4 1.004 181     16.5     20.5
+
+Degrees-of-freedom method: user-specified 
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m.quasi, ~limit|year, type = &quot;response&quot;), 
+  infer = TRUE, reverse = TRUE, df = 181)</code></pre>
+<pre><code>year = 1961:
+ contrast ratio     SE  df lower.CL upper.CL null t.ratio p.value
+ yes / no 0.828 0.0539 181    0.728    0.941    1  -2.903  0.0042
+
+year = 1962:
+ contrast ratio     SE  df lower.CL upper.CL null t.ratio p.value
+ yes / no 0.828 0.0539 181    0.728    0.941    1  -2.903  0.0042
+
+Degrees-of-freedom method: user-specified 
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre></li>
 <li><p>The model can be written as <span class="math display">\[
   \log E(Y_i) = \beta_0 + \beta_1 l_i + \beta_2 y_i,
 \]</span> where <span class="math inline">\(l_i\)</span> and <span
@@ -901,7 +932,7 @@ p &lt;- ggplot(anoctua, aes(x = elevation, y = PA)) + theme_minimal() +
   scale_x_continuous(breaks = seq(100, 700, by = 50)) + 
   geom_line(aes(y = yhat), data = d)
 plot(p)</code></pre>
-<p><img src="hw4-solutions_files/figure-html/unnamed-chunk-30-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="hw4-solutions_files/figure-html/unnamed-chunk-31-1.png" width="100%" style="display: block; margin: auto;" />
 The “rugs” at the top and bottom of the plot show the elevations of nest
 boxes where owls were present and absent, respectively. In what follows
 you will use the delta method to obtain estimates of meaningful
@@ -959,7 +990,7 @@ presence is <em>at least</em> 0.25 for elevations between <span
 class="math inline">\(x_l\)</span> and <span
 class="math inline">\(x_h\)</span>. The figure below depicts these two
 values for the estimated model.
-<img src="hw4-solutions_files/figure-html/unnamed-chunk-32-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="hw4-solutions_files/figure-html/unnamed-chunk-33-1.png" width="100%" style="display: block; margin: auto;" />
 We can see that <span class="math inline">\(x_l\)</span> and <span
 class="math inline">\(x_h\)</span> are approximately 100 and 275 meters,
 respectively, but we need to express them as functions of the model
@@ -1072,7 +1103,7 @@ p &lt;- ggplot(anoctua, aes(x = elevation, y = PA)) + theme_minimal() +
   geom_hline(yintercept = 0.25, linetype = 3) + 
   geom_vline(xintercept = c(170.1, 110, 263.1), linetype = 3)
 plot(p)</code></pre>
-<p><img src="hw4-solutions_files/figure-html/unnamed-chunk-36-1.png" width="100%" style="display: block; margin: auto;" /></p></li>
+<p><img src="hw4-solutions_files/figure-html/unnamed-chunk-37-1.png" width="100%" style="display: block; margin: auto;" /></p></li>
 </ol>
 </div>
 <div id="reactions-of-lizards-to-fire-ants" class="section level2">
@@ -1127,7 +1158,7 @@ p &lt;- ggplot(FireAnts, aes(x = Habitat, y = fleetime, fill = censored)) +
   theme_minimal() + coord_flip() +
   labs(y = &quot;Seconds Elapsed Until Lizard Flees&quot;, fill = &quot;Censored?&quot;)
 plot(p)</code></pre>
-<p><img src="hw4-solutions_files/figure-html/unnamed-chunk-39-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="hw4-solutions_files/figure-html/unnamed-chunk-40-1.png" width="100%" style="display: block; margin: auto;" />
 Note that the open points at 60 seconds are all right-censored times and
 do not represent actual flee times.</p>
 <ol style="list-style-type: decimal">
@@ -1179,14 +1210,14 @@ d &lt;- summary(m, newdata = d, t = seq(0, 120, length = 500),
 p &lt;- ggplot(d, aes(x = time, y = est, color = Habitat)) + theme_minimal() + 
   geom_line() + labs(x = &quot;Minutes&quot;, y = &quot;S(t)&quot;, title = &quot;Survival Functions&quot;)
 plot(p)</code></pre>
-<p><img src="hw4-solutions_files/figure-html/unnamed-chunk-41-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="hw4-solutions_files/figure-html/unnamed-chunk-42-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>d &lt;- data.frame(Habitat = c(&quot;Invaded&quot;,&quot;Uninvaded&quot;))
 d &lt;- summary(m, newdata = d, t = seq(0, 120, length = 500), 
   type = &quot;hazard&quot;, B = 0, tidy = TRUE)
 p &lt;- ggplot(d, aes(x = time, y = est, color = Habitat)) + theme_minimal() + 
   geom_line() + labs(x = &quot;Minutes&quot;, y = &quot;h(t)&quot;, title = &quot;Hazard Functions&quot;)
 plot(p)</code></pre>
-<p><img src="hw4-solutions_files/figure-html/unnamed-chunk-41-2.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="hw4-solutions_files/figure-html/unnamed-chunk-42-2.png" width="100%" style="display: block; margin: auto;" />
 Note that for any given time point, the survival probability of a lizard
 from the invaded habitat is smaller (i.e., they are less likely to wait
 at least that long to flee) and the hazard rate is higher (i.e., they

@@ -43,6 +43,7 @@ options(digits = 4, width = 90)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
+<!-- Comment to add: The emmeans functions specify df = Inf by default when using quasi. But we can override this with df = x argument.  -->
 
 ## Overdispersion
 

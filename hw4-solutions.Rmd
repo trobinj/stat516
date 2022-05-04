@@ -81,14 +81,14 @@ since if $\beta_s = \beta_a$ then we can remove the subscript and just call the 
       ), start = list(beta_a = 2.9, beta_s = 4.5, gamma = 0.5), 
       data = CrabShip)
     library(trtools)
-    lincon(m_final, a = c(1, -1, 0))
+    lincon(m_final, a = c(-1, 1, 0))
     dmethod(m_final, pfunc = "beta_s - beta_a", 
-      pname = c("beta_s", "beta_a", "gamma"))
+      pname = c("beta_a", "beta_s", "gamma"))
     ```
     To make the test and confidence interval from `dmethod` agree with that from `lincon` we can manually set the degrees of freedom as follows.
     ```{r}
     dmethod(m_final, pfunc = "beta_s - beta_a", 
-      pname = c("beta_s", "beta_a", "gamma"), df = 31)
+      pname = c("beta_a", "beta_s", "gamma"), df = 31)
     ```
     Unfortunately there is a bug in `dmethod` that only applies the specified degrees of freedom to the confidence interval and not the p-value calculation. That will be fixed soon in an update. Next I will specify $F$ test of the same null hypothesis.
     ```{r}
@@ -255,11 +255,18 @@ In what follows you will consider inferences based on this model while also deal
     And next the rate ratios for the effect of limits.
     ```{r}
     pairs(emmeans(m, ~limit|year, type = "response"), 
-      infer = TRUE, reverse = TRUE, infer = TRUE)
+      infer = TRUE, reverse = TRUE)
     pairs(emmeans(m.quasi, ~limit|year, type = "response"), 
-      infer = TRUE, reverse = TRUE, infer = TRUE)
+      infer = TRUE, reverse = TRUE)
     ```
     Note that the estimates of the expected rates and rate ratios are the same, but the standard errors are larger when using quasi-likelihood resulting in wider confidence intervals, test statistics that are smaller in absolute value, and thus larger p-values (similar to what we saw in the last problem). Again, failing to account for over-dispersion frequently results in underestimation of the standard errors. 
+    
+    Typically when using quasi-likelihood for a Poisson or logistic regression model we use a finite degrees of freedom based on the residual degrees of freedom. This is what is done by default by `summary` as well as `contrast`, but not by functions from the **emmeans** package. But you can manually specify the degrees of freedom using the `df` argument. Here is how you would do it here.
+    ```{r}
+    emmeans(m.quasi, ~limit*year, type = "response", df = 181)
+    pairs(emmeans(m.quasi, ~limit|year, type = "response"), 
+      infer = TRUE, reverse = TRUE, df = 181)
+    ```
 
 0. The model can be written as
 $$
