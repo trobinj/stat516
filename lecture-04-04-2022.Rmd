@@ -40,6 +40,8 @@ options(digits = 4, width = 90)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
+<!-- Make clear that the order in which the parameter names are specified to dmethod must be the same as how they appear in the summary output.  -->
+
 ## Review of Linear Combinations
 
 Consider a regression model with parameters $\beta_0, \beta_1, \dots, \beta_k$. A *linear combination* is a *linear function* of the form
