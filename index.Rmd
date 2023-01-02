@@ -5,5 +5,5 @@ output:
     theme: readable
 ---
   
-This is a placeholder for Dr. Johnson's *Applied Regression Modeling* course (Stat 436/516) at the University of Idaho.
+This is a placeholder for Dr. Johnson's *Applied Regression Modeling* course (Stat 436/516) at the University of Idaho (UI).
 
