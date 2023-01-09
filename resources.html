@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Resources</title>
+
+<script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Resources</h1>
+
+</div>
+
+
+<p>Below are miscellaneous resources (mostly for R) that you may find
+useful.</p>
+<div id="getting-started-with-r-and-rstudio" class="section level2">
+<h2>Getting Started with R and RStudio</h2>
+<p>You should do the following as soon as possible to be sure you are
+ready to use R.</p>
+<ol style="list-style-type: decimal">
+<li><p>Download and install R from <a
+href="https://www.r-project.org">www.r-project.org</a> for your
+operating system. If you already have R installed, be sure you have the
+latest version installed which is R version 4.2.2 Patched (2022-11-10
+r83330) nicknamed “Innocent and Trusting.” You can see the version when
+starting R/RStudio, or by typing the command
+<code>version$version.string</code> in the console. It should show
+<code>R version 4.2.2 Patched (2022-11-10 r83330)</code>. For this
+course you must use this version of R (or later if a newer version is
+released during the semester).</p></li>
+<li><p>Download and install the free open source license desktop version
+RStudio from <a href="https://www.rstudio.com">www.rstudio.com</a>. Be
+sure you download “RStudio Desktop” and <em>not</em> RStudio Desktop
+Pro, RStudio Server, or RStudio Workbench. If you already have RStudio
+installed, be sure you have the latest version installed (i.e.,
+2022.12.0.353 or later).</p></li>
+<li><p>Run RStudio to verify that everything is working. Note that R
+runs “under” RStudio (the latter is what is sometimes called an
+“integrated development environment” or IDE). Tinker around with
+RStudio/R if you’ve not used it before. Explore some of the options in
+“Global Options…” under the “Tools” drop-down menu to suit your tastes.
+Many of these options you should not change if you don’t understand
+fully what you are doing, but most of the options under <em>Code</em>,
+<em>Appearance</em>, and <em>Pane Layout</em> are safe to
+explore.</p></li>
+<li><p>Try installing a package from the Comprehensive R Archive Network
+(CRAN) repository by typing the command
+<code>install.packages("devtools")</code> at the <code>&gt;</code>
+prompt in the console window of RStudio to install the
+<strong>devtools</strong> package. This package is used to install my
+<strong>trtools</strong> package (see the next step). Also install the
+package <strong>tidyverse</strong> with
+<code>install.packages("tidyverse")</code>. This will install several
+packages that we will be using throughout the semester for data
+manipulation and plotting. You can also try updating any packages you
+already have installed or that came with R by typing the command
+<code>update.packages()</code> at the prompt in the console window. Note
+that <code>update.packages()</code> will only update packages that are
+on the CRAN repository. Installing or updating packages from CRAN can
+also be done via the “Tools” menu in RStudio.</p></li>
+<li><p>Install my <strong>trtools</strong> package using by typing the
+command <code>devtools::install_github("trobinj/trtools")</code> at the
+prompt in the console window of RStudio, assuming you have already
+installed the package <strong>devtools</strong> as described in the
+previous step. Installing <strong>trtools</strong> requires a different
+command because it is hosted on GitHub rather than on CRAN. Most of the
+packages we will be using are on CRAN and can be installed using
+<code>install.packages</code>, but a few are hosted elsewhere and
+require different commands for installation.</p></li>
+</ol>
+<p>If you run into problems with any of the steps above let me know.</p>
+</div>
+<div id="r-packages" class="section level2">
+<h2>R Packages</h2>
+<p>The following are a few interesting and sometimes useful R
+packages.</p>
+<p><a
+href="https://cran.r-project.org/web/packages/anytime/index.html"><strong>anytime</strong></a>
+is useful for converting a variety of variable types into dates/times.
+See the <a
+href="https://cran.r-project.org/web/packages/anytime/vignettes/anytime-introduction.pdf">vignette</a>
+for some examples.</p>
+<p><a
+href="http://colorspace.r-forge.r-project.org"><strong>colorspace</strong></a>
+provides tools to select and manipulate individual colors and color
+pallets for graphics and plots.</p>
+<p><a
+href="https://github.com/daattali/colourpicker"><strong>colourpicker</strong></a>
+is useful when trying to find the name or HEX value for a color for a
+plot. It adds an add-in to RStudio that helps identify different
+colors.</p>
+<p><a
+href="https://cran.r-project.org/web/packages/cowplot/index.html"><strong>cowplot</strong></a>
+extends the capabilities of <code>ggplot</code> in several ways, but
+what I find particularly useful is the <code>plot_grid</code> function
+for combining and aligning several plots into one. See the vignettes
+that come with the package for some examples.</p>
+<p><a href="http://dplyr.tidyverse.org"><strong>dplyr</strong></a> is
+very helpful for manipulating data and computing basic descriptive
+statistics. It is part of the <a
+href="https://www.tidyverse.org">“tidyverse”</a> of R packages.</p>
+<p><a
+href="https://cran.r-project.org/web/packages/emmeans/index.html"><strong>emmeans</strong></a>
+is designed to estimate “marginal means” for linear and generalized
+linear models. It is a very useful package for making specific
+inferences based on a linear or generalized linear (mixed) model model.
+It’s functionality is similar to the <code>contrast</code> function in
+the <strong>trtools</strong> package.</p>
+<p><a
+href="https://github.com/tidyverse/forcats"><strong>forcats</strong></a>
+includes some useful functions for working with factors. It is part of
+the <a href="https://www.tidyverse.org">“tidyverse”</a> of R
+packages.</p>
+<p><a
+href="https://github.com/thomasp85/gganimate"><strong>gganimate</strong></a>
+lets you produce animated plots with <code>ggplot</code> that can be
+exported as gifs.</p>
+<p><a
+href="http://lubridate.tidyverse.org"><strong>lubridate</strong></a> is
+very useful when working with time or dates. It is part of the <a
+href="https://www.tidyverse.org">“tidyverse”</a> of R packages.</p>
+<p><a href="http://rmarkdown.rstudio.com"><strong>rmarkdown</strong></a>
+lets you create documents that combine text, R code, and the results of
+running that code. Almost all of the documents I create for my classes,
+include this web page, are created using <strong>rmarkdown</strong>.</p>
+<p><a
+href="http://dirk.eddelbuettel.com/code/rcpp.html"><strong>Rcpp</strong></a>
+facilitates the interfacing C++ code with R. It allows for more
+computationally efficient code, but it also extends C/C++ with useful
+classes and functions. This is highly recommended for C++ programmers
+(or anyone who would like to learn C++). There are also several packages
+that allow you to easily install and access various C++ libraries. Some
+examples are <a
+href="http://dirk.eddelbuettel.com/code/rcpp.armadillo.html"><strong>RcppArmadillo</strong></a>
+(my favorite) for using the <a
+href="http://arma.sourceforge.net">Armadillo</a> C++ linear algebra
+library with Rcpp, <a
+href="http://dirk.eddelbuettel.com/code/rcpp.eigen.html"><strong>RcppEigen</strong></a>
+for using the <a
+href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a>
+numerical library, <a
+href="http://dirk.eddelbuettel.com/code/rcpp.gsl.html"><strong>RcppGSL</strong></a>
+for using the <a href="https://www.gnu.org/software/gsl">GNU Scientific
+Library (GSL)</a>, and <a
+href="https://cran.r-project.org/web/packages/RcppEnsmallen/index.html"><strong>RcppEnsmallen</strong></a>
+for using the <a
+href="https://github.com/mlpack/ensmallen">Ensmallen</a> optimisation
+library. For an introduction to using the <strong>Rcpp</strong> package
+I would recommend starting with the book <a
+href="http://adv-r.had.co.nz/Rcpp.html">chapter</a> in <a
+href="http://r-pkgs.had.co.nz"><em>Advanced R</em></a> on Rcpp, the
+github “book” <a
+href="https://teuder.github.io/rcpp4everyone_en"><em>Rcpp for
+Everyone</em></a>, and the blog entry <a
+href="https://zenglix.github.io/Rcpp_basic"><em>Introduction to
+Rcpp</em></a>.</p>
+<p><a
+href="https://cran.r-project.org/web/packages/tesseract/index.html"><strong>tesseract</strong></a>
+lets you use the <a
+href="https://en.wikipedia.org/wiki/Tesseract_(software)">tesseract</a>
+optical character recognition (OCR) software from R. I have found this
+useful for reading data into R from a scanned document from a book or
+article, although it can be a little tricky to calibrate.</p>
+<p><a href="http://tidyr.tidyverse.org"><strong>tidyr</strong></a>
+includes functions for “reshaping” data in various ways such as between
+“long form” (with one observation per row) and “wide form” with multiple
+observations per row. It is part of the <a
+href="https://www.tidyverse.org">“tidyverse”</a> of R packages.</p>
+<p><a href="https://www.tidyverse.org/"><strong>tidyverse</strong></a>
+is actually a collection of packages for manipulating and plotting
+including <strong>dplyr</strong>, <strong>forcats</strong>,
+<strong>lubridate</strong>, <strong>tidyr</strong>, and
+<strong>ggplot2</strong>. You can install all of these packages at once
+by installing the <strong>tidyverse</strong> package. Also you can load
+all of these packages at once with <code>library(tidyverse)</code>.</p>
+<p><a
+href="https://github.com/trobinj/trtools"><strong>trtools</strong></a>
+is a package I originally created for teaching, but now I and others
+also use it for research as well. It contains some data sets that I use
+in classes as well as several utility functions to facilitate certain
+kinds of tasks that are not (in my opinion) as easily done with other
+packages or functions. It is not available on CRAN so it cannot be
+installed using <code>install.packages</code>. To install it use
+<code>devtools::install_github("trobinj/trtools")</code> (assuming you
+already have the <strong>devtools</strong> package installed). Note that
+this package is a work in progress.</p>
+<p>There are several packages that add new color pallets for use with
+the <strong>ggplot2</strong> package. Several of based on themes such as
+the <a
+href="https://github.com/karthik/wesanderson"><strong>wesanderson</strong></a>
+package for <a href="https://wesandersonpalettes.tumblr.com">color
+pallets used in Wes Anderson films</a>, the <a
+href="https://github.com/ewenme/ghibli"><strong>ghibli</strong></a>
+package for pallets inspired by films produced by <a
+href="https://en.wikipedia.org/wiki/Studio_Ghibli">Studio Ghibli</a>,
+and the <a
+href="https://github.com/aljrico/gameofthrones"><strong>gameofthrones</strong></a>
+package for pallets inspired by the Game of Thrones television
+series.</p>
+</div>
+<div id="books" class="section level2">
+<h2>Books</h2>
+<p>The following are some free books about using R that you might find
+useful.</p>
+<p><a href="http://r-pkgs.had.co.nz"><em>Advanced R</em></a> covers some
+of the more advanced aspects of the R programming language.</p>
+<p><a href="http://socviz.co"><em>Data Visualization for Social
+Science</em></a> is a very nice book on visualization using R with the
+<strong>ggplot2</strong> package and some supporting packages. And
+despite the title, this book would be useful for applications outside
+the social sciences.</p>
+<p><a href="https://leanpub.com/hitchhikers_ggplot2"><em>The
+Hitchhiker’s Guide to Ggplot2</em></a> is a introduction to the
+<strong>ggplot2</strong> package with many fun examples.</p>
+<p><a href="http://r-pkgs.had.co.nz"><em>R Packages</em></a> is an
+introduction to creating your own R package. Making a R package is a
+useful way to organize your own R code and to disseminate that work to
+others.</p>
+<p><a href="http://r4ds.had.co.nz"><em>R for Data Science</em></a> is an
+introduction to R. It also features using some capabilities of the <a
+href="www.tidyverse.org">tidyverse</a> packages (e.g.,
+<strong>dplyr</strong>, <strong>tidyr</strong>, and
+<strong>ggplot2</strong>).</p>
+<p><a
+href="https://www.cs.upc.edu/~robert/teaching/estadistica/rprogramming.pdf"><em>R
+Programming for Data Science</em></a> is an introduction to R.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,158 @@
+---
+title: "Lectures"
+output: 
+  html_document: 
+    theme: readable
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r, message = FALSE}
+library(lubridate)
+d <- dmy("09-01-2023","11-01-2023","13-01-2023") + rep(7 * c(0:17), each = 3)
+d <- paste(wday(d, label = TRUE, abbr = FALSE), ", ", 
+  month(d, label = TRUE), " ", day(d), ".", sep = "")
+i <- 1
+```
+
+&nbsp;
+
+`r i <- i + 1; d[i]` [Introduction](lecture-01-11-2023.html).
+
+`r i <- i + 1; d[i]` 
+
+***
+
+`r i <- i + 1; d[i]` **Holiday**. 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` **Holiday**.
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` **Spring recess**.
+
+`r i <- i + 1; d[i]` **Spring recess**.
+
+`r i <- i + 1; d[i]` **Spring recess**.
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]`  
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+ 
+***
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]` 
+
+`r i <- i + 1; d[i]`
+
+
+
+
+
+
