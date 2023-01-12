@@ -158,6 +158,11 @@ where $x_1 = x$ and $x_2 = x^2$ so that we can also write the model as
 $$
   E(Y) = \beta_0 + \beta_1x + \beta x^2.
 $$
+We also need to be careful for models where an explanatory variable has been subject to a *nonlinear* transformation. For example, consider the model
+$$
+  E(Y) = \beta_0 + \beta_1 \log_2(x),
+$$
+where $\log_2$ is the base-2 logarithm. Here $\beta_1$ is the change in $E(Y)$ if we increase $\log_2(x)$ by one unit, not $x$. But it can be shown that $\beta_1$ is the change in $E(Y)$ if we *double* $x$. We'll discuss log transformations later in the course. 
 
 \pagebreak
 

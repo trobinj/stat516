@@ -389,7 +389,19 @@ extreme case consider the model <span class="math display">\[
 class="math inline">\(x_2 = x^2\)</span> so that we can also write the
 model as <span class="math display">\[
   E(Y) = \beta_0 + \beta_1x + \beta x^2.
-\]</span></p>
+\]</span> We also need to be careful for models where an explanatory
+variable has been subject to a <em>nonlinear</em> transformation. For
+example, consider the model <span class="math display">\[
+  E(Y) = \beta_0 + \beta_1 \log_2(x),
+\]</span> where <span class="math inline">\(\log_2\)</span> is the
+base-2 logarithm. Here <span class="math inline">\(\beta_1\)</span> is
+the change in <span class="math inline">\(E(Y)\)</span> if we increase
+<span class="math inline">\(\log_2(x)\)</span> by one unit, not <span
+class="math inline">\(x\)</span>. But it can be shown that <span
+class="math inline">\(\beta_1\)</span> is the change in <span
+class="math inline">\(E(Y)\)</span> if we <em>double</em> <span
+class="math inline">\(x\)</span>. We’ll discuss log transformations
+later in the course.</p>
 <div style="page-break-after: always;"></div>
 </div>
 <div id="indicator-variables-and-parameter-interpretation"
