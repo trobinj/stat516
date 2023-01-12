@@ -21,7 +21,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Introduction](lecture-01-11-2023.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Linear models and their parameterization](lecture-01-13-2023.html).
 
 ***
 

@@ -22,7 +22,7 @@ header-includes:
 
 **Learning Outcomes**: Given data and research questions, students should be able to correctly specify and interpret inferences for an appropriate regression model. Students should be to specify and interpret these inferences mathematically, with code, and in writing. 
 
-**Course Website**: Most course materials including lecture notes, homework assignments, study guides, this syllabus, and other materials can be found on the course website [trobinj.github.io/stat251](https://trobinj.github.io/stat251). Note that this is separate from [Canvas](http://canvas.uidaho.edu), which will only be used for examination scores. Canvas does have a link to the course website. 
+**Course Website**: Most course materials including lecture notes, homework assignments, study guides, this syllabus, and other materials can be found on the course website [trobinj.github.io/stat516](https://trobinj.github.io/stat251). Note that this is separate from [Canvas](http://canvas.uidaho.edu), which will only be used for examination scores. Canvas does have a link to the course website. 
 
 **Software**: This course uses the statistical package R with the RStudio integrated development environment. Previous experience with R and RStudio is not assumed, but students are expected to make the effort to learn how to use these software packages. Both R and RStudio are free and available for Windows, macOS, and Linux operating systems. For information about installing R and RStudio see the section titled "Getting Started with R and RStudio" on the [resources](resources.html) page.  
 
