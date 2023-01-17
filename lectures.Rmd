@@ -27,7 +27,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` **Holiday**. 
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Introduction to linear model specification in R using the `lm` function](lecture-01-18-2023.html).
 
 `r i <- i + 1; d[i]` 
  

@@ -1,0 +1,192 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "01-18-2023"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"), comment = "")
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+suppressWarnings(library(kableExtra))
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+**Example**: The *data frame* `trees` comes with R. We can see it if we just type `trees` at the prompt in the R console.
+```{r}
+trees
+```
+Let's specify the model
+$$
+  E(V_i) = \beta_0 + \beta_1 g_i + \beta_2 h_i,
+$$
+where $V_i$, $g_i$, and $h_i$ are the volume, girth, and height from the $i$-th observation.
+```{r}
+m <- lm(formula = Volume ~ Girth + Height, data = trees)
+```
+There's a lot to say here.
+
+1. `lm` is a *function* to which we have provided two *arguments*: `formula` and `data`. Other arguments can be found using `args(lm)`, some of which we will use later.
+      ```{r}
+      args(lm)
+      ```
+We do not need to name the arguments *if we provide them in the same order as they are expected*. For example, this would also work:
+      ```{r}
+      m <- lm(Volume ~ Girth + Height, trees)
+      ```
+    Just about all functions that estimate a regression model expect `formula` to be the first argument. A common convention (and one that I use) is to name all arguments except the first:
+      ```{r}
+      m <- lm(Volume ~ Girth + Height, data = trees)
+      ```
+      
+0. The `formula` argument is *symbolic*, not literal. It is a system for communicating with R the regression model you want to specify. The model formula `Volume ~ Girth + Height` implies the statistical model $E(V_i) = \beta_0 + \beta_1 g_i + \beta_2 h_i$.
+
+0. We have *assigned* the output of this function to an *object* called `m` (R is an *object-oriented* programming language). Note that you can also use `=` instead of `<-`. We can apply other functions to this object. For example, `print(m)`.
+      ```{r}
+      print(m)
+      ```
+But if you just have `m` it will interpret that as `print(m)`.
+      ```{r}
+      m
+      ```
+A bit more information can be extracted by using the `summary` function. 
+      ```{r}
+      summary(m)
+      ```
+In lecture I will often trim the output from `summary` using something like the following.
+      ```{r}
+      summary(m)$coefficients
+      ```
+This shows estimates of the parameters $\beta_0$, $\beta_1$, and $\beta_2$, and some other information concerning inferences for those parameters (more on that later). 
+      
+\vspace{5cm}
+
+**Example**: Here are the data and a specified linear model for the study on dopamine activity in schizophrenics. The data are available in the **BSDA** package.
+```{r, echo = TRUE}
+library(BSDA) # install with install.packages("BSDA")
+Dopamine
+head(Dopamine)
+tail(Dopamine)
+```
+Also you can try `?Dopamine` or `help(Dopamine)` to see the help file (you can also do this for functions like `lm`). A `tibble` is another way that data are stored in R that is mostly interchangeable with data frames (they are effectively "enhanced" data frames). 
+
+Let's specify a linear model using the `lm` function.
+```{r}
+m <- lm(dbh ~ group, data = Dopamine)
+summary(m)$coefficients
+```
+Note: The `grouppsychotic` tells us that an indicator variable was created for the level/category `psychotic` for the categorical variable `group`. How would we write this model *mathematically*? 
+
+\vspace{3cm}
+
+**Example**: Here are the data from the anorexia study.
+```{r}
+library(MASS) # install with install.packages("MASS")
+head(anorexia)
+summary(anorexia)
+```
+Here we are going to create another variable `change` which is the change in weight. (Note: I redefined `change` from the original lecture as the post-weight minus the pre-weight so that a positive value indicates weight gain and a negative value indicates weight loss.)  
+```{r}
+anorexia$change <- anorexia$Postwt - anorexia$Prewt
+head(anorexia)
+```
+Let's specify a linear model.
+```{r}
+m <- lm(change ~ Treat, data = anorexia)
+summary(m)$coefficients
+```
+What are the indicator variables? How would we write this model mathematically? 
+
+\vspace{5cm}
+
+We can change the parameterization using `relevel`.
+```{r, echo = TRUE}
+anorexia$Treat <- relevel(anorexia$Treat, ref = "Cont")
+m <- lm(change ~ Treat, data = anorexia)
+summary(m)$coefficients
+```
+What are the indicator variables? How would we write this model mathematically? 
+
+\vspace{5cm}
+
+**Note**: We can change the parameterization for the model for the previous example, but we need to make `group` a *factor* because the `relevel` function will only work on variables that are factors (although the function `lm` automatically converts a character variable to a factor). We can see that it is not a factor (yet) from `summary` and also from the `is.factor` function. 
+```{r, echo = TRUE}
+summary(Dopamine)
+is.factor(Dopamine$group)
+```
+Here's what happens if you try to use `relevel` with the `group` variable.
+```{r, error = TRUE}
+Dopamine$group <- relevel(Dopamine$group, ref = "psychotic")
+```
+Let's make `group` a factor and then change the parameterization. 
+```{r, echo = TRUE}
+Dopamine$group <- factor(Dopamine$group)
+Dopamine$group <- relevel(Dopamine$group, ref = "psychotic")
+```
+Note that we could also have done this with one line of code.
+```{r, echo = TRUE}
+Dopamine$group <- relevel(factor(Dopamine$group), ref = "psychotic")
+```
+Here's the reparameterized model.
+```{r, echo = TRUE}
+m <- lm(dbh ~ group, data = Dopamine)
+summary(m)$coefficients
+```
+What is this model?
+
+\vspace{5cm}
+
+Here's another parameterization. Including the term `-1` in the model formula argument suppresses the inclusion of the $\beta_0$ parameter (again, it is symbolic, not literal).[^intercept] 
+```{r}
+m <- lm(dbh ~ -1 + group, data = Dopamine)
+summary(m)$coefficients
+```
+Let's try that with the `anorexia` data.
+```{r}
+m <- lm(change ~ -1 + Treat, data = anorexia)
+summary(m)$coefficients
+```
+What are these models?
+
+\vspace{5cm}
+
+**Example**: Sometimes we may also want so basic descriptive statistics. There are *many* ways to do this in R. One flexible approach is to use the **dplyr** package. 
+```{r, echo = TRUE}
+library(dplyr) # install with install.packages("dplyr") or install.packages("tidyverse")
+Dopamine %>% group_by(group) %>% summarize(dbh = mean(dbh))
+anorexia %>% mutate(change = Prewt - Postwt) %>% group_by(Treat) %>%
+  summarize(meanchange = mean(change), sdchange = sd(change), samplesize = n())
+```
+The **dplyr** and **tidyr** packages are very useful for manipulating and summarizing data. They have a bit of a learning curve, but they are well worth learning. I will provide many examples of how they can be used.
+
+[^intercept]: When we say something like `dbh ~ group` this is actually translated as `dbh ~ 1 + group` where the "explanatory variable" of `1` effectively becomes the term $\beta_0$. Including this term is the default even if we do not mention it explicitly. But if we do not want it then we "add" `-1` to the model formula to remove it. 
+
+
+

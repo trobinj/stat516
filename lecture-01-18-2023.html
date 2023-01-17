@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Wednesday, Jan 18</title>
+
+<script src="site_libs/header-attrs-2.19/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Wednesday, Jan 18</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-01-18-2023.pdf">PDF</a> copy
+of this lecture.</p>
+<p><strong>Example</strong>: The <em>data frame</em> <code>trees</code>
+comes with R. We can see it if we just type <code>trees</code> at the
+prompt in the R console.</p>
+<pre class="r"><code>trees</code></pre>
+<pre><code>   Girth Height Volume
+1    8.3     70   10.3
+2    8.6     65   10.3
+3    8.8     63   10.2
+4   10.5     72   16.4
+5   10.7     81   18.8
+6   10.8     83   19.7
+7   11.0     66   15.6
+8   11.0     75   18.2
+9   11.1     80   22.6
+10  11.2     75   19.9
+11  11.3     79   24.2
+12  11.4     76   21.0
+13  11.4     76   21.4
+14  11.7     69   21.3
+15  12.0     75   19.1
+16  12.9     74   22.2
+17  12.9     85   33.8
+18  13.3     86   27.4
+19  13.7     71   25.7
+20  13.8     64   24.9
+21  14.0     78   34.5
+22  14.2     80   31.7
+23  14.5     74   36.3
+24  16.0     72   38.3
+25  16.3     77   42.6
+26  17.3     81   55.4
+27  17.5     82   55.7
+28  17.9     80   58.3
+29  18.0     80   51.5
+30  18.0     80   51.0
+31  20.6     87   77.0</code></pre>
+<p>Let’s specify the model <span class="math display">\[
+  E(V_i) = \beta_0 + \beta_1 g_i + \beta_2 h_i,
+\]</span> where <span class="math inline">\(V_i\)</span>, <span
+class="math inline">\(g_i\)</span>, and <span
+class="math inline">\(h_i\)</span> are the volume, girth, and height
+from the <span class="math inline">\(i\)</span>-th observation.</p>
+<pre class="r"><code>m &lt;- lm(formula = Volume ~ Girth + Height, data = trees)</code></pre>
+<p>There’s a lot to say here.</p>
+<ol style="list-style-type: decimal">
+<li><p><code>lm</code> is a <em>function</em> to which we have provided
+two <em>arguments</em>: <code>formula</code> and <code>data</code>.
+Other arguments can be found using <code>args(lm)</code>, some of which
+we will use later.</p>
+<pre class="r"><code>args(lm)</code></pre>
+<pre><code>function (formula, data, subset, weights, na.action, method = &quot;qr&quot;, 
+    model = TRUE, x = FALSE, y = FALSE, qr = TRUE, singular.ok = TRUE, 
+    contrasts = NULL, offset, ...) 
+NULL</code></pre>
+<p>We do not need to name the arguments <em>if we provide them in the
+same order as they are expected</em>. For example, this would also
+work:</p>
+<pre class="r"><code>m &lt;- lm(Volume ~ Girth + Height, trees)</code></pre>
+<p>Just about all functions that estimate a regression model expect
+<code>formula</code> to be the first argument. A common convention (and
+one that I use) is to name all arguments except the first:</p>
+<pre class="r"><code>m &lt;- lm(Volume ~ Girth + Height, data = trees)</code></pre></li>
+<li><p>The <code>formula</code> argument is <em>symbolic</em>, not
+literal. It is a system for communicating with R the regression model
+you want to specify. The model formula
+<code>Volume ~ Girth + Height</code> implies the statistical model <span
+class="math inline">\(E(V_i) = \beta_0 + \beta_1 g_i + \beta_2
+h_i\)</span>.</p></li>
+<li><p>We have <em>assigned</em> the output of this function to an
+<em>object</em> called <code>m</code> (R is an <em>object-oriented</em>
+programming language). Note that you can also use <code>=</code> instead
+of <code>&lt;-</code>. We can apply other functions to this object. For
+example, <code>print(m)</code>.</p>
+<pre class="r"><code>print(m)</code></pre>
+<pre><code>
+Call:
+lm(formula = Volume ~ Girth + Height, data = trees)
+
+Coefficients:
+(Intercept)        Girth       Height  
+   -57.9877       4.7082       0.3393  </code></pre>
+<p>But if you just have <code>m</code> it will interpret that as
+<code>print(m)</code>.</p>
+<pre class="r"><code>m</code></pre>
+<pre><code>
+Call:
+lm(formula = Volume ~ Girth + Height, data = trees)
+
+Coefficients:
+(Intercept)        Girth       Height  
+   -57.9877       4.7082       0.3393  </code></pre>
+<p>A bit more information can be extracted by using the
+<code>summary</code> function.</p>
+<pre class="r"><code>summary(m)</code></pre>
+<pre><code>
+Call:
+lm(formula = Volume ~ Girth + Height, data = trees)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.4065 -2.6493 -0.2876  2.2003  8.4847 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -57.9877     8.6382  -6.713 2.75e-07 ***
+Girth         4.7082     0.2643  17.816  &lt; 2e-16 ***
+Height        0.3393     0.1302   2.607   0.0145 *  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 3.882 on 28 degrees of freedom
+Multiple R-squared:  0.948,   Adjusted R-squared:  0.9442 
+F-statistic:   255 on 2 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>In lecture I will often trim the output from <code>summary</code>
+using something like the following.</p>
+<pre class="r"><code>summary(m)$coefficients</code></pre>
+<pre><code>               Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept) -57.9876589  8.6382259 -6.712913 2.749507e-07
+Girth         4.7081605  0.2642646 17.816084 8.223304e-17
+Height        0.3392512  0.1301512  2.606594 1.449097e-02</code></pre>
+<p>This shows estimates of the parameters <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, and <span
+class="math inline">\(\beta_2\)</span>, and some other information
+concerning inferences for those parameters (more on that
+later).</p></li>
+</ol>
+<p><strong>Example</strong>: Here are the data and a specified linear
+model for the study on dopamine activity in schizophrenics. The data are
+available in the <strong>BSDA</strong> package.</p>
+<pre class="r"><code>library(BSDA) # install with install.packages(&quot;BSDA&quot;)
+Dopamine</code></pre>
+<pre><code># A tibble: 25 × 2
+     dbh group       
+   &lt;int&gt; &lt;chr&gt;       
+ 1   104 nonpsychotic
+ 2   105 nonpsychotic
+ 3   112 nonpsychotic
+ 4   116 nonpsychotic
+ 5   130 nonpsychotic
+ 6   145 nonpsychotic
+ 7   154 nonpsychotic
+ 8   156 nonpsychotic
+ 9   170 nonpsychotic
+10   180 nonpsychotic
+# … with 15 more rows</code></pre>
+<pre class="r"><code>head(Dopamine)</code></pre>
+<pre><code># A tibble: 6 × 2
+    dbh group       
+  &lt;int&gt; &lt;chr&gt;       
+1   104 nonpsychotic
+2   105 nonpsychotic
+3   112 nonpsychotic
+4   116 nonpsychotic
+5   130 nonpsychotic
+6   145 nonpsychotic</code></pre>
+<pre class="r"><code>tail(Dopamine)</code></pre>
+<pre><code># A tibble: 6 × 2
+    dbh group    
+  &lt;int&gt; &lt;chr&gt;    
+1   226 psychotic
+2   245 psychotic
+3   270 psychotic
+4   275 psychotic
+5   306 psychotic
+6   320 psychotic</code></pre>
+<p>Also you can try <code>?Dopamine</code> or
+<code>help(Dopamine)</code> to see the help file (you can also do this
+for functions like <code>lm</code>). A <code>tibble</code> is another
+way that data are stored in R that is mostly interchangeable with data
+frames (they are effectively “enhanced” data frames).</p>
+<p>Let’s specify a linear model using the <code>lm</code> function.</p>
+<pre class="r"><code>m &lt;- lm(dbh ~ group, data = Dopamine)
+summary(m)$coefficients</code></pre>
+<pre><code>                Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept)    164.26667   12.58563 13.051923 4.058662e-12
+grouppsychotic  78.33333   19.89963  3.936422 6.586761e-04</code></pre>
+<p>Note: The <code>grouppsychotic</code> tells us that an indicator
+variable was created for the level/category <code>psychotic</code> for
+the categorical variable <code>group</code>. How would we write this
+model <em>mathematically</em>?</p>
+<p><strong>Example</strong>: Here are the data from the anorexia
+study.</p>
+<pre class="r"><code>library(MASS) # install with install.packages(&quot;MASS&quot;)
+head(anorexia)</code></pre>
+<pre><code>  Treat Prewt Postwt
+1  Cont  80.7   80.2
+2  Cont  89.4   80.1
+3  Cont  91.8   86.4
+4  Cont  74.0   86.3
+5  Cont  78.1   76.1
+6  Cont  88.3   78.1</code></pre>
+<pre class="r"><code>summary(anorexia)</code></pre>
+<pre><code>  Treat        Prewt           Postwt      
+ CBT :29   Min.   :70.00   Min.   : 71.30  
+ Cont:26   1st Qu.:79.60   1st Qu.: 79.33  
+ FT  :17   Median :82.30   Median : 84.05  
+           Mean   :82.41   Mean   : 85.17  
+           3rd Qu.:86.00   3rd Qu.: 91.55  
+           Max.   :94.90   Max.   :103.60  </code></pre>
+<p>Here we are going to create another variable <code>change</code>
+which is the change in weight. (Note: I redefined <code>change</code>
+from the original lecture as the post-weight minus the pre-weight so
+that a positive value indicates weight gain and a negative value
+indicates weight loss.)</p>
+<pre class="r"><code>anorexia$change &lt;- anorexia$Postwt - anorexia$Prewt
+head(anorexia)</code></pre>
+<pre><code>  Treat Prewt Postwt change
+1  Cont  80.7   80.2   -0.5
+2  Cont  89.4   80.1   -9.3
+3  Cont  91.8   86.4   -5.4
+4  Cont  74.0   86.3   12.3
+5  Cont  78.1   76.1   -2.0
+6  Cont  88.3   78.1  -10.2</code></pre>
+<p>Let’s specify a linear model.</p>
+<pre class="r"><code>m &lt;- lm(change ~ Treat, data = anorexia)
+summary(m)$coefficients</code></pre>
+<pre><code>             Estimate Std. Error   t value   Pr(&gt;|t|)
+(Intercept)  3.006897   1.397996  2.150861 0.03499197
+TreatCont   -3.456897   2.033297 -1.700144 0.09360765
+TreatFT      4.257809   2.299644  1.851508 0.06837576</code></pre>
+<p>What are the indicator variables? How would we write this model
+mathematically?</p>
+<p>We can change the parameterization using <code>relevel</code>.</p>
+<pre class="r"><code>anorexia$Treat &lt;- relevel(anorexia$Treat, ref = &quot;Cont&quot;)
+m &lt;- lm(change ~ Treat, data = anorexia)
+summary(m)$coefficients</code></pre>
+<pre><code>             Estimate Std. Error    t value    Pr(&gt;|t|)
+(Intercept) -0.450000   1.476449 -0.3047854 0.761447048
+TreatCBT     3.456897   2.033297  1.7001438 0.093607652
+TreatFT      7.714706   2.348163  3.2854224 0.001602338</code></pre>
+<p>What are the indicator variables? How would we write this model
+mathematically?</p>
+<p><strong>Note</strong>: We can change the parameterization for the
+model for the previous example, but we need to make <code>group</code> a
+<em>factor</em> because the <code>relevel</code> function will only work
+on variables that are factors (although the function <code>lm</code>
+automatically converts a character variable to a factor). We can see
+that it is not a factor (yet) from <code>summary</code> and also from
+the <code>is.factor</code> function.</p>
+<pre class="r"><code>summary(Dopamine)</code></pre>
+<pre><code>      dbh           group          
+ Min.   :104.0   Length:25         
+ 1st Qu.:150.0   Class :character  
+ Median :200.0   Mode  :character  
+ Mean   :195.6                     
+ 3rd Qu.:230.0                     
+ Max.   :320.0                     </code></pre>
+<pre class="r"><code>is.factor(Dopamine$group)</code></pre>
+<pre><code>[1] FALSE</code></pre>
+<p>Here’s what happens if you try to use <code>relevel</code> with the
+<code>group</code> variable.</p>
+<pre class="r"><code>Dopamine$group &lt;- relevel(Dopamine$group, ref = &quot;psychotic&quot;)</code></pre>
+<pre><code>Error in relevel.default(Dopamine$group, ref = &quot;psychotic&quot;): &#39;relevel&#39; only for (unordered) factors</code></pre>
+<p>Let’s make <code>group</code> a factor and then change the
+parameterization.</p>
+<pre class="r"><code>Dopamine$group &lt;- factor(Dopamine$group)
+Dopamine$group &lt;- relevel(Dopamine$group, ref = &quot;psychotic&quot;)</code></pre>
+<p>Note that we could also have done this with one line of code.</p>
+<pre class="r"><code>Dopamine$group &lt;- relevel(factor(Dopamine$group), ref = &quot;psychotic&quot;)</code></pre>
+<p>Here’s the reparameterized model.</p>
+<pre class="r"><code>m &lt;- lm(dbh ~ group, data = Dopamine)
+summary(m)$coefficients</code></pre>
+<pre><code>                   Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept)       242.60000   15.41419 15.738750 8.320341e-14
+groupnonpsychotic -78.33333   19.89963 -3.936422 6.586761e-04</code></pre>
+<p>What is this model?</p>
+<p>Here’s another parameterization. Including the term <code>-1</code>
+in the model formula argument suppresses the inclusion of the <span
+class="math inline">\(\beta_0\)</span> parameter (again, it is symbolic,
+not literal).<a href="#fn1" class="footnote-ref"
+id="fnref1"><sup>1</sup></a></p>
+<pre class="r"><code>m &lt;- lm(dbh ~ -1 + group, data = Dopamine)
+summary(m)$coefficients</code></pre>
+<pre><code>                  Estimate Std. Error  t value     Pr(&gt;|t|)
+grouppsychotic    242.6000   15.41419 15.73875 8.320341e-14
+groupnonpsychotic 164.2667   12.58563 13.05192 4.058662e-12</code></pre>
+<p>Let’s try that with the <code>anorexia</code> data.</p>
+<pre class="r"><code>m &lt;- lm(change ~ -1 + Treat, data = anorexia)
+summary(m)$coefficients</code></pre>
+<pre><code>           Estimate Std. Error    t value     Pr(&gt;|t|)
+TreatCont -0.450000   1.476449 -0.3047854 0.7614470484
+TreatCBT   3.006897   1.397996  2.1508614 0.0349919664
+TreatFT    7.264706   1.825915  3.9786656 0.0001687833</code></pre>
+<p>What are these models?</p>
+<p><strong>Example</strong>: Sometimes we may also want so basic
+descriptive statistics. There are <em>many</em> ways to do this in R.
+One flexible approach is to use the <strong>dplyr</strong> package.</p>
+<pre class="r"><code>library(dplyr) # install with install.packages(&quot;dplyr&quot;) or install.packages(&quot;tidyverse&quot;)
+Dopamine %&gt;% group_by(group) %&gt;% summarize(dbh = mean(dbh))</code></pre>
+<pre><code># A tibble: 2 × 2
+  group          dbh
+  &lt;fct&gt;        &lt;dbl&gt;
+1 psychotic     243.
+2 nonpsychotic  164.</code></pre>
+<pre class="r"><code>anorexia %&gt;% mutate(change = Prewt - Postwt) %&gt;% group_by(Treat) %&gt;%
+  summarize(meanchange = mean(change), sdchange = sd(change), samplesize = n())</code></pre>
+<pre><code># A tibble: 3 × 4
+  Treat meanchange sdchange samplesize
+  &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt;      &lt;int&gt;
+1 Cont       0.450     7.99         26
+2 CBT       -3.01      7.31         29
+3 FT        -7.26      7.16         17</code></pre>
+<p>The <strong>dplyr</strong> and <strong>tidyr</strong> packages are
+very useful for manipulating and summarizing data. They have a bit of a
+learning curve, but they are well worth learning. I will provide many
+examples of how they can be used.</p>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>When we say something like <code>dbh ~ group</code> this
+is actually translated as <code>dbh ~ 1 + group</code> where the
+“explanatory variable” of <code>1</code> effectively becomes the term
+<span class="math inline">\(\beta_0\)</span>. Including this term is the
+default even if we do not mention it explicitly. But if we do not want
+it then we “add” <code>-1</code> to the model formula to remove it.<a
+href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
