@@ -1,0 +1,284 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "01-20-2023"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"), comment = "")
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+suppressWarnings(library(kableExtra))
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+
+## Quantitative and Categorical Explanatory Variables
+
+```{r}
+library(MASS) # for the whiteside data frame
+head(whiteside)
+```
+Here is a plot of the data (we will consider how to create such plots later). 
+```{r, fig.height = 3.5, echo = FALSE}
+p <- ggplot(whiteside, aes(x = Temp, y = Gas, color = Insul))
+p <- p + geom_point() + labs(color = "Insulation", x = "Temperature (C)", 
+  y = "Gas Consumption (1000s of cubic feet)")
+p <- p + theme_minimal() + theme(legend.position = c(0.8, 0.8))
+p <- p + scale_x_continuous(breaks = -1:10)
+p <- p + scale_y_continuous(breaks = 0:10)
+plot(p)
+```
+Consider the following model specified using the `lm` function.
+```{r}
+m <- lm(Gas ~ Insul + Temp, data = whiteside)
+summary(m)$coefficients
+```
+The model specified above can be written as
+$$
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2},
+$$
+or 
+$$
+  E(G_i) = \beta_0 + \beta_1 d_i + \beta_2 t_i,
+$$
+where $G_i$ is gas consumption, $t_i$ is temperature, and $d_i$ is defined as
+$$
+  d_i = 
+  \begin{cases}
+    1, & \text{if the $i$-th observation is after insulation}, \\
+    0, & \text{otherwise}.
+  \end{cases}
+$$
+Thus we can also write the model case-wise as 
+$$
+  E(G_i) = 
+  \begin{cases}
+    \beta_0 + \beta_2t_i, & \text{if the $i$-th observation is before insulation}, \\
+    \beta_0 + \beta_1 + \beta_2t_i, & \text{if the $i$-th observation is after insulation.}
+  \end{cases}
+$$
+If we plot expected gas consumption versus temperature, we get a line with a slope of $\beta_2$ and an intercept of $\beta_0$ *before* insulation and $\beta_0 + \beta_1$ *after* insulation. 
+```{r, fig.height = 3.5, echo = FALSE}
+d <- expand.grid(Insul = c("Before","After"), Temp = seq(-1, 11, length = 2))
+d$yhat <- predict(m, newdata = d)
+p <- p + geom_line(aes(y = yhat), data = d)
+plot(p)
+```
+
+\pagebreak
+
+For the model
+$$
+  E(G_i) = 
+  \begin{cases}
+    \beta_0 + \beta_2t_i, & \text{if the $i$-th observation is before insulation}, \\
+    \beta_0 + \beta_1 + \beta_2t_i, & \text{if the $i$-th observation is after insulation,}
+  \end{cases}
+$$
+how can we write the following as functions of $\beta_0$, $\beta_1$, and/or $\beta_2$?
+
+1. The change in the expected gas consumption per unit increase in temperature *before* insulation.
+
+0. The change in the expected gas consumption per unit increase in temperature *after* insulation. 
+
+0. The change in expected gas consumption (before and after) for a 10 degree increase in temperature. 
+
+0. The expected gas consumption before and after insulation at 0C, and at 5C.
+
+0. The change in expected gas consumption from before to after insulation at 0C, and at 5C.
+
+\pagebreak
+
+Now consider the following model specified using the `lm` function.
+```{r}
+m <- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+summary(m)$coefficients
+```
+The model specified above can be written as
+$$
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3},
+$$
+or
+$$
+  E(G_i) = \beta_0 + \beta_1 d_i + \beta_2 t_i + \beta_3 d_i t_i,
+$$
+where again $G_i$ is gas consumption, $t_i$ is temperature, and $d_i$ is defined as
+$$
+  d_i = 
+  \begin{cases}
+    1, & \text{if the $i$-th observation is after insulation}, \\
+    0, & \text{otherwise}.
+  \end{cases}
+$$
+Thus we can also write the model case-wise as 
+$$
+  E(G_i) = 
+  \begin{cases}
+    \beta_0 + \beta_2t_i, & \text{if the $i$-th observation is before insulation}, \\
+    \beta_0 + \beta_1 + (\beta_2 + \beta_3)t_i, & \text{if the $i$-th observation is after insulation.}
+  \end{cases}
+$$
+If we plot expected gas consumption versus temperature, we get a line with a slope of $\beta_2$ *before* insulation and $\beta_2 + \beta_3$ *after* insulation, and an intercept of $\beta_0$ *before* insulation and $\beta_0 + \beta_1$ *after* insulation.
+```{r, fig.height = 3.5, echo = FALSE}
+d <- expand.grid(Insul = c("Before","After"), Temp = seq(-1, 11, length = 2))
+d$yhat <- predict(m, newdata = d)
+p <- ggplot(whiteside, aes(x = Temp, y = Gas, color = Insul))
+p <- p + geom_point() + labs(color = "Insulation", x = "Temperature (C)", 
+  y = "Gas Consumption (1000s of cubic feet)")
+p <- p + scale_x_continuous(breaks = -1:10)
+p <- p + scale_y_continuous(breaks = 0:10)
+p <- p + theme_minimal() + theme(legend.position = c(0.8, 0.8))
+p <- p + geom_line(aes(y = yhat), data = d)
+plot(p)
+```
+
+\pagebreak
+
+For the model
+$$
+  E(G_i) = 
+  \begin{cases}
+    \beta_0 + \beta_2t_i, & \text{if the $i$-th observation is before insulation}, \\
+    \beta_0 + \beta_1 + (\beta_2 + \beta_3)t_i, & \text{if the $i$-th observation is after insulation,}
+  \end{cases}
+$$
+how can we write the following as functions of $\beta_0$, $\beta_1$, $\beta_2$ and/or $\beta_3$?
+
+1. The rate of change in the expected gas consumption per unit increase in temperature *before* insulation.
+
+0. The rate of change in the expected gas consumption per unit increase in temperature *after* insulation. 
+
+0. The change in expected gas consumption (before and after) for a 10 degree increase in temperature. 
+
+0. The expected gas consumption before and after insulation at 0C, and at 5C.
+
+0. The change in expected gas consumption from before to after insulation at 0C, and at 5C.
+
+\pagebreak
+
+## Identifying Model Terms in Linear Models in R
+
+A linear model can be written as
+$$
+  E(Y) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \cdots + \beta_kx_k
+$$
+that has $k$ *terms*, where the $j$-th term is $\beta_jx_j$. The row labels returned by `summary` such as
+```{r}
+summary(m)$coefficients
+```
+let us identify each term in the model using the following rules.
+
+1. If the label is `(Intercept)` them the first term is $\beta_0$. Otherwise $\beta_0$ is excluded.
+
+0. If the label is the name of a *quantitative* variable (e.g., `Temp`), then the model includes the term $\beta_jx_j$ where $x_j$ is the value of that variable for a given observation.
+
+0. If the label is the name of a *categorical/factor* variable with a category/level "suffix" (e.g., `InsulAfter`), then the model includes the term $\beta_jx_j$ where $x_j$ is an *indicator variable* for when the observation of the categorical/factor variable equals that category/level.[^contrasts]
+
+0. If the label is has a colon (`:`) between two labels (e.g., `InsulAfter:Temp`), then the model includes the term $\beta_jx_j$ where $x_j$ is the *product* of the values of two $x$ variables defined by the two labels (i.e., $x$ defined by `InsulAfter` times the $x$ defined by `Temp`).
+
+**Example**: Here's an alternative parameterization of the model used above.
+```{r}
+m <- lm(Gas ~ -1 + Insul + Insul:Temp, data = whiteside)
+summary(m)$coefficients
+```
+How would we write this model?
+
+[^contrasts]: There are alternative "systems" to indicator variables when dealing with categorical explanatory variables. One example is where the reference category/level gets a value of -1 instead of 0. These have some applications when using specialized parameterizations of linear models and simplify some calculations, but they can often be avoided. Most software (including R) uses the indicator/dummy variable system by default.
+
+\pagebreak
+
+## Linear Functions of Parameters
+
+"The default output isn't necessarily useful, and what is useful is not necessarily the default output." --- Me
+
+For a regression model like
+$$
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik},
+$$
+a quantity of interest can often be written as a *linear function of the model parameters* (sometimes also called a *linear combination* or *linear contrast* of the parameters). This can be written in general as
+$$
+  \ell = a_0\beta_0 + a_1\beta_1 + a_2\beta_2 + \cdots + a_k\beta_k + b,
+$$
+where $a_0, a_1, \dots, a_k$ and $b$ are specified coefficients. There are several ways to do this on R. One way is to use the `lincon` function (for **lin**ear **con**trast) from the **trtools** package. 
+
+\pagebreak
+
+```{r, echo = FALSE}
+options(width = 90)
+```
+
+**Example**: Consider the following model.
+```{r}
+m <- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+summary(m)$coefficients
+library(trtools)    # so we can use lincon below
+options(digits = 4) # for display purposes
+```
+How do we write the following as linear combinations and then make inferences about that linear combination?
+
+1. The rate of change in expected gas consumption before insulation is $\beta_2$.
+\vspace{2cm}
+      ```{r}
+      lincon(m, a = c(0,0,1,0), b = 0)
+      ```
+
+2. The rate of change in expected gas consumption after insulation is $\beta_2 + \beta_3$.
+\vspace{2cm}
+      ```{r}
+      lincon(m, a = c(0,0,1,1), b = 0)
+      ```
+
+3. The change in expected gas consumption (before and after insulation) for a 10 degree increase in temperature are $10\beta_2$ and $10\beta_2 + 10\beta_3$, respectively.
+\vspace{2cm}
+      ```{r}
+      lincon(m, a = c(0,0,10,0), b = 0) # before
+      lincon(m, a = c(0,0,10,10), b = 0) # after
+      ```
+
+\pagebreak
+
+4. The expected gas consumption before and after insulation at 5C are $\beta_0 + \beta_25$ and $\beta_0 + \beta_1 + (\beta_2 + \beta_3)5$, respectively. 
+\vspace{2cm}
+      ```{r}
+      lincon(m, a = c(1,0,5,0), b = 0) # before
+      lincon(m, a = c(1,1,5,5), b = 0) # after
+      ```
+      
+5. The change in the expected gas consumption from before to after insulation at 5C is $\beta_1 + \beta_35$. How is this expressed as a linear combination of $\beta_0, \beta_1, \beta_2, \beta_3$?
+\vspace{2cm}
+      ```{r}
+      lincon(m, a = c(0,1,0,5), b = 0)
+      ```
+
+Note: Because in many cases we have $b = 0$, the `b` argument has this as a default value and can be omitted if $b = 0$. So we can write `lincon(m, a = c(0,1,0,5))` instead of `lincon(m, a = c(0,1,0,5), b = 0)`.
+
+
+
