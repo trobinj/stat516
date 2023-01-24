@@ -1,0 +1,317 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "01-25-2023"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"), comment = "")
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+suppressWarnings(library(kableExtra))
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+```{r options, echo = FALSE}
+options(digits = 4)
+```
+
+## Parameter Estimation
+
+There are *many* ways to estimate the parameters of a regression model. One useful and common approach is to use the method of *least squares*. 
+
+### Least Squares Estimation of $\beta_0, \beta_1, \dots, \beta_k$
+
+Consider the linear model
+$$
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_k x_{ik}.
+$$
+The *least squares estimates* of $\beta_0, \beta_1, \dots, \beta_p$ are those values that minimize
+$$
+	\sum_{i=1}^n (y_i - \mu_i)^2 = (y_1-\mu_1)^2 + (y_2-\mu_2)^2 + \cdots + (y_n-\mu_n)^2,
+$$
+where
+$$
+	\mu_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}.
+$$
+These estimates are denoted as $\hat{\beta}_0, \hat{\beta}_1, \dots, \hat{\beta}_k$. They are labeled under `Estimate` from the output of the `summary` function. 
+
+### Estimation of a Linear Function of Parameters
+
+Replacing $\beta_0, \beta_1, \dots, \beta_k$ with $\hat{\beta}_0, \hat{\beta}_1, \dots, \hat{\beta}_k$ in
+$$
+  \ell = a_0\beta_0 + a_1\beta_1 + \cdots + a_k\beta_k + b
+$$
+gives the *estimate* of the linear function $\ell$, 
+$$
+  \hat\ell = a_0\hat\beta_0 + a_1\hat\beta_1 + \cdots + a_k\hat\beta_k + b.
+$$
+These estimates are labeled as `estimate` when using the `lincon` and `contrast` functions. 
+
+### Estimation of the Response Variable Variance
+
+The typical linear model also has one additional parameter, the variance of $Y_i$ (denoted as $\sigma^2$), which is assumed to be a constant (i.e., the same regardless of the values of the explanatory variables). The usual estimator of $\sigma^2$ is
+$$
+  \hat\sigma^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n-k-1}.
+$$
+The estimate of $\sigma$ (not $\sigma^2$) is labeled as the "residual standard error" from the output of `summary`, and the "degrees of freedom"" associated with it is $n-k-1$ (more generally, this degrees of freedom is $n$ minus the number of $\beta$ parameters in the model so we would define it as $n-p$ where $p$ is the number of parameters other than $\sigma^2$). 
+
+Note: We sometimes make a distinction between an *estimator* (i.e., the formula/procedure that produces a *estimate*), and the *estimate* (i.e., a specific value produced by an *estimator*).
+
+## Sampling Distributions
+
+A **sampling distribution** is the probability distribution of an estimator. 
+
+```{r, echo = FALSE}
+n <- 25
+s <- 10
+b <- 50
+```
+
+**Example**: Consider the model $E(Y_i) = \beta_0$, and assume that $\beta_0$ = `r b` and also that the standard deviation of $Y_i$ is $\sigma$ = `r s`. The probability distribution below shows the sampling distribution of $\hat\beta_0$.
+```{r, echo = FALSE, fig.height = 3}
+x <- seq(b - 5 * s/sqrt(n), b + 5 * s/sqrt(n), length = 1000)
+y <- dnorm(x, b, s/sqrt(n))
+d <- data.frame(x = x, y = y)
+p <- ggplot(d, aes(x = x, y = y)) + theme_classic()
+p <- p + geom_line() + labs(x = "Estimate", y = "Probability Density")
+p <- p + scale_x_continuous(breaks = seq(40, 60, by = 5), limits = c(40,60))
+plot(p)
+```
+The figure below is a histogram of $\hat\beta_0$ from 1000 samples of $n$ = `r n` observations $Y_1, Y_2, \dots, Y_{25}$.
+```{r, warning = FALSE, echo = FALSE, fig.height = 3}
+set.seed(101)
+w <- 0.5
+d <- data.frame(x = rnorm(10000, b, s/sqrt(n)))
+p <- ggplot(d, aes(x = x, y = w * ..density..)) + theme_classic()
+p <- p + geom_histogram(binwidth = w, fill = "white", color = "black")
+p <- p + labs(x = "Estimate", y = "Relative Frequency")
+p <- p + scale_x_continuous(breaks = seq(40, 60, by = 5), limits = c(40,60))
+plot(p)
+```
+
+```{r, echo = FALSE}
+n <- 10
+b0 <- 5
+b1 <- 1
+s <- 1
+```
+
+**Example**: Consider the model $E(Y_i) = \beta_0 + \beta_1 x_i$ where $x_1$ = 1, $x_2$ = 2, $\dots$, $x_{10}$ = 10, $\beta_0$ = `r b0`, $\beta_1$ = `r b1`, and $\sigma$ = `r s`. The figure below shows the distribution of $\hat\beta_0$ and $\hat\beta_1$ from 10000 samples of observations of $Y_1, Y_2, \dots, Y_{10}$.
+
+```{r, echo = FALSE, fig.height = 5}
+foo <- function(n) {
+  x <- seq(1, 10, length = n)
+  y <- 5 + x + rnorm(n)
+  coef(lm(y ~ x))
+}
+set.seed(101)
+tmp <- t(replicate(10000, foo(n)))
+tmp <- as.data.frame(tmp)
+names(tmp) <- c("b0","b1")
+mb0 <- mean(tmp$b0)
+mb1 <- mean(tmp$b1)
+p <- ggplot(tmp, aes(x = b0, y = b1))
+p <- p + geom_point(shape = 16, size = 1, alpha = 0.5)
+p <- p + theme_classic()
+p <- p + geom_vline(xintercept = mb0, linetype = 3)
+p <- p + geom_hline(yintercept = mb1, linetype = 3)
+p <- p + xlab("Estimate of Intercept") + ylab("Estimate of Slope")
+p <- p + scale_x_continuous(breaks = 2:8)
+ggExtra::ggMarginal(p, type = "histogram", fill = "white")
+```
+
+Three properties of a sampling distribution are of interest.
+
+1. The **mean** of a sampling distribution of an estimator (i.e., the *expected value* of the estimator). Ideally this is equal to the parameter we are estimating (in which case we the estimator is *unbiased*), or relatively close. 
+
+2. The **standard deviation** of the sampling distribution of an estimator, which is referred to as the **standard error** of the estimator.
+
+3. The **shape** of the sampling distribution. Typically as $n$ increases the shape "approaches" that of a normal distribution.
+
+## Standard Errors
+
+We can often *estimate* standard errors of estimators of parameters or linear functions thereof. These are labeled as `Std. Error` in the output of the `summary` function, and as `se` in the output of the `lincon` and `contrast` functions. 
+
+**Example**: Consider the model for the `whiteside` data. 
+```{r}
+library(MASS) # contains the whiteside and anorexia data frames
+mgas <- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+summary(mgas)$coefficients
+```
+Recall that the model can be written as
+$$
+  E(G_i) = \beta_0 + \beta_1 d_i + \beta_2 t_i + \beta_3 d_it_i,
+$$
+where $d_i$ is an indicator variable for *after* insulation so that we can also write the model as 
+$$
+  E(G_i) = 
+  \begin{cases}
+    \beta_0 + \beta_2 t_i, & \text{if the $i$-th observation is before insulation}, \\
+    \beta_0 + \beta_1 + (\beta_2 + \beta_3)t_i, & \text{if the $i$-th observation is after insulation}.
+  \end{cases}
+$$
+*Estimates* of the standard errors are reported by `summary`. Standard errors are also shown by `lincon` and `contrast`.
+```{r}
+library(trtools)
+lincon(mgas, a = c(0,0,1,1)) # b2 + b3
+contrast(mgas, 
+  a = list(Insul = c("Before","After"), Temp = 2),
+  b = list(Insul = c("Before","After"), Temp = 1),
+  cnames = c("before","after"))
+```
+We can also obtain standard errors for estimating the expected weight change under each treatment condition for the `anorexia` study/model.
+```{r}
+anorexia$change <- anorexia$Postwt - anorexia$Prewt
+mwght <- lm(change ~ Treat, data = anorexia)
+contrast(mwght, a = list(Treat = c("Cont","CBT","FT")), 
+  cnames = c("Control","Cognitive","Family"))
+```
+
+Because the *shape* of a sampling distribution is usually approximately normal, we can say the following.
+
+1. The *mean distance* between the parameter and the estimator is approximately  $\text{SE} \times \sqrt{2/\pi} \approx \text{SE} \times 0.8$.
+
+0. The *median distance* between the parameter and the estimator is approximately $\text{SE} \times 0.67$. 
+
+0. The *95th percentile* of the distance between the parameter and the estimator is approximately $\text{SE} \times 1.96 \approx \text{SE} \times 2$. 
+
+Note that all of these quantities are *proportional* to the standard error. Standard errors give us an idea of how (in)accurate a given estimator is for a given parameter in a given model for a given design --- the larger the standard error the farther away the estimator will tend to be to the parameter (or function thereof) being estimated.
+
+Also note that in many cases the estimate and the (estimated) standard error are sufficient for computing both confidence intervals and test statistics as shown in the next two sections. 
+
+## Confidence Intervals
+
+A **confidence interval** is an *interval estimator* (as opposed to a *point estimator* which is a single value) with the property that the estimator has a specified probability of being correct (i.e., the *confidence level* of the interval). Note that this probability is a property of the estimator, not an estimate.  
+
+One common kind of confidence interval (sometimes called a *Wald* confidence interval) has the general form
+$$
+  \text{estimator} \pm \text{multiplier} \times \text{standard error}.
+$$
+For example, 
+$$
+  \hat\beta_j \pm t \times \mbox{SE}(\hat\beta_j)
+$$
+where $\mbox{SE}(\hat\beta_j)$ is the (estimated) standard error of $\hat\beta_j$, and $t$ is a "multiplier" to set the desired confidence level. Similarly a confidence interval for $\ell$ is
+$$
+  \hat\ell \pm t \times \mbox{SE}(\hat\ell).
+$$
+In R confidence intervals for model parameters can usually be computed by applying the `confint` function to the model object. 
+```{r}
+confint(mgas) # 95% confidence level is the default
+confint(mgas, level = 0.99) # 99% confidence level
+```
+For some compact output I often use `cbind` to append the confidence intervals to the output from `summary` as follows.
+```{r}
+cbind(summary(mgas)$coefficients, confint(mgas))
+```
+Note that other functions like `lincon` and `contrast` provide confidence intervals by default.
+```{r}
+lincon(mgas, a = c(0,0,1,1)) # b2 + b3
+contrast(mgas, 
+  a = list(Insul = c("Before","After"), Temp = 2),
+  b = list(Insul = c("Before","After"), Temp = 1),
+  cnames = c("before","after"))
+```
+They also have a default confidence level of 95%, and will accept a `level` argument to specify other confidence levels.
+
+## Significance Tests
+
+We consider four components to a given significance test: *hypotheses*, *test statistics*, *$p$-values*, and a *decision rule*.
+
+### Hypotheses
+
+A significance test for a single parameter concerns a pair of hypotheses such as 
+$$
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j \neq c, 
+$$
+or 
+$$
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j > c, 
+$$
+or 
+$$
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j < c,
+$$
+where $c$ is some specified value (often but not necessarily zero). Similarly we can have hypotheses concerning $\ell$ by replacing $\beta_j$ with $\ell$ in the above statement such as
+$$
+  H_0\!: \ell = c \ \ \text{and} \ \ H_a\!: \ell \neq c.
+$$
+Tests that are reported by default by functions like `summary`, `lincon`, and `contrast` are for the two-sided null hypothesis with $c = 0$ so that the hypotheses are $H_0\!:\beta_j = 0$ versus $H_a\!:\beta_j \neq 0$ (as when using `summary`) or $H_0\!: \ell = 0$ versus $H_a\!: \ell \neq 0$ (as when using `lincon` or `contrast`).
+
+### Test Statistics
+
+Assuming $H_0$ is *true*, the **test statistics**
+$$
+  t = \frac{\hat\beta_j - \beta_j}{\text{SE}(\hat\beta_j)}
+$$
+and
+$$
+  t = \frac{\hat\ell - \ell}{\text{SE}(\hat\ell)}
+$$
+have an approximate $t$ distribution with $n - p$ degrees of freedom (usually denoted as `df` in output, where $p$ is the number of $\beta_j$ parameters). Note that $\beta_j$ and $\ell$ are the values of these quantities hypothesized by the *null* hypothesis. 
+
+### P-Values
+
+The $p$-value is the probability of a value of the test statistic *as or more extreme than the observed value, assuming $H_0$ is true*. What is *as or more extreme* is decided by $H_a$:
+$$
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j \neq c \Rightarrow \text{$p$-value} = P(|t| \ge t_{\text{obs}}|H_0),
+$$
+or 
+$$
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j > c \Rightarrow \text{$p$-value} = P(t \ge t_{\text{obs}}|H_0),
+$$
+or 
+$$
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j < c \Rightarrow \text{$p$-value} = P(t \le t_{\text{obs}}|H_0),
+$$
+where $t_{\text{obs}}$ is the observed/computed value of the $t$ test statistic. 
+
+Note: Software typically produces the following: (a) a test with a null hypothesis where $\beta_j = 0$ of $\ell = 0$, and (b) p-values only for *two-sided/tailed* tests. This is true of `summary`, `lincon`, and `contrast`. But the p-value for a *one-sided/tailed* test can be obtained as half of the p-value for the two-sided/tailed test (assuming that $t_{\text{obs}}$) is in the direction hypothesized by $H_a$. 
+
+A *composite* null hypothesis such as 
+$$
+  H_0\!: \beta_j \le c \ \ \text{and} \ \ H_a\!: \beta_j > c, 
+$$
+or 
+$$
+  H_0\!: \ell \le c \ \ \text{and} \ \ H_a\!: \ell > c, 
+$$
+can be done by assuming the equality under the null (e.g., $\beta_j = c$ or $\ell = c$), and interpreting the computed p-value as the *upper bound* on the p-value. 
+
+### Decision Rule
+
+The decision rule for a significance test is always
+$$
+  \text{$p$-value} \le \alpha \Rightarrow \text{reject $H_0$}, \ \ 
+  \text{$p$-value} > \alpha \Rightarrow \text{do not reject $H_0$},
+$$
+for some specified significance level $0 < \alpha < 1$ (frequently $\alpha$ = 0.05).
+
