@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Monday, Jan 30</title>
+
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Monday, Jan 30</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-01-30-2023.pdf">PDF</a> copy
+of this lecture.</p>
+<p>The purpose of this exercise is to familiarize you with the
+specification of linear models and contrasts within R. You will need to
+have the following packages installed: <strong>abd</strong>,
+<strong>cowplot</strong>, <strong>ggplot2</strong>, and
+<strong>trtools</strong>. You should already have
+<strong>ggplot2</strong> and <strong>trtools</strong> installed. The
+other packages can be installed using
+<code>install.packages("abd")</code> and
+<code>install.packages("cowplot")</code>, or
+<code>install.packages(c("abd","cowplot"))</code>.</p>
+<p>This exercise features data from a study published in <em>Nature</em>
+in 2006.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+The data can be found in the data frame <code>MoleRats</code>, included
+in the package <strong>abd</strong>. You can inspect the data frame by
+typing <code>MoleRats</code> at the prompt after you load the package
+with <code>library(abd)</code>, and you can look at a summary of the
+data with <code>summary(MoleRats)</code> or the structure of the
+variables with <code>str(MoleRats)</code>. The study concerned two
+“castes” of Damaraland mole-rats (<em>Cryptomys damarensis</em>):
+frequent workers (denoted here as “worker”) and infrequent workers
+(denoted here as “lazy”). The researchers observed the body mass (g) and
+daily energy expenditure (kJ/day) of samples mole-rats from both castes.
+Our objective is to model the difference between the two castes in terms
+of daily energy expenditure. However, mole-rats in the two castes differ
+by body mass, which may also be related to energy expenditure.</p>
+<p>Here are plots of the raw data, showing the distribution of log
+energy expenditure for lazy and worker caste rats, and then again but
+also taking into account the (log) mass of the rats.</p>
+<pre class="r"><code>library(abd)     # for the data
+library(ggplot2) # for plotting
+library(cowplot) # for use of the plot_grid function
+
+# boxplot
+p1 &lt;- ggplot(MoleRats, aes(x = caste, y = ln.energy)) + 
+   geom_boxplot() + geom_point() + theme_classic() + 
+   labs(x = &quot;Caste&quot;, y = &quot;Log Energy Expenditure (log kJ/Day)&quot;)
+
+# scatterplot
+p2 &lt;- ggplot(MoleRats, aes(x = ln.mass, y = ln.energy, color = caste)) +
+   geom_point() + theme_classic() + theme(legend.position = c(0.9, 0.2)) +
+   labs(x = &quot;Log Mass (log g)&quot;, y = NULL, color = &quot;Caste&quot;)
+
+# plot both plots side-by-side
+plot_grid(p1, p2, align = &quot;h&quot;, rel_widths = c(1,3))</code></pre>
+<p><img src="lecture-01-30-2023_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
+Note that both energy expenditure and mass are recorded on the (natural)
+log scale. We will be modeling both of these variables on the log
+scale.</p>
+<ol style="list-style-type: decimal">
+<li><p>First consider a model where expected log energy expenditure is
+modeled as a function of only caste. Use the <code>lm</code> function to
+estimate this model. We should see in the output of the
+<code>summary</code> function applied to the model object that R will,
+by default, parameterize this model as <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 d_i,
+\]</span> where <span class="math inline">\(Y_i\)</span> is the log of
+energy expenditure of the <span class="math inline">\(i\)</span>-th
+observation and <span class="math display">\[
+  d_i =
+  \begin{cases}
+1, &amp; \text{if the $i$-th observation is of a worker}, \\
+0, &amp; \text{otherwise},
+  \end{cases}
+\]</span> so that the model can also be written as <span
+class="math display">\[
+  E(Y_i) =
+  \begin{cases}
+\beta_0, &amp; \text{if the $i$-th observation is from the lazy caste},
+\\
+\beta_0 + \beta_1, &amp; \text{if the $i$-th observation is from the
+worker caste}.
+  \end{cases}
+\]</span></p></li>
+<li><p>Consider the following three quantities and how they can be
+expressed as functions of the model parameters: the expected log energy
+expenditure of mole-rats from the <em>lazy</em> caste (<span
+class="math inline">\(\beta_0\)</span>), the expected log energy
+expenditure of mole-rats from the <em>worker</em> caste (<span
+class="math inline">\(\beta_0 + \beta_1\)</span>), and the difference in
+expected log energy expenditure between the two castes (<span
+class="math inline">\(\beta_1\)</span> if we subtract lazy from worker).
+Note that using <code>summary</code> provides inferences for <span
+class="math inline">\(\beta_0\)</span> and <span
+class="math inline">\(\beta_1\)</span>, but not <span
+class="math inline">\(\beta_0 + \beta_1\)</span>. All three quantities
+can be written as a linear combination of the form <span
+class="math display">\[
+  \ell = a_0\beta_0 + a_1\beta_1 + b.
+\]</span> How can we use the <code>lincon</code> and
+<code>contrast</code> functions to estimate these three quantities? Note
+that inferences for two of these quantities — i.e., the expected log
+expenditure of mole-rats of the <em>lazy</em> caste and the
+<em>difference</em> in the expected log expenditures between the two
+castes — should match those given by using <code>summary</code> and
+<code>confint</code> applied to the model object.</p></li>
+<li><p>The model we considered above compares the two castes of
+mole-rats, but it does not account for differences in their sizes. The
+lazy mole-rats tend to be larger than the worker mole-rats. It may be
+useful to compare rats in the two castes while “controlling for size”
+meaning that comparisons can be made between mole-rats in different
+castes but of the same size. We can use <code>lm</code> to estimate a
+linear model that includes both caste and the log of mass as explanatory
+variables. If we list <code>caste</code> first in the right-hand side of
+the model formula then the model will be parameterized as <span
+class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 d_i + \beta_2 \ln(m_i),
+\]</span> where <span class="math inline">\(d_i\)</span> is defined as
+before and <span class="math inline">\(\log(m_i)\)</span> is the log of
+mass of the <span class="math inline">\(i\)</span>-th observation (i.e.,
+the <code>ln.mass</code> variable). Note that this model can also be
+written as <span class="math display">\[
+  E(Y_i) =
+  \begin{cases}
+\beta_0 + \beta_2 \ln(m_i),
+   &amp; \text{if the $i$-th observation is from the lazy caste}, \\
+\beta_0 + \beta_1 + \beta_2 \ln(m_i),
+   &amp; \text{if the $i$-th observation is from the worker caste}.
+  \end{cases}
+\]</span></p></li>
+<li><p>Using the code given above, add lines to the plot to show the
+estimated expected log energy expenditure as a function of log mass and
+caste.</p></li>
+<li><p>With the model now including the log of mass as an explanatory
+variable, comparisons between the castes must also consider mass. How
+can we use <code>contrast</code> to estimate the expected log energy
+consumption for a mole-rat from each of the two castes with a log mass
+of 4.5? Also how can we estimate the <em>difference</em> in expected log
+energy expenditure between the two castes for a mole-rat with log mass
+4.5? How can we do the same for log masses of 4.0 and 5.0? Our estimates
+should be consistent with the figure (i.e., they should look reasonable
+based on “eyeball” estimates from the figure). Also because the model
+specifies that the two lines are parallel, the estimated difference in
+expected log energy consumption between the castes will not depend on
+mass.</p></li>
+<li><p>The parameter <span class="math inline">\(\beta_2\)</span> is the
+rate of change of the expected log energy consumption per unit increase
+in the log of mass. Inferences concerning this quantity can be obtained
+simply using <code>summary</code> and <code>confint</code> applied to
+the model object, but as an exercise how can we estimate this rate of
+change for each caste using the <code>contrast</code> function?
+Naturally we should find that the estimated rate is the same for each
+caste.</p></li>
+<li><p>A test to determine if there is a statistically significant
+difference in expected log energy expenditure between the two castes
+uses the null hypothesis <span class="math inline">\(H_0\!: \beta_1 =
+0\)</span> based on how the model was parameterized earlier. How can we
+test this null hypothesis using the full-null model approach (i.e., by
+specifying a null model based on the full model but with <span
+class="math inline">\(\beta_1 = 0\)</span>) and using the
+<code>anova</code> function? We should find that the resulting <span
+class="math inline">\(F\)</span> test statistic is the square of the
+<span class="math inline">\(t\)</span> test statistic from
+<code>summary</code>, and that the p-values from <code>summary</code>
+and <code>anova</code> are the same.</p></li>
+<li><p>Repeat 3-6 with both <code>caste</code> and <code>ln.mass</code>
+as explanatory variables, but now with an “interaction” between the them
+by including <code>caste:ln.energy</code> in your model formula. Note
+that this model can be written case-wise as <span
+class="math display">\[
+  E(Y_i) =
+  \begin{cases}
+\beta_0 + \beta_2 \ln(m_i),
+   &amp; \text{if the $i$-th observation is from the lazy caste}, \\
+\beta_0 + \beta_1 + (\beta_2 + \beta_3) \ln(m_i),
+   &amp; \text{if the $i$-th observation is from the worker caste}.
+  \end{cases}
+\]</span></p></li>
+</ol>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Scantlebury, M., Speakman, J. R., Oosthuizen, M. K.,
+Roper, T. J., &amp; Bennett, N. C. (2006). Energetics reveals
+physiological distinct castes in a eurosical mammal. <em>Nature</em>,
+<em>440</em>, 795-797.<a href="#fnref1"
+class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

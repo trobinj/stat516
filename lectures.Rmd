@@ -41,7 +41,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` **First homework assignment assigned**.
+`r i <- i + 1; d[i]` [R demonstration on linear models and using `lincon` and `contrast` with linear models](lecture-01-30-2023.html). **First homework assignment assigned**.
 
 `r i <- i + 1; d[i]` 
 
