@@ -235,4 +235,4 @@ Notice how the "interaction" between log mass and caste now changes the results 
       b = list(caste = c("lazy","worker"), ln.mass = 2),
       cnames = c("lazy","worker"))
     ```
-
+  
