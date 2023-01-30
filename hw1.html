@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Linear Model Specification and Interpretation</title>
+
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Linear Model Specification and
+Interpretation</h1>
+<h3 class="subtitle">Statistics 516, Homework 1</h3>
+
+</div>
+
+
+<p>You can also download a <a href="hw1.pdf">PDF</a> copy of this
+homework assignment.</p>
+<p>This homework assignment concerns specifying and making inferences
+from linear models using data from several studies. In particular, you
+will see how to make inferences concerning linear combinations of model
+parameters. Note that you will likely need to install several packages
+to access the data used in these problems.</p>
+<div id="instructions" class="section level2">
+<h2>Instructions</h2>
+<ol style="list-style-type: decimal">
+<li><p>This assignment is due by 11:59 PM on Wednesday, February 8th.
+Email me your homework at <a href="mailto:trjohns@uidaho.edu"
+class="email">trjohns@uidaho.edu</a>. Please submit your homework as a
+PDF file. Late assignments will be penalized by 10% if turned-in within
+12 hours of the deadline, and 10% more for each additional 12 hour
+interval.</p></li>
+<li><p>Your solutions must be <strong>typed</strong> and
+<strong>very</strong> neatly organized. I will not try to infer your
+solutions if they are not clearly presented. Mathematical expressions
+need not be typeset perfectly but they should be clear. You may
+substitute letters for symbols (e.g., b1 for <span
+class="math inline">\(\beta_1\)</span>) and use other shortcuts for
+mathematical notation if no meaning is lost.</p></li>
+<li><p>You must include with your solutions the relevant R output
+<strong>and</strong> R code that created them. Be sure that you provide
+sufficient code that I can replicate your results. Include both the code
+and the output within the text of your solutions (not in an appendix)
+using cut-and-paste. Edit your output so as to provide only that which
+is relevant to answering the questions. Use a monospace font (e.g.,
+Courier or Monoco) for R code and output for clarity. Do not use a
+monospace font for text that is not R code or output. You can use the R
+command <code>options(digits = 4)</code> (or some other small number of
+digits) to exert some control over the width of the output by reducing
+the number of digits shown by R.</p></li>
+<li><p>Plots from R Studio can be exported in various formats or
+directly to the clipboard using the “export” menu in the top-left part
+of the plot panel.</p></li>
+<li><p>It is permitted for you to discuss the homework with other
+students in the course. However your work including R code, output, and
+written answers must be your own.</p></li>
+<li><p>You are very welcome to ask me questions. I will be happy to
+clarify what I am asking in any of the questions and will provide you
+some help with solving problems by showing you how to work through
+similar problems from class. I will also be open to helping with any R
+problems. If you email me with a R question, it will usually be helpful
+for you to include enough of your R script so that I can replicate your
+issue. But please avoid saving all your questions for just before the
+assignment is due. I can usually respond quickly to questions, but I
+will sometimes need time to respond.</p></li>
+</ol>
+<div style="page-break-after: always;"></div>
+</div>
+<div
+id="dopamine-beta-hydroxylase-activity-in-schizophrenics-after-neuroleptic-treatment"
+class="section level2">
+<h2>Dopamine <span class="math inline">\(\beta\)</span>-Hydroxylase
+Activity in Schizophrenics After Neuroleptic Treatment</h2>
+<p>The data frame <code>Dopamine</code> in the package
+<strong>BSDA</strong> is from an observational study of the response of
+schizophrenic patients to treatment.<a href="#fn1" class="footnote-ref"
+id="fnref1"><sup>1</sup></a> Schizophrenic patients who had been treated
+with a neuroleptic drug were classified as either remaining psychotic or
+becoming non-psychotic after the treatment. Samples of cerebrospinal
+fluid from all patients in the study were assayed for dopamine <span
+class="math inline">\(\beta\)</span>-hydroxylase (DBH) activity. DBH is
+an enzyme that catalyzes the conversion of the dopamine to
+norepinephrine, both of which are thought to be involved in the
+pathology of schizophrenia. There researchers thought that a difference
+in DBH activity between the two groups might delineate a subgroup of
+patients with a dopamine-sensative condition. You can see the raw data
+as follows with the variables <code>dbh</code> (DBH activity) and
+<code>group</code> (psychotic or non-psychotic).</p>
+<pre class="r"><code>library(BSDA)
+head(Dopamine)</code></pre>
+<pre><code>  dbh        group
+1 104 nonpsychotic
+2 105 nonpsychotic
+3 112 nonpsychotic
+4 116 nonpsychotic
+5 130 nonpsychotic
+6 145 nonpsychotic</code></pre>
+<pre class="r"><code>tail(Dopamine)</code></pre>
+<pre><code>   dbh     group
+20 226 psychotic
+21 245 psychotic
+22 270 psychotic
+23 275 psychotic
+24 306 psychotic
+25 320 psychotic</code></pre>
+<p>The plot below shows the data.<a href="#fn2" class="footnote-ref"
+id="fnref2"><sup>2</sup></a></p>
+<pre class="r"><code>library(ggplot2)
+p &lt;- ggplot(Dopamine, aes(x = group, y = dbh)) + 
+  theme_minimal() + geom_point() + coord_flip() +
+  labs(x = NULL, y = &quot;DBH (nanomoles/ml-hour per mg of protein)&quot;)
+plot(p)</code></pre>
+<p><img src="hw1_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
+We can also get some basic summary statistics (mean, standard deviation,
+and sample size) using the <strong>dplyr</strong> package.<a href="#fn3"
+class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<pre class="r"><code>library(dplyr)
+Dopamine %&gt;% group_by(group) %&gt;% 
+  summarize(meandbh = mean(dbh), sddbh = sd(dbh), n = n())</code></pre>
+<pre><code># A tibble: 2 × 4
+  group        meandbh sddbh     n
+  &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1 nonpsychotic    164.  47.0    15
+2 psychotic       243.  51.4    10</code></pre>
+<p>As can be seen from the descriptive statistics, DBH is a bit lower,
+on average, for the 15 non-psychotic patients. Here you will use a
+linear model to make inferences about DBH and how it differs between
+patients classified as psychotic and non-psychotic.</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a linear model using the <code>lm</code> function with
+DBH (<code>dbh</code>) as the response variable and patient group
+(<code>group</code>) as the explanatory variable. Report the parameter
+estimates and their standard errors using the <code>summary</code>
+function.</p></li>
+<li><p>The model you estimated in the previous problem can be written as
+<span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_i,
+\]</span> where <span class="math inline">\(Y_i\)</span> is the <span
+class="math inline">\(i\)</span>-th observation of DBH. Explain how the
+value of <span class="math inline">\(x_i\)</span> is defined for this
+model (i.e., how would you determine the value of <span
+class="math inline">\(x_i\)</span> for a given patient?). Write the
+model case-wise to express the expected DBH as a function of <span
+class="math inline">\(\beta_0\)</span> and/or <span
+class="math inline">\(\beta_1\)</span> for psychotic and non-psychotic
+patients. Let <span class="math inline">\(\mu_p\)</span> and <span
+class="math inline">\(\mu_n\)</span> be the expected DBH of psychotic
+and non-psychotic patients, respectively. Using the case-wise
+representation of the model, write each of these parameters as a
+function of <span class="math inline">\(\beta_0\)</span> and/or <span
+class="math inline">\(\beta_1\)</span> (i.e., how would you compute
+<span class="math inline">\(\mu_p\)</span> and <span
+class="math inline">\(\mu_n\)</span> using <span
+class="math inline">\(\beta_0\)</span> and <span
+class="math inline">\(\beta_1\)</span>?).</p></li>
+<li><p>Using the <code>lincon</code> and <code>contrast</code> functions
+from the <strong>trtools</strong> package, produce estimates, standard
+errors, and confidence intervals for <span
+class="math inline">\(\mu_p\)</span> and <span
+class="math inline">\(\mu_n\)</span>. For the <code>lincon</code>
+function, use the fact that each of these parameters can be written as a
+function of <span class="math inline">\(\beta_0\)</span> and/or <span
+class="math inline">\(\beta_1\)</span>. The results from
+<code>lincon</code> and <code>contrast</code> should be the
+same.</p></li>
+<li><p>Using the <code>lincon</code> and <code>contrast</code>
+functions, produce an estimate, standard error, and confidence interval
+for <span class="math inline">\(\mu_p - \mu_n\)</span>, as well as the
+test statistic and p-value for a test of the null hypothesis that <span
+class="math inline">\(\mu_p - \mu_n\)</span> = 0. The results from
+<code>lincon</code> and <code>contrast</code> should be the same.<a
+href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p></li>
+<li><p>There are alternative prameterizations of this model. Estimate a
+linear model using the <code>lm</code> function with the model formula
+<code>dbh ~ -1 + group</code>, and repeat what you did in the previous
+four problems but for this model.<a href="#fn5" class="footnote-ref"
+id="fnref5"><sup>5</sup></a> <strong>Note</strong>: This problem is
+<strong>extra credit</strong> for students enrolled in Stat 436, but is
+<strong>required</strong> for students enrolled in Stat 516.</p></li>
+</ol>
+</div>
+<div id="weight-gain-in-rats-exposed-to-thiouracil-and-thyroxin"
+class="section level2">
+<h2>Weight Gain in Rats Exposed to Thiouracil and Thyroxin</h2>
+<p>The data frame <code>rat</code> in the package <strong>ALA</strong>
+is from an experiment investigating the effects of thiouracil and
+thyroxin on growth of rats.<a href="#fn6" class="footnote-ref"
+id="fnref6"><sup>6</sup></a> The <strong>ALA</strong> package is located
+in the R-Forge repository and not the CRAN repository, which is the
+default repository used by <code>install.packages</code>, so use the
+command
+<code>install.packages("ALA", repos = "http://R-Forge.R-project.org")</code>
+to specify the correct repository for installing <strong>ALA</strong>
+package. In this experiment thirty rats were each randomly assigned to
+one of three treatment groups where for two of the three groups an
+additive (thiouracil or thyroxin) was put in the drinking water.<a
+href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>
+Measurements of rat weight (in grams) were observed at a baseline of
+zero weeks before putting the additives in the drinking water, and again
+at one, two, three, and four weeks after the additives were introduced.
+Three of the rats from the thyroxin group were lost so the total number
+of rats from which we have data is 27.<a href="#fn8"
+class="footnote-ref" id="fnref8"><sup>8</sup></a> The following shows
+first few rows of the <code>rat</code> data frame.</p>
+<pre class="r"><code>library(ALA)
+head(rat)</code></pre>
+<pre><code>    id treatment week weight
+1    1   control    0     57
+28   1   control    1     86
+55   1   control    2    114
+82   1   control    3    139
+109  1   control    4    172
+2    2   control    0     60</code></pre>
+<p>Note that the row names are not consecutive integers. This is likely
+because the data were originally sorted by treatment and week before
+being sorted by rat and then stored in the data frame. The row names
+usually do not have any effect on what we are doing here, but if you
+wanted to “reset” them you could use
+<code>rownames(rat) &lt;- NULL</code>. The data can be plotted as
+follows.</p>
+<pre class="r"><code>library(ggplot2)
+p &lt;- ggplot(rat, aes(x = week, y = weight)) + theme_minimal() + 
+  geom_point() + facet_wrap(~ treatment) + labs(y = &quot;Weight (g)&quot;, x = &quot;Week&quot;)
+plot(p)</code></pre>
+<p><img src="hw1_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
+These data are <em>longitudinal</em> in that multiple observations are
+made on the same rat over time. Special methods are necessary to provide
+proper inferences for such designs, and we will discuss these later in
+the semester. But for now we will ignore this issue. You might pretend
+that each rat was only observed <em>once</em> (i.e., the rats in a given
+treatment group observed at one week are <em>different</em> from those
+observed at another week).</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a linear model using the <code>lm</code> function with
+<code>weight</code> as your response variable, and <code>week</code> and
+<code>treatment</code> as your explanatory variables, respectively. The
+model should be specified with an “interaction” between
+<code>treatment</code> and <code>week</code> so that the rate of change
+in expected weight per week can be different across the treatment
+groups. Report the parmater estimates using the <code>summary</code>
+function. You should get something like the following.</p>
+<pre><code>                         Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)               52.8800      2.648 19.9694 2.758e-41
+treatmentthiouracil        4.8200      3.745  1.2871 2.004e-01
+treatmentthyroxin         -0.7943      4.127 -0.1925 8.477e-01
+week                      26.4800      1.081 24.4944 2.373e-50
+treatmentthiouracil:week  -9.4300      1.529 -6.1680 8.257e-09
+treatmentthyroxin:week     0.6629      1.685  0.3935 6.946e-01</code></pre></li>
+<li><p>As can be seen from the output of <code>summary</code> from the
+previous problem, the model has six terms, including <span
+class="math inline">\(\beta_0\)</span>, so it can be written as <span
+class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3} +
+\beta_4 x_{i4} + \beta_5 x_{i5},
+\]</span> where <span class="math inline">\(Y_i\)</span> is the <span
+class="math inline">\(i\)</span>-th observation of weight (in grams),
+and <span class="math inline">\(x_{i1}, x_{i2}, \dots, x_{i5}\)</span>
+depend on treatment and/or week. Explain how <span
+class="math inline">\(x_{i1}\)</span>, <span
+class="math inline">\(x_{i2}\)</span>, <span
+class="math inline">\(x_{i3}\)</span>, <span
+class="math inline">\(x_{i4}\)</span>, and <span
+class="math inline">\(x_{i5}\)</span> are defined for this model (i.e.,
+how would you determine their values for a given observation?). Then
+write the model case-wise to show how the expected weight depends on
+week for each of the three treatment conditions.</p></li>
+<li><p>Plot the model by creating an artificial data set of combinations
+of values of week and treatment using the <code>expand.grid</code>
+function, computing the predicted values from the model using the
+<code>predict</code> function, and adding lines to the plot using the
+code above and <code>geom_line</code>.</p></li>
+<li><p>Using the <code>contrast</code> function, estimate the expected
+weight at zero weeks and again at four weeks for rats in each of the
+three treatment conditions.</p></li>
+<li><p>Using the <code>contrast</code> function, estimate the
+<em>difference</em> in expected weight at four weeks between the control
+group and the other two treatment groups, and also between the
+thiouracil and thyroxin groups. Also estimate these differences at zero
+weeks.</p></li>
+<li><p>Using the <code>contrast</code> function, estimate the rate of
+change in expected weight per unit increase in week (i.e., the change in
+expected weight corresponding to a one week increase in time) for rats
+in <em>each</em> of the three treatment groups.</p></li>
+<li><p>Now consider a model for these data but using the model formula
+<code>weight ~ treatment:week</code> with the <code>lm</code>
+function.<a href="#fn9" class="footnote-ref"
+id="fnref9"><sup>9</sup></a> Repeat what you did in the previous
+problems but using now this model. <strong>Note</strong>: This problem
+is <strong>extra credit</strong> for students enrolled in Stat 436, but
+is <strong>required</strong> for students enrolled in Stat 516.</p></li>
+</ol>
+</div>
+<div id="otter-survey" class="section level2">
+<h2>Otter Survey</h2>
+<p>The data frame <code>otters</code> in the package
+<strong>SDaA</strong> is from a survey of dens (holts) of Eurasian
+otters (<em>Lutra lutra</em>) along the coast of Shetland in the United
+Kingdom.<a href="#fn10" class="footnote-ref"
+id="fnref10"><sup>10</sup></a> The observational units here are 110 m
+deep by 5 km long sections along the coast. These sections were selected
+using a stratified random sampling design where simple random sampling
+was applied to the sections in each of four strata defined by the
+habitat: cliff, agricultural, peat, and non-peat. The number of holts
+was counted for the sections that were sampled. Here are the first few
+observations of that data.</p>
+<pre class="r"><code>library(SDaA)
+head(otters)</code></pre>
+<pre><code>  section habitat holts
+1       1       4     6
+2       3       2     0
+3       4       1     8
+4       8       1     0
+5      11       1     0
+6      19       2     0</code></pre>
+<p>The four strata (<code>habitat</code>) are just coded with integers.
+This is problematic for two reasons. One is that if we were to use this
+variable as an explanatory variable it would be specified as being
+quantitative and not categorical, which would not make sense. We can fix
+this by converting it to a factor, but it we are going to do that we
+might as well give the levels more descriptive labels. The code below
+creates a new variable <code>stratum</code> which does this.</p>
+<pre class="r"><code>library(dplyr)
+otters &lt;- otters %&gt;%
+  mutate(stratum = factor(habitat, levels = 1:4, 
+    labels = c(&quot;cliff&quot;,&quot;agricultural&quot;,&quot;peat&quot;,&quot;non-peat&quot;)))
+head(otters)</code></pre>
+<pre><code>  section habitat holts      stratum
+1       1       4     6     non-peat
+2       3       2     0 agricultural
+3       4       1     8        cliff
+4       8       1     0        cliff
+5      11       1     0        cliff
+6      19       2     0 agricultural</code></pre>
+<p>In what follows we will use the variable <code>stratum</code> instead
+of <code>habitat</code>. Here is a dot plot of the data.<a href="#fn11"
+class="footnote-ref" id="fnref11"><sup>11</sup></a></p>
+<pre class="r"><code>library(ggplot2) 
+p &lt;- ggplot(otters, aes(x = stratum, y = holts)) + theme_classic() +
+  geom_dotplot(binaxis = &quot;y&quot;, binwidth = 1, stackdir = &quot;center&quot;) + 
+  labs(x = &quot;Stratum&quot;, y = &quot;Number of Holts&quot;)
+plot(p)</code></pre>
+<p><img src="hw1_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" />
+Here are some basic descriptive statistics for the number of holts per
+section by stratum (mean, standard deviation, and sample size).</p>
+<pre class="r"><code>library(dplyr)
+otters %&gt;% group_by(stratum) %&gt;%
+  summarize(meanholts = mean(holts), sdholts = sd(holts), n = n())</code></pre>
+<pre><code># A tibble: 4 × 4
+  stratum      meanholts sdholts     n
+  &lt;fct&gt;            &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;
+1 cliff             1.74    2.33    19
+2 agricultural      1.75    2.61    20
+3 peat             13.3     7.67    22
+4 non-peat          4.10    3.95    21</code></pre>
+<p>Notice how the strata with more holts per section, on average, have
+higher variance. This is common for counts, and it is a problem for
+proper inferences since our inferences will assume that the variability
+of the response variable is (relatively) constant. We will discuss how
+to deal with this problem later, but ignore it here for the purpose of
+this assignment. Here you will use a linear model to make inferences
+about the abundance of otter dens.<a href="#fn12" class="footnote-ref"
+id="fnref12"><sup>12</sup></a></p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a linear model using the <code>lm</code> function with
+<code>holts</code> as the response variable and <code>stratum</code> as
+the explanatory variable. Report the parameter estimates using
+<code>summary</code> function. Note that the model can be written as
+<span class="math inline">\(E(Y_i) = \beta_0 + \beta_1x_{i1} +
+\beta_2x_{i2} + \beta_3x_{i3}\)</span>. Explain briefly what <span
+class="math inline">\(x_{i1}\)</span>, <span
+class="math inline">\(x_{i2}\)</span>, and <span
+class="math inline">\(x_{i3}\)</span> each represent (i.e., how would
+you determine the their values for a given section?). Write the model
+case-wise to show how the expected number of holts of a sampled section
+can be written as a function of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>. Finally, let <span
+class="math inline">\(\mu_c\)</span>, <span
+class="math inline">\(\mu_a\)</span>, <span
+class="math inline">\(\mu_p\)</span>, and <span
+class="math inline">\(\mu_n\)</span> denote the expected number of holts
+in a section from the cliff, agricultural, peat, and non-peat habitats,
+respectively. Write each of these as a function of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>.</p></li>
+<li><p>Use the <code>contrast</code> function to estimate the expected
+number of holts in a section sampled from each stratum, and also the
+<em>difference</em> in the expected number of holts between a sampled
+<em>peat</em> section and each of the other three types of
+habitat.</p></li>
+<li><p>Suppose we want to estimate the <em>number</em> of holts in
+<em>all</em> of the sections in a given stratum. For the cliffs stratum,
+for example, the total number of holts (denoted as <span
+class="math inline">\(\tau_c\)</span>) would be computed as <span
+class="math inline">\(\tau_c = N_c\mu_c\)</span>, where <span
+class="math inline">\(N_c\)</span> is the <em>total</em> number of
+sections in the cliffs stratum (i.e., not the sample size, but the
+population size for that stratum). The stratum sizes for the four strata
+are known to be <span class="math inline">\(N_c\)</span> = 89, <span
+class="math inline">\(N_a\)</span> = 61, <span
+class="math inline">\(N_p\)</span> = 40, and <span
+class="math inline">\(N_n\)</span> = 47. Use the <code>lincon</code>
+function to estimate the total number of holts in each stratum. Note
+that to do this you will need to write the quantity of interest (e.g.,
+<span class="math inline">\(N_c\mu_c\)</span>) as a linear combination
+of <span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and <span
+class="math inline">\(\beta_3\)</span> to determine the appropriate
+coefficients to use with <code>lincon</code>.</p></li>
+<li><p>Now suppose you wanted to estimate the mean number of holts per
+section and the total number of holts in all sections for the
+<em>population</em> of sections rather than for a particular stratum.
+Denote this mean and total as <span class="math inline">\(\mu\)</span>
+and <span class="math inline">\(\tau\)</span>, respectively. These can
+be written as <span class="math display">\[
+  \mu = \frac{N_c}{N}\mu_c + \frac{N_a}{N}\mu_a +
+  \frac{N_p}{N}\mu_p + \frac{N_n}{N}\mu_n,
+\]</span> where <span class="math inline">\(N = N_c + N_a + N_p +
+N_n\)</span>, and <span class="math display">\[
+  \tau = N_c\mu_c + N_a\mu_a + N_p\mu_p + N_n\mu_n.
+\]</span> In a previous problem you expressed <span
+class="math inline">\(\mu_c\)</span>, <span
+class="math inline">\(\mu_a\)</span>, <span
+class="math inline">\(\mu_p\)</span>, and <span
+class="math inline">\(\mu_n\)</span> as functions of the parameters
+<span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>. In the expressions for <span
+class="math inline">\(\mu\)</span> and <span
+class="math inline">\(\tau\)</span> above, substitute <span
+class="math inline">\(\mu_c\)</span>, <span
+class="math inline">\(\mu_a\)</span>, <span
+class="math inline">\(\mu_p\)</span>, and <span
+class="math inline">\(\mu_n\)</span> with the corresponding function of
+<span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>, and then simplify the
+expressions so that <span class="math inline">\(\mu\)</span> and <span
+class="math inline">\(\tau\)</span> are then written as linear
+combinations of <span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and <span
+class="math inline">\(\beta_3\)</span>. Then use the <code>lincon</code>
+function to compute estimates of <span
+class="math inline">\(\mu\)</span> and <span
+class="math inline">\(\tau\)</span> as well as confidence intervals for
+these parameters and the standard errors of the estimators.</p></li>
+</ol>
+</div>
+<div id="anger-management-study" class="section level2">
+<h2>Anger Management Study</h2>
+<p>The data frame <code>AngerManagement</code> from the package
+<strong>restriktor</strong> is from a study of the effectiveness of
+different types of anger management exercises on aggression.<a
+href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>
+Subjects were randomly assigned to one of four treatment groups: no
+exercises, physical exercises, behavioral exercises, or both physical
+and behavioral exercises. The response variable was the reduction in
+aggression between the beginning and end of the study, so that a
+positive value means a reduction, a negative number means an increase,
+and zero means no change. Here is what the data look like.</p>
+<pre class="r"><code>library(restriktor)
+head(AngerManagement)</code></pre>
+<pre><code>  Anger Group Age
+1     1    No  18
+2     0    No  20
+3     0    No  21
+4     1    No  22
+5    -1    No  23
+6    -2    No  24</code></pre>
+<p>The data also includes the age of each subject, but that will not be
+used here. I am going to make a couple of changes to the data. One is to
+rename the control condition from <code>No</code> to <code>None</code>,
+and the other is to order the factor levels. There are various ways to
+manipulate factors and their levels. I like to use functions from the
+<strong>forcats</strong> package. The following creates a new variable
+called <code>treatment</code> that we will use in place of
+<code>Group</code> that has the properties I want.</p>
+<pre class="r"><code>library(forcats)
+library(dplyr)
+AngerManagement &lt;- AngerManagement %&gt;%
+  mutate(treatment = fct_recode(Group, &quot;None&quot; = &quot;No&quot;)) %&gt;%
+  mutate(treatment = fct_relevel(treatment, c(&quot;None&quot;, &quot;Physical&quot;, &quot;Behavioral&quot;, &quot;Both&quot;)))</code></pre>
+<p>This is not necessary. We could use the original variable
+<code>Group</code>, although by changing the order of the levels we do
+change the parameterization of the model.<a href="#fn14"
+class="footnote-ref" id="fnref14"><sup>14</sup></a> Here is a dot plot
+showing the data.</p>
+<pre class="r"><code>p &lt;- ggplot(AngerManagement, aes(x = treatment, y = Anger)) + theme_minimal() +
+  geom_dotplot(binaxis = &quot;y&quot;, binwidth = 1, stackdir = &quot;center&quot;) +
+  labs(x = &quot;Treatment&quot;, y = &quot;Aggression Reduction&quot;)
+plot(p)</code></pre>
+<p><img src="hw1_files/figure-html/unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" />
+Here are some descriptive statistics for the aggression level reduction
+by treatment (mean, standard deviation, and sample size).</p>
+<pre class="r"><code>AngerManagement %&gt;% group_by(treatment) %&gt;%
+  summarize(meanagg = mean(Anger), sdagg = sd(Anger), n = n())</code></pre>
+<pre><code># A tibble: 4 × 4
+  treatment  meanagg sdagg     n
+  &lt;fct&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1 None          -0.2  1.55    10
+2 Physical       0.8  1.03    10
+3 Behavioral     3.1  2.60    10
+4 Both           4.1  2.08    10</code></pre>
+<p>In what follows you will use a linear model to evaluate the
+effectiveness of physical and behavioral exercises for anger
+management.</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a linear model using the <code>lm</code> function with
+<code>Anger</code> as your response variable and <code>treatment</code>
+as your explanatory variable. Show the output from <code>summary</code>
+and use this to explain what <span
+class="math inline">\(x_{i1}\)</span>, <span
+class="math inline">\(x_{i2}\)</span>, and <span
+class="math inline">\(x_{i3}\)</span> represent in the linear model
+<span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3},
+\]</span> where <span class="math inline">\(Y_i\)</span> is the <span
+class="math inline">\(i\)</span>-th observation of aggression reduction.
+Finally, write the model case-wise to show how <span
+class="math inline">\(E(Y_i)\)</span> can be expressed as a function of
+<span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span> for each of the four treatment
+conditions.</p></li>
+<li><p>Let <span class="math inline">\(\mu_n\)</span>, <span
+class="math inline">\(\mu_p\)</span>, <span
+class="math inline">\(\mu_b\)</span>, and <span
+class="math inline">\(\mu_{pb}\)</span> denote the expected anger
+reduction when the treatment is no exercises, physical exercises,
+behavioral exercises, and both physical and behavioral exercises,
+respectively. Write each of these as functions of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>. Then write each of the following
+as functions of <span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>: <span
+class="math inline">\(\mu_p - \mu_n\)</span>, <span
+class="math inline">\(\mu_b - \mu_n\)</span>, <span
+class="math inline">\(\mu_{pb} - \mu_n\)</span>, <span
+class="math inline">\(\mu_b - \mu_p\)</span>, <span
+class="math inline">\(\mu_{pb} - \mu_p\)</span> and <span
+class="math inline">\(\mu_{pb} - \mu_b\)</span>.</p></li>
+<li><p>Use the <code>lincon</code> and <code>contrast</code> functions
+to estimate each of the quantities that you estimated in the previous
+problem. You should obtain the same results for each function.</p></li>
+<li><p>The model used above uses a single factor with four levels,
+corresponding to what is sometimes called a <em>one-way design</em>. But
+it could also be viewed as a <em>factorial design</em> with two factors:
+use of physical exercises (yes or no), and use of behavioral exercises
+(yes or no).<a href="#fn15" class="footnote-ref"
+id="fnref15"><sup>15</sup></a> Students that are familiar with the
+analysis of factorial designs using an analysis of variance approach
+might remember the concepts of <em>main effects</em> and
+<em>interactions</em>. Inferences for main effects and interactions can
+be made even if we do not explicitly specify the model as having the two
+factors (with an interaction) as explanatory variables. Here the main
+effect for physical exercise can be written in terms of the difference
+between the average expected response for treatment conditions with
+physical exercise versus that for the treatment conditions without
+physical exercise. This can be written as <span class="math display">\[
+  (\mu_p + \mu_{pb})/2 - (\mu_b + \mu_n)/2.
+\]</span> Similarly the main effect for behavioral exercise can be
+written as <span class="math display">\[
+  (\mu_b + \mu_{pb})/2 - (\mu_p + \mu_n)/2.
+\]</span> Finally the interaction can be written in terms of the
+difference in the effect of adding one type of exercise when the other
+type of exercise is being used versus when it is not, which can be
+written as <span class="math display">\[
+  \mu_{pb} - \mu_p - (\mu_b - \mu_n)
+\]</span> or, alternatively, as <span class="math inline">\(\mu_{pb} -
+\mu_b - (\mu_p - \mu_n)\)</span> which is algebraically equivalent.
+Write each of the three quantities above as functions of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span> by substituting each <span
+class="math inline">\(\mu\)</span> by the corresponding function of
+those parameters, and simplifying. You should find that each of these
+quantities can be written as a linear combination of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and <span
+class="math inline">\(\beta_3\)</span>. Use the <code>lincon</code>
+function to estimate each of these quantities. If you do this correctly
+the <span class="math inline">\(p\)</span>-values you get should be the
+same as those given by the ANOVA table shown below, and the <span
+class="math inline">\(F\)</span> test statistics shown below should
+equal (approximately due to rounding) the squares of the <span
+class="math inline">\(t\)</span> test statistics reported by
+<code>lincon</code>.<a href="#fn16" class="footnote-ref"
+id="fnref16"><sup>16</sup></a></p>
+<pre class="r"><code>library(car)
+AngerManagement &lt;- AngerManagement %&gt;% 
+  mutate(behavioral = ifelse(treatment %in% c(&quot;Behavioral&quot;,&quot;Both&quot;), &quot;yes&quot;, &quot;no&quot;)) %&gt;%
+  mutate(physical = ifelse(treatment %in% c(&quot;Physical&quot;,&quot;Both&quot;), &quot;yes&quot;, &quot;no&quot;))
+m &lt;- lm(Anger ~ behavioral + physical + behavioral:physical, data = AngerManagement)
+Anova(m)</code></pre>
+<pre><code>Anova Table (Type II tests)
+
+Response: Anger
+                    Sum Sq Df F value  Pr(&gt;F)    
+behavioral             109  1   29.93 3.5e-06 ***
+physical                10  1    2.75    0.11    
+behavioral:physical      0  1    0.00    1.00    
+Residuals              131 36                    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre></li>
+</ol>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Sternberg, D. E., Van Kammen, D. P., &amp; Bunney, W. E.
+(1982). Schizophrenia: Dopamine <span
+class="math inline">\(\beta\)</span>-hydroxylase activity and treatment
+response. <em>Science</em>, <em>216</em>, 1423–1425.<a href="#fnref1"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Note now <code>coord_flip()</code> can be used to “flip”
+the ordinate and abscissa of the plot which works nicely here to orient
+the plot horizontally.<a href="#fnref2"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>The <strong>dplyr</strong> package (sometimes used in
+conjunction with the <strong>tidyr</strong>) package is very useful for
+data manipulation and descriptive analysis. There is a bit of a learning
+curve to using it, but it is well worth learning in my opinion.<a
+href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Introductory statistics classes typically discuss
+inferences for the difference between the means based on two independent
+samples. That is what you are doing here, although you are framing the
+inferences in terms of a linear model.<a href="#fnref4"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Note how including <code>-1</code> in the model formula
+causes the model to <em>not</em> include a term of <span
+class="math inline">\(\beta_0\)</span>.<a href="#fnref5"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Source: Box, G. E. P. (1950). Problems in the analysis
+of growth and wear curves. <em>Biometrics</em>, <em>6(4)</em>,
+362–389.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>Thioracil is an anti-thyroid medication that is
+sometimes used to treat hyperthyroidism, and thyroxin is a hormone made
+by the thyroid that controls growth and development.<a href="#fnref7"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>Missing data can be a serious issue in longitudinal
+studies and in regression in general. We generally assume that missing
+data are “missing at random” meaning that while whether or not an
+observation is missing may depend on the explanatory variable(s) it is
+not related to the response variable once we account for the explanatory
+variable. Here this would mean that within a given treatment group the
+probability that an observation is missing does not depend on weight.<a
+href="#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>This model is specified such that the expected weight at
+zero weeks is the same for rats in all three treatment conditions, which
+makes sense because at the beginning of the study before the additives
+were put in the drinking water there would not be a difference in
+expected weight between the treatment conditions (assuming the
+treatments were randomized, which they were).<a href="#fnref9"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p>Kruuk, H., Moorhouse, A., Conroy, J. W. H., Durbin, L.,
+&amp; Frears, S. (1989). An estimate of numbers and habitat preferences
+of otters <em>Lutra lutra</em> in Shetland, UK. <em>Biological
+Conservation</em>, <em>49(4)</em>, 241–254.<a href="#fnref10"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn11"><p>Dot plots are like scatter plots except they stack
+dots. I find them useful for smaller studies with categorical
+explanatory variables. They can be a bit tricky to make using
+<code>ggplot</code>.<a href="#fnref11"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>While this linear model will provide appropriate
+estimates, the standard errors and thus confidence intervals and tests
+will not be accurate because of the sampling design. This survey sampled
+the sections <em>without replacement</em> which causes the observations
+to be <em>dependent</em> because if one section is in the sample then it
+cannot be observed again. Taking this into account requires modifying
+the standard errors. This is standard practice in survey research, but
+it requires specialized software (e.g., see the <strong>survey</strong>
+package in R). If the number of sampled units is much smaller than the
+number of units that could be sampled (i.e., the population size), then
+little or no adjustment is necessary, but that is not the case here.
+Also the way the standard error is usually computed in survey research
+does not assume that the variance is the same across the strata, but
+that is being implicitly assumed here. So consider that we are using
+these data as an exercise but other than the point estimates the
+inferences are questionable.<a href="#fnref12"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>Hoijtink, H. (2012). <em>Informative hypotheses: Theory
+and practice for behavioral and social scientists</em>. Taylor &amp;
+Francis. I am fairly certain that these data are fictional, but maybe
+not completely unrealistic.<a href="#fnref13"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn14"><p>Usually when <code>lm</code> creates indicator
+variables it will create them for all but the first level. If the levels
+are not ordered then that will be the first level when they are ordered
+alphabetically. But here it will be that for the <code>None</code>
+level. A side effect of ordering the levels is that it allows us to
+control how they appear in a plot when using <code>ggplot</code> which
+is sometimes desirable.<a href="#fnref14"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn15"><p>Interestingly a model for a factorial design can always
+be written by “collapsing” the two or more factors of the design into
+one factor where each level of that factor is a combination of levels of
+the factors of the factorial design.<a href="#fnref15"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn16"><p>Although I do not like to use ANOVA tables, and I do
+not recommend using them outside of some very specialized applications,
+if you must produce them then I would recommend using the
+<code>Anova</code> function from the <strong>car</strong> package. But
+only use this function if you fully understand how it works.<a
+href="#fnref16" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
