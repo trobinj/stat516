@@ -342,7 +342,17 @@ class="math display">\[
 \beta_0 + \beta_1, &amp; \text{if the $i$-th observation is from the
 worker caste}.
   \end{cases}
-\]</span></p></li>
+\]</span> <strong>Solution</strong>: We can estimate the model as
+follows and confirm the parameterization using the output from
+<code>summary</code>.</p>
+<pre class="r"><code>m &lt;- lm(ln.energy ~ caste, data = MoleRats)
+summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)  4.24601     0.1008 42.1150 2.885e-30
+casteworker -0.08902     0.1302 -0.6839 4.988e-01</code></pre>
+<p>The <code>casteworker</code> shows that an indicator variable was
+created that assumes a value of one for any observation where the caste
+is worker, and zero otherwise.</p></li>
 <li><p>Consider the following three quantities and how they can be
 expressed as functions of the model parameters: the expected log energy
 expenditure of mole-rats from the <em>lazy</em> caste (<span
@@ -364,7 +374,48 @@ that inferences for two of these quantities — i.e., the expected log
 expenditure of mole-rats of the <em>lazy</em> caste and the
 <em>difference</em> in the expected log expenditures between the two
 castes — should match those given by using <code>summary</code> and
-<code>confint</code> applied to the model object.</p></li>
+<code>confint</code> applied to the model object.</p>
+<p><strong>Solution</strong>: First we need to load the
+<strong>trtools</strong> package to use <code>lincon</code> and
+<code>contrast</code>.</p>
+<pre class="r"><code>library(trtools)</code></pre>
+<p>We can use <code>lincon</code> to produce inferences for <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_0 + \beta_1\)</span>, and <span
+class="math inline">\(\beta_1\)</span> as follows.</p>
+<pre class="r"><code>lincon(m, a = c(1,0)) # b0</code></pre>
+<pre><code>        estimate     se lower upper tvalue df    pvalue
+(1,0),0    4.246 0.1008 4.041 4.451  42.12 33 2.885e-30</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,1)) # b0 + b1</code></pre>
+<pre><code>        estimate      se lower upper tvalue df   pvalue
+(1,1),0    4.157 0.08232  3.99 4.324   50.5 33 7.89e-33</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,1)) # b1</code></pre>
+<pre><code>        estimate     se   lower  upper  tvalue df pvalue
+(0,1),0 -0.08902 0.1302 -0.3538 0.1758 -0.6839 33 0.4988</code></pre>
+<p>Note, however, that single parameter inferences (i.e., <span
+class="math inline">\(\beta_0\)</span> and <span
+class="math inline">\(\beta_1\)</span>) are also produced by
+<code>summary</code>. We can produce inferences about the expected
+response for the two castes using <code>contrast</code> as follows.</p>
+<pre class="r"><code>contrast(m, 
+  a = list(caste = c(&quot;lazy&quot;,&quot;worker&quot;)),
+  cnames = c(&quot;lazy&quot;,&quot;worker&quot;))</code></pre>
+<pre><code>       estimate      se lower upper tvalue df    pvalue
+lazy      4.246 0.10082 4.041 4.451  42.12 33 2.885e-30
+worker    4.157 0.08232 3.990 4.324  50.50 33 7.890e-33</code></pre>
+<p>And the following will produce inferences concerning the
+<em>difference</em> in the expected response between the worker and lazy
+castes.</p>
+<pre class="r"><code>contrast(m,
+  a = list(caste = &quot;worker&quot;),
+  b = list(caste = &quot;lazy&quot;))</code></pre>
+<pre><code> estimate     se   lower  upper  tvalue df pvalue
+ -0.08902 0.1302 -0.3538 0.1758 -0.6839 33 0.4988</code></pre>
+<p>Note that <code>lincon</code> andd <code>contrast</code> produce the
+same results. Also note that the estimated expected response for the
+worker caste is slightly less than that for the lazy caste, although the
+difference is not statistically significant at conventional significance
+levels.</p></li>
 <li><p>The model we considered above compares the two castes of
 mole-rats, but it does not account for differences in their sizes. The
 lazy mole-rats tend to be larger than the worker mole-rats. It may be
@@ -388,10 +439,28 @@ written as <span class="math display">\[
 \beta_0 + \beta_1 + \beta_2 \ln(m_i),
    &amp; \text{if the $i$-th observation is from the worker caste}.
   \end{cases}
-\]</span></p></li>
+\]</span> <strong>Solution</strong>: The model can be estimated as
+follows.</p>
+<pre class="r"><code>m &lt;- lm(ln.energy ~ caste + ln.mass, data = MoleRats)
+summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept) -0.09687     0.9423 -0.1028 9.188e-01
+casteworker  0.39334     0.1461  2.6922 1.120e-02
+ln.mass      0.89282     0.1930  4.6252 5.887e-05</code></pre>
+<p>The parameterization can be confirmed from the output from
+<code>summary</code>.</p></li>
 <li><p>Using the code given above, add lines to the plot to show the
 estimated expected log energy expenditure as a function of log mass and
-caste.</p></li>
+caste.</p>
+<p><strong>Solution</strong>: First we create a data set to hold
+estimated expected responses at a variety of values of the explanatory
+variables.</p>
+<pre class="r"><code>d &lt;- expand.grid(caste = c(&quot;lazy&quot;,&quot;worker&quot;), ln.mass = seq(3.5, 5.5, length = 100))
+d$yhat &lt;- predict(m, newdata = d)</code></pre>
+<p>Then we “add to” the plot we created above.</p>
+<pre class="r"><code>p2 &lt;- p2 + geom_line(aes(y = yhat), data = d)
+plot(p2)</code></pre>
+<p><img src="lecture-01-30-2023_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" /></p></li>
 <li><p>With the model now including the log of mass as an explanatory
 variable, comparisons between the castes must also consider mass. How
 can we use <code>contrast</code> to estimate the expected log energy
@@ -403,7 +472,30 @@ should be consistent with the figure (i.e., they should look reasonable
 based on “eyeball” estimates from the figure). Also because the model
 specifies that the two lines are parallel, the estimated difference in
 expected log energy consumption between the castes will not depend on
-mass.</p></li>
+mass.</p>
+<p><strong>Solution</strong>: Here are the estimates of the expected
+response for a lazy mole-rat at three different masses, and also a
+worker mole-rat at the same masses.worker</p>
+<pre class="r"><code>contrast(m, a = list(caste = &quot;lazy&quot;, ln.mass = c(4,4.5,5)), cnames = c(4,4.5,5))</code></pre>
+<pre><code>    estimate      se lower upper tvalue df    pvalue
+4      3.474 0.18470 3.098 3.851  18.81 32 7.300e-19
+4.5    3.921 0.10595 3.705 4.137  37.00 32 7.733e-28
+5      4.367 0.08348 4.197 4.537  52.31 32 1.426e-32</code></pre>
+<pre class="r"><code>contrast(m, a = list(caste = &quot;worker&quot;, ln.mass = c(4,4.5,5)), cnames = c(4,4.5,5))</code></pre>
+<pre><code>    estimate      se lower upper tvalue df    pvalue
+4      3.868 0.09000 3.684 4.051  42.98 32 7.067e-30
+4.5    4.314 0.07309 4.165 4.463  59.02 32 3.120e-34
+5      4.761 0.14566 4.464 5.057  32.68 32 3.725e-26</code></pre>
+<p>And here we make inferences about the difference in the expected
+response at different values of log mass as follows.</p>
+<pre class="r"><code>contrast(m, 
+  a = list(caste = &quot;worker&quot;, ln.mass = c(4,4.5,5)),
+  b = list(caste = &quot;lazy&quot;, ln.mass = c(4,4.5,5)),
+  cnames = c(4,4.5,5))</code></pre>
+<pre><code>    estimate     se   lower upper tvalue df pvalue
+4     0.3933 0.1461 0.09573 0.691  2.692 32 0.0112
+4.5   0.3933 0.1461 0.09573 0.691  2.692 32 0.0112
+5     0.3933 0.1461 0.09573 0.691  2.692 32 0.0112</code></pre></li>
 <li><p>The parameter <span class="math inline">\(\beta_2\)</span> is the
 rate of change of the expected log energy consumption per unit increase
 in the log of mass. Inferences concerning this quantity can be obtained
@@ -411,7 +503,17 @@ simply using <code>summary</code> and <code>confint</code> applied to
 the model object, but as an exercise how can we estimate this rate of
 change for each caste using the <code>contrast</code> function?
 Naturally we should find that the estimated rate is the same for each
-caste.</p></li>
+caste.</p>
+<p><strong>Solution</strong>: Here is how to use <code>contrast</code>
+to estimate the rate of change in the expected response per unit
+increase in log mass for each caste.</p>
+<pre class="r"><code>contrast(m, 
+  a = list(caste = c(&quot;lazy&quot;,&quot;worker&quot;), ln.mass = 3),
+  b = list(caste = c(&quot;lazy&quot;,&quot;worker&quot;), ln.mass = 2),
+  cnames = c(&quot;lazy&quot;,&quot;worker&quot;))</code></pre>
+<pre><code>       estimate    se  lower upper tvalue df    pvalue
+lazy     0.8928 0.193 0.4996 1.286  4.625 32 5.887e-05
+worker   0.8928 0.193 0.4996 1.286  4.625 32 5.887e-05</code></pre></li>
 <li><p>A test to determine if there is a statistically significant
 difference in expected log energy expenditure between the two castes
 uses the null hypothesis <span class="math inline">\(H_0\!: \beta_1 =
@@ -423,7 +525,20 @@ class="math inline">\(\beta_1 = 0\)</span>) and using the
 class="math inline">\(F\)</span> test statistic is the square of the
 <span class="math inline">\(t\)</span> test statistic from
 <code>summary</code>, and that the p-values from <code>summary</code>
-and <code>anova</code> are the same.</p></li>
+and <code>anova</code> are the same.</p>
+<p><strong>Solution</strong>: Here is how to conduct the test using
+<code>anova</code>.</p>
+<pre class="r"><code>m.null &lt;- lm(ln.energy ~ ln.mass, data = MoleRats)
+anova(m.null,m)</code></pre>
+<pre><code>Analysis of Variance Table
+
+Model 1: ln.energy ~ ln.mass
+Model 2: ln.energy ~ caste + ln.mass
+  Res.Df  RSS Df Sum of Sq    F Pr(&gt;F)  
+1     33 3.45                           
+2     32 2.81  1     0.637 7.25  0.011 *
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre></li>
 <li><p>Repeat 3-6 with both <code>caste</code> and <code>ln.mass</code>
 as explanatory variables, but now with an “interaction” between the them
 by including <code>caste:ln.energy</code> in your model formula. Note
@@ -436,7 +551,54 @@ class="math display">\[
 \beta_0 + \beta_1 + (\beta_2 + \beta_3) \ln(m_i),
    &amp; \text{if the $i$-th observation is from the worker caste}.
   \end{cases}
-\]</span></p></li>
+\]</span>/ <strong>Solution</strong>: The model would be specified as
+<code>ln.energy ~ caste + ln.mass + caste:ln.mass</code>. Here are the
+parameter estimates and a plot of the estimated model.</p>
+<pre class="r"><code>m &lt;- lm(ln.energy ~ caste + ln.mass + caste:ln.mass, data = MoleRats)
+summary(m)$coefficients</code></pre>
+<pre><code>                    Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)           1.2939     1.6691  0.7752  0.44408
+casteworker          -1.5713     1.9518 -0.8050  0.42694
+ln.mass               0.6069     0.3428  1.7706  0.08646
+casteworker:ln.mass   0.4186     0.4147  1.0094  0.32061</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(caste = c(&quot;lazy&quot;,&quot;worker&quot;), ln.mass = seq(3.5, 5.5, length = 100))
+d$yhat &lt;- predict(m, newdata = d)
+
+p &lt;- ggplot(MoleRats, aes(x = ln.mass, y = ln.energy, color = caste)) +
+  geom_point() + theme_classic() + theme(legend.position = c(0.9, 0.2)) +
+  geom_line(aes(y = yhat), data = d) +
+  labs(x = &quot;Log Mass (log g)&quot;, y = &quot;Log Energy Expenditure (log kJ/Day)&quot;,
+    color = &quot;Caste&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-01-30-2023_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" />
+Notice how the “interaction” between log mass and caste now changes the
+results form <code>contrast</code> since the lines are no longer
+restricted to be parallel.</p>
+<pre class="r"><code>contrast(m, a = list(caste = &quot;lazy&quot;, ln.mass = c(4,4.5,5)), cnames = c(4,4.5,5))</code></pre>
+<pre><code>    estimate      se lower upper tvalue df    pvalue
+4      3.722 0.30664 3.096 4.347  12.14 31 2.601e-13
+4.5    4.025 0.14787 3.723 4.327  27.22 31 3.313e-23
+5      4.328 0.09189 4.141 4.516  47.10 31 2.057e-30</code></pre>
+<pre class="r"><code>contrast(m, a = list(caste = &quot;worker&quot;, ln.mass = c(4,4.5,5)), cnames = c(4,4.5,5))</code></pre>
+<pre><code>    estimate      se lower upper tvalue df    pvalue
+4      3.825 0.09954 3.622 4.028  38.42 31 1.026e-27
+4.5    4.337 0.07665 4.181 4.494  56.59 31 7.432e-33
+5      4.850 0.17059 4.502 5.198  28.43 31 9.024e-24</code></pre>
+<pre class="r"><code>contrast(m, 
+  a = list(caste = &quot;worker&quot;, ln.mass = c(4,4.5,5)),
+  b = list(caste = &quot;lazy&quot;, ln.mass = c(4,4.5,5)),
+  cnames = c(4,4.5,5))</code></pre>
+<pre><code>    estimate     se    lower  upper tvalue df  pvalue
+4     0.1032 0.3224 -0.55429 0.7608 0.3202 31 0.75095
+4.5   0.3125 0.1666 -0.02715 0.6522 1.8765 31 0.07002
+5     0.5219 0.1938  0.12667 0.9171 2.6932 31 0.01131</code></pre>
+<pre class="r"><code>contrast(m, 
+  a = list(caste = c(&quot;lazy&quot;,&quot;worker&quot;), ln.mass = 3),
+  b = list(caste = c(&quot;lazy&quot;,&quot;worker&quot;), ln.mass = 2),
+  cnames = c(&quot;lazy&quot;,&quot;worker&quot;))</code></pre>
+<pre><code>       estimate     se    lower upper tvalue df    pvalue
+lazy     0.6069 0.3428 -0.09217 1.306  1.771 31 0.0864587
+worker   1.0255 0.2335  0.54928 1.502  4.392 31 0.0001216</code></pre></li>
 </ol>
 <div class="footnotes footnotes-end-of-document">
 <hr />
