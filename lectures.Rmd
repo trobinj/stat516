@@ -43,7 +43,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [R demonstration on linear models and using `lincon` and `contrast` with linear models](lecture-01-30-2023.html). The [first homework assignment](hw1.html) is now available.
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Estimated expected responses, prediction, and visualization](lecture-02-01-2023.html).
 
 `r i <- i + 1; d[i]` 
  

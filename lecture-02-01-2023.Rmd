@@ -1,0 +1,323 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "02-01-2023"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"), comment = "")
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+suppressWarnings(library(kableExtra))
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+```{r options, echo = FALSE}
+options(digits = 4)
+```
+
+## The Estimated Expected Response
+
+Assuming the linear model
+$$
+  E(Y) = \beta_0 + \beta_1 x_{1} + \beta_2 x_{2} + \cdots + \beta_k x_{k},
+$$
+the estimated expected response at specified values of the response variables is
+$$
+  \widehat{E(Y)} = \hat\beta_0 + \hat\beta_1 x_{1} + \hat\beta_2 x_{2} + \cdots + \hat\beta_k x_{k},
+$$
+where $x_{1}, x_{2}, \dots, x_{k}$ are specified values of the explanatory variables. Because $\widehat{E(Y)}$ is sometimes used for *predicting* $Y$, we sometimes refer to it as the "predicted value" of $Y$ and denote it as $\hat{y}$. 
+
+Note that an expected response is simply a linear combination of the form
+$$
+  \ell = a_0\beta_0 + a_1\beta_1 + a_2\beta_2 + \cdots + a_k\beta_k + b,
+$$
+where $a_0 = 1, a_1 = x_{1}, a_2 = x_{2}, \dots, a_k = x_{k}$ and $b = 0$.
+
+**Example**: Consider the following model for the `whiteside` data.
+```{r}
+m <- lm(Gas ~ Insul + Temp + Insul:Temp, data = MASS::whiteside) # note :: operator
+summary(m)$coefficients
+```
+What is the estimated expected gas consumption at 0, 5, and 10 degrees C after insulation? Either `lincon` or `contrast` can be used (although `contrast` is probably easier). 
+```{r}
+library(trtools)
+lincon(m, a = c(1,1,0,0))   # After @ 0C
+lincon(m, a = c(1,1,5,5))   # After @ 5C
+lincon(m, a = c(1,1,10,10)) # After @ 10C
+contrast(m, a = list(Insul = "After", Temp = c(0,5,10)),
+  cnames = c("After @ 0C","After @ 5C","After @ 10C"))
+```
+There are better approaches if we want more points.
+```{r}
+d <- expand.grid(Temp = c(0,5,10), Insul = c("Before","After"))
+d
+predict(m, newdata = d)
+predict(m, newdata = d, interval = "confidence")
+cbind(d, predict(m, newdata = d, interval = "confidence"))
+```
+
+## Prediction and the Standard Error of Prediction
+
+The estimated expected response $\widehat{E(Y)}$ can also be viewed as the *predicted value* of $Y$, justified by least squares. The estimate of $Y$ is then
+$$
+  \hat{y} = \hat\beta_0 + \hat\beta_1x_{1} + \hat\beta_{2}x_{2} + \cdots + 
+  \hat\beta_kx_{k}.
+$$
+The (estimated) standard deviation of $Y - \hat{Y}$ is the *standard error of prediction*, defined as
+$$
+	\text{SE}(\hat{Y} - Y) = \sqrt{\text{SE}(\hat{Y})^2 + \sigma^2},
+$$
+where $\sigma^2$ is the variance of $Y$ (note *two* sources of variability --- that of $\hat{Y}$ and that of $Y$). The *prediction interval* for $Y$ is then
+$$
+  \hat{y} \pm t\sqrt{\text{SE}(\hat{Y})^2 + \sigma^2}.
+$$
+Compare this with the confidence interval for $\widehat{E(Y)}$ which is 
+$$
+  \hat{y} \pm t \text{SE}(\hat{Y}).
+$$
+Prediction intervals for $Y$ are wider than confidence intervals for $E(Y)$. 
+
+**Example**: Prediction intervals for `lm` objects can also be obtained form `predict`. 
+```{r}
+predict(m, newdata = d, interval = "prediction")
+```
+
+## Visualization of Confidence Intervals and Prediction Intervals
+
+**Example**: Suppose we want to visualize the model for the `whiteside` data.
+
+First consider a plot of the raw data.
+```{r, fig.height = 4}
+p <- ggplot(MASS::whiteside, aes(x = Temp, y = Gas, color = Insul)) + 
+  geom_point() + theme_minimal() +
+  labs(x = "Temperature (C)", y = "Gas Consumption", color = "Insulation")
+plot(p)
+```
+There are several ways we could show confidence intervals for the expected response or prediction intervals.
+```{r, fig.height = 4}
+d <- expand.grid(Insul = c("Before","After"), Temp = seq(-1, 11, by = 1))
+d <- cbind(d, predict(m, newdata = d, interval = "confidence"))
+head(d)
+
+p <- p + geom_line(aes(y = fit), data = d)
+plot(p)
+p <- p + geom_errorbar(aes(y = NULL, ymin = lwr, ymax = upr), width = 0.25, data = d)
+plot(p)
+```
+Here's another approach using confidence intervals for the expected response.
+```{r, fig.height = 4}
+d <- expand.grid(Insul = c("Before","After"), Temp = seq(-1, 11, length = 100))
+d <- cbind(d, predict(m, newdata = d, interval = "confidence"))
+
+p <- ggplot(MASS::whiteside, aes(x = Temp, y = Gas, color = Insul)) + 
+  geom_point() + theme_minimal() +
+  labs(x = "Temperature (C)", y = "Gas Consumption", color = "Insulation") + 
+  geom_line(aes(y = fit), data = d) + 
+  geom_ribbon(aes(y = NULL, ymin = lwr, ymax = upr, fill = Insul),
+    alpha = 0.25, color = NA, data = d, show.legend = FALSE)
+plot(p)
+```
+Same approach but now for prediction intervals.
+```{r, fig.height = 4}
+d <- expand.grid(Insul = c("Before","After"), Temp = seq(-1, 11, length = 100))
+d <- cbind(d, predict(m, newdata = d, interval = "prediction"))
+
+p <- ggplot(MASS::whiteside, aes(x = Temp, y = Gas, color = Insul)) + 
+  geom_point() + theme_minimal() + 
+  labs(x = "Temperature (C)", y = "Gas Consumption", color = "Insulation") + 
+  geom_line(aes(y = fit), data = d) + 
+  geom_ribbon(aes(y = NULL, ymin = lwr, ymax = upr, fill = Insul),
+    alpha = 0.25, color = NA, data = d, show.legend = FALSE)
+plot(p)
+```
+We can put them together, and move the legend.
+```{r, fig.height = 4}
+d1 <- expand.grid(Insul = c("Before","After"), Temp = seq(-1, 11, length = 100))
+d1 <- cbind(d1, predict(m, newdata = d1, interval = "confidence"))
+
+d2 <- expand.grid(Insul = c("Before","After"), Temp = seq(-1, 11, length = 100))
+d2 <- cbind(d2, predict(m, newdata = d2, interval = "prediction"))
+
+p <- ggplot(MASS::whiteside, aes(x = Temp, y = Gas, color = Insul)) + 
+  geom_point() + theme_minimal() + 
+  labs(x = "Temperature (C)", y = "Gas Consumption", color = "Insulation") + 
+  geom_line(aes(y = fit), data = d1) + 
+  geom_ribbon(aes(y = NULL, ymin = lwr, ymax = upr, fill = Insul),
+    alpha = 0.25, color = NA, data = d1, show.legend = FALSE) + 
+  geom_ribbon(aes(y = NULL, ymin = lwr, ymax = upr, fill = Insul),
+    alpha = 0.25, color = NA, data = d2, show.legend = FALSE) + 
+  theme(legend.position = c(0.8,0.8))
+plot(p)
+```
+Black and white for the color printer challenged.
+```{r, fig.height = 4}
+d1 <- expand.grid(Insul = c("Before","After"), Temp = seq(-1, 11, length = 100))
+d1 <- cbind(d1, predict(m, newdata = d1, interval = "confidence"))
+
+d2 <- expand.grid(Insul = c("Before","After"), Temp = seq(-1, 11, length = 100))
+d2 <- cbind(d2, predict(m, newdata = d2, interval = "prediction"))
+
+p <- ggplot(MASS::whiteside, aes(x = Temp, y = Gas)) + 
+  geom_point(size = 1) + theme_minimal() + facet_wrap(~ Insul) + 
+  labs(x = "Temperature (C)", y = "Gas Consumption") + 
+  geom_line(aes(y = fit), data = d1) + 
+  geom_ribbon(aes(y = NULL, ymin = lwr, ymax = upr), fill = "black",
+    alpha = 0.25, color = NA, data = d1, show.legend = FALSE) + 
+  geom_ribbon(aes(y = NULL, ymin = lwr, ymax = upr), fill = "black",
+    alpha = 0.25, color = NA, data = d2, show.legend = FALSE)
+plot(p)
+```
+
+**Example**: Consider visualizing several models for the `trees` data. How do we deal with having two quantitative explanatory variables?
+```{r}
+m <- lm(Volume ~ Height + Girth, data = trees)
+
+d <- expand.grid(Height = seq(63, 87, length = 100), Girth = c(8, 13, 18))
+d <- cbind(d, predict(m, newdata = d, interval = "confidence"))
+
+p <- ggplot(d, aes(x = Height, y = fit)) + theme_minimal() + 
+  geom_line() + facet_wrap(~ Girth) + 
+  geom_ribbon(aes(ymin = lwr, ymax = upr), alpha = 0.25) + 
+  labs(x = "Height (ft)", y = "Expected Volume (cubic feet)")
+plot(p)
+```
+Now suppose there is a third categorical variable `Species`.
+```{r}
+set.seed(123)
+trees$Species <- sample(c("A","B"), 31, TRUE)
+head(trees)
+m <- lm(Volume ~ Height + Girth + Height:Species + Girth:Species, data = trees)
+summary(m)$coefficients
+d <- expand.grid(Height = seq(63, 87, length = 100), Girth = c(8, 13, 18), Species = c("A","B"))
+d <- cbind(d, predict(m, newdata = d, interval = "confidence"))
+
+p <- ggplot(d, aes(x = Height, y = fit)) + theme_minimal() + 
+  geom_line() + facet_grid(Species ~ Girth) + 
+  geom_ribbon(aes(ymin = lwr, ymax = upr), alpha = 0.25) + 
+  labs(x = "Height (ft)", y = "Expected Volume (cubic feet)")
+plot(p)
+```
+The help file for trees (see `?trees`) suggests the model
+$$
+  E(V_i) = \beta_1h_ig_i^2,
+$$
+which might be reasonable if we think of a tree as being approximately a cylinder or a cone and assume that expected volume is approximately proportional to the volume of a cylinder or cone (girth is actually diameter). This is a linear model of the form
+$$
+  E(V_i) = \beta_0 + \beta_1 x_i,
+$$
+where $\beta_0 = 0$ and $x_i = h_ig_i^2$. To specify $h_ig_i^2$ as an explanatory variable, we need to use `I()` to keep R from misinterpreting interpret '*' and '^' anything other than the mathematical operators.
+```{r}
+m <- lm(Volume ~ -1 + I(Height*Girth^2), data = trees)
+summary(m)$coefficients
+d <- expand.grid(Height = seq(63, 87, length = 100), Girth = c(8, 13, 18))
+d <- cbind(d, predict(m, newdata = d, interval = "confidence"))
+
+p <- ggplot(d, aes(x = Height, y = fit)) + theme_minimal() + 
+  geom_line() + facet_wrap(. ~ Girth) + 
+  geom_ribbon(aes(ymin = lwr, ymax = upr), alpha = 0.25) + 
+  labs(x = "Height (ft)", y = "Expected Volume (cubic feet)")
+plot(p)
+```
+Now suppose we specify the following model.
+```{r}
+m <- lm(Volume ~ -1 + I(Height*Girth^2):Species, data = trees)
+summary(m)$coefficients
+```
+We can see that this model is
+$$
+  E(V_i) = \beta_1h_ig_i^2a_i + \beta_2h_ig_i^2b_i,
+$$
+where 
+$$
+  a_i = 
+  \begin{cases}
+  1, & \text{if the $i$-th observation is of species A}, \\
+  0, & \text{otherwise},
+  \end{cases}
+$$
+$$
+  b_i = 
+  \begin{cases}
+  1, & \text{if the $i$-th observation is of species B}, \\
+  0, & \text{otherwise},
+  \end{cases}
+$$
+so we can write the model as
+$$
+  E(V_i) = 
+  \begin{cases}
+  \beta_1h_ig_i^2, & \text{if the $i$-th observation is of species A}, \\
+  \beta_2h_ig_i^2, & \text{if the $i$-th observation is of species B}.
+  \end{cases}
+$$
+```{r}
+d <- expand.grid(Height = seq(63, 87, length = 100), 
+  Girth = c(8, 13, 18), Species = c("A","B"))
+d <- cbind(d, predict(m, newdata = d, interval = "confidence"))
+
+p <- ggplot(d, aes(x = Height, y = fit)) + theme_minimal() + 
+  geom_line() + facet_grid(Species ~ Girth) + 
+  geom_ribbon(aes(ymin = lwr, ymax = upr), alpha = 0.25) + 
+  labs(x = "Height (ft)", y = "Expected Volume (cubic feet)")
+plot(p)
+```
+Comparison of the two species:
+```{r}
+lincon(m, a = c(-1,1)) # b2 - b1
+```
+
+**Example**: Visualization of models for an experiment on mate preference in female platyfish.
+
+Consider data from an experiment on mate preference in female platyfish. 
+```{r, fig.height = 3}
+head(Sleuth3::case0602)
+p <- ggplot(Sleuth3::case0602, aes(x = Pair, y = Percentage)) + 
+  geom_point(alpha = 0.5) + theme_minimal() + coord_flip() + 
+  labs(x = NULL, y = "Percent Time Spent with Yellow-Tailed Male") + 
+  scale_y_continuous(breaks = seq(0, 100, by = 10), limits = c(0,100))
+plot(p)
+```
+We will specify a model to allow for differences in the expected response over male pairs.
+```{r}
+m <- lm(Percentage ~ Pair, data = Sleuth3::case0602)
+summary(m)$coefficients
+```
+Computing and plotting the estimated expected response for each pair.
+```{r, fig.height = 3}
+contrast(m, a = list(Pair = paste("Pair", 1:6, sep = "")),
+  cnames = paste("Pair", 1:6, sep = ""))
+d <- data.frame(Pair = paste("Pair", 1:6, sep = ""))
+d <- cbind(d, predict(m, newdata = d, interval = "confidence"))
+d
+p <- p + geom_errorbar(aes(y = NULL, ymin = lwr, ymax = upr), width = 0.2, data = d)
+plot(p)
+```
+Try replacing `confidence` with `prediction` to see prediction intervals. 
