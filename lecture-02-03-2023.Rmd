@@ -53,7 +53,7 @@ library(emmeans)
 ```
 **Warning**: The **emmeans** package contains a function called `contrast` which is not the same as the function of the same name in the **trtools** package, resulting in a namespace conflict if both packages are loaded. If you have both packages loaded in a given session, use `trtools::contrast` and `emmeans::contrast` to refer to a given function. 
 
-**Example**: Consider again the data from the platy fish study.
+**Example**: Consider again the data from the platyfish study.
 ```{r}
 m <- lm(Percentage ~ Pair, data = Sleuth3::case0602)
 summary(m)$coefficients
