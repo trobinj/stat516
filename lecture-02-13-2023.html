@@ -503,10 +503,10 @@ subset(cars, abs(rest) &gt; 2)</code></pre>
 <pre><code>                  car  mpg weight ratio  yhat  rest
 1  Buick Estate Wagon 16.9   4.36  2.73 10.32 3.944
 34        Fiat Strada 37.3   2.13  3.10 32.67 2.348</code></pre>
-<pre class="r"><code>p &lt;- ggplot(cars, aes(x = rest, y = car))
-p &lt;- p + geom_point() + theme_classic()
-p &lt;- p + geom_segment(aes(x = 0, xend = rest, y = car, yend = car))
-p &lt;- p + labs(x = &quot;Studentized Residual&quot;, y = NULL)
+<pre class="r"><code>p &lt;- ggplot(cars, aes(x = rest, y = car)) + geom_point() +
+  theme_classic() + 
+  geom_segment(aes(x = 0, xend = rest, y = car, yend = car)) +
+  labs(x = &quot;Studentized Residual&quot;, y = NULL)
 plot(p)</code></pre>
 <p><img src="lecture-02-13-2023_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" />
 What is up with the <a

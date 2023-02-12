@@ -242,10 +242,10 @@ m <- lm(mpg ~ weight + ratio, data = cars)
 cars$yhat <- predict(m)
 cars$rest <- rstudent(m)
 subset(cars, abs(rest) > 2)
-p <- ggplot(cars, aes(x = rest, y = car))
-p <- p + geom_point() + theme_classic()
-p <- p + geom_segment(aes(x = 0, xend = rest, y = car, yend = car))
-p <- p + labs(x = "Studentized Residual", y = NULL)
+p <- ggplot(cars, aes(x = rest, y = car)) + geom_point() +
+  theme_classic() + 
+  geom_segment(aes(x = 0, xend = rest, y = car, yend = car)) +
+  labs(x = "Studentized Residual", y = NULL)
 plot(p)
 ```
 What is up with the [Buick Estate Wagon](https://en.wikipedia.org/wiki/Buick_Estate)?
