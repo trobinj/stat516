@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Wednesday, Feb 15</title>
+
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Wednesday, Feb 15</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-02-15-2023.pdf">PDF</a> copy
+of this lecture.</p>
+<div id="assumption-3-independence-of-errorsobservations"
+class="section level2">
+<h2>Assumption 3: Independence of Errors/Observations</h2>
+<p>In the regression model <span class="math display">\[
+    Y_i = f(x_{i1}, x_{i2}, \dots, x_{ik}) + \epsilon_i,
+\]</span> it is assumed that <span class="math inline">\(\epsilon_1,
+\epsilon_2, \dots, \epsilon_n\)</span> are <em>mutually
+independent</em>. Equivalently, it is assumed that <span
+class="math inline">\(Y_1, Y_2, \dots, Y_n\)</span> are
+<em>conditionally independent</em> given <span
+class="math inline">\(x_{i1}, x_{i2}, \dots, x_{ik}\)</span>. That is,
+the distribution of any one <span
+class="math inline">\(\epsilon_i\)</span> (or <span
+class="math inline">\(Y_i\)</span>) should not depend on the values of
+the other <span class="math inline">\(\epsilon_{i&#39;}\)</span> (or
+<span class="math inline">\(Y_{i&#39;}\)</span>) (<span
+class="math inline">\(i&#39; \neq i\)</span>).</p>
+<p>A weaker condition that <span
+class="math inline">\(\text{Cov}(\epsilon_i, \epsilon_{i&#39;}) =
+0\)</span> for all <span class="math inline">\(i \neq i&#39;\)</span> is
+sufficient. The <em>covariance</em> between <span
+class="math inline">\(\epsilon_i\)</span> and <span
+class="math inline">\(\epsilon_{i&#39;}\)</span> is defined as <span
+class="math display">\[
+  \text{Cov}(\epsilon_i, \epsilon_{i&#39;}) = \text{Corr}(\epsilon_i,
+\epsilon_{i&#39;})\sqrt{\text{Var}(\epsilon_i)\text{Var}(\epsilon_{i&#39;})}.,
+\]</span> Note that this implies the same condition for <span
+class="math inline">\(Y_i\)</span> and <span
+class="math inline">\(Y_{i&#39;}\)</span>.</p>
+<p><strong>Consequences</strong>: Severe violations of independence can
+result in two problems.</p>
+<ol style="list-style-type: decimal">
+<li><p>Biased standard errors, incorrect p-values, and incorrect
+confidence/prediction intervals.</p></li>
+<li><p>Inefficient estimation of model parameters (and functions
+thereof).</p></li>
+</ol>
+<p><strong>Detection</strong>: A common reason for a lack of
+independence is that multiple observations are influenced by one or more
+common random but unobserved effects, or in some cases one observation
+influences another observation directly. Typically observations that are
+“closer” in some sense — time, space, or observational units — are not
+independent. Plotting with this in mind can sometimes reveal a lack of
+independence.</p>
+<p><strong>Example</strong>: Serial dependence — observations close in
+time.
+<img src="lecture-02-15-2023_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>Example</strong>: Nested observations — observations within a
+common experimental unit.</p>
+<pre class="r"><code>source(&quot;http://webpages.uidaho.edu/~trjohns/grooming.txt&quot;)
+head(grooming)</code></pre>
+<pre><code>  id day frequency collar
+1 m1  -6      0.66 before
+2 m2  -6      0.63 before
+3 m3  -6      2.16 before
+4 m4  -6      1.54 before
+5 m5  -6      0.56 before
+6 m6  -6      2.04 before</code></pre>
+<pre class="r"><code>tail(grooming)</code></pre>
+<pre><code>    id day frequency collar
+112 m4   7      5.07  after
+113 m5   7      2.20  after
+114 m6   7      2.52  after
+115 m7   7      1.39  after
+116 m8   7      3.84  after
+117 m9   7      1.90  after</code></pre>
+<pre class="r"><code>p &lt;- ggplot(grooming, aes(x = day, y = frequency, color = id))
+p &lt;- p + geom_point() + facet_grid(~ collar, scales = &quot;free_x&quot;)
+p &lt;- p + theme_minimal()
+p &lt;- p + labs(x = &quot;Relative Day&quot;, y = &quot;Grooming Frequency&quot;, color = &quot;Rabbit&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-15-2023_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>m &lt;- lm(log(frequency) ~ day + collar + day:collar, data = grooming)
+grooming$yhat &lt;- predict(m)
+grooming$rest &lt;- rstudent(m)
+p &lt;- ggplot(grooming, aes(x = yhat, y = rest))
+p &lt;- p + geom_point() + geom_segment(aes(x = yhat, xend = yhat, y = rest, yend = 0))
+p &lt;- p + facet_wrap(~ id) + theme_minimal()
+p &lt;- p + labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-15-2023_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>Solutions</strong>: There are several possible solutions.</p>
+<ol style="list-style-type: decimal">
+<li><p>Generalized least squares.</p></li>
+<li><p>Robust standard error estimators.</p></li>
+<li><p>Models that allow for dependence of observations.</p></li>
+</ol>
+<p>We will discuss each of these in later lectures.</p>
+</div>
+<div id="assumption-4-normality" class="section level2">
+<h2>Assumption 4: Normality</h2>
+<p><strong>Description</strong>: It is assumed that the distribution of
+each <span class="math inline">\(\epsilon_i\)</span> is normal, which
+implies that the distribution of each <span
+class="math inline">\(Y_i\)</span> is also normal (conditional on <span
+class="math inline">\(x_{i1}, x_{i2}, \dots, x_{ik}\)</span>).</p>
+<p><strong>Consequences</strong>: Confidence/prediction intervals and
+p-values may not be accurate if the distribution of <span
+class="math inline">\(\epsilon_i\)</span> (or <span
+class="math inline">\(Y_i\)</span>) is very non-normal, but only if
+<span class="math inline">\(n\)</span> is very small relative to the
+number of parameters (<span class="math inline">\(p\)</span>). This is
+because under fairly general circumstances as <span
+class="math inline">\(n \rightarrow \infty\)</span> the <em>sampling
+distribution</em> of the model parameters (and functions thereof)
+“approach” a normal distribution (i.e., “asymptotically normal”)
+<em>regardless</em> of the distribution of the error/response. With the
+exception of prediction intervals, we only require that <em>sampling
+distributions</em> are (approximately) normal.</p>
+<p>Consider the model <span class="math inline">\(Y_i = \beta_0 +
+\beta_1 x_i + \epsilon_i\)</span> where the distribution of each <span
+class="math inline">\(\epsilon_i\)</span> is
+<img src="lecture-02-15-2023_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
+and <span class="math inline">\(x_i\)</span> is 1, 2, or 3 with <span
+class="math inline">\(n/3\)</span> observations at each distinct value
+of <span class="math inline">\(x_i\)</span>. What about the <em>sampling
+distributions</em> of <span class="math inline">\(\hat\beta_0\)</span>
+and <span class="math inline">\(\hat\beta_1\)</span>?</p>
+<p>Sampling distributions when <span class="math inline">\(n =
+3\)</span>:
+<img src="lecture-02-15-2023_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Sampling distributions when <span class="math inline">\(n =
+6\)</span>:
+<img src="lecture-02-15-2023_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Sampling distributions when <span class="math inline">\(n =
+12\)</span>:
+<img src="lecture-02-15-2023_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>Detection</strong>: Plots of standardized or studentized
+residuals can reveal severe non-normality. Histograms can be used, but
+quantile-quantile (qq) plots are preferred. A qq-plot is a plot of the
+sorted residuals against their expected “order statistics” under the
+assumption that they are normally-distributed.</p>
+<pre class="r"><code>m &lt;- lm(Gas ~ Insul + Temp + Insul:Temp, data = MASS::whiteside)
+hist(rstandard(m))
+qqnorm(rstandard(m))</code></pre>
+<p><img src="lecture-02-15-2023_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" />
+Note that it <em>not</em> usually appropriate to use plots of the
+response variable since they are not <em>identically</em>
+distributed.</p>
+<p><strong>Solutions</strong>: For severe non-normality there are
+generally three solutions.</p>
+<ol style="list-style-type: decimal">
+<li><p>Increase <span class="math inline">\(n\)</span> (unless <span
+class="math inline">\(n\)</span> is already “sufficiently large” and
+then non-normality is a non-issue).</p></li>
+<li><p>Transform the response variable.</p></li>
+<li><p>Use a model that assumes the response variable has some other
+distribution.</p></li>
+</ol>
+</div>
+<div id="tests-of-assumptions" class="section level2">
+<h2>Tests of Assumptions</h2>
+<p>A variety of statistical tests have been proposed for various
+assumptions, where the null hypothesis is that the assumption is true.
+In my opinion these are rarely very useful for several reasons.</p>
+<ol style="list-style-type: decimal">
+<li><p>Such tests have their own assumptions, which may not be well
+met.</p></li>
+<li><p>Such tests do not clearly reveal the <em>severity</em> of the
+violation. While it is true that tests tend to have more power when the
+violation is severe, they can also have high power when the violation is
+negligible (as may also be the consequences) but <span
+class="math inline">\(n\)</span> is large.</p></li>
+<li><p>Perhaps the question to ask is not if the assumption is wrong,
+but rather if it is “reasonable” — i.e., is it “close enough” or are
+inferences likely to be very adversely affected?</p></li>
+</ol>
+</div>
+<div id="effects-of-explanatory-variable-distributions"
+class="section level2">
+<h2>Effects of Explanatory Variable Distributions</h2>
+<p>Regression models do not make any assumptions about the distribution
+of the explanatory variables. Their distribution, however, does affect
+inferences just as sample size does.</p>
+<p><strong>Example</strong>: Consider a linear model <span
+class="math display">\[
+   E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2},
+\]</span> where the explanatory variables are distributed as shown
+below.
+<img src="lecture-02-15-2023_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" />
+Note the standard errors for <span
+class="math inline">\(\hat\beta_1\)</span> and <span
+class="math inline">\(\hat\beta_2\)</span> shown below.</p>
+<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)   2.5 % 97.5 %
+(Intercept)  -0.1753     0.3543 -0.4949 6.208e-01 -0.8706 0.5199
+x1            1.0264     0.1120  9.1616 2.837e-19  0.8066 1.2463
+x2            0.9488     0.1120  8.4688 8.794e-17  0.7289 1.1687</code></pre>
+<p>Now suppose we reduce the variance of the first explanatory variable.
+<img src="lecture-02-15-2023_files/figure-html/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" />
+Note the standard errors for <span
+class="math inline">\(\hat\beta_1\)</span> and <span
+class="math inline">\(\hat\beta_2\)</span> shown below.</p>
+<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)   2.5 % 97.5 %
+(Intercept)   0.2183     0.4446   0.491 6.235e-01 -0.6541  1.091
+x1            0.8855     0.1757   5.039 5.568e-07  0.5406  1.230
+x2            1.0002     0.1111   8.999 1.127e-18  0.7821  1.218</code></pre>
+<p>Now suppose that the two explanatory variables have the same variance
+as in the first example, but have a much higher <em>covariance</em>.
+<img src="lecture-02-15-2023_files/figure-html/unnamed-chunk-14-1.png" width="100%" style="display: block; margin: auto;" />
+Note the standard errors for <span
+class="math inline">\(\hat\beta_1\)</span> and <span
+class="math inline">\(\hat\beta_2\)</span> shown below.</p>
+<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)   2.5 % 97.5 %
+(Intercept)  0.05121     0.2726  0.1879 8.510e-01 -0.4837 0.5862
+x1           0.88591     0.2873  3.0838 2.100e-03  0.3222 1.4497
+x2           1.15892     0.2873  4.0341 5.901e-05  0.5952 1.7227</code></pre>
+<p>This last example illustrates what is called (multi)collinearity
+where there exist <span class="math inline">\(\lambda_0, \lambda_1,
+\lambda_2, \dots, \lambda_k\)</span> (other than that all <span
+class="math inline">\(\lambda_0, \lambda_1, \lambda_2, \dots,
+\lambda_k\)</span> equal zero) such that <span class="math display">\[
+  \lambda_0 + \lambda_1x_{i1} + \lambda_2x_{i2} + \cdots +
+\lambda_kx_{ik} \approx 0
+\]</span> for all observations. Another way to say this is that we could
+almost determine the value of one explanatory variable from the others
+using a linear model where that explanatory variable is the response
+variable. When there are only two explanatory variables involved this
+will be evident from a high correlation (in absolute value) between
+those two explanatory variables.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
