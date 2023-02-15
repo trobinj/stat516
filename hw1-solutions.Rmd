@@ -147,7 +147,7 @@ Note that when using `pairs` the estimated difference is that for $\mu_n - \mu_p
     lincon(m, a = c(1,0)) 
     trtools::contrast(m, a = list(group = c("psychotic","nonpsychotic")), 
       cnames = c("psychotic","nonpsychotic"))
-    # emmeans(m, ~group)
+    emmeans(m, ~group)
     ```
     Here is how we can make inferences for $\mu_p - \mu_n$.
     ```{r}

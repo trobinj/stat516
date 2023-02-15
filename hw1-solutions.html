@@ -518,7 +518,12 @@ class="math inline">\(\mu_n\)</span> using <code>lincon</code>,
 <pre><code>             estimate    se lower upper tvalue df    pvalue
 psychotic       242.6 15.41 210.7 274.5  15.74 23 8.320e-14
 nonpsychotic    164.3 12.59 138.2 190.3  13.05 23 4.059e-12</code></pre>
-<pre class="r"><code># emmeans(m, ~group)</code></pre>
+<pre class="r"><code>emmeans(m, ~group)</code></pre>
+<pre><code> group        emmean   SE df lower.CL upper.CL
+ nonpsychotic    164 12.6 23      138      190
+ psychotic       243 15.4 23      211      274
+
+Confidence level used: 0.95 </code></pre>
 <p>Here is how we can make inferences for <span
 class="math inline">\(\mu_p - \mu_n\)</span>.</p>
 <pre class="r"><code>lincon(m, a = c(-1,1))</code></pre>
@@ -1324,15 +1329,15 @@ can sometimes give very slightly different results).</p>
   cnames = c(&quot;peat versus agricultural&quot;,&quot;peat versus cliff&quot;,&quot;peat versus non-peat&quot;),
   adjust = TRUE)</code></pre>
 <pre><code>                         estimate    se lower upper tvalue df    pvalue
-peat versus agricultural   11.523 1.473 7.987 15.06  7.821 78 4.461e-11
-peat versus cliff          11.536 1.493 7.952 15.12  7.724 78 1.925e-11
-peat versus non-peat        9.177 1.455 5.687 12.67  6.309 78 2.855e-08</code></pre>
+peat versus agricultural   11.523 1.473 7.985 15.06  7.821 78 2.008e-11
+peat versus cliff          11.536 1.493 7.950 15.12  7.724 78 2.862e-11
+peat versus non-peat        9.177 1.455 5.684 12.67  6.309 78 2.067e-08</code></pre>
 <pre class="r"><code>contrast(emmeans(m, ~stratum), method = &quot;trt.vs.ctrl&quot;, ref = &quot;peat&quot;,
   reverse = TRUE, infer = TRUE, adjust = &quot;mvt&quot;)</code></pre>
 <pre><code> contrast            estimate   SE df lower.CL upper.CL t.ratio p.value
  peat - cliff           11.54 1.49 78     7.95     15.1   7.724  &lt;.0001
  peat - agricultural    11.52 1.47 78     7.99     15.1   7.821  &lt;.0001
- peat - (non-peat)       9.18 1.45 78     5.68     12.7   6.309  &lt;.0001
+ peat - (non-peat)       9.18 1.45 78     5.69     12.7   6.309  &lt;.0001
 
 Confidence level used: 0.95 
 Conf-level adjustment: mvt method for 3 estimates 
