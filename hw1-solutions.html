@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Linear Model Specification and Interpretation</title>
+
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Linear Model Specification and
+Interpretation</h1>
+<h3 class="subtitle">Statistics 516, Homework 1 (Solutions)</h3>
+
+</div>
+
+
+<p>You can also download a <a href="hw1-solutions.pdf">PDF</a> copy of
+this homework assignment.</p>
+<p>This homework assignment concerns specifying and making inferences
+from linear models using data from several studies. In particular, you
+will see how to make inferences concerning linear combinations of model
+parameters. Note that you will likely need to install several packages
+to access the data used in these problems.</p>
+<div
+id="dopamine-beta-hydroxylase-activity-in-schizophrenics-after-neuroleptic-treatment"
+class="section level2">
+<h2>Dopamine <span class="math inline">\(\beta\)</span>-Hydroxylase
+Activity in Schizophrenics After Neuroleptic Treatment</h2>
+<p>The data frame <code>Dopamine</code> in the package
+<strong>BSDA</strong> is from an observational study of the response of
+schizophrenic patients to treatment.<a href="#fn1" class="footnote-ref"
+id="fnref1"><sup>1</sup></a> Schizophrenic patients who had been treated
+with a neuroleptic drug were classified as either remaining psychotic or
+becoming non-psychotic after the treatment. Samples of cerebrospinal
+fluid from all patients in the study were assayed for dopamine <span
+class="math inline">\(\beta\)</span>-hydroxylase (DBH) activity. DBH is
+an enzyme that catalyzes the conversion of the dopamine to
+norepinephrine, both of which are thought to be involved in the
+pathology of schizophrenia. There researchers thought that a difference
+in DBH activity between the two groups might delineate a subgroup of
+patients with a dopamine-sensative condition. You can see the raw data
+as follows with the variables <code>dbh</code> (DBH activity) and
+<code>group</code> (psychotic or non-psychotic).</p>
+<pre class="r"><code>library(BSDA)
+head(Dopamine)</code></pre>
+<pre><code>  dbh        group
+1 104 nonpsychotic
+2 105 nonpsychotic
+3 112 nonpsychotic
+4 116 nonpsychotic
+5 130 nonpsychotic
+6 145 nonpsychotic</code></pre>
+<pre class="r"><code>tail(Dopamine)</code></pre>
+<pre><code>   dbh     group
+20 226 psychotic
+21 245 psychotic
+22 270 psychotic
+23 275 psychotic
+24 306 psychotic
+25 320 psychotic</code></pre>
+<p>The plot below shows the data.<a href="#fn2" class="footnote-ref"
+id="fnref2"><sup>2</sup></a></p>
+<pre class="r"><code>library(ggplot2)
+p &lt;- ggplot(Dopamine, aes(x = group, y = dbh)) + 
+  theme_minimal() + geom_point() + coord_flip() +
+  labs(x = NULL, y = &quot;DBH (nanomoles/ml-hour per mg of protein)&quot;)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
+We can also get some basic summary statistics (mean, standard deviation,
+and sample size) using the <strong>dplyr</strong> package.<a href="#fn3"
+class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<pre class="r"><code>library(dplyr)
+Dopamine %&gt;% group_by(group) %&gt;% 
+  summarize(meandbh = mean(dbh), sddbh = sd(dbh), n = n())</code></pre>
+<pre><code># A tibble: 2 × 4
+  group        meandbh sddbh     n
+  &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1 nonpsychotic    164.  47.0    15
+2 psychotic       243.  51.4    10</code></pre>
+<p>As can be seen from the descriptive statistics, DBH is a bit lower,
+on average, for the 15 non-psychotic patients. Here you will use a
+linear model to make inferences about DBH and how it differs between
+patients classified as psychotic and non-psychotic.</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a linear model using the <code>lm</code> function with
+DBH (<code>dbh</code>) as the response variable and patient group
+(<code>group</code>) as the explanatory variable. Report the parameter
+estimates and their standard errors using the <code>summary</code>
+function.</p>
+<p><strong>Solution</strong>: Here is the estimated model.</p>
+<pre class="r"><code>m &lt;- lm(dbh ~ group, data = Dopamine)
+summary(m)$coefficients</code></pre>
+<pre><code>               Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)      164.27      12.59  13.052 4.059e-12
+grouppsychotic    78.33      19.90   3.936 6.587e-04</code></pre></li>
+<li><p>The model you estimated in the previous problem can be written as
+<span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_i,
+\]</span> where <span class="math inline">\(Y_i\)</span> is the <span
+class="math inline">\(i\)</span>-th observation of DBH. Explain how the
+value of <span class="math inline">\(x_i\)</span> is defined for this
+model (i.e., how would you determine the value of <span
+class="math inline">\(x_i\)</span> for a given patient?). Write the
+model case-wise to express the expected DBH as a function of <span
+class="math inline">\(\beta_0\)</span> and/or <span
+class="math inline">\(\beta_1\)</span> for psychotic and non-psychotic
+patients. Let <span class="math inline">\(\mu_p\)</span> and <span
+class="math inline">\(\mu_n\)</span> be the expected DBH of psychotic
+and non-psychotic patients, respectively. Using the case-wise
+representation of the model, write each of these parameters as a
+function of <span class="math inline">\(\beta_0\)</span> and/or <span
+class="math inline">\(\beta_1\)</span> (i.e., how would you compute
+<span class="math inline">\(\mu_p\)</span> and <span
+class="math inline">\(\mu_n\)</span> using <span
+class="math inline">\(\beta_0\)</span> and <span
+class="math inline">\(\beta_1\)</span>?).</p>
+<p><strong>Solution</strong>: The <code>grouppsychotic</code> in the
+output from <code>summary</code> shows that <span
+class="math inline">\(x_i\)</span> is an indicator variable defined as
+<span class="math display">\[
+x_i =
+\begin{cases}
+1, &amp; \text{if the $i$-th observation is of a psychotic patient}, \\
+0, &amp; \text{otherwise}.
+\end{cases}
+\]</span> Thus the model can be written case-wise as <span
+class="math display">\[
+E(Y_i) =
+\begin{cases}
+\beta_0, &amp; \text{if the $i$-th observation is of a non-psychotic
+patient}, \\
+\beta_0 + \beta_1, &amp; \text{if the $i$-th observation is of a
+psychotic patient}.
+\end{cases}
+\]</span> Thus we have that <span class="math inline">\(\mu_p = \beta_0
++ \beta_1\)</span> and <span class="math inline">\(\mu_n =
+\beta_0\)</span>.</p></li>
+<li><p>Using the <code>lincon</code> and <code>contrast</code> functions
+from the <strong>trtools</strong> package, produce estimates, standard
+errors, and confidence intervals for <span
+class="math inline">\(\mu_p\)</span> and <span
+class="math inline">\(\mu_n\)</span>. For the <code>lincon</code>
+function, use the fact that each of these parameters can be written as a
+function of <span class="math inline">\(\beta_0\)</span> and/or <span
+class="math inline">\(\beta_1\)</span>. The results from
+<code>lincon</code> and <code>contrast</code> should be the same.</p>
+<p><strong>Solution</strong>: Here is how to make those inferences using
+<code>lincon</code> and <code>contrast</code>.</p>
+<pre class="r"><code>library(trtools)
+lincon(m, a = c(1,1)) # b0 + b1 (psychotic)</code></pre>
+<pre><code>        estimate    se lower upper tvalue df   pvalue
+(1,1),0    242.6 15.41 210.7 274.5  15.74 23 8.32e-14</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,0)) # b0 (non-psychotic)</code></pre>
+<pre><code>        estimate    se lower upper tvalue df    pvalue
+(1,0),0    164.3 12.59 138.2 190.3  13.05 23 4.059e-12</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(group = c(&quot;psychotic&quot;,&quot;nonpsychotic&quot;)),
+  cnames = c(&quot;psychotic&quot;,&quot;non-psychotic&quot;))</code></pre>
+<pre><code>              estimate    se lower upper tvalue df    pvalue
+psychotic        242.6 15.41 210.7 274.5  15.74 23 8.320e-14
+non-psychotic    164.3 12.59 138.2 190.3  13.05 23 4.059e-12</code></pre>
+<p>Note that we do not necessarily need to use <code>lincon</code> or
+<code>contrast</code> to make inferences about <span
+class="math inline">\(\mu_n = \beta_0\)</span> since that is given by
+<code>summary</code>.</p>
+<pre class="r"><code>cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>               Estimate Std. Error t value  Pr(&gt;|t|)  2.5 % 97.5 %
+(Intercept)      164.27      12.59  13.052 4.059e-12 138.23  190.3
+grouppsychotic    78.33      19.90   3.936 6.587e-04  37.17  119.5</code></pre>
+<p>The <strong>emmeans</strong> package offers some of the same
+functionality as <code>lincon</code> and <code>contrast</code>, although
+the interface is quite different. It is a very powerful package. In
+these solutions I will show how to use it to make some of the same
+inferences that are made using <code>lincon</code> and/or
+<code>contrast</code>.</p>
+<pre class="r"><code>library(emmeans)
+emmeans(m, ~group) # estimate expected response for each group</code></pre>
+<pre><code> group        emmean   SE df lower.CL upper.CL
+ nonpsychotic    164 12.6 23      138      190
+ psychotic       243 15.4 23      211      274
+
+Confidence level used: 0.95 </code></pre></li>
+<li><p>Using the <code>lincon</code> and <code>contrast</code>
+functions, produce an estimate, standard error, and confidence interval
+for <span class="math inline">\(\mu_p - \mu_n\)</span>, as well as the
+test statistic and p-value for a test of the null hypothesis that <span
+class="math inline">\(\mu_p - \mu_n\)</span> = 0. The results from
+<code>lincon</code> and <code>contrast</code> should be the same.<a
+href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+<p><strong>Solution</strong>: Here is how to make inferences regarding
+<span class="math inline">\(\mu_p - \mu_n\)</span> using
+<code>lincon</code> and <code>contrast</code>.</p>
+<pre class="r"><code>lincon(m, a = c(0,1))</code></pre>
+<pre><code>        estimate   se lower upper tvalue df    pvalue
+(0,1),0    78.33 19.9 37.17 119.5  3.936 23 0.0006587</code></pre>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(group = &quot;psychotic&quot;), 
+  b = list(group = &quot;nonpsychotic&quot;))</code></pre>
+<pre><code> estimate   se lower upper tvalue df    pvalue
+    78.33 19.9 37.17 119.5  3.936 23 0.0006587</code></pre>
+<p>Here is how to estimate this differences using the
+<strong>emmeans</strong> package.</p>
+<pre class="r"><code>pairs(emmeans(m, ~group)) # estimate difference in expected response</code></pre>
+<pre><code> contrast                 estimate   SE df t.ratio p.value
+ nonpsychotic - psychotic    -78.3 19.9 23  -3.936  0.0007</code></pre>
+<p>Note that when using <code>pairs</code> the estimated difference is
+that for <span class="math inline">\(\mu_n - \mu_p\)</span>. To get
+<span class="math inline">\(\mu_p - \mu_n\)</span> we can use the
+options <code>reverse = TRUE</code>. Also the functions in
+<strong>emmeans</strong> may not necessarily give both a test and a
+confidence interval for what is being estimated. To force it to provide
+both we can use the option <code>infer = TRUE</code>.</p>
+<pre class="r"><code>pairs(emmeans(m, ~group), reverse = TRUE, infer = TRUE)</code></pre>
+<pre><code> contrast                 estimate   SE df lower.CL upper.CL t.ratio p.value
+ psychotic - nonpsychotic     78.3 19.9 23     37.2      120   3.936  0.0007
+
+Confidence level used: 0.95 </code></pre></li>
+<li><p>There are alternative prameterizations of this model. Estimate a
+linear model using the <code>lm</code> function with the model formula
+<code>dbh ~ -1 + group</code>, and repeat what you did in the previous
+four problems but for this model.<a href="#fn5" class="footnote-ref"
+id="fnref5"><sup>5</sup></a> <strong>Note</strong>: This problem is
+<strong>extra credit</strong> for students enrolled in Stat 436, but is
+<strong>required</strong> for students enrolled in Stat 516.</p>
+<p><strong>Solution</strong>: Here is the estimated model.</p>
+<pre class="r"><code>m &lt;- lm(dbh ~ -1 + group, data = Dopamine)
+summary(m)$coefficients</code></pre>
+<pre><code>                  Estimate Std. Error t value  Pr(&gt;|t|)
+groupnonpsychotic    164.3      12.59   13.05 4.059e-12
+grouppsychotic       242.6      15.41   15.74 8.320e-14</code></pre>
+<p>This model can be written as <span class="math inline">\(E(Y_i) =
+\beta_1x_{i1} + \beta_2x_{i2}\)</span>. From the output of
+<code>summary</code> we can see that <span
+class="math inline">\(x_{i1}\)</span> and <span
+class="math inline">\(x_{i2}\)</span> are indicator variables defined as
+<span class="math display">\[
+x_{i1} =
+\begin{cases}
+1, &amp; \text{if the $i$-th observation is of a non-psychotic patient},
+\\
+0, &amp; \text{otherwise},
+\end{cases}
+\]</span> and <span class="math display">\[
+x_{i2} =
+\begin{cases}
+1, &amp; \text{if the $i$-th observation is of a psychotic patient}, \\
+0, &amp; \text{otherwise}.
+\end{cases}
+\]</span> So we have that <span class="math inline">\(\mu_p =
+\beta_2\)</span> and <span class="math inline">\(\mu_n =
+\beta_1\)</span>. Here is how we can make inferences for <span
+class="math inline">\(\mu_p\)</span> and <span
+class="math inline">\(\mu_n\)</span> using <code>lincon</code>,
+<code>contrast</code>, and the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>lincon(m, a = c(0,1)) </code></pre>
+<pre><code>        estimate    se lower upper tvalue df   pvalue
+(0,1),0    242.6 15.41 210.7 274.5  15.74 23 8.32e-14</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,0)) </code></pre>
+<pre><code>        estimate    se lower upper tvalue df    pvalue
+(1,0),0    164.3 12.59 138.2 190.3  13.05 23 4.059e-12</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(group = c(&quot;psychotic&quot;,&quot;nonpsychotic&quot;)), 
+  cnames = c(&quot;psychotic&quot;,&quot;nonpsychotic&quot;))</code></pre>
+<pre><code>             estimate    se lower upper tvalue df    pvalue
+psychotic       242.6 15.41 210.7 274.5  15.74 23 8.320e-14
+nonpsychotic    164.3 12.59 138.2 190.3  13.05 23 4.059e-12</code></pre>
+<pre class="r"><code># emmeans(m, ~group)</code></pre>
+<p>Here is how we can make inferences for <span
+class="math inline">\(\mu_p - \mu_n\)</span>.</p>
+<pre class="r"><code>lincon(m, a = c(-1,1))</code></pre>
+<pre><code>         estimate   se lower upper tvalue df    pvalue
+(-1,1),0    78.33 19.9 37.17 119.5  3.936 23 0.0006587</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(group = &quot;psychotic&quot;), b = list(group = &quot;nonpsychotic&quot;))</code></pre>
+<pre><code> estimate   se lower upper tvalue df    pvalue
+    78.33 19.9 37.17 119.5  3.936 23 0.0006587</code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~group), reverse = TRUE, infer = TRUE)</code></pre>
+<pre><code> contrast                 estimate   SE df lower.CL upper.CL t.ratio p.value
+ psychotic - nonpsychotic     78.3 19.9 23     37.2      120   3.936  0.0007
+
+Confidence level used: 0.95 </code></pre>
+<p>Note that for this parameterization we can get inferences for <span
+class="math inline">\(\mu_p = \beta_2\)</span> and <span
+class="math inline">\(\mu_n = \beta_1\)</span> from <code>summary</code>
+as well, but not <span class="math inline">\(\mu_p - \mu_n = \beta_2 -
+\beta_1\)</span>.</p>
+<pre class="r"><code>cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>                  Estimate Std. Error t value  Pr(&gt;|t|) 2.5 % 97.5 %
+groupnonpsychotic    164.3      12.59   13.05 4.059e-12 138.2  190.3
+grouppsychotic       242.6      15.41   15.74 8.320e-14 210.7  274.5</code></pre>
+<p>Perhaps one of the advantages of functions like <code>contrast</code>
+and those from the <strong>emmeans</strong> package is that we do not
+usually need to be concerned with how the model is
+parameterized.</p></li>
+</ol>
+</div>
+<div id="weight-gain-in-rats-exposed-to-thiouracil-and-thyroxin"
+class="section level2">
+<h2>Weight Gain in Rats Exposed to Thiouracil and Thyroxin</h2>
+<p>The data frame <code>rat</code> in the package <strong>ALA</strong>
+is from an experiment investigating the effects of thiouracil and
+thyroxin on growth of rats.<a href="#fn6" class="footnote-ref"
+id="fnref6"><sup>6</sup></a> The <strong>ALA</strong> package is located
+in the R-Forge repository and not the CRAN repository, which is the
+default repository used by <code>install.packages</code>, so use the
+command
+<code>install.packages("ALA", repos = "http://R-Forge.R-project.org")</code>
+to specify the correct repository for installing <strong>ALA</strong>
+package. In this experiment thirty rats were each randomly assigned to
+one of three treatment groups where for two of the three groups an
+additive (thiouracil or thyroxin) was put in the drinking water.<a
+href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a>
+Measurements of rat weight (in grams) were observed at a baseline of
+zero weeks before putting the additives in the drinking water, and again
+at one, two, three, and four weeks after the additives were introduced.
+Three of the rats from the thyroxin group were lost so the total number
+of rats from which we have data is 27.<a href="#fn8"
+class="footnote-ref" id="fnref8"><sup>8</sup></a> The following shows
+first few rows of the <code>rat</code> data frame.</p>
+<pre class="r"><code>library(ALA)
+head(rat)</code></pre>
+<pre><code>    id treatment week weight
+1    1   control    0     57
+28   1   control    1     86
+55   1   control    2    114
+82   1   control    3    139
+109  1   control    4    172
+2    2   control    0     60</code></pre>
+<p>Note that the row names are not consecutive integers. This is likely
+because the data were originally sorted by treatment and week before
+being sorted by rat and then stored in the data frame. The row names
+usually do not have any effect on what we are doing here, but if you
+wanted to “reset” them you could use
+<code>rownames(rat) &lt;- NULL</code>. The data can be plotted as
+follows.</p>
+<pre class="r"><code>library(ggplot2)
+p &lt;- ggplot(rat, aes(x = week, y = weight)) + theme_minimal() + 
+  geom_point() + facet_wrap(~ treatment) + labs(y = &quot;Weight (g)&quot;, x = &quot;Week&quot;)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" />
+These data are <em>longitudinal</em> in that multiple observations are
+made on the same rat over time. Special methods are necessary to provide
+proper inferences for such designs, and we will discuss these later in
+the semester. But for now we will ignore this issue. You might pretend
+that each rat was only observed <em>once</em> (i.e., the rats in a given
+treatment group observed at one week are <em>different</em> from those
+observed at another week).</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a linear model using the <code>lm</code> function with
+<code>weight</code> as your response variable, and <code>week</code> and
+<code>treatment</code> as your explanatory variables, respectively. The
+model should be specified with an “interaction” between
+<code>treatment</code> and <code>week</code> so that the rate of change
+in expected weight per week can be different across the treatment
+groups. Report the parameter estimates using the <code>summary</code>
+function. You should get something like the following.</p>
+<pre><code>                         Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)               52.8800      2.648 19.9694 2.758e-41
+treatmentthiouracil        4.8200      3.745  1.2871 2.004e-01
+treatmentthyroxin         -0.7943      4.127 -0.1925 8.477e-01
+week                      26.4800      1.081 24.4944 2.373e-50
+treatmentthiouracil:week  -9.4300      1.529 -6.1680 8.257e-09
+treatmentthyroxin:week     0.6629      1.685  0.3935 6.946e-01</code></pre>
+<p><strong>Solution</strong>: The model can be estimated as follows.</p>
+<pre class="r"><code>m &lt;- lm(weight ~ treatment + week + treatment:week, data = rat)
+summary(m)$coefficients</code></pre>
+<pre><code>                         Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)               52.8800      2.648 19.9694 2.758e-41
+treatmentthiouracil        4.8200      3.745  1.2871 2.004e-01
+treatmentthyroxin         -0.7943      4.127 -0.1925 8.477e-01
+week                      26.4800      1.081 24.4944 2.373e-50
+treatmentthiouracil:week  -9.4300      1.529 -6.1680 8.257e-09
+treatmentthyroxin:week     0.6629      1.685  0.3935 6.946e-01</code></pre></li>
+<li><p>As can be seen from the output of <code>summary</code> from the
+previous problem, the model has six terms, including <span
+class="math inline">\(\beta_0\)</span>, so it can be written as <span
+class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3} +
+\beta_4 x_{i4} + \beta_5 x_{i5},
+\]</span> where <span class="math inline">\(Y_i\)</span> is the <span
+class="math inline">\(i\)</span>-th observation of weight (in grams),
+and <span class="math inline">\(x_{i1}, x_{i2}, \dots, x_{i5}\)</span>
+depend on treatment and/or week. Explain how <span
+class="math inline">\(x_{i1}\)</span>, <span
+class="math inline">\(x_{i2}\)</span>, <span
+class="math inline">\(x_{i3}\)</span>, <span
+class="math inline">\(x_{i4}\)</span>, and <span
+class="math inline">\(x_{i5}\)</span> are defined for this model (i.e.,
+how would you determine their values for a given observation?). Then
+write the model case-wise to show how the expected weight depends on
+week for each of the three treatment conditions.</p>
+<p><strong>Solution</strong>: From <code>summary</code> we can see that
+<span class="math inline">\(x_{i1}\)</span> and <span
+class="math inline">\(x_{i2}\)</span> are both indicator variables
+defined as <span class="math display">\[
+x_{i1} =
+   \begin{cases}
+   1, &amp; \text{if the treatment used for the $i$-th observation is
+thiouracil}, \\
+   0, &amp; \text{otherwise},
+   \end{cases}
+\]</span> and <span class="math display">\[
+x_{i2} =
+\begin{cases}
+1, &amp; \text{if the treatment used for the $i$-th observation is
+thyroxin}, \\
+0, &amp; \text{otherwise}.
+\end{cases}
+\]</span> Then <span class="math inline">\(x_{i3}\)</span> is the week
+(0, 1, 2, 3, or 4), and <span class="math inline">\(x_{i4} =
+x_{i1}x_{i3}\)</span> and <span class="math inline">\(x_{i5} =
+x_{i2}x_{i3}\)</span>. This implies that we could also write <span
+class="math inline">\(x_{i4}\)</span> and <span
+class="math inline">\(x_{i5}\)</span> as <span class="math display">\[
+x_{i4} =
+   \begin{cases}
+   w_i, &amp; \text{if the treatment used for the $i$-th observation is
+thiouracil}, \\
+   0, &amp; \text{otherwise},
+   \end{cases}
+\]</span> and <span class="math display">\[
+x_{i5} =
+\begin{cases}
+w_i, &amp; \text{if the treatment used for the $i$-th observation is
+thyroxin}, \\
+0, &amp; \text{otherwise},
+\end{cases}
+\]</span> where <span class="math inline">\(w_i = x_{i3}\)</span> (i.e.,
+week for the <span class="math inline">\(i\)</span>-th observation). We
+can therefore write the model case-wise as <span class="math display">\[
+E(Y_i) =
+\begin{cases}
+   \beta_0 + \beta_3 w_i, &amp; \text{if the treatment for the $i$-th
+observation is control}, \\
+   \beta_0 + \beta_1 + (\beta_3 + \beta_4) w_i, &amp; \text{if the
+treatment for the $i$-th observation is thiouracil}, \\
+   \beta_0 + \beta_2 + (\beta_3 + \beta_5) w_i, &amp; \text{if the
+treatment for the $i$-th observation is thyroxin}, \\
+\end{cases}
+\]</span> where <span class="math inline">\(w_i = x_{i3}\)</span> is the
+week for the <span class="math inline">\(i\)</span>-th observation. Note
+that if you entered the terms in the model formula in a different order
+(e.g., <code>week</code> before <code>treatment</code> this would change
+the parameterization of the model).</p></li>
+<li><p>Plot the model by creating an artificial data set of combinations
+of values of week and treatment using the <code>expand.grid</code>
+function, computing the predicted values from the model using the
+<code>predict</code> function, and adding lines to the plot using the
+code above and <code>geom_line</code>.</p>
+<p><strong>Solution</strong>: Here is our artifical data set.</p>
+<pre class="r"><code>d &lt;- expand.grid(week = seq(0, 4, length = 100), 
+  treatment = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;))
+head(d)</code></pre>
+<pre><code>     week treatment
+1 0.00000   control
+2 0.04040   control
+3 0.08081   control
+4 0.12121   control
+5 0.16162   control
+6 0.20202   control</code></pre>
+<p>There are a couple of things to note here. One is that we really only
+need two points for a line. So you could have
+<code>week = c(0,4)</code>. But we will want to have more points in the
+future when we are plotting curves and not lines. A shortcut you could
+use to specify the levels of treatment is
+<code>treatment = unique(rat$treatment)</code> which will give you the
+unique values of <code>treatment</code>. Now we can add the predicted
+valus using the <code>predict</code> function, which effectively
+computes the estimated expected response for every combination of
+<code>treatment</code> and <code>week</code>.</p>
+<pre class="r"><code>d$yhat &lt;- predict(m, newdata = d)
+head(d)</code></pre>
+<pre><code>     week treatment  yhat
+1 0.00000   control 52.88
+2 0.04040   control 53.95
+3 0.08081   control 55.02
+4 0.12121   control 56.09
+5 0.16162   control 57.16
+6 0.20202   control 58.23</code></pre>
+<p>Now we can create the plot. Here is the complete code for the plot
+with the data and the estimated model.</p>
+<pre class="r"><code>p &lt;- ggplot(rat, aes(x = week, y = weight)) + theme_minimal() + 
+  geom_point() + facet_wrap(~ treatment) + labs(y = &quot;Weight (g)&quot;, x = &quot;Week&quot;) + 
+  geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" /></p></li>
+<li><p>Using the <code>contrast</code> function, estimate the expected
+weight at zero weeks and again at four weeks for rats in each of the
+three treatment conditions.</p>
+<p><strong>Solution</strong>: Here are the estimated weights at zero
+weeks.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;), week = 0),
+  cnames = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;))</code></pre>
+<pre><code>           estimate    se lower upper tvalue  df    pvalue
+control       52.88 2.648 47.64 58.12  19.97 129 2.758e-41
+thiouracil    57.70 2.648 52.46 62.94  21.79 129 4.604e-45
+thyroxin      52.09 3.165 45.82 58.35  16.46 129 1.744e-33</code></pre>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;), week = 4),
+  cnames = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;))</code></pre>
+<pre><code>           estimate    se lower upper tvalue  df    pvalue
+control       158.8 2.648 153.6 164.0  59.97 129 4.436e-96
+thiouracil    125.9 2.648 120.7 131.1  47.54 129 1.231e-83
+thyroxin      160.7 3.165 154.4 166.9  50.76 129 4.059e-87</code></pre>
+<p>Here is how you would do that using the <strong>emmeans</strong>
+package.</p>
+<pre class="r"><code>emmeans(m, ~treatment, at = list(week = 0))</code></pre>
+<pre><code> treatment  emmean   SE  df lower.CL upper.CL
+ control      52.9 2.65 129     47.6     58.1
+ thiouracil   57.7 2.65 129     52.5     62.9
+ thyroxin     52.1 3.17 129     45.8     58.4
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>emmeans(m, ~treatment, at = list(week = 4))</code></pre>
+<pre><code> treatment  emmean   SE  df lower.CL upper.CL
+ control       159 2.65 129      154      164
+ thiouracil    126 2.65 129      121      131
+ thyroxin      161 3.17 129      154      167
+
+Confidence level used: 0.95 </code></pre>
+<p>You can also do this in one statement as follows.</p>
+<pre class="r"><code>emmeans(m, ~treatment|week, at = list(week = c(0,4)))</code></pre>
+<pre><code>week = 0:
+ treatment  emmean   SE  df lower.CL upper.CL
+ control      52.9 2.65 129     47.6     58.1
+ thiouracil   57.7 2.65 129     52.5     62.9
+ thyroxin     52.1 3.17 129     45.8     58.4
+
+week = 4:
+ treatment  emmean   SE  df lower.CL upper.CL
+ control     158.8 2.65 129    153.6    164.0
+ thiouracil  125.9 2.65 129    120.7    131.1
+ thyroxin    160.7 3.17 129    154.4    166.9
+
+Confidence level used: 0.95 </code></pre></li>
+<li><p>Using the <code>contrast</code> function, estimate the
+<em>difference</em> in expected weight at four weeks between the control
+group and the other two treatment groups, and also between the
+thiouracil and thyroxin groups. Also estimate these differences at zero
+weeks.</p>
+<p><strong>Solution</strong>: Here is the comparison between the the
+groups at four weeks.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = c(&quot;thiouracil&quot;,&quot;thyroxin&quot;), week = 4),
+  b = list(treatment = &quot;control&quot;, week = 4),
+  cnames = c(&quot;thiouracil vs control&quot;,&quot;thyroxin vs control&quot;))</code></pre>
+<pre><code>                      estimate    se   lower  upper tvalue  df    pvalue
+thiouracil vs control  -32.900 3.745 -40.309 -25.49 -8.785 129 8.276e-15
+thyroxin vs control      1.857 4.127  -6.308  10.02  0.450 129 6.534e-01</code></pre>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = &quot;thyroxin&quot;, week = 4),
+  b = list(treatment = &quot;thiouracil&quot;, week = 4))</code></pre>
+<pre><code> estimate    se lower upper tvalue  df    pvalue
+    34.76 4.127 26.59 42.92  8.423 129 6.168e-14</code></pre>
+<p>And here are the comparisons at zero weeks.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = c(&quot;thiouracil&quot;,&quot;thyroxin&quot;), week = 0),
+  b = list(treatment = &quot;control&quot;, week = 0),
+  cnames = c(&quot;thiouracil vs control&quot;,&quot;thyroxin vs control&quot;))</code></pre>
+<pre><code>                      estimate    se  lower upper  tvalue  df pvalue
+thiouracil vs control   4.8200 3.745 -2.589 12.23  1.2871 129 0.2004
+thyroxin vs control    -0.7943 4.127 -8.959  7.37 -0.1925 129 0.8477</code></pre>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = &quot;thyroxin&quot;, week = 0),
+  b = list(treatment = &quot;thiouracil&quot;, week = 0))</code></pre>
+<pre><code> estimate    se  lower upper tvalue  df pvalue
+   -5.614 4.127 -13.78  2.55  -1.36 129  0.176</code></pre></li>
+<li><p>Using the <code>contrast</code> function, estimate the rate of
+change in expected weight per unit increase in week (i.e., the change in
+expected weight corresponding to a one week increase in time) for rats
+in <em>each</em> of the three treatment groups.</p>
+<p><strong>Solution</strong>: Here is how we can estimate the rates of
+change in expected weight per week.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(week = 1, treatment = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;)),
+  b = list(week = 0, treatment = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;)),
+  cnames = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;))</code></pre>
+<pre><code>           estimate    se lower upper tvalue  df    pvalue
+control       26.48 1.081 24.34 28.62  24.49 129 2.373e-50
+thiouracil    17.05 1.081 14.91 19.19  15.77 129 6.900e-32
+thyroxin      27.14 1.292 24.59 29.70  21.01 129 1.846e-43</code></pre>
+<p>We can estimate these quantities with the <strong>emmeans</strong>
+package a couple of ways. One is to use the <code>emtrends</code>
+function.</p>
+<pre class="r"><code>emtrends(m, ~treatment, var = &quot;week&quot;, infer = TRUE)</code></pre>
+<pre><code> treatment  week.trend   SE  df lower.CL upper.CL t.ratio p.value
+ control          26.5 1.08 129     24.3     28.6  24.494  &lt;.0001
+ thiouracil       17.1 1.08 129     14.9     19.2  15.772  &lt;.0001
+ thyroxin         27.1 1.29 129     24.6     29.7  21.007  &lt;.0001
+
+Confidence level used: 0.95 </code></pre>
+<p>Another is to use the <code>pairs</code> function but use the
+<code>by</code> argument so that the pairs are within each level of
+<code>treatment</code>.</p>
+<pre class="r"><code>pairs(emmeans(m, ~treatment*week, at = list(week = c(0,1))),
+  by = &quot;treatment&quot;, reverse = TRUE, infer = TRUE)</code></pre>
+<pre><code>treatment = control:
+ contrast      estimate   SE  df lower.CL upper.CL t.ratio p.value
+ week1 - week0     26.5 1.08 129     24.3     28.6  24.494  &lt;.0001
+
+treatment = thiouracil:
+ contrast      estimate   SE  df lower.CL upper.CL t.ratio p.value
+ week1 - week0     17.1 1.08 129     14.9     19.2  15.772  &lt;.0001
+
+treatment = thyroxin:
+ contrast      estimate   SE  df lower.CL upper.CL t.ratio p.value
+ week1 - week0     27.1 1.29 129     24.6     29.7  21.007  &lt;.0001
+
+Confidence level used: 0.95 </code></pre>
+<p>Note that here the <code>emmeans</code> part creates estimates of the
+expected response at weeks 0 and 1 for each treatment.</p>
+<pre class="r"><code>emmeans(m, ~treatment*week, at = list(week = c(0,4)))</code></pre>
+<pre><code> treatment  week emmean   SE  df lower.CL upper.CL
+ control       0   52.9 2.65 129     47.6     58.1
+ thiouracil    0   57.7 2.65 129     52.5     62.9
+ thyroxin      0   52.1 3.17 129     45.8     58.4
+ control       4  158.8 2.65 129    153.6    164.0
+ thiouracil    4  125.9 2.65 129    120.7    131.1
+ thyroxin      4  160.7 3.17 129    154.4    166.9
+
+Confidence level used: 0.95 </code></pre>
+<p>Putting that “inside” the <code>pairs</code> function then generates
+inferences for the difference between pairs of conditions, and the
+<code>by</code> argument forces those to be within each level of
+<code>treatment</code>. This is perhaps more complicated than is
+necessary, but an advantage of this approach is that we could do the
+same thing for something other than an increase of one week. For
+example, we can estimate the increase in expected weight after four
+weeks for each treatment condition.</p>
+<pre class="r"><code>pairs(emmeans(m, ~treatment*week, at = list(week = c(0,4))),
+  by = &quot;treatment&quot;, reverse = TRUE, infer = TRUE)</code></pre>
+<pre><code>treatment = control:
+ contrast      estimate   SE  df lower.CL upper.CL t.ratio p.value
+ week4 - week0    105.9 4.32 129     97.4    114.5  24.494  &lt;.0001
+
+treatment = thiouracil:
+ contrast      estimate   SE  df lower.CL upper.CL t.ratio p.value
+ week4 - week0     68.2 4.32 129     59.6     76.8  15.772  &lt;.0001
+
+treatment = thyroxin:
+ contrast      estimate   SE  df lower.CL upper.CL t.ratio p.value
+ week4 - week0    108.6 5.17 129     98.3    118.8  21.007  &lt;.0001
+
+Confidence level used: 0.95 </code></pre>
+<p>We could even go one step further and compare the rates of change
+among the three treatment conditions.</p>
+<pre class="r"><code>pairs(pairs(emmeans(m, ~treatment*week, at = list(week = c(0,4))),
+  by = &quot;treatment&quot;, reverse = TRUE), by = NULL)</code></pre>
+<pre><code> contrast                                              estimate   SE  df t.ratio p.value
+ (week4 - week0 control) - (week4 - week0 thiouracil)     37.72 6.12 129   6.168  &lt;.0001
+ (week4 - week0 control) - (week4 - week0 thyroxin)       -2.65 6.74 129  -0.393  0.9183
+ (week4 - week0 thiouracil) - (week4 - week0 thyroxin)   -40.37 6.74 129  -5.991  &lt;.0001
+
+P value adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+<p>Here the <code>by = NULL</code> argument is necessary because they
+“inner” use of <code>pairs</code> grouped the comparison by
+<code>treatment</code>, but now we want to make comparisons across
+treatment conditions. Note that <code>pairs</code> automatically applied
+an adjustment for the family-wise error rate here. This can be removed
+by adding the option <code>adjust = "none"</code>.</p>
+<pre class="r"><code>pairs(pairs(emmeans(m, ~treatment*week, at = list(week = c(0,4))),
+  by = &quot;treatment&quot;, reverse = TRUE), by = NULL, adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast                                              estimate   SE  df t.ratio p.value
+ (week4 - week0 control) - (week4 - week0 thiouracil)     37.72 6.12 129   6.168  &lt;.0001
+ (week4 - week0 control) - (week4 - week0 thyroxin)       -2.65 6.74 129  -0.393  0.6946
+ (week4 - week0 thiouracil) - (week4 - week0 thyroxin)   -40.37 6.74 129  -5.991  &lt;.0001</code></pre>
+<p>The <strong>emmeans</strong> package is quite powerful, but it there
+is a bit of a learning curve. You can estimate differences of
+differences like this with with the <code>contrast</code> function from
+<strong>trtools</strong> as well by using two additional arguments. Here
+is how to estimate the difference in the increase in the expected weight
+from week 0 to week 4 between the control and thiouracil conditions.</p>
+<pre class="r"><code>trtools::contrast(m,
+  a = list(treatment = &quot;control&quot;, week = 4),
+  b = list(treatment = &quot;control&quot;, week = 0),
+  u = list(treatment = &quot;thiouracil&quot;, week = 4),
+  v = list(treatment = &quot;thiouracil&quot;, week = 0))</code></pre>
+<pre><code> estimate    se lower upper tvalue  df    pvalue
+    37.72 6.115 25.62 49.82  6.168 129 8.257e-09</code></pre>
+<p>Here the <code>contrast</code> function considers the difference in
+the expected response between the conditions specified <code>a</code>
+and <code>b</code>, and also between <code>u</code> and <code>v</code>,
+and then makes inferences for the difference between those
+differences!</p></li>
+<li><p>Now consider a model for these data but using the model formula
+<code>weight ~ treatment:week</code> with the <code>lm</code>
+function.<a href="#fn9" class="footnote-ref"
+id="fnref9"><sup>9</sup></a> Repeat what you did in the previous
+problems but using now this model. <strong>Note</strong>: This problem
+is <strong>extra credit</strong> for students enrolled in Stat 436, but
+is <strong>required</strong> for students enrolled in Stat 516.</p>
+<p><strong>Solution</strong>: Here is the estimated model.</p>
+<pre class="r"><code>m &lt;- lm(weight ~ treatment:week, data = rat)
+summary(m)$coefficients</code></pre>
+<pre><code>                         Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)                 54.46     1.6141   33.74 1.829e-66
+treatmentcontrol:week       25.95     0.8248   31.47 6.268e-63
+treatmentthiouracil:week    18.13     0.8248   21.98 8.733e-46
+treatmentthyroxin:week      26.35     0.9207   28.62 3.247e-58</code></pre>
+<p>The model can be written as <span class="math inline">\(E(Y_i) =
+\beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \beta_3x_{i3}\)</span>. We can
+explain <span class="math inline">\(x_{i1}\)</span>, <span
+class="math inline">\(x_{i2}\)</span>, and <span
+class="math inline">\(x_{i3}\)</span> in a couple of ways. If we were to
+define three new variables called <span
+class="math inline">\(d_{i1}\)</span>, <span
+class="math inline">\(d_{i2}\)</span>, and <span
+class="math inline">\(d_{i3}\)</span> such that <span
+class="math display">\[
+   d_{i1} =
+   \begin{cases}
+   1, &amp; \text{if the treatment for the $i$-th observation is
+control}, \\
+   0, &amp; \text{otherwise},
+   \end{cases}
+\]</span> <span class="math display">\[
+d_{i2} =
+   \begin{cases}
+   1, &amp; \text{if the treatment for the $i$-th observation is
+thiouracil}, \\
+   0, &amp; \text{otherwise},
+   \end{cases}
+\]</span> <span class="math display">\[
+d_{i3} =
+   \begin{cases}
+   1, &amp; \text{if the treatment for the $i$-th observation is
+thyroxin}, \\
+   0, &amp; \text{otherwise},
+   \end{cases}
+\]</span> then we can say that <span class="math inline">\(x_{i1} =
+d_{i1}w_i\)</span>, <span class="math inline">\(x_{i2} =
+d_{i2}w_i\)</span>, and <span class="math inline">\(x_{i3} =
+d_{i3}w_i\)</span>, where <span class="math inline">\(w_i\)</span> is
+the week for the <span class="math inline">\(i\)</span>-th observation.
+We can also define these variables without explicitly referencing
+indicator variables as <span class="math display">\[
+   x_{i1} =
+   \begin{cases}
+   w_i, &amp; \text{if the treatment for the $i$-th observation is
+control}, \\
+   0, &amp; \text{otherwise},
+   \end{cases}
+\]</span> <span class="math display">\[
+x_{i2} =
+   \begin{cases}
+   w_i, &amp; \text{if the treatment for the $i$-th observation is
+thiouracil}, \\
+   0, &amp; \text{otherwise},
+   \end{cases}
+\]</span> <span class="math display">\[
+x_{i3} =
+   \begin{cases}
+   w_i, &amp; \text{if the treatment for the $i$-th observation is
+thyroxin}, \\
+   0, &amp; \text{otherwise}.
+   \end{cases}
+\]</span> We can write the model case-wise as <span
+class="math display">\[
+E(Y_i) =
+\begin{cases}
+   \beta_0 + \beta_1w_i, &amp; \text{if the treatment for the $i$-th
+observation is control}, \\
+   \beta_0 + \beta_2w_i, &amp; \text{if the treatment for the $i$-th
+observation is thiouracil}, \\
+   \beta_0 + \beta_3w_i, &amp; \text{if the treatment for the $i$-th
+observation is thyroxin}. \\
+\end{cases}
+\]</span> For everything else we can just cut-and-paste the code from
+before, but apply it to this alternative model. Here is the plot.</p>
+<pre class="r"><code>d &lt;- expand.grid(week = seq(0, 4, length = 100), 
+  treatment = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;))
+d$yhat &lt;- predict(m, newdata = d)
+p &lt;- ggplot(rat, aes(x = week, y = weight)) + theme_minimal() + 
+  geom_point() + facet_wrap(~ treatment) + labs(y = &quot;Weight (g)&quot;, x = &quot;Week&quot;) + 
+  geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-36-1.png" width="100%" style="display: block; margin: auto;" />
+Notice how the three lines have the same intercept (i.e., the same
+estimated expected weight at zero weeks). I can make this a bit more
+obvious by putting the three treatment conditions in the same plot.</p>
+<pre class="r"><code>p &lt;- ggplot(rat, aes(x = week, y = weight, color = treatment)) + theme_minimal() + 
+  geom_point(alpha = 0.5) + labs(y = &quot;Weight (g)&quot;, x = &quot;Week&quot;, color = &quot;Treatment&quot;) +
+  geom_line(aes(y = yhat), data = d) + 
+  theme(legend.position = c(0.15, 0.8))
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-37-1.png" width="100%" style="display: block; margin: auto;" />
+Here are the estimated weights at zero weeks.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;), week = 0),
+  cnames = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;))</code></pre>
+<pre><code>           estimate    se lower upper tvalue  df    pvalue
+control       54.46 1.614 51.27 57.65  33.74 131 1.829e-66
+thiouracil    54.46 1.614 51.27 57.65  33.74 131 1.829e-66
+thyroxin      54.46 1.614 51.27 57.65  33.74 131 1.829e-66</code></pre>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;), week = 4),
+  cnames = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;))</code></pre>
+<pre><code>           estimate    se lower upper tvalue  df    pvalue
+control       158.3 2.558 153.2 163.3  61.88 131 7.619e-99
+thiouracil    127.0 2.558 121.9 132.0  49.64 131 7.990e-87
+thyroxin      159.9 3.037 153.9 165.9  52.64 131 5.297e-90</code></pre>
+<p>Here is the comparison between the the groups at four weeks.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = c(&quot;thiouracil&quot;,&quot;thyroxin&quot;), week = 4),
+  b = list(treatment = &quot;control&quot;, week = 4),
+  cnames = c(&quot;thiouracil vs control&quot;,&quot;thyroxin vs control&quot;))</code></pre>
+<pre><code>                      estimate    se   lower   upper  tvalue  df    pvalue
+thiouracil vs control  -31.293 3.536 -38.289 -24.298 -8.8491 131 5.256e-15
+thyroxin vs control      1.592 3.897  -6.117   9.301  0.4086 131 6.835e-01</code></pre>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = &quot;thyroxin&quot;, week = 4),
+  b = list(treatment = &quot;thiouracil&quot;, week = 4))</code></pre>
+<pre><code> estimate    se lower upper tvalue  df    pvalue
+    32.89 3.897 25.18 40.59  8.439 131 5.169e-14</code></pre>
+<p>And here are the comparisons at zero weeks.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = c(&quot;thiouracil&quot;,&quot;thyroxin&quot;), week = 0),
+  b = list(treatment = &quot;control&quot;, week = 0),
+  cnames = c(&quot;thiouracil vs control&quot;,&quot;thyroxin vs control&quot;))</code></pre>
+<pre><code>                      estimate se lower upper tvalue  df pvalue
+thiouracil vs control        0  0     0     0    NaN 131    NaN
+thyroxin vs control          0  0     0     0    NaN 131    NaN</code></pre>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(treatment = &quot;thyroxin&quot;, week = 0),
+  b = list(treatment = &quot;thiouracil&quot;, week = 0))</code></pre>
+<pre><code> estimate se lower upper tvalue  df pvalue
+        0  0     0     0    NaN 131    NaN</code></pre>
+<p>Here are the estimated rates of change in expected weight per
+week.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(week = 1, treatment = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;)),
+  b = list(week = 0, treatment = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;)),
+  cnames = c(&quot;control&quot;,&quot;thiouracil&quot;,&quot;thyroxin&quot;))</code></pre>
+<pre><code>           estimate     se lower upper tvalue  df    pvalue
+control       25.95 0.8248 24.32 27.59  31.47 131 6.268e-63
+thiouracil    18.13 0.8248 16.50 19.76  21.98 131 8.733e-46
+thyroxin      26.35 0.9207 24.53 28.17  28.62 131 3.247e-58</code></pre>
+<p>Note that with this parameterization these rates of change are <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and <span
+class="math inline">\(\beta_3\)</span>, and so inferences are given by
+<code>summary</code> as well.</p></li>
+</ol>
+</div>
+<div id="otter-survey" class="section level2">
+<h2>Otter Survey</h2>
+<p>The data frame <code>otters</code> in the package
+<strong>SDaA</strong> is from a survey of dens (holts) of Eurasian
+otters (<em>Lutra lutra</em>) along the coast of Shetland in the United
+Kingdom.<a href="#fn10" class="footnote-ref"
+id="fnref10"><sup>10</sup></a> The observational units here are 110 m
+deep by 5 km long sections along the coast. These sections were selected
+using a stratified random sampling design where simple random sampling
+was applied to the sections in each of four strata defined by the
+habitat: cliff, agricultural, peat, and non-peat. The number of holts
+was counted for the sections that were sampled. Here are the first few
+observations of that data.</p>
+<pre class="r"><code>library(SDaA)
+head(otters)</code></pre>
+<pre><code>  section habitat holts
+1       1       4     6
+2       3       2     0
+3       4       1     8
+4       8       1     0
+5      11       1     0
+6      19       2     0</code></pre>
+<p>The four strata (<code>habitat</code>) are just coded with integers.
+This is problematic for two reasons. One is that if we were to use this
+variable as an explanatory variable it would be specified as being
+quantitative and not categorical, which would not make sense. We can fix
+this by converting it to a factor, but it we are going to do that we
+might as well give the levels more descriptive labels. The code below
+creates a new variable <code>stratum</code> which does this.</p>
+<pre class="r"><code>library(dplyr)
+otters &lt;- otters %&gt;%
+  mutate(stratum = factor(habitat, levels = 1:4, 
+    labels = c(&quot;cliff&quot;,&quot;agricultural&quot;,&quot;peat&quot;,&quot;non-peat&quot;)))
+head(otters)</code></pre>
+<pre><code>  section habitat holts      stratum
+1       1       4     6     non-peat
+2       3       2     0 agricultural
+3       4       1     8        cliff
+4       8       1     0        cliff
+5      11       1     0        cliff
+6      19       2     0 agricultural</code></pre>
+<p>In what follows we will use the variable <code>stratum</code> instead
+of <code>habitat</code>. Here is a dot plot of the data.<a href="#fn11"
+class="footnote-ref" id="fnref11"><sup>11</sup></a></p>
+<pre class="r"><code>library(ggplot2) 
+p &lt;- ggplot(otters, aes(x = stratum, y = holts)) + theme_classic() +
+  geom_dotplot(binaxis = &quot;y&quot;, binwidth = 1, stackdir = &quot;center&quot;) + 
+  labs(x = &quot;Stratum&quot;, y = &quot;Number of Holts&quot;)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-44-1.png" width="100%" style="display: block; margin: auto;" />
+Here are some basic descriptive statistics for the number of holts per
+section by stratum (mean, standard deviation, and sample size).</p>
+<pre class="r"><code>library(dplyr)
+otters %&gt;% group_by(stratum) %&gt;%
+  summarize(meanholts = mean(holts), sdholts = sd(holts), n = n())</code></pre>
+<pre><code># A tibble: 4 × 4
+  stratum      meanholts sdholts     n
+  &lt;fct&gt;            &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;
+1 cliff             1.74    2.33    19
+2 agricultural      1.75    2.61    20
+3 peat             13.3     7.67    22
+4 non-peat          4.10    3.95    21</code></pre>
+<p>Notice how the strata with more holts per section, on average, have
+higher variance. This is common for counts, and it is a problem for
+proper inferences since our inferences will assume that the variability
+of the response variable is (relatively) constant. We will discuss how
+to deal with this problem later, but ignore it here for the purpose of
+this assignment. Here you will use a linear model to make inferences
+about the abundance of otter dens.<a href="#fn12" class="footnote-ref"
+id="fnref12"><sup>12</sup></a></p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a linear model using the <code>lm</code> function with
+<code>holts</code> as the response variable and <code>stratum</code> as
+the explanatory variable. Report the parameter estimates using
+<code>summary</code> function. Note that the model can be written as
+<span class="math inline">\(E(Y_i) = \beta_0 + \beta_1x_{i1} +
+\beta_2x_{i2} + \beta_3x_{i3}\)</span>. Explain briefly what <span
+class="math inline">\(x_{i1}\)</span>, <span
+class="math inline">\(x_{i2}\)</span>, and <span
+class="math inline">\(x_{i3}\)</span> each represent (i.e., how would
+you determine the their values for a given section?). Write the model
+case-wise to show how the expected number of holts of a sampled section
+can be written as a function of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>. Finally, let <span
+class="math inline">\(\mu_c\)</span>, <span
+class="math inline">\(\mu_a\)</span>, <span
+class="math inline">\(\mu_p\)</span>, and <span
+class="math inline">\(\mu_n\)</span> denote the expected number of holts
+in a section from the cliff, agricultural, peat, and non-peat habitats,
+respectively. Write each of these as a function of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>.</p>
+<p><strong>Solution</strong>: We can estimate the model as follows.</p>
+<pre class="r"><code>m &lt;- lm(holts ~ stratum, data = otters)
+summary(m)$coefficients</code></pre>
+<pre><code>                    Estimate Std. Error  t value  Pr(&gt;|t|)
+(Intercept)          1.73684      1.094 1.587653 1.164e-01
+stratumagricultural  0.01316      1.528 0.008613 9.931e-01
+stratumpeat         11.53589      1.493 7.724417 3.211e-11
+stratumnon-peat      2.35840      1.510 1.562039 1.223e-01</code></pre>
+<p>This shows that <span class="math inline">\(x_{i1}\)</span>, <span
+class="math inline">\(x_{i2}\)</span>, and <span
+class="math inline">\(x_{i3}\)</span> are defined as <span
+class="math display">\[
+x_{i1} =
+\begin{cases}
+1, &amp; \text{if the $i$-th observation is from the agricultural
+stratum}, \\
+0, &amp; \text{otherwise},
+\end{cases}
+\]</span> <span class="math display">\[
+x_{i2} =
+\begin{cases}
+1, &amp; \text{if the $i$-th observation is from the peat stratum}, \\
+0, &amp; \text{otherwise},
+\end{cases}
+\]</span> <span class="math display">\[
+x_{i3} =
+\begin{cases}
+1, &amp; \text{if the $i$-th observation is from the non-peat stratum},
+\\
+0, &amp; \text{otherwise}.
+\end{cases}
+\]</span> So the model can be written case-wise as <span
+class="math display">\[
+E(Y_i) =
+\begin{cases}
+\beta_0, &amp; \text{if the $i$-th observation is from the cliff
+stratum}, \\
+\beta_0 + \beta_1, &amp; \text{if the $i$-th observation is from the
+agricultural stratum}, \\
+\beta_0 + \beta_2, &amp; \text{if the $i$-th observation is from the
+peat stratum}, \\
+\beta_0 + \beta_3, &amp; \text{if the $i$-th observation is from the
+non-peat stratum}.
+\end{cases}
+\]</span> Thus we have that <span class="math inline">\(\mu_c =
+\beta_0\)</span>, <span class="math inline">\(\beta_a = \beta_0 +
+\beta_1\)</span>, <span class="math inline">\(\mu_p = \beta_0 +
+\beta_2\)</span>, and <span class="math inline">\(\mu_n = \beta_0 +
+\beta_3\)</span>.</p></li>
+<li><p>Use the <code>contrast</code> function to estimate the expected
+number of holts in a section sampled from each stratum, and also the
+<em>difference</em> in the expected number of holts between a sampled
+<em>peat</em> section and each of the other three types of habitat.</p>
+<p><strong>Solution</strong>: Here is how to estimate the expected
+number of holts in a section using <code>contrast</code>.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(stratum = unique(otters$stratum)), 
+  cnames = unique(otters$stratum))</code></pre>
+<pre><code>             estimate    se   lower  upper tvalue df    pvalue
+non-peat        4.095 1.041  2.0236  6.167  3.936 78 1.790e-04
+agricultural    1.750 1.066 -0.3728  3.873  1.641 78 1.048e-01
+cliff           1.737 1.094 -0.4411  3.915  1.588 78 1.164e-01
+peat           13.273 1.017 11.2487 15.297 13.055 78 2.580e-21</code></pre>
+<p>And here are the inferences for the difference between the peat
+stratum and the other three.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(stratum = &quot;peat&quot;), 
+  b = list(stratum = c(&quot;agricultural&quot;,&quot;cliff&quot;,&quot;non-peat&quot;)),
+  cnames = c(&quot;peat versus agricultural&quot;,&quot;peat versus cliff&quot;,&quot;peat versus non-peat&quot;))</code></pre>
+<pre><code>                         estimate    se lower upper tvalue df    pvalue
+peat versus agricultural   11.523 1.473 8.590 14.46  7.821 78 2.087e-11
+peat versus cliff          11.536 1.493 8.563 14.51  7.724 78 3.211e-11
+peat versus non-peat        9.177 1.455 6.281 12.07  6.309 78 1.576e-08</code></pre>
+<p>Here is how to do this using the <strong>emmeans</strong> package.
+The estimated expected number of holts in each section is relatively
+simple.</p>
+<pre class="r"><code>emmeans(m, ~stratum)</code></pre>
+<pre><code> stratum      emmean   SE df lower.CL upper.CL
+ cliff          1.74 1.09 78   -0.441     3.92
+ agricultural   1.75 1.07 78   -0.373     3.87
+ peat          13.27 1.02 78   11.249    15.30
+ non-peat       4.09 1.04 78    2.024     6.17
+
+Confidence level used: 0.95 </code></pre>
+<p>For the pairwise comparisons there are a couple of approaches. We can
+generate <em>all possible</em> pairwise comparisons as follows.</p>
+<pre class="r"><code>pairs(emmeans(m, ~stratum), infer = TRUE, adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast                  estimate   SE df lower.CL upper.CL t.ratio p.value
+ cliff - agricultural        -0.013 1.53 78    -3.05    3.028  -0.009  0.9931
+ cliff - peat               -11.536 1.49 78   -14.51   -8.563  -7.724  &lt;.0001
+ cliff - (non-peat)          -2.358 1.51 78    -5.36    0.647  -1.562  0.1223
+ agricultural - peat        -11.523 1.47 78   -14.46   -8.590  -7.821  &lt;.0001
+ agricultural - (non-peat)   -2.345 1.49 78    -5.31    0.621  -1.574  0.1195
+ peat - (non-peat)            9.177 1.45 78     6.28   12.074   6.309  &lt;.0001
+
+Confidence level used: 0.95 </code></pre>
+<p>Note that the differences are not necessarily in the same direction
+here. If you want to get just pairwise comparisons between one level and
+the other levels you can use the <code>contrast</code> function from the
+<strong>emmeans</strong> package which works a little differently from
+the function of the same name from the <strong>trtools</strong>
+package.</p>
+<pre class="r"><code>contrast(emmeans(m, ~stratum), method = &quot;trt.vs.ctrl&quot;, ref = &quot;peat&quot;,
+  reverse = TRUE, infer = TRUE, adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast            estimate   SE df lower.CL upper.CL t.ratio p.value
+ peat - cliff           11.54 1.49 78     8.56     14.5   7.724  &lt;.0001
+ peat - agricultural    11.52 1.47 78     8.59     14.5   7.821  &lt;.0001
+ peat - (non-peat)       9.18 1.45 78     6.28     12.1   6.309  &lt;.0001
+
+Confidence level used: 0.95 </code></pre>
+<p>Note that specifying <code>adjust = "none"</code> means that the
+tests and confidence intervals are not adjusted for multiple testing. An
+adjustment means that the family-wise error rate which is the
+probability of making <em>at least one Type I error</em> (assuming all
+null hypotheses are true) can be maintained at a given significance
+level, and the joint confidence level (i.e., the probability that
+<em>all</em> confidence intervals contain what is being estimated) is
+kept at 95%. Whether or not this is necessary depends on the user’s
+goals. The <code>contrast</code> function from the
+<strong>trtools</strong> package does not make these adjustments by
+default, but it can by specifying <code>adjust = TRUE</code>. It uses a
+method that is equivalent to the “mvt” method used by functions in the
+<strong>emmeans</strong> package, which is the most reliable way to make
+these kinds of adjustments (although it is a little bit more
+computationally intensive, and it relies a numerical approximation that
+can sometimes give very slightly different results).</p>
+<pre class="r"><code>trtools::contrast(m,
+  a = list(stratum = &quot;peat&quot;),
+  b = list(stratum = c(&quot;agricultural&quot;,&quot;cliff&quot;,&quot;non-peat&quot;)),
+  cnames = c(&quot;peat versus agricultural&quot;,&quot;peat versus cliff&quot;,&quot;peat versus non-peat&quot;),
+  adjust = TRUE)</code></pre>
+<pre><code>                         estimate    se lower upper tvalue df    pvalue
+peat versus agricultural   11.523 1.473 7.987 15.06  7.821 78 4.461e-11
+peat versus cliff          11.536 1.493 7.952 15.12  7.724 78 1.925e-11
+peat versus non-peat        9.177 1.455 5.687 12.67  6.309 78 2.855e-08</code></pre>
+<pre class="r"><code>contrast(emmeans(m, ~stratum), method = &quot;trt.vs.ctrl&quot;, ref = &quot;peat&quot;,
+  reverse = TRUE, infer = TRUE, adjust = &quot;mvt&quot;)</code></pre>
+<pre><code> contrast            estimate   SE df lower.CL upper.CL t.ratio p.value
+ peat - cliff           11.54 1.49 78     7.95     15.1   7.724  &lt;.0001
+ peat - agricultural    11.52 1.47 78     7.99     15.1   7.821  &lt;.0001
+ peat - (non-peat)       9.18 1.45 78     5.68     12.7   6.309  &lt;.0001
+
+Confidence level used: 0.95 
+Conf-level adjustment: mvt method for 3 estimates 
+P value adjustment: mvt method for 3 tests </code></pre></li>
+<li><p>Suppose we want to estimate the <em>number</em> of holts in
+<em>all</em> of the sections in a given stratum. For the cliffs stratum,
+for example, the total number of holts (denoted as <span
+class="math inline">\(\tau_c\)</span>) would be computed as <span
+class="math inline">\(\tau_c = N_c\mu_c\)</span>, where <span
+class="math inline">\(N_c\)</span> is the <em>total</em> number of
+sections in the cliffs stratum (i.e., not the sample size, but the
+population size for that stratum). The stratum sizes for the four strata
+are known to be <span class="math inline">\(N_c\)</span> = 89, <span
+class="math inline">\(N_a\)</span> = 61, <span
+class="math inline">\(N_p\)</span> = 40, and <span
+class="math inline">\(N_n\)</span> = 47. Use the <code>lincon</code>
+function to estimate the total number of holts in each stratum. Note
+that to do this you will need to write the quantity of interest (e.g.,
+<span class="math inline">\(N_c\mu_c\)</span>) as a linear combination
+of <span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and <span
+class="math inline">\(\beta_3\)</span> to determine the appropriate
+coefficients to use with <code>lincon</code>.</p>
+<p><strong>Solution</strong>: First note that we can write these totals
+as <span class="math inline">\(\tau_c = N_c\beta_0\)</span>, <span
+class="math inline">\(\tau_a = N_a(\beta_0 + \beta_1) = N_a\beta_0 +
+N_a\beta_1\)</span>, <span class="math inline">\(\tau_p = N_p(\beta_0 +
+\beta_2) = N_p\beta_0 + N_p\beta_2\)</span>, and <span
+class="math inline">\(\tau_n = N_n(\beta_0 + \beta_3) = N_n\beta_0 +
+N_n\beta_3\)</span>. So we can estimate these quantities as follows with
+<code>lincon</code>.</p>
+<pre class="r"><code>lincon(m, a = c(89,0,0,0))  # cliff</code></pre>
+<pre><code>             estimate    se  lower upper tvalue df pvalue
+(89,0,0,0),0    154.6 97.36 -39.26 348.4  1.588 78 0.1164</code></pre>
+<pre class="r"><code>lincon(m, a = c(61,61,0,0)) # agricultural</code></pre>
+<pre><code>              estimate    se  lower upper tvalue df pvalue
+(61,61,0,0),0    106.8 65.04 -22.74 236.2  1.641 78 0.1048</code></pre>
+<pre class="r"><code>lincon(m, a = c(40,0,40,0)) # peat</code></pre>
+<pre><code>              estimate    se lower upper tvalue df   pvalue
+(40,0,40,0),0    530.9 40.67 449.9 611.9  13.06 78 2.58e-21</code></pre>
+<pre class="r"><code>lincon(m, a = c(47,0,0,47)) # non-peat</code></pre>
+<pre><code>              estimate    se lower upper tvalue df   pvalue
+(47,0,0,47),0    192.5 48.91 95.11 289.8  3.936 78 0.000179</code></pre>
+<p>The <code>contrast</code> function in the <strong>emmeans</strong>
+package can do this but with a somewhat different approach. If we use it
+to estimate <span class="math inline">\(\mu_c\)</span>, <span
+class="math inline">\(\mu_a\)</span>, <span
+class="math inline">\(\mu_p\)</span>, and <span
+class="math inline">\(\mu_n\)</span> it will allow us to also estimate a
+linear combination of these quantities which we might write as <span
+class="math inline">\(a_c\mu_c + a_a\mu_a + a_p\mu_p + a_n\mu_n\)</span>
+where we specify the coefficients <span
+class="math inline">\(a_c\)</span>, <span
+class="math inline">\(a_a\)</span>, <span
+class="math inline">\(a_p\)</span>, ad <span
+class="math inline">\(a_n\)</span>. Here is how that would work.</p>
+<pre class="r"><code>contrast(emmeans(m, ~stratum), method = list(stratum = c(89,0,0,0)), infer = TRUE) # cliff</code></pre>
+<pre><code> contrast estimate   SE df lower.CL upper.CL t.ratio p.value
+ stratum       155 97.4 78    -39.3      348   1.588  0.1164
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>contrast(emmeans(m, ~stratum), method = list(stratum = c(0,61,0,0)), infer = TRUE) # agricultural</code></pre>
+<pre><code> contrast estimate SE df lower.CL upper.CL t.ratio p.value
+ stratum       107 65 78    -22.7      236   1.641  0.1048
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>contrast(emmeans(m, ~stratum), method = list(stratum = c(0,0,40,0)), infer = TRUE) # peat</code></pre>
+<pre><code> contrast estimate   SE df lower.CL upper.CL t.ratio p.value
+ stratum       531 40.7 78      450      612  13.055  &lt;.0001
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>contrast(emmeans(m, ~stratum), method = list(stratum = c(0,0,0,47)), infer = TRUE) # non-peat</code></pre>
+<pre><code> contrast estimate   SE df lower.CL upper.CL t.ratio p.value
+ stratum       192 48.9 78     95.1      290   3.936  0.0002
+
+Confidence level used: 0.95 </code></pre></li>
+<li><p>Now suppose you wanted to estimate the mean number of holts per
+section and the total number of holts in all sections for the
+<em>population</em> of sections rather than for a particular stratum.
+Denote this mean and total as <span class="math inline">\(\mu\)</span>
+and <span class="math inline">\(\tau\)</span>, respectively. These can
+be written as <span class="math display">\[
+  \mu = \frac{N_c}{N}\mu_c + \frac{N_a}{N}\mu_a +
+  \frac{N_p}{N}\mu_p + \frac{N_n}{N}\mu_n,
+\]</span> where <span class="math inline">\(N = N_c + N_a + N_p +
+N_n\)</span>, and <span class="math display">\[
+  \tau = N_c\mu_c + N_a\mu_a + N_p\mu_p + N_n\mu_n.
+\]</span> In a previous problem you expressed <span
+class="math inline">\(\mu_c\)</span>, <span
+class="math inline">\(\mu_a\)</span>, <span
+class="math inline">\(\mu_p\)</span>, and <span
+class="math inline">\(\mu_n\)</span> as functions of the parameters
+<span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>. In the expressions for <span
+class="math inline">\(\mu\)</span> and <span
+class="math inline">\(\tau\)</span> above, substitute <span
+class="math inline">\(\mu_c\)</span>, <span
+class="math inline">\(\mu_a\)</span>, <span
+class="math inline">\(\mu_p\)</span>, and <span
+class="math inline">\(\mu_n\)</span> with the corresponding function of
+<span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>, and then simplify the
+expressions so that <span class="math inline">\(\mu\)</span> and <span
+class="math inline">\(\tau\)</span> are then written as linear
+combinations of <span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and <span
+class="math inline">\(\beta_3\)</span>. Then use the <code>lincon</code>
+function to compute estimates of <span
+class="math inline">\(\mu\)</span> and <span
+class="math inline">\(\tau\)</span> as well as confidence intervals for
+these parameters and the standard errors of the estimators.</p>
+<p><strong>Solution</strong>: Note that <span class="math display">\[
+   \mu = \frac{N_c}{N}\beta_0 +
+   \frac{N_a}{N}(\beta_0 + \beta_1) +
+   \frac{N_p}{N}(\beta_0 + \beta_2) +
+   \frac{N_n}{N}(\beta_0 + \beta_3) =
+   \beta_0 + \frac{N_a}{N}\beta_1 +
+   \frac{N_p}{N}\beta_2 +
+   \frac{N_n}{N}\beta_3,
+\]</span> and <span class="math display">\[
+   \tau = N_c\beta_0 +
+   N_a(\beta_0 + \beta_1) +
+   N_p(\beta_0 + \beta_2) +
+   N_n(\beta_0 + \beta_3) =
+   N\beta_0 + N_a\beta_1 + N_p\beta_2 + N_n\beta_3.
+\]</span> We can estimate <span class="math inline">\(\mu\)</span> and
+<span class="math inline">\(\tau\)</span> using <code>lincon</code> as
+follows.</p>
+<pre class="r"><code>lincon(m, a = c(1,61/237,40/237,47/237))</code></pre>
+<pre><code>                           estimate     se lower upper tvalue df    pvalue
+(1,61/237,40/237,47/237),0    4.155 0.5622 3.036 5.274   7.39 78 1.415e-10</code></pre>
+<pre class="r"><code>lincon(m, a = c(237,61,40,47))</code></pre>
+<pre><code>                 estimate    se lower upper tvalue df    pvalue
+(237,61,40,47),0    984.7 133.3 719.4  1250   7.39 78 1.415e-10</code></pre>
+<p>We can also estimate <span class="math inline">\(\mu\)</span> and
+<span class="math inline">\(\tau\)</span> using the
+<strong>emmeans</strong> package, but there we specify a linear
+combination of <span class="math inline">\(\mu_c\)</span>, <span
+class="math inline">\(\mu_a\)</span>, <span
+class="math inline">\(\mu_p\)</span>, and <span
+class="math inline">\(\mu_n\)</span> using the <code>contrast</code>
+function from that package.</p>
+<pre class="r"><code>contrast(emmeans(m, ~stratum),
+  method = list(stratum = c(89/237,61/237,40/237,47/237)), infer = TRUE)</code></pre>
+<pre><code> contrast estimate    SE df lower.CL upper.CL t.ratio p.value
+ stratum      4.16 0.562 78     3.04     5.27   7.390  &lt;.0001
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>contrast(emmeans(m, ~stratum),
+  method = list(stratum = c(89,61,40,47)), infer = TRUE)</code></pre>
+<pre><code> contrast estimate  SE df lower.CL upper.CL t.ratio p.value
+ stratum       985 133 78      719     1250   7.390  &lt;.0001
+
+Confidence level used: 0.95 </code></pre>
+<p>Note that we could also write
+<code>c(89/237,61/237,40/237,47/237)</code> as
+<code>c(89,61,40,47)/237</code>.</p></li>
+</ol>
+</div>
+<div id="anger-management-study" class="section level2">
+<h2>Anger Management Study</h2>
+<p>The data frame <code>AngerManagement</code> from the package
+<strong>restriktor</strong> is from a study of the effectiveness of
+different types of anger management exercises on aggression.<a
+href="#fn13" class="footnote-ref" id="fnref13"><sup>13</sup></a>
+Subjects were randomly assigned to one of four treatment groups: no
+exercises, physical exercises, behavioral exercises, or both physical
+and behavioral exercises. The response variable was the reduction in
+aggression between the beginning and end of the study, so that a
+positive value means a reduction, a negative number means an increase,
+and zero means no change. Here is what the data look like.</p>
+<pre class="r"><code>library(restriktor)
+head(AngerManagement)</code></pre>
+<pre><code>  Anger Group Age
+1     1    No  18
+2     0    No  20
+3     0    No  21
+4     1    No  22
+5    -1    No  23
+6    -2    No  24</code></pre>
+<p>The data also includes the age of each subject, but that will not be
+used here. I am going to make a couple of changes to the data. One is to
+rename the control condition from <code>No</code> to <code>None</code>,
+and the other is to order the factor levels. There are various ways to
+manipulate factors and their levels. I like to use functions from the
+<strong>forcats</strong> package. The following creates a new variable
+called <code>treatment</code> that we will use in place of
+<code>Group</code> that has the properties I want.</p>
+<pre class="r"><code>library(forcats)
+library(dplyr)
+AngerManagement &lt;- AngerManagement %&gt;%
+  mutate(treatment = fct_recode(Group, &quot;None&quot; = &quot;No&quot;)) %&gt;%
+  mutate(treatment = fct_relevel(treatment, c(&quot;None&quot;, &quot;Physical&quot;, &quot;Behavioral&quot;, &quot;Both&quot;)))</code></pre>
+<p>This is not necessary. We could use the original variable
+<code>Group</code>, although by changing the order of the levels we do
+change the parameterization of the model.<a href="#fn14"
+class="footnote-ref" id="fnref14"><sup>14</sup></a> Here is a dot plot
+showing the data.</p>
+<pre class="r"><code>p &lt;- ggplot(AngerManagement, aes(x = treatment, y = Anger)) + theme_minimal() +
+  geom_dotplot(binaxis = &quot;y&quot;, binwidth = 1, stackdir = &quot;center&quot;) +
+  labs(x = &quot;Treatment&quot;, y = &quot;Aggression Reduction&quot;)
+plot(p)</code></pre>
+<p><img src="hw1-solutions_files/figure-html/unnamed-chunk-59-1.png" width="100%" style="display: block; margin: auto;" />
+Here are some descriptive statistics for the aggression level reduction
+by treatment (mean, standard deviation, and sample size).</p>
+<pre class="r"><code>AngerManagement %&gt;% group_by(treatment) %&gt;%
+  summarize(meanagg = mean(Anger), sdagg = sd(Anger), n = n())</code></pre>
+<pre><code># A tibble: 4 × 4
+  treatment  meanagg sdagg     n
+  &lt;fct&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1 None          -0.2  1.55    10
+2 Physical       0.8  1.03    10
+3 Behavioral     3.1  2.60    10
+4 Both           4.1  2.08    10</code></pre>
+<p>In what follows you will use a linear model to evaluate the
+effectiveness of physical and behavioral exercises for anger
+management.</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a linear model using the <code>lm</code> function with
+<code>Anger</code> as your response variable and <code>treatment</code>
+as your explanatory variable. Show the output from <code>summary</code>
+and use this to explain what <span
+class="math inline">\(x_{i1}\)</span>, <span
+class="math inline">\(x_{i2}\)</span>, and <span
+class="math inline">\(x_{i3}\)</span> represent in the linear model
+<span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3},
+\]</span> where <span class="math inline">\(Y_i\)</span> is the <span
+class="math inline">\(i\)</span>-th observation of aggression reduction.
+Finally, write the model case-wise to show how <span
+class="math inline">\(E(Y_i)\)</span> can be expressed as a function of
+<span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span> for each of the four treatment
+conditions.</p>
+<p><strong>Solution</strong>: We can estimate the model as follows.</p>
+<pre class="r"><code>m &lt;- lm(Anger ~ treatment, data = AngerManagement)
+summary(m)$coefficients</code></pre>
+<pre><code>                    Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)             -0.2     0.6032 -0.3315 7.422e-01
+treatmentPhysical        1.0     0.8531  1.1722 2.488e-01
+treatmentBehavioral      3.3     0.8531  3.8683 4.420e-04
+treatmentBoth            4.3     0.8531  5.0404 1.328e-05</code></pre>
+<p>The output of <code>summary</code> shows that indicator variables
+were created for all but the <code>None</code> levels of
+<code>treatment</code> so that <span class="math display">\[
+x_{i1} =
+\begin{cases}
+1, &amp; \text{if the treatment for the $i$-th observation is physical},
+\\
+0, &amp; \text{otherwise},
+\end{cases}
+\]</span> <span class="math display">\[
+x_{i2} =
+\begin{cases}
+1, &amp; \text{if the treatment for the $i$-th observation is
+behavioral}, \\
+0, &amp; \text{otherwise},
+\end{cases}
+\]</span> <span class="math display">\[
+x_{i3} =
+\begin{cases}
+1, &amp; \text{if the treatment for the $i$-th observation is both}, \\
+0, &amp; \text{otherwise}.
+\end{cases}
+\]</span> Thus we have that the model can be written as <span
+class="math display">\[
+E(Y_i) =
+\begin{cases}
+\beta_0,           &amp; \text{if the treatment for the $i$-th
+observation is none}, \\
+\beta_0 + \beta_1, &amp; \text{if the treatment for the $i$-th
+observation is physical}, \\
+\beta_0 + \beta_2, &amp; \text{if the treatment for the $i$-th
+observation is behavioral}, \\
+\beta_0 + \beta_3, &amp; \text{if the treatment for the $i$-th
+observation is both}.
+\end{cases}
+\]</span></p></li>
+<li><p>Let <span class="math inline">\(\mu_n\)</span>, <span
+class="math inline">\(\mu_p\)</span>, <span
+class="math inline">\(\mu_b\)</span>, and <span
+class="math inline">\(\mu_{pb}\)</span> denote the expected anger
+reduction when the treatment is no exercises, physical exercises,
+behavioral exercises, and both physical and behavioral exercises,
+respectively. Write each of these as functions of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>. Then write each of the following
+as functions of <span class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span>: <span
+class="math inline">\(\mu_p - \mu_n\)</span>, <span
+class="math inline">\(\mu_b - \mu_n\)</span>, <span
+class="math inline">\(\mu_{pb} - \mu_n\)</span>, <span
+class="math inline">\(\mu_b - \mu_p\)</span>, <span
+class="math inline">\(\mu_{pb} - \mu_p\)</span> and <span
+class="math inline">\(\mu_{pb} - \mu_b\)</span>.</p>
+<p><strong>Solution</strong>: First note that <span
+class="math inline">\(\mu_n = \beta_0\)</span>, <span
+class="math inline">\(\mu_p = \beta_0 + \beta_1\)</span>, <span
+class="math inline">\(\mu_b = \beta_0 + \beta_2\)</span>, and <span
+class="math inline">\(\mu_{pb} = \beta_0 + \beta_3\)</span>. From this
+we have that <span class="math display">\[\begin{align*}
+\mu_p - \mu_n &amp;= \beta_0 + \beta_1 - \beta_0 = \beta_1, \\
+\mu_b - \mu_n &amp;= \beta_0 + \beta_2 - \beta_0 = \beta_2, \\
+\mu_{pb} - \mu_n &amp; = \beta_0 + \beta_3 - \beta_0 = \beta_3, \\
+\mu_b - \mu_p &amp;= \beta_0 + \beta_2 - (\beta_0 + \beta_1) = \beta_2 -
+\beta_1, \\
+\mu_{pb} - \mu_p &amp;= \beta_0 + \beta_3 - (\beta_0 + \beta_1) =
+\beta_3 - \beta_1, \\
+\mu_{pb} - \mu_b &amp;= \beta_0 + \beta_3 - (\beta_0 + \beta_2) =
+\beta_3 - \beta_2.
+\end{align*}\]</span></p></li>
+<li><p>Use the <code>lincon</code> and <code>contrast</code> functions
+to estimate each of the quantities that you estimated in the previous
+problem. You should obtain the same results for each function.</p>
+<p><strong>Solution</strong>: We can estimate these quantities as
+follows.</p>
+<pre class="r"><code>lincon(m, a = c(1,0,0,0))  # b0</code></pre>
+<pre><code>            estimate     se  lower upper  tvalue df pvalue
+(1,0,0,0),0     -0.2 0.6032 -1.423 1.023 -0.3315 36 0.7422</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,1,0,0))  # b0 + b1</code></pre>
+<pre><code>            estimate     se   lower upper tvalue df pvalue
+(1,1,0,0),0      0.8 0.6032 -0.4234 2.023  1.326 36 0.1931</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,0,1,0))  # b0 + b2</code></pre>
+<pre><code>            estimate     se lower upper tvalue df    pvalue
+(1,0,1,0),0      3.1 0.6032 1.877 4.323  5.139 36 9.819e-06</code></pre>
+<pre class="r"><code>lincon(m, a = c(1,0,0,1))  # b0 + b3</code></pre>
+<pre><code>            estimate     se lower upper tvalue df    pvalue
+(1,0,0,1),0      4.1 0.6032 2.877 5.323  6.797 36 6.075e-08</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,1,0,0))  # b1</code></pre>
+<pre><code>            estimate     se   lower upper tvalue df pvalue
+(0,1,0,0),0        1 0.8531 -0.7302  2.73  1.172 36 0.2488</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,0,1,0))  # b2</code></pre>
+<pre><code>            estimate     se lower upper tvalue df   pvalue
+(0,0,1,0),0      3.3 0.8531  1.57  5.03  3.868 36 0.000442</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,0,0,1))  # b3</code></pre>
+<pre><code>            estimate     se lower upper tvalue df    pvalue
+(0,0,0,1),0      4.3 0.8531  2.57  6.03   5.04 36 1.328e-05</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,-1,1,0)) # b2 - b1</code></pre>
+<pre><code>             estimate     se  lower upper tvalue df pvalue
+(0,-1,1,0),0      2.3 0.8531 0.5698  4.03  2.696 36 0.0106</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,-1,0,1)) # b3 - b1</code></pre>
+<pre><code>             estimate     se lower upper tvalue df   pvalue
+(0,-1,0,1),0      3.3 0.8531  1.57  5.03  3.868 36 0.000442</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,0,-1,1)) # b3 - b2</code></pre>
+<pre><code>             estimate     se   lower upper tvalue df pvalue
+(0,0,-1,1),0        1 0.8531 -0.7302  2.73  1.172 36 0.2488</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(treatment = c(&quot;None&quot;,&quot;Physical&quot;,&quot;Behavioral&quot;,&quot;Both&quot;)))</code></pre>
+<pre><code> estimate     se   lower upper  tvalue df    pvalue
+     -0.2 0.6032 -1.4234 1.023 -0.3315 36 7.422e-01
+      0.8 0.6032 -0.4234 2.023  1.3262 36 1.931e-01
+      3.1 0.6032  1.8766 4.323  5.1390 36 9.819e-06
+      4.1 0.6032  2.8766 5.323  6.7967 36 6.075e-08</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(treatment = &quot;Physical&quot;), b = list(treatment = &quot;None&quot;))</code></pre>
+<pre><code> estimate     se   lower upper tvalue df pvalue
+        1 0.8531 -0.7302  2.73  1.172 36 0.2488</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(treatment = &quot;Behavioral&quot;), b = list(treatment = &quot;None&quot;))</code></pre>
+<pre><code> estimate     se lower upper tvalue df   pvalue
+      3.3 0.8531  1.57  5.03  3.868 36 0.000442</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(treatment = &quot;Both&quot;), b = list(treatment = &quot;None&quot;))</code></pre>
+<pre><code> estimate     se lower upper tvalue df    pvalue
+      4.3 0.8531  2.57  6.03   5.04 36 1.328e-05</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(treatment = &quot;Behavioral&quot;), b = list(treatment = &quot;Physical&quot;))    </code></pre>
+<pre><code> estimate     se  lower upper tvalue df pvalue
+      2.3 0.8531 0.5698  4.03  2.696 36 0.0106</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(treatment = &quot;Both&quot;), b = list(treatment = &quot;Physical&quot;))    </code></pre>
+<pre><code> estimate     se lower upper tvalue df   pvalue
+      3.3 0.8531  1.57  5.03  3.868 36 0.000442</code></pre>
+<pre class="r"><code>trtools::contrast(m, a = list(treatment = &quot;Both&quot;), b = list(treatment = &quot;Behavioral&quot;))    </code></pre>
+<pre><code> estimate     se   lower upper tvalue df pvalue
+        1 0.8531 -0.7302  2.73  1.172 36 0.2488</code></pre>
+<p>Note that we have estimated all possible paired comparisons between
+the treatment conditions. This is fairly easy to do using the
+<strong>emmeans</strong> package since it requires only one
+statement.</p>
+<pre class="r"><code>emmeans(m, ~treatment)    </code></pre>
+<pre><code> treatment  emmean    SE df lower.CL upper.CL
+ None         -0.2 0.603 36   -1.423     1.02
+ Physical      0.8 0.603 36   -0.423     2.02
+ Behavioral    3.1 0.603 36    1.877     4.32
+ Both          4.1 0.603 36    2.877     5.32
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~treatment), infer = TRUE, adjust = &quot;none&quot;, reverse = TRUE)</code></pre>
+<pre><code> contrast              estimate    SE df lower.CL upper.CL t.ratio p.value
+ Physical - None            1.0 0.853 36    -0.73     2.73   1.172  0.2488
+ Behavioral - None          3.3 0.853 36     1.57     5.03   3.868  0.0004
+ Behavioral - Physical      2.3 0.853 36     0.57     4.03   2.696  0.0106
+ Both - None                4.3 0.853 36     2.57     6.03   5.040  &lt;.0001
+ Both - Physical            3.3 0.853 36     1.57     5.03   3.868  0.0004
+ Both - Behavioral          1.0 0.853 36    -0.73     2.73   1.172  0.2488
+
+Confidence level used: 0.95 </code></pre></li>
+<li><p>The model used above uses a single factor with four levels,
+corresponding to what is sometimes called a <em>one-way design</em>. But
+it could also be viewed as a <em>factorial design</em> with two factors:
+use of physical exercises (yes or no), and use of behavioral exercises
+(yes or no).<a href="#fn15" class="footnote-ref"
+id="fnref15"><sup>15</sup></a> Students that are familiar with the
+analysis of factorial designs using an analysis of variance approach
+might remember the concepts of <em>main effects</em> and
+<em>interactions</em>. Inferences for main effects and interactions can
+be made even if we do not explicitly specify the model as having the two
+factors (with an interaction) as explanatory variables. Here the main
+effect for physical exercise can be written in terms of the difference
+between the average expected response for treatment conditions with
+physical exercise versus that for the treatment conditions without
+physical exercise. This can be written as <span class="math display">\[
+  (\mu_p + \mu_{pb})/2 - (\mu_b + \mu_n)/2.
+\]</span> Similarly the main effect for behavioral exercise can be
+written as <span class="math display">\[
+  (\mu_b + \mu_{pb})/2 - (\mu_p + \mu_n)/2.
+\]</span> Finally the interaction can be written in terms of the
+difference in the effect of adding one type of exercise when the other
+type of exercise is being used versus when it is not, which can be
+written as <span class="math display">\[
+  \mu_{pb} - \mu_p - (\mu_b - \mu_n)
+\]</span> or, alternatively, as <span class="math inline">\(\mu_{pb} -
+\mu_b - (\mu_p - \mu_n)\)</span> which is algebraically equivalent.
+Write each of the three quantities above as functions of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and/or <span
+class="math inline">\(\beta_3\)</span> by substituting each <span
+class="math inline">\(\mu\)</span> by the corresponding function of
+those parameters, and simplifying. You should find that each of these
+quantities can be written as a linear combination of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, <span
+class="math inline">\(\beta_2\)</span>, and <span
+class="math inline">\(\beta_3\)</span>. Use the <code>lincon</code>
+function to estimate each of these quantities. If you do this correctly
+the <span class="math inline">\(p\)</span>-values you get should be the
+same as those given by the ANOVA table shown below, and the <span
+class="math inline">\(F\)</span> test statistics shown below should
+equal (approximately due to rounding) the squares of the <span
+class="math inline">\(t\)</span> test statistics reported by
+<code>lincon</code>.<a href="#fn16" class="footnote-ref"
+id="fnref16"><sup>16</sup></a></p>
+<pre class="r"><code>library(car)
+AngerManagement &lt;- AngerManagement %&gt;% 
+  mutate(behavioral = ifelse(treatment %in% c(&quot;Behavioral&quot;,&quot;Both&quot;), &quot;yes&quot;, &quot;no&quot;)) %&gt;%
+  mutate(physical = ifelse(treatment %in% c(&quot;Physical&quot;,&quot;Both&quot;), &quot;yes&quot;, &quot;no&quot;))
+m &lt;- lm(Anger ~ behavioral + physical + behavioral:physical, data = AngerManagement)
+Anova(m)</code></pre>
+<pre><code>Anova Table (Type II tests)
+
+Response: Anger
+                    Sum Sq Df F value  Pr(&gt;F)    
+behavioral             109  1   29.93 3.5e-06 ***
+physical                10  1    2.75    0.11    
+behavioral:physical      0  1    0.00    1.00    
+Residuals              131 36                    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><strong>Solution</strong>: I am going to estimate the model again
+here because in the code above I specified a different
+parameterization.</p>
+<pre class="r"><code>m &lt;- lm(Anger ~ treatment, data = AngerManagement)</code></pre>
+<p>The main effect of physical exercises can be written as <span
+class="math display">\[
+(\mu_p + \mu_{pb})/2 - (\mu_b + \mu_n)/2 =
+(2\beta_0 + \beta_1 + \beta_3)/2 -
+(2\beta_0 + \beta_2)/2 = \beta_1/2 + \beta_3/2 - \beta_2/2.
+\]</span> We can estimate this as follows.</p>
+<pre class="r"><code>lincon(m, a = c(0,0.5,-0.5,0.5))</code></pre>
+<pre><code>                   estimate     se   lower upper tvalue df pvalue
+(0,1/2,-1/2,1/2),0        1 0.6032 -0.2234 2.223  1.658 36 0.1061</code></pre>
+<p>The main effect of behavioral exercises can be written as <span
+class="math display">\[
+(\mu_b + \mu_{pb})/2 - (\mu_p + \mu_n)/2 =
+(2\beta_0 + \beta_2 + \beta_3)/2 -
+(2\beta_0 + \beta_1)/2 = \beta_2/2 + \beta_3/2 - \beta_1/2.
+\]</span> We can estimate this as follows.</p>
+<pre class="r"><code>lincon(m, a = c(0,-0.5,0.5,0.5))</code></pre>
+<pre><code>                   estimate     se lower upper tvalue df    pvalue
+(0,-1/2,1/2,1/2),0      3.3 0.6032 2.077 4.523  5.471 36 3.546e-06</code></pre>
+<p>Finally the interaction can be written as <span
+class="math display">\[
+\mu_{pb} - \mu_p - (\mu_b - \mu_n) = \beta_0 + \beta_3 - (\beta_0 -
+\beta_1) - (\beta_0 + \beta_2) + \beta_0 = \beta_3 - \beta_1 - \beta_2.
+\]</span> We can estimate this as follows.</p>
+<pre class="r"><code>lincon(m, a = c(0,-1,-1,1))</code></pre>
+<pre><code>              estimate    se  lower upper tvalue df pvalue
+(0,-1,-1,1),0        0 1.206 -2.447 2.447      0 36      1</code></pre>
+<p>Note that if the <span class="math inline">\(t\)</span> test
+statistics are squared we get (approximately) the <span
+class="math inline">\(F\)</span> test statistics, and the p-values are
+the same.</p></li>
+</ol>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>Sternberg, D. E., Van Kammen, D. P., &amp; Bunney, W. E.
+(1982). Schizophrenia: Dopamine <span
+class="math inline">\(\beta\)</span>-hydroxylase activity and treatment
+response. <em>Science</em>, <em>216</em>, 1423–1425.<a href="#fnref1"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Note now <code>coord_flip()</code> can be used to “flip”
+the ordinate and abscissa of the plot which works nicely here to orient
+the plot horizontally.<a href="#fnref2"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>The <strong>dplyr</strong> package (sometimes used in
+conjunction with the <strong>tidyr</strong>) package is very useful for
+data manipulation and descriptive analysis. There is a bit of a learning
+curve to using it, but it is well worth learning in my opinion.<a
+href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Introductory statistics classes typically discuss
+inferences for the difference between the means based on two independent
+samples. That is what you are doing here, although you are framing the
+inferences in terms of a linear model.<a href="#fnref4"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Note how including <code>-1</code> in the model formula
+causes the model to <em>not</em> include a term of <span
+class="math inline">\(\beta_0\)</span>.<a href="#fnref5"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>Source: Box, G. E. P. (1950). Problems in the analysis
+of growth and wear curves. <em>Biometrics</em>, <em>6(4)</em>,
+362–389.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>Thioracil is an anti-thyroid medication that is
+sometimes used to treat hyperthyroidism, and thyroxin is a hormone made
+by the thyroid that controls growth and development.<a href="#fnref7"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>Missing data can be a serious issue in longitudinal
+studies and in regression in general. We generally assume that missing
+data are “missing at random” meaning that while whether or not an
+observation is missing may depend on the explanatory variable(s) it is
+not related to the response variable once we account for the explanatory
+variable. Here this would mean that within a given treatment group the
+probability that an observation is missing does not depend on weight.<a
+href="#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>This model is specified such that the expected weight at
+zero weeks is the same for rats in all three treatment conditions, which
+makes sense because at the beginning of the study before the additives
+were put in the drinking water there would not be a difference in
+expected weight between the treatment conditions (assuming the
+treatments were randomized, which they were).<a href="#fnref9"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p>Kruuk, H., Moorhouse, A., Conroy, J. W. H., Durbin, L.,
+&amp; Frears, S. (1989). An estimate of numbers and habitat preferences
+of otters <em>Lutra lutra</em> in Shetland, UK. <em>Biological
+Conservation</em>, <em>49(4)</em>, 241–254.<a href="#fnref10"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn11"><p>Dot plots are like scatter plots except they stack
+dots. I find them useful for smaller studies with categorical
+explanatory variables. They can be a bit tricky to make using
+<code>ggplot</code>.<a href="#fnref11"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>While this linear model will provide appropriate
+estimates, the standard errors and thus confidence intervals and tests
+will not be accurate because of the sampling design. This survey sampled
+the sections <em>without replacement</em> which causes the observations
+to be <em>dependent</em> because if one section is in the sample then it
+cannot be observed again. Taking this into account requires modifying
+the standard errors. This is standard practice in survey research, but
+it requires specialized software (e.g., see the <strong>survey</strong>
+package in R). If the number of sampled units is much smaller than the
+number of units that could be sampled (i.e., the population size), then
+little or no adjustment is necessary, but that is not the case here.
+Also the way the standard error is usually computed in survey research
+does not assume that the variance is the same across the strata, but
+that is being implicitly assumed here. So consider that we are using
+these data as an exercise but other than the point estimates the
+inferences are questionable.<a href="#fnref12"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>Hoijtink, H. (2012). <em>Informative hypotheses: Theory
+and practice for behavioral and social scientists</em>. Taylor &amp;
+Francis. I am fairly certain that these data are fictional, but maybe
+not completely unrealistic.<a href="#fnref13"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn14"><p>Usually when <code>lm</code> creates indicator
+variables it will create them for all but the first level. If the levels
+are not ordered then that will be the first level when they are ordered
+alphabetically. But here it will be that for the <code>None</code>
+level. A side effect of ordering the levels is that it allows us to
+control how they appear in a plot when using <code>ggplot</code> which
+is sometimes desirable.<a href="#fnref14"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn15"><p>Interestingly a model for a factorial design can always
+be written by “collapsing” the two or more factors of the design into
+one factor where each level of that factor is a combination of levels of
+the factors of the factorial design.<a href="#fnref15"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn16"><p>Although I do not like to use ANOVA tables, and I do
+not recommend using them outside of some very specialized applications,
+if you must produce them then I would recommend using the
+<code>Anova</code> function from the <strong>car</strong> package. But
+only use this function if you fully understand how it works.<a
+href="#fnref16" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
