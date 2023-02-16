@@ -61,7 +61,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Assumptions --- continued](lecture-02-15-2023.html). The [solutions](hw1-solutions.html) to the first homework assignment are now available.
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Dealing with heteroscedasticity --- transformations and weighted least squares](lecture-02-17-2023.html).
  
 ***
 

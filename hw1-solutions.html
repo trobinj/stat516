@@ -1329,9 +1329,9 @@ can sometimes give very slightly different results).</p>
   cnames = c(&quot;peat versus agricultural&quot;,&quot;peat versus cliff&quot;,&quot;peat versus non-peat&quot;),
   adjust = TRUE)</code></pre>
 <pre><code>                         estimate    se lower upper tvalue df    pvalue
-peat versus agricultural   11.523 1.473 7.985 15.06  7.821 78 2.008e-11
-peat versus cliff          11.536 1.493 7.950 15.12  7.724 78 2.862e-11
-peat versus non-peat        9.177 1.455 5.684 12.67  6.309 78 2.067e-08</code></pre>
+peat versus agricultural   11.523 1.473 7.988 15.06  7.821 78 3.442e-11
+peat versus cliff          11.536 1.493 7.952 15.12  7.724 78 4.102e-11
+peat versus non-peat        9.177 1.455 5.687 12.67  6.309 78 3.289e-08</code></pre>
 <pre class="r"><code>contrast(emmeans(m, ~stratum), method = &quot;trt.vs.ctrl&quot;, ref = &quot;peat&quot;,
   reverse = TRUE, infer = TRUE, adjust = &quot;mvt&quot;)</code></pre>
 <pre><code> contrast            estimate   SE df lower.CL upper.CL t.ratio p.value

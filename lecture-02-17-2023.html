@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Friday, Feb 17</title>
+
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Friday, Feb 17</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-02-17-2023.pdf">PDF</a> copy
+of this lecture.</p>
+<div id="solutions-for-heteroscedasticity" class="section level2">
+<h2>Solutions for Heteroscedasticity</h2>
+<p>We will discuss four solutions to heteroscedasticity in linear and
+nonlinear regression: variance-stabilizing transformations, weighted
+least squares, robust standard errors, and models that do not assume
+homoscedasticity.</p>
+<div id="variance-stabilizing-transformations" class="section level3">
+<h3>Variance-Stabilizing Transformations</h3>
+<p>The idea is to use <span class="math inline">\(Y_i^* =
+g(Y_i)\)</span> instead of <span class="math inline">\(Y_i\)</span> as
+the response variable, where <span class="math inline">\(g\)</span> is a
+<em>variance-stabilizing transformation</em>.</p>
+<p><strong>Example</strong>: Consider again the cancer survival time
+data.</p>
+<pre class="r"><code>library(Stat2Data)
+data(CancerSurvival) 
+CancerSurvival$Organ &lt;- with(CancerSurvival, reorder(Organ, Survival, mean))
+p &lt;- ggplot(CancerSurvival, aes(x = Organ, y = Survival)) +
+   geom_jitter(height = 0, width = 0.25) + 
+   labs(y = &quot;Survival Time (Days)&quot;) + theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>m &lt;- lm(Survival ~ Organ, data = CancerSurvival)
+
+CancerSurvival$yhat &lt;- predict(m)
+CancerSurvival$rest &lt;- rstudent(m)
+
+p &lt;- ggplot(CancerSurvival, aes(x = yhat, y = rest, color = Organ)) +
+  geom_point(alpha = 0.5) + theme_minimal() + 
+  labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-2-2.png" width="100%" style="display: block; margin: auto;" />
+A model for <em>log</em> time might exhibit something closer to
+homoscedasticity.</p>
+<pre class="r"><code>p &lt;- ggplot(CancerSurvival, aes(x = Organ, y = log(Survival))) +
+   geom_jitter(height = 0, width = 0.25) + 
+   labs(y = &quot;log(Days)&quot;) + theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>m &lt;- lm(log(Survival) ~ Organ, data = CancerSurvival)
+
+CancerSurvival$yhat &lt;- predict(m)
+CancerSurvival$rest &lt;- rstudent(m)
+
+p &lt;- ggplot(CancerSurvival, aes(x = yhat, y = rest, color = Organ)) + 
+   geom_point(alpha = 0.5) + theme_minimal() + 
+   labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-3-2.png" width="100%" style="display: block; margin: auto;" />
+Comments on variance-stabilizing transformations.</p>
+<ol style="list-style-type: decimal">
+<li><p>Depending on the situation, other transformations may exhibit
+variance-stabilizing properties. Some common transformations are <span
+class="math inline">\(\sqrt{Y_i}\)</span>, <span
+class="math inline">\(\log(Y_i)\)</span>, <span
+class="math inline">\(1/\sqrt{Y_i}\)</span> and <span
+class="math inline">\(1/Y_i\)</span> for right-skewed response
+variables, and <span class="math inline">\(n_i
+\sin^{-1}\sqrt{Y_i}\)</span> when <span
+class="math inline">\(Y_i\)</span> is a proportion with a denominator of
+<span class="math inline">\(n_i\)</span>.</p></li>
+<li><p>A limitation of variance stabilizing transformations is that it
+is often difficult (and undesirable) to to <em>interpret</em> the model
+in terms of the transformed response variable (although there are
+exceptions as we will later see with the log transformation in the
+context of accelerated failure time models for survival data).</p></li>
+<li><p>It is important to note that for any <em>nonlinear</em>
+transformation that <span class="math inline">\(E[g(Y)] \neq
+g[E(Y)]\)</span> (i.e., the expected transformed response does not
+necessarily equal the transformed expected response). For example, the
+expected log of survival time does not equal the log of the expected
+survival time. So we cannot obtain inferences for the expected response
+by applying the inverse function. For example, while we have that <span
+class="math inline">\(\exp[\log(Y)] = Y\)</span>, this <strong>does
+not</strong> imply that <span
+class="math inline">\(\exp\left\{E[\log(Y)]\right\} =
+E(Y)\)</span>.</p></li>
+</ol>
+</div>
+<div id="weighted-least-squares" class="section level3">
+<h3>Weighted Least Squares</h3>
+<p>A <em>weighted</em> least squares (WLS) estimator of the regression
+model parameters minimizes <span class="math display">\[
+    \sum_{i=1}^n w_i (y_i - \hat{y}_i)^2,
+\]</span> were <span class="math inline">\(w_i &gt; 0\)</span> is the
+<em>weight</em> for the <span class="math inline">\(i\)</span>-th
+observation. So-called <em>ordinary least squares</em> (OLS) or
+<em>unweighted least squares</em> is a special case where all <span
+class="math inline">\(w_i\)</span> = 1.</p>
+<p>To account for heteroscedasticity, the weights should be
+<em>inversely proportional to the variance of the response</em> so that
+<span class="math display">\[
+    w_i \propto \frac{1}{\text{Var}(Y_i)}.
+\]</span> Estimation is <em>efficient</em> meaning that the
+<em>true</em> standard errors (which are not necessarily the
+<em>reported</em> standard errors shown by software since these are
+estimates and may be biased without using weights as defined above) are
+as small as they can be when using weighted least squares.</p>
+<p><strong>Example</strong>: One situation where we can anticipate
+heteroscedasticity and the need for weights is when the response
+variable is the mean of a varying number of observations. Consider the
+following data.</p>
+<pre class="r"><code>library(alr4)
+head(allshoots)</code></pre>
+<pre><code>  Day  n  ybar   SD Type
+1   0  5 10.00 0.00    0
+2   6  5 11.00 0.72    0
+3   9  5 10.00 0.72    0
+4  19 11 13.36 1.03    0
+5  27  7 14.29 0.95    0
+6  30  8 14.50 1.19    0</code></pre>
+<pre class="r"><code>allshoots$Type &lt;- factor(allshoots$Type, labels = c(&quot;short&quot;,&quot;long&quot;))
+head(allshoots)</code></pre>
+<pre><code>  Day  n  ybar   SD  Type
+1   0  5 10.00 0.00 short
+2   6  5 11.00 0.72 short
+3   9  5 10.00 0.72 short
+4  19 11 13.36 1.03 short
+5  27  7 14.29 0.95 short
+6  30  8 14.50 1.19 short</code></pre>
+<pre class="r"><code>p &lt;- ggplot(allshoots, aes(x = Day, y = ybar, size = n, color = Type)) +
+   geom_point(alpha = 0.5) + theme_minimal() + 
+   labs(x = &quot;Days Since Dormancy&quot;, 
+      y = &quot;Mean Number of Stem Units per Shoot&quot;,
+      size = &quot;Number of Shoots&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
+The response variable is an <em>mean</em> of several observations so
+that <span class="math display">\[
+  Y_i = \frac{Z_{i1} + Z_{i2} + \cdots + Z_{in_i}}{n_i}
+\]</span> where <span class="math inline">\(Z_{ij}\)</span> is the
+length of the <span class="math inline">\(j\)</span>-th shoot that goes
+into the <span class="math inline">\(i\)</span>-th average, and a total
+of <span class="math inline">\(n_i\)</span> shoots go into the <span
+class="math inline">\(i\)</span>-th average. If <span
+class="math inline">\(\text{Var}(Z_{ij}) = \sigma^2\)</span> then <span
+class="math inline">\(\text{Var}(Y_i) = \sigma^2/n_i\)</span>. Thus the
+weights should be <span class="math display">\[
+  w_i \propto \frac{1}{\sigma^2/n_i} = \frac{n_i}{\sigma^2}.
+\]</span> Since <span class="math inline">\(1/\sigma^2\)</span> is a
+constant for all observations, we can define the weights as <span
+class="math inline">\(w_i = n_i\)</span>. The weights can be specified
+in <code>lm</code> and <code>nls</code> (and other functions for
+regression) using the <code>weights</code> argument.</p>
+<pre class="r"><code># weighted least squares
+m &lt;- lm(ybar ~ Type + Day + Type:Day, weights = n, data = allshoots)
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>             Estimate Std. Error t value  Pr(&gt;|t|)    2.5 %  97.5 %
+(Intercept)   9.48837   0.238615  39.764 2.126e-38  9.00861 9.96814
+Typelong      0.48538   0.362496   1.339 1.869e-01 -0.24347 1.21423
+Day           0.18726   0.003486  53.722 1.559e-44  0.18025 0.19427
+Typelong:Day  0.03007   0.005800   5.185 4.281e-06  0.01841 0.04173</code></pre>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(Type = c(&quot;short&quot;,&quot;long&quot;), Day = 1),
+  b = list(Type = c(&quot;short&quot;,&quot;long&quot;), Day = 0),
+  cnames = c(&quot;short shoot slope&quot;,&quot;long shoot slope&quot;))</code></pre>
+<pre><code>                  estimate       se  lower  upper tvalue df    pvalue
+short shoot slope   0.1873 0.003486 0.1802 0.1943  53.72 48 1.559e-44
+long shoot slope    0.2173 0.004636 0.2080 0.2267  46.88 48 9.535e-42</code></pre>
+<p><strong>Example</strong>: Consider again the cancer survival time
+data.</p>
+<pre class="r"><code>p &lt;- ggplot(CancerSurvival, aes(x = Organ, y = Survival)) +
+   geom_jitter(height = 0, width = 0.25) + 
+   labs(y = &quot;Survival Time (Days)&quot;) + theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>m.ols &lt;- lm(Survival ~ Organ, data = CancerSurvival)
+
+CancerSurvival$yhat &lt;- predict(m.ols)
+CancerSurvival$rest &lt;- rstudent(m.ols)
+
+p &lt;- ggplot(CancerSurvival, aes(x = yhat, y = rest, color = Organ)) +
+   geom_point(alpha = 0.5) + theme_minimal() +
+   labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-6-2.png" width="100%" style="display: block; margin: auto;" />
+There are a couple of ways we could go with these data. One is that
+since we have a categorical explanatory variable with multiple
+observations per category, we could <em>estimate</em> the variance of
+<span class="math inline">\(Y_i\)</span> of each organ, and then set the
+weights to the reciprocals of these estimated variances.</p>
+<pre class="r"><code>library(dplyr)
+CancerSurvival %&gt;% group_by(Organ) %&gt;% 
+  summarize(variance = var(Survival), weight = 1/var(Survival))</code></pre>
+<pre><code># A tibble: 5 × 3
+  Organ    variance      weight
+  &lt;fct&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+1 Bronchus   44041. 0.0000227  
+2 Stomach   119930. 0.00000834 
+3 Colon     182473. 0.00000548 
+4 Ovary    1206875. 0.000000829
+5 Breast   1535038. 0.000000651</code></pre>
+<p>We can use the following to compute weights and add them to the data
+frame.</p>
+<pre class="r"><code>CancerSurvival &lt;- CancerSurvival %&gt;% 
+   group_by(Organ) %&gt;% mutate(w = 1/var(Survival))
+head(CancerSurvival)</code></pre>
+<pre><code># A tibble: 6 × 3
+# Groups:   Organ [1]
+  Survival Organ            w
+     &lt;int&gt; &lt;fct&gt;        &lt;dbl&gt;
+1      124 Stomach 0.00000834
+2       42 Stomach 0.00000834
+3       25 Stomach 0.00000834
+4       45 Stomach 0.00000834
+5      412 Stomach 0.00000834
+6       51 Stomach 0.00000834</code></pre>
+<p>Now let’s estimate the model using weighted least squares with these
+weights and inspect the residuals.</p>
+<pre class="r"><code>m.wls &lt;- lm(Survival ~ Organ, weights = w, data = CancerSurvival)
+
+CancerSurvival$yhat &lt;- predict(m.wls)
+CancerSurvival$rest &lt;- rstudent(m.wls)
+
+p &lt;- ggplot(CancerSurvival, aes(x = yhat, y = rest, color = Organ)) +
+   geom_point(alpha = 0.5) + theme_minimal() + 
+   labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" />
+Note how this affects our inferences.</p>
+<pre class="r"><code>cbind(summary(m.ols)$coefficients, confint(m.ols))</code></pre>
+<pre><code>             Estimate Std. Error t value  Pr(&gt;|t|)   2.5 % 97.5 %
+(Intercept)    211.59      162.4  1.3030 0.1976373 -113.34  536.5
+OrganStomach    74.41      246.7  0.3017 0.7639784 -419.20  568.0
+OrganColon     245.82      229.6  1.0704 0.2887820 -213.70  705.3
+OrganOvary     672.75      317.9  2.1160 0.0385749   36.56 1308.9
+OrganBreast   1184.32      259.1  4.5713 0.0000253  665.91 1702.7</code></pre>
+<pre class="r"><code>cbind(summary(m.wls)$coefficients, confint(m.wls))</code></pre>
+<pre><code>             Estimate Std. Error t value  Pr(&gt;|t|)   2.5 % 97.5 %
+(Intercept)    211.59       50.9  4.1571 0.0001057  109.74  313.4
+OrganStomach    74.41      108.7  0.6846 0.4963078 -143.10  291.9
+OrganColon     245.82      115.4  2.1296 0.0373858   14.85  476.8
+OrganOvary     672.75      451.4  1.4904 0.1414343 -230.45 1575.9
+OrganBreast   1184.32      377.0  3.1413 0.0026291  429.92 1938.7</code></pre>
+<pre class="r"><code>organs &lt;- unique(CancerSurvival$Organ)
+trtools::contrast(m.ols, a = list(Organ = organs), cnames = organs)</code></pre>
+<pre><code>         estimate    se   lower  upper tvalue df    pvalue
+Stomach     286.0 185.7  -85.57  657.6  1.540 59 1.289e-01
+Bronchus    211.6 162.4 -113.34  536.5  1.303 59 1.976e-01
+Colon       457.4 162.4  132.48  782.3  2.817 59 6.587e-03
+Ovary       884.3 273.3  337.39 1431.3  3.235 59 1.993e-03
+Breast     1395.9 201.9  991.96 1799.9  6.915 59 3.770e-09</code></pre>
+<pre class="r"><code>trtools::contrast(m.wls, a = list(Organ = organs), cnames = organs)</code></pre>
+<pre><code>         estimate     se  lower  upper tvalue df    pvalue
+Stomach     286.0  96.05  93.81  478.2  2.978 59 0.0042091
+Bronchus    211.6  50.90 109.74  313.4  4.157 59 0.0001057
+Colon       457.4 103.60 250.10  664.7  4.415 59 0.0000437
+Ovary       884.3 448.49 -13.10 1781.8  1.972 59 0.0533281
+Breast     1395.9 373.56 648.41 2143.4  3.737 59 0.0004228</code></pre>
+<pre class="r"><code>trtools::contrast(m.ols,
+   a = list(Organ = &quot;Breast&quot;),
+   b = list(Organ = c(&quot;Bronchus&quot;,&quot;Stomach&quot;,&quot;Colon&quot;,&quot;Ovary&quot;)),
+   cnames = c(&quot;Breast vs Bronchus&quot;, &quot;Breast vs Stomach&quot;, 
+      &quot;Breast vs Colon&quot;,&quot;Breast vs Ovary&quot;))</code></pre>
+<pre><code>                   estimate    se  lower upper tvalue df    pvalue
+Breast vs Bronchus   1184.3 259.1  665.9  1703  4.571 59 0.0000253
+Breast vs Stomach    1109.9 274.3  561.1  1659  4.046 59 0.0001533
+Breast vs Colon       938.5 259.1  420.1  1457  3.622 59 0.0006083
+Breast vs Ovary       511.6 339.8 -168.4  1192  1.506 59 0.1375263</code></pre>
+<pre class="r"><code>trtools::contrast(m.wls,
+   a = list(Organ = &quot;Breast&quot;),
+   b = list(Organ = c(&quot;Bronchus&quot;,&quot;Stomach&quot;,&quot;Colon&quot;,&quot;Ovary&quot;)),
+   cnames = c(&quot;Breast vs Bronchus&quot;, &quot;Breast vs Stomach&quot;, 
+      &quot;Breast vs Colon&quot;,&quot;Breast vs Ovary&quot;))</code></pre>
+<pre><code>                   estimate    se  lower upper tvalue df   pvalue
+Breast vs Bronchus   1184.3 377.0  429.9  1939 3.1413 59 0.002629
+Breast vs Stomach    1109.9 385.7  338.1  1882 2.8776 59 0.005572
+Breast vs Colon       938.5 387.7  162.8  1714 2.4209 59 0.018577
+Breast vs Ovary       511.6 583.7 -656.4  1680 0.8765 59 0.384340</code></pre>
+<p>Here’s how you can do the comparison of one level with all others
+using the <code>contrast</code> function from the
+<strong>emmeans</strong> package.</p>
+<pre class="r"><code>library(emmeans)
+contrast(emmeans(m.wls, ~ Organ), &quot;trt.vs.ctrl&quot;, ref = &quot;Breast&quot;, 
+   reverse = TRUE, adjust = &quot;none&quot;, infer = TRUE)</code></pre>
+<pre><code> contrast          estimate  SE df lower.CL upper.CL t.ratio p.value
+ Breast - Bronchus     1184 377 59      430     1939   3.141  0.0026
+ Breast - Stomach      1110 386 59      338     1882   2.878  0.0056
+ Breast - Colon         938 388 59      163     1714   2.421  0.0186
+ Breast - Ovary         512 584 59     -656     1680   0.876  0.3843
+
+Confidence level used: 0.95 </code></pre>
+<p>Another approach is to assume that the variance of the response
+variable is some function of its expected response, and thus the weights
+are a function of the expected response. With right-skewed response
+variables one common functional relationship is that <span
+class="math display">\[
+   \text{Var}(Y_i) \propto E(Y_i),
+\]</span> or, more generally, <span class="math display">\[
+   \text{Var}(Y_i) \propto E(Y_i)^p,
+\]</span> where <span class="math inline">\(p\)</span> is some power
+(usually <span class="math inline">\(p \ge 1\)</span>). So the weights
+would then be <span class="math display">\[
+   w_i \propto \frac{1}{E(Y_i)^p}.
+\]</span> We do not know <span class="math inline">\(E(Y_i)\)</span>,
+but <span class="math inline">\(\hat{y}_i\)</span> is an estimate of
+<span class="math inline">\(E(Y_i)\)</span>. But we need the weights to
+compute <span class="math inline">\(\hat{y}_i\)</span>!</p>
+<p>Two situations:</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimates of the model parameters and thus <span
+class="math inline">\(\hat{y}_i\)</span> <em>do not</em> depend on the
+weights.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+Here we can compute the weights with an initial regression model without
+weights.</p></li>
+<li><p>Estimates of the model parameters and thus <span
+class="math inline">\(\hat{y}_i\)</span> <em>do</em> depend on the
+weights. An approach we can use here is <em>iteratively weighted least
+squares</em>.</p></li>
+</ol>
+<p>It can be shown that <span class="math inline">\(\hat{y}_i\)</span>
+does not depend on the weights for the model for the
+<code>CancerSurvival</code> model. We can use the estimates from
+ordinary least squares to obtain weights of <span
+class="math inline">\(w_i = 1/\hat{y}_i^p\)</span>.</p>
+<pre class="r"><code>m.ols &lt;- lm(Survival ~ Organ, data = CancerSurvival)
+
+CancerSurvival$w &lt;- 1/predict(m.ols) 
+m.wls &lt;- lm(Survival ~ Organ, data = CancerSurvival, weights = w)
+
+CancerSurvival$yhat &lt;- predict(m.wls)
+CancerSurvival$rest &lt;- rstudent(m.wls)
+
+p &lt;- ggplot(CancerSurvival, aes(x = yhat, y = rest, color = Organ)) +
+   geom_point(alpha = 0.5) + theme_minimal() + 
+   labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" />
+Maybe we could do better. Let’s try <span
+class="math inline">\(p\)</span> = 2 — i.e., <span
+class="math inline">\(\text{Var}(Y_i) \propto E(Y_i)^2\)</span>.</p>
+<pre class="r"><code>m.ols &lt;- lm(Survival ~ Organ, data = CancerSurvival)
+
+CancerSurvival$w &lt;- 1/predict(m.ols)^2 
+m.wls &lt;- lm(Survival ~ Organ, data = CancerSurvival, weights = w)
+
+CancerSurvival$yhat &lt;- predict(m.wls)
+CancerSurvival$rest &lt;- rstudent(m.wls)
+
+p &lt;- ggplot(CancerSurvival, aes(x = yhat, y = rest, color = Organ)) +
+   geom_point(alpha = 0.5) + theme_minimal() + 
+   labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-14-1.png" width="100%" style="display: block; margin: auto;" />
+<strong>Example</strong>: Consider again following data from a study on
+the effects of fuel reduction on biomass.</p>
+<pre class="r"><code>library(trtools) # for biomass data
+
+m &lt;- lm(suitable ~ -1 + treatment:total, data = biomass)
+summary(m)$coefficients</code></pre>
+<pre><code>                 Estimate Std. Error t value Pr(&gt;|t|)
+treatmentn:total   0.1056    0.04183   2.524 1.31e-02
+treatmenty:total   0.1319    0.01121  11.773 7.61e-21</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(treatment = c(&quot;n&quot;,&quot;y&quot;), total = seq(0, 2767, length = 10))
+d$yhat &lt;- predict(m, newdata = d)
+
+p &lt;- ggplot(biomass, aes(x = total, y = suitable, color = treatment)) +
+   geom_point() + geom_line(aes(y = yhat), data = d) + theme_minimal() +
+   labs(x = &quot;Total Biomass (kg/ha)&quot;, 
+      y = &quot;Suitable Biomass (kg/ha)&quot;,
+      color = &quot;Treatment&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>biomass$yhat &lt;- predict(m)
+biomass$rest &lt;- rstudent(m)
+
+p &lt;- ggplot(biomass, aes(x = yhat, y = rest, color = treatment)) +
+   geom_point() + theme_minimal() + 
+   labs(x = &quot;Predicted Value&quot;, 
+      y = &quot;Studentized Residual&quot;, 
+      color = &quot;Treatment&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-17-2023_files/figure-html/unnamed-chunk-15-2.png" width="100%" style="display: block; margin: auto;" />
+Here we might also assume that <span
+class="math inline">\(\text{Var}(Y_i) \propto E(Y_i)^p\)</span>, with
+weights of <span class="math inline">\(w_i = 1/\hat{y}_i\)</span>. But
+here things are a bit more complicated for this model: the <span
+class="math inline">\(w_i\)</span> depend on the <span
+class="math inline">\(\hat{y}_i\)</span>, the <span
+class="math inline">\(\hat{y}_i\)</span> depend on the <span
+class="math inline">\(w_i\)</span>. In the model for the
+<code>CancerSurvival</code> data this was not an issue because there the
+estimates of the model parameters, and thus <span
+class="math inline">\(\hat{y}_i\)</span>, did not depend on the weights
+so we could use ordinary least squares where all <span
+class="math inline">\(w_i\)</span> = 1 to get the <span
+class="math inline">\(\hat{y}_i\)</span>. But that is not true for this
+model. But we can solve this problem using <em>iteratively weighted
+least squares</em>.</p>
+<pre class="r"><code>biomass$w &lt;- 1 # initial weights are all equal to one
+for (i in 1:5) {
+  m.wls &lt;- lm(suitable ~ -1 + treatment:total, weights = w, data = biomass)
+  print(coef(m.wls)) # optional
+  print(biomass$w)   # optional
+  biomass$w &lt;- 1 / predict(m.wls)
+}</code></pre>
+<pre><code>treatmentn:total treatmenty:total 
+          0.1056           0.1319 
+  [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ [38] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+ [75] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+treatmentn:total treatmenty:total 
+          0.1155           0.1578 
+  [1] 0.007064 0.032550 0.008232 0.011412 0.014898 0.074071 0.006703 0.005470
+  [9] 0.007314 0.010754 0.021027 0.024910 0.035501 0.016278 0.008970 0.015132
+ [17] 0.022310 0.033109 0.021716 0.010972 0.014911 0.015997 0.092343 0.011300
+ [25] 0.013910 0.008150 0.007978 0.011553 0.006235 0.005782 0.018173 0.025335
+ [33] 0.010453 0.014369 0.011716 0.009869 0.008049 0.005353 0.003933 0.024211
+ [41] 0.015701 0.005305 0.064582 0.011616 0.011111 0.005036 0.007079 0.005436
+ [49] 0.004746 0.009239 0.026575 0.015901 0.021376 0.008873 0.012010 0.024113
+ [57] 0.014990 0.008727 0.008070 0.014726 0.008485 0.020475 0.038766 0.005255
+ [65] 0.006031 0.013957 0.007197 0.006031 0.010244 0.010559 0.005978 0.009652
+ [73] 0.057874 0.018494 0.013587 0.007693 0.053023 0.004846 0.010163 0.007394
+ [81] 0.013009 0.007429 0.006036 0.004073 0.043850 0.003994 0.003538 0.004487
+ [89] 0.090312 0.005598 0.003575 0.008461 0.003624 0.008445 0.004467 0.004414
+ [97] 0.005854 0.002740 0.031633 0.011055 0.015161 0.004513 0.015473 0.004263
+[105] 0.004681 0.003246
+treatmentn:total treatmenty:total 
+          0.1155           0.1578 
+  [1] 0.005904 0.027206 0.006880 0.009538 0.012453 0.067738 0.005602 0.004572
+  [9] 0.006114 0.008988 0.019229 0.020820 0.032465 0.014886 0.007498 0.012647
+ [17] 0.020403 0.027673 0.018151 0.009171 0.012463 0.013371 0.084448 0.009445
+ [25] 0.011626 0.006812 0.006668 0.009656 0.005211 0.004833 0.016620 0.023169
+ [33] 0.008737 0.012010 0.010714 0.008249 0.006727 0.004474 0.003288 0.022141
+ [41] 0.013123 0.004434 0.059060 0.009709 0.009287 0.004209 0.005917 0.004544
+ [49] 0.003967 0.007722 0.022212 0.013290 0.017867 0.008114 0.010038 0.022052
+ [57] 0.013709 0.007981 0.006745 0.013467 0.007092 0.017114 0.035451 0.004392
+ [65] 0.005041 0.011666 0.006016 0.005041 0.008562 0.008826 0.004997 0.008068
+ [73] 0.048373 0.015458 0.012425 0.006430 0.048490 0.004050 0.008494 0.006180
+ [81] 0.010873 0.006210 0.005045 0.003405 0.036651 0.003339 0.002957 0.003750
+ [89] 0.082590 0.004679 0.002988 0.007072 0.003029 0.007723 0.003734 0.003690
+ [97] 0.004893 0.002290 0.028928 0.009240 0.013865 0.003772 0.014150 0.003563
+[105] 0.003912 0.002713
+treatmentn:total treatmenty:total 
+          0.1155           0.1578 
+  [1] 0.005904 0.027206 0.006880 0.009538 0.012453 0.067738 0.005602 0.004572
+  [9] 0.006114 0.008988 0.019229 0.020820 0.032465 0.014886 0.007498 0.012647
+ [17] 0.020403 0.027673 0.018151 0.009171 0.012463 0.013371 0.084448 0.009445
+ [25] 0.011626 0.006812 0.006668 0.009656 0.005211 0.004833 0.016620 0.023169
+ [33] 0.008737 0.012010 0.010714 0.008249 0.006727 0.004474 0.003288 0.022141
+ [41] 0.013123 0.004434 0.059060 0.009709 0.009287 0.004209 0.005917 0.004544
+ [49] 0.003967 0.007722 0.022212 0.013290 0.017867 0.008114 0.010038 0.022052
+ [57] 0.013709 0.007981 0.006745 0.013467 0.007092 0.017114 0.035451 0.004392
+ [65] 0.005041 0.011666 0.006016 0.005041 0.008562 0.008826 0.004997 0.008068
+ [73] 0.048373 0.015458 0.012425 0.006430 0.048490 0.004050 0.008494 0.006180
+ [81] 0.010873 0.006210 0.005045 0.003405 0.036651 0.003339 0.002957 0.003750
+ [89] 0.082590 0.004679 0.002988 0.007072 0.003029 0.007723 0.003734 0.003690
+ [97] 0.004893 0.002290 0.028928 0.009240 0.013865 0.003772 0.014150 0.003563
+[105] 0.003912 0.002713
+treatmentn:total treatmenty:total 
+          0.1155           0.1578 
+  [1] 0.005904 0.027206 0.006880 0.009538 0.012453 0.067738 0.005602 0.004572
+  [9] 0.006114 0.008988 0.019229 0.020820 0.032465 0.014886 0.007498 0.012647
+ [17] 0.020403 0.027673 0.018151 0.009171 0.012463 0.013371 0.084448 0.009445
+ [25] 0.011626 0.006812 0.006668 0.009656 0.005211 0.004833 0.016620 0.023169
+ [33] 0.008737 0.012010 0.010714 0.008249 0.006727 0.004474 0.003288 0.022141
+ [41] 0.013123 0.004434 0.059060 0.009709 0.009287 0.004209 0.005917 0.004544
+ [49] 0.003967 0.007722 0.022212 0.013290 0.017867 0.008114 0.010038 0.022052
+ [57] 0.013709 0.007981 0.006745 0.013467 0.007092 0.017114 0.035451 0.004392
+ [65] 0.005041 0.011666 0.006016 0.005041 0.008562 0.008826 0.004997 0.008068
+ [73] 0.048373 0.015458 0.012425 0.006430 0.048490 0.004050 0.008494 0.006180
+ [81] 0.010873 0.006210 0.005045 0.003405 0.036651 0.003339 0.002957 0.003750
+ [89] 0.082590 0.004679 0.002988 0.007072 0.003029 0.007723 0.003734 0.003690
+ [97] 0.004893 0.002290 0.028928 0.009240 0.013865 0.003772 0.014150 0.003563
+[105] 0.003912 0.002713</code></pre>
+</div>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>In practice the most common situation where this will
+happen is with models with only a single categorical explanatory
+variable (or models with multiple categorical explanatory variables that
+include interactions).<a href="#fnref1"
+class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
