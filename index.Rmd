@@ -11,7 +11,9 @@ This site contains material for Dr. Johnson's *Applied Regression Modeling* cour
 
 <center>
 
-![https://xkcd.com/2311](http://imgs.xkcd.com/comics/confidence_interval.png)
+![](heteroscedasticity.jpg)
+
+My little statistics parody of one of the variations of the cover of the album [Sychronicity](https://en.wikipedia.org/wiki/Synchronicity_(The_Police_album)) by the [The Police](https://en.wikipedia.org/wiki/The_Police) (apparently there were 36 variations of this album cover). 
 
 </center>
 
