@@ -304,7 +304,7 @@ have an “intercept” of zero, which makes sense in the context of enzyme
 kinetics. The plot below shows an example of the model where <span
 class="math inline">\(\alpha\)</span> = 300 and <span
 class="math inline">\(\lambda\)</span> = 0.5.
-<img src="lecture-02-24-2023_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="lecture-02-24-2023-new_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
 To estimate <span class="math inline">\(\alpha\)</span> and <span
 class="math inline">\(\lambda\)</span> the typical method is to conduct
 a series of assays, varying substrate concentration and recording the
@@ -336,7 +336,7 @@ p &lt;- ggplot(Puromycin, aes(x = conc, y = rate)) +
     y = &quot;Reaction Rate (counts/min)&quot;, color = &quot;Cell State&quot;) + 
   theme_minimal() + theme(legend.position = c(0.8,0.2))
 plot(p)</code></pre>
-<p><img src="lecture-02-24-2023_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-02-24-2023-new_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" />
 Clearly the linear model is not a good model for the data. Cut-and-paste
 the R code above and modify it to replace the linear model with the
 Michaelis-Menten model (ignoring the experimental manipulation for now).
@@ -411,7 +411,7 @@ p &lt;- ggplot(Puromycin, aes(x = conc, y = rate, color = state)) +
     y = &quot;Reaction Rate (counts/min)&quot;, color = &quot;Cell State&quot;) + 
   theme_minimal() + theme(legend.position = c(0.8,0.2))
 plot(p)</code></pre>
-<p><img src="lecture-02-24-2023_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-02-24-2023-new_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
 Since there are only two levels of <code>state</code> we could also use
 the <code>ifelse</code> function to produce the same results as using
 the indicator variable.</p>
@@ -521,7 +521,7 @@ p &lt;- ggplot(daphniastrat, aes(x = layer, y = count)) +
   geom_dotplot(binaxis = &quot;y&quot;, binwidth = 1, stackdir = &quot;center&quot;) + 
   labs(x = &quot;Layer&quot;, y = &quot;Number of Daphnia&quot;) + theme_minimal()
 plot(p)</code></pre>
-<p><img src="lecture-02-24-2023_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-02-24-2023-new_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" />
 We used the following linear model for these data.</p>
 <pre class="r"><code>m &lt;- lm(count ~ layer, data = daphniastrat)
 summary(m)$coefficients</code></pre>
@@ -537,7 +537,7 @@ p &lt;- ggplot(daphniastrat, aes(x = yhat, y = rest, color = layer)) +
   geom_count() + theme_minimal() + 
   labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;, color = &quot;Layer&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-02-24-2023_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-02-24-2023-new_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" />
 Note that <code>geom_count</code> is a variant of
 <code>geom_point</code> that makes the point size proportional to the
 number of points at a particular position, which is useful here.</p>
