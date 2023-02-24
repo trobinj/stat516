@@ -109,6 +109,8 @@ $$
 $$
 Estimation is *efficient* meaning that the *true* standard errors (which are not necessarily the *reported* standard errors shown by software since these are estimates and may be biased without using weights as defined above) are as small as they can be when using weighted least squares.
 
+<!-- Maybe replace the following example with the turkey data from my copy of Applied Linear Regression as the responses are means. -->
+
 **Example**: One situation where we can anticipate heteroscedasticity and the need for weights is when the response variable is the mean of a varying number of observations. Consider the following data.
 ```{r, message = FALSE}
 library(alr4)
