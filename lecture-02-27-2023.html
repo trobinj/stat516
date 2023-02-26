@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Monday, Feb 27</title>
+
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Monday, Feb 27</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-02-27-2023.pdf">PDF</a> copy
+of this lecture.</p>
+<div id="modeling-counts" class="section level2">
+<h2>Modeling Counts</h2>
+<p><strong>Example</strong>: Consider the following data.</p>
+<pre class="r"><code>library(trtools) # for ceriodaphniastrain data
+ceriodaphniastrain$strainf &lt;- factor(ceriodaphniastrain$strain, 
+  levels = c(1,2), labels = c(&quot;a&quot;,&quot;b&quot;))
+head(ceriodaphniastrain)</code></pre>
+<pre><code>  count concentration strain strainf
+1    82             0      1       a
+2    58             0      2       b
+3   106             0      1       a
+4    58             0      2       b
+5    63             0      1       a
+6    62             0      2       b</code></pre>
+<pre class="r"><code>tail(ceriodaphniastrain)</code></pre>
+<pre><code>   count concentration strain strainf
+65     3          1.75      1       a
+66     2          1.75      2       b
+67     8          1.75      1       a
+68     8          1.75      2       b
+69     1          1.75      1       a
+70     4          1.75      2       b</code></pre>
+<pre class="r"><code>p &lt;- ggplot(ceriodaphniastrain, aes(x = concentration, y = count, color = strainf)) +
+  geom_point(alpha = 0.5) + theme_classic() + 
+  theme(legend.position = c(0.9, 0.8)) + 
+  labs(x = &quot;Concentration&quot;, y = &quot;Organisms&quot;, color = &quot;Strain&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-27-2023_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>What are the complications when the response variable is a count?</p>
+<ol style="list-style-type: decimal">
+<li><p>Nonlinear models may be necessary because <span
+class="math inline">\(E(Y_i) &gt; 0\)</span>.</p></li>
+<li><p>Heteroscedasticity because <span
+class="math inline">\(\text{Var}(Y_i)\)</span> tends to increase with
+<span class="math inline">\(E(Y_i)\)</span>.</p></li>
+<li><p>Non-normal discrete distribution.</p></li>
+</ol>
+<p>One solution would be to use a <em>nonlinear</em> regression model
+combined with some method to account for the heteroscedasticity, and we
+will revisit this approach, but for now we will consider instead a
+specialized model that assumes a <em>Poisson</em> rather than a normal
+distribution of <span class="math inline">\(Y_i\)</span>.</p>
+</div>
+<div id="poisson-regression" class="section level2">
+<h2>Poisson Regression</h2>
+<p>A random variable <span class="math inline">\(Y\)</span> has a
+<em>Poisson distribution</em> if <span class="math display">\[
+P(Y = y) = \frac{\lambda^y e^{-\lambda}}{y!},
+\]</span> where <span class="math inline">\(y\)</span> is a non-negative
+integer (i.e., <span class="math inline">\(y = 0, 1, 2, \dots\)</span>)
+and <span class="math inline">\(\lambda &gt; 0\)</span> is the parameter
+of the distribution. Also note that <span
+class="math inline">\(y!\)</span> is the <em>factorial</em> of <span
+class="math inline">\(y\)</span>, defined as <span
+class="math inline">\(y! = y \times (y - 1) \times (y - 2) \times \cdots
+\times 2 \times 1\)</span> and <span class="math inline">\(0! =
+1\)</span>.</p>
+<p>It can be shown that if <span class="math inline">\(Y\)</span> has a
+Poisson distribution then <span class="math inline">\(E(Y) =
+\lambda\)</span> and <span class="math inline">\(\text{Var}(Y) =
+\lambda\)</span>. The parameter <span
+class="math inline">\(\lambda\)</span> is sometimes called a “rate”
+parameter.
+<img src="lecture-02-27-2023_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" />
+A regression model can be specified for a response variable with a
+Poisson distribution by assuming that <span class="math display">\[
+P(Y_i = y) = \frac{\lambda_i^y e^{-\lambda_i}}{y!}
+\]</span> where <span class="math inline">\(\lambda_i\)</span> is a
+function of <span class="math inline">\(x_{i1}, x_{i2}, \dots,
+x_{ik}\)</span>. Since <span class="math inline">\(\lambda_i &gt;
+0\)</span> we might use <span class="math display">\[
+  \lambda_i = \exp(\beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots +
+\beta_kx_{ik}).
+\]</span> This implies the <em>nonlinear</em> regression model <span
+class="math display">\[
+  E(Y_i) = \exp(\beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots +
+\beta_kx_{ik}),
+\]</span> which can also be written as <span class="math display">\[
+  \log E(Y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots +
+\beta_kx_{ik}.
+\]</span> This kind of model is sometimes called a <em>log-linear</em>
+model. And because <span class="math inline">\(\text{Var}(Y_i) =
+E(Y_i)\)</span> the model assumes a certain pattern of
+heteroscedasticity. This kind of regression model is called a
+<em>Poisson regression</em> model.</p>
+</div>
+<div id="generalized-linear-models" class="section level2">
+<h2>Generalized Linear Models</h2>
+<p>Poisson regression is a member of a family of models known as
+<em>generalized linear models</em> (GLM). A generalized linear model has
+the form <span class="math display">\[
+  g[E(Y_i)] = \underbrace{\beta_0 + \beta_1 x_{i1} + \beta_1 x_{i2} +
+\cdots + \beta_k x_{ik}}_{\eta_i}
+\]</span> where <span class="math inline">\(g\)</span> is the <em>link
+function</em> and <span class="math inline">\(\eta_i\)</span> is the
+<em>linear predictor</em> or <em>systematic component</em>. The link
+function is invertable so that we can also write <span
+class="math display">\[
+    E(Y_i) = g^{-1}(\underbrace{\beta_0 + \beta_1 x_{i1} + \beta_1
+x_{i2} + \cdots + \beta_k x_{ik}}_{\eta_i}) = g^{-1}(\eta_i).
+\]</span> <strong>Example</strong>: A linear regression model can be
+written as <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_1 x_{i2} + \cdots + \beta_k
+x_{ik},
+\]</span> which implies that the link function is the “identity”
+function <span class="math inline">\(g(u) = u\)</span>, and thus so is
+the inverse link function <span class="math inline">\(g^{-1}(v) =
+v\)</span>.</p>
+<p><strong>Example</strong>: A Poisson regression model can be written
+as <span class="math display">\[
+  \log E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_1 x_{i2} + \cdots +
+\beta_k x_{ik},
+\]</span> so the link function is <span class="math inline">\(g(u) =
+\log(u)\)</span>, and the inverse link funtion is the exponential
+function <span class="math inline">\(g^{-1}(v) = \exp(v)\)</span>, also
+written as <span class="math inline">\(e^v\)</span>.</p>
+<p>In a GLM the variance of <span class="math inline">\(Y_i\)</span> is
+<span class="math display">\[
+  \text{Var}(Y_i) = \phi V[E(Y_i)]
+\]</span> where <span class="math inline">\(\phi\)</span> is a
+<em>dispersion parameter</em> and <span class="math inline">\(V\)</span>
+is the <em>variance function</em>. That is, the variance of <span
+class="math inline">\(Y_i\)</span> is proportional to some function of
+<span class="math inline">\(E(Y_i)\)</span>.</p>
+<p><strong>Example</strong>: Linear models typically assume
+homoscedasticity meaning that <span
+class="math inline">\(\text{Var}(Y_i) = \sigma^2\)</span> is a constant.
+Here the dispersion parameter is <span class="math inline">\(\phi =
+\sigma^2\)</span>, and the variance function is just <span
+class="math inline">\(V[E(Y_i)] = 1\)</span>.</p>
+<p><strong>Example</strong>: In Poisson regression we have that <span
+class="math inline">\(\text{Var}(Y_i) = E(Y_i)\)</span>. Here the
+dispersion parameter is <span class="math inline">\(\phi = 1\)</span>,
+and the variance function is the identity function <span
+class="math inline">\(V[E(Y_i)] = E(Y_i)\)</span>.</p>
+<p>We can write a GLM concisely as <span
+class="math display">\[\begin{align}
+  E(Y_i) &amp; = g^{-1}(\eta_i), \\
+  \text{Var}(Y_i) &amp; = \phi V[g^{-1}(\eta_i)],
+\end{align}\]</span> where again <span class="math display">\[
+    \eta_i = \beta_0 + \beta_1x_{i1} + \cdots + \beta_kx_{ik},
+\]</span> to define the <em>mean structure</em> and a <em>variance
+structure</em> for <span class="math inline">\(Y_i\)</span>,
+respectively. In general, specification of a GLM involves specifying
+three component parts:</p>
+<ol style="list-style-type: decimal">
+<li>The <em>linear predictor</em> <span class="math inline">\(\eta_i =
+\beta_0 + \beta_1x_{i1} + \cdots + \beta_kx_{ik}\)</span>.</li>
+<li>The <em>link function</em> <span class="math inline">\(g\)</span> to
+relate <span class="math inline">\(E(Y_i)\)</span> to <span
+class="math inline">\(\eta_i\)</span> as <span
+class="math inline">\(g[E(Y_i)] = \eta_i\)</span>.</li>
+<li>The <em>distribution</em> of <span
+class="math inline">\(Y_i\)</span>, <em>or</em> the <em>variance
+structure</em> <span class="math inline">\(\phi
+V[g^{-1}(\eta_i)]\)</span>.</li>
+</ol>
+<p>The choice of distribution implies a certain variance structure when
+using <code>glm</code>. The distribution comes from a family of
+distributions known as the <em>exponential family</em> (not to be
+confused with what is called an <em>exponential distribution</em>).</p>
+<p><strong>Example</strong>: Normal linear regression is a GLM where
+<span class="math inline">\(g(u) = u\)</span>, <span
+class="math inline">\(g^{-1}(v) = v\)</span>, <span
+class="math inline">\(\phi = \sigma^2\)</span>, and <span
+class="math inline">\(V(u) = 1\)</span> so that <span
+class="math display">\[\begin{align}
+  E(Y_i) &amp; = \eta_i, \\
+  \text{Var}(Y_i) &amp; = \sigma^2.
+\end{align}\]</span></p>
+<p><strong>Example</strong>: Poisson regression is a GLM where <span
+class="math inline">\(g(u) = \log(u)\)</span>, <span
+class="math inline">\(g^{-1}(v) = e^v\)</span>, <span
+class="math inline">\(\phi = 1\)</span>, and <span
+class="math inline">\(V(u) = u\)</span> so that <span
+class="math display">\[\begin{align}
+  \log[E(Y_i)] &amp; = \eta_i, \\
+  \text{Var}(Y_i) &amp; = \exp(\eta_i).
+\end{align}\]</span></p>
+<p>In R the function <code>glm</code> can be used to specify a
+generalized linear model.</p>
+<p><strong>Example</strong>: Recall the model for the
+<code>whiteside</code> data.</p>
+<pre class="r"><code>library(MASS)
+m &lt;- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+summary(m)$coefficients</code></pre>
+<pre><code>                Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)       6.8538    0.13596  50.409 7.997e-46
+InsulAfter       -2.1300    0.18009 -11.827 2.316e-16
+Temp             -0.3932    0.02249 -17.487 1.976e-23
+InsulAfter:Temp   0.1153    0.03211   3.591 7.307e-04</code></pre>
+<pre class="r"><code>m &lt;- glm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside,
+  family = gaussian(link = identity))
+summary(m)$coefficients</code></pre>
+<pre><code>                Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)       6.8538    0.13596  50.409 7.997e-46
+InsulAfter       -2.1300    0.18009 -11.827 2.316e-16
+Temp             -0.3932    0.02249 -17.487 1.976e-23
+InsulAfter:Temp   0.1153    0.03211   3.591 7.307e-04</code></pre>
+<p>Note that we do not explicitly state the variance structure (although
+we could — more on that later). Here the variance structure is implied
+by the choice of distribution.</p>
+<p><strong>Example</strong>: Now consider the following Poisson
+regression model for the <code>ceriodaphniastrain</code> data.</p>
+<pre class="r"><code>m &lt;- glm(count ~ concentration + strainf, data = ceriodaphniastrain,
+  family = poisson(link = log))
+summary(m)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value   Pr(&gt;|z|)
+(Intercept)      4.455    0.03914 113.819  0.000e+00
+concentration   -1.543    0.04660 -33.111 2.057e-240
+strainfb        -0.275    0.04837  -5.684  1.313e-08</code></pre>
+<p>This model can be written as <span class="math display">\[
+  E(Y_i) = \exp(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2}),
+\]</span> or <span class="math display">\[
+  \log E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2}
+\]</span> where <span class="math inline">\(x_{i1}\)</span> is the
+concentration for the <span class="math inline">\(i\)</span>-th
+observation, and <span class="math inline">\(x_{i2}\)</span> is an
+indicator variable for strain such that <span class="math display">\[
+  x_{i2} =
+  \begin{cases}
+    1, &amp; \text{if the strain is b}, \\
+    0, &amp; \text{otherwise},
+  \end{cases}
+\]</span> so that the model can be written case-wise as <span
+class="math display">\[
+  \log E(Y_i) =
+  \begin{cases}
+    \beta_0 + \beta_1 c_i, &amp; \text{if the strain is a}, \\
+    \beta_0 + \beta_2 + \beta_1 c_i, &amp; \text{if the strain is b},
+  \end{cases}
+\]</span> or <span class="math display">\[
+  E(Y_i) =
+  \begin{cases}
+    \exp(\beta_0 + \beta_1 c_i), &amp; \text{if the strain is a}, \\
+    \exp(\beta_0 + \beta_2 + \beta_1 c_i), &amp; \text{if the strain is
+b},
+  \end{cases}
+\]</span> if we let <span class="math inline">\(c_i = x_{i1}\)</span>
+denote the concentration for the <span
+class="math inline">\(i\)</span>-th observation. Also note that because
+<span class="math inline">\(Y_i\)</span> is assumed to have a Poisson
+distribution, <span class="math inline">\(\text{Var}(Y_i) =
+E(Y_i)\)</span>.</p>
+<p><strong>Example</strong>: Recall the daphnia survey.</p>
+<pre class="r"><code>library(trtools) # for daphniastrat
+library(ggplot2) 
+p &lt;- ggplot(daphniastrat, aes(x = layer, y = count)) + 
+  geom_dotplot(binaxis = &quot;y&quot;, binwidth = 1, stackdir = &quot;center&quot;) + 
+  labs(x = &quot;Layer&quot;, y = &quot;Number of Daphnia&quot;) + theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-02-27-2023_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" />
+A Poisson regression model for these data might be specified as
+follows.</p>
+<pre class="r"><code>m &lt;- glm(count ~ layer, family = poisson(link = log), data = daphniastrat)
+summary(m)$coefficients</code></pre>
+<pre><code>                 Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)        2.9704    0.05064  58.661 0.000e+00
+layerthermocline  -0.5456    0.10683  -5.107 3.272e-07
+layerhypolimnion  -2.4204    0.20255 -11.950 6.519e-33</code></pre>
+<p>So the model is <span class="math inline">\(\log E(Y_i) = \beta_0 +
+\beta_1 x_{i1} + \beta_2 x_{i2}\)</span>, where <span
+class="math inline">\(Y_i\)</span> is the <span
+class="math inline">\(i\)</span>-th count, and <span
+class="math inline">\(x_{i1}\)</span> and <span
+class="math inline">\(x_{i2}\)</span> are defined as <span
+class="math display">\[
+x_{i1} =
+  \begin{cases}
+  1, &amp; \text{if the $i$-th observation is from the thermocline
+layer,} \\
+  0, &amp; \text{otherwise}, \\
+  \end{cases}
+\]</span> and <span class="math display">\[
+x_{i2} =
+  \begin{cases}
+  1, &amp; \text{if the $i$-th observation is from the hypolimnion
+layer,} \\
+  0, &amp; \text{otherwise}. \\
+  \end{cases}
+\]</span> So the model can be written case-wise as <span
+class="math display">\[
+  \log E(Y_i) =
+  \begin{cases}
+    \beta_0, &amp; \text{if the $i$-th observation is from the
+epilimnion layer}, \\
+    \beta_0 + \beta_1, &amp; \text{if the $i$-th observation is from the
+thermocline layer}, \\
+    \beta_0 + \beta_2, &amp; \text{if the $i$-th observation is from the
+hypolimnion layer},
+  \end{cases}
+\]</span> or <span class="math display">\[
+  E(Y_i) =
+  \begin{cases}
+    \exp(\beta_0), &amp; \text{if the $i$-th observation is from the
+epilimnion layer}, \\
+    \exp(\beta_0 + \beta_1), &amp; \text{if the $i$-th observation is
+from the thermocline layer}, \\
+    \exp(\beta_0 + \beta_2), &amp; \text{if the $i$-th observation is
+from the hypolimnion layer}.
+  \end{cases}
+\]</span> And of course we have that <span
+class="math inline">\(\text{Var}(Y_i) = E(Y_i)\)</span>.</p>
+</div>
+<div id="visualization-of-a-glm" class="section level2">
+<h2>Visualization of a GLM</h2>
+<p>Visualization of a GLM be done in the usual way provided we use the
+<code>type = response</code> option when using <code>predict</code>. The
+default, which is <code>type = link</code>, returns <span
+class="math inline">\(\hat\eta_i = \hat\beta_0 + \hat\beta_1x_{i1} +
+\cdots + \hat\beta_kx_{ik}\)</span> which is the estimate of <span
+class="math inline">\(\log E(Y_i)\)</span>.</p>
+<pre class="r"><code>m &lt;- glm(count ~ concentration + strainf, data = ceriodaphniastrain,
+  family = poisson(link = log))
+
+d &lt;- expand.grid(concentration = seq(0, 1.75, length = 100), strainf = c(&quot;a&quot;,&quot;b&quot;))
+d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;) # note type = &quot;response&quot; argument
+
+p &lt;- ggplot(ceriodaphniastrain, aes(x = concentration, y = count, color = strainf)) +
+  geom_point(alpha = 0.5) + theme_classic() + geom_line(aes(y = yhat), data = d) +
+  theme(legend.position = c(0.9, 0.8)) + 
+  labs(x = &quot;Concentration&quot;, y = &quot;Organisms&quot;, color = &quot;Strain&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-27-2023_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" />
+To compute confidence intervals for the expected response you can use
+the <code>glmint</code> function from the <strong>trtools</strong>
+package.</p>
+<pre class="r"><code>d &lt;- expand.grid(concentration = seq(0, 1.75, length = 100), strainf = c(&quot;a&quot;,&quot;b&quot;))
+d &lt;- cbind(d, glmint(m, newdata = d))
+head(d)</code></pre>
+<pre><code>  concentration strainf   fit   low   upp
+1       0.00000       a 86.03 79.67 92.88
+2       0.01768       a 83.71 77.60 90.30
+3       0.03535       a 81.46 75.58 87.79
+4       0.05303       a 79.27 73.61 85.35
+5       0.07071       a 77.13 71.69 82.99
+6       0.08838       a 75.06 69.82 80.68</code></pre>
+<pre class="r"><code>p &lt;- ggplot(ceriodaphniastrain, aes(x = concentration, y = count, color = strainf)) +
+  geom_point(alpha = 0.5) + theme_classic() + 
+  geom_line(aes(y = fit), data = d) + 
+  geom_ribbon(aes(ymin = low, ymax = upp, y = NULL, fill = strainf), 
+    color = NA, alpha = 0.25, data = d) + 
+  theme(legend.position = c(0.9, 0.8)) + guides(fill = FALSE) + 
+  labs(x = &quot;Concentration&quot;, y = &quot;Organisms&quot;, color = &quot;Strain&quot;)</code></pre>
+<pre><code>Warning: The `&lt;scale&gt;` argument of `guides()` cannot be `FALSE`. Use &quot;none&quot; instead as
+of ggplot2 3.3.4.</code></pre>
+<pre class="r"><code>plot(p)</code></pre>
+<p><img src="lecture-02-27-2023_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" />
+We might visualize the model for the <code>daphniastrat</code> data as
+follows.</p>
+<pre class="r"><code>m &lt;- glm(count ~ layer, family = poisson(link = log), data = daphniastrat)
+
+d &lt;- data.frame(layer = unique(daphniastrat$layer))
+d &lt;- cbind(d, glmint(m, newdata = d))
+
+p &lt;- ggplot(daphniastrat, aes(x = layer, y = count)) + 
+  geom_dotplot(binaxis = &quot;y&quot;, binwidth = 1, stackdir = &quot;center&quot;, alpha = 0.25) + 
+  labs(x = &quot;Layer&quot;, y = &quot;Number of Daphnia&quot;) + 
+  theme_minimal() + geom_pointrange(aes(y = fit, ymin = low, ymax = upp), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-02-27-2023_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="glms-versus-nonlinear-regression" class="section level2">
+<h2>GLMs Versus Nonlinear Regression</h2>
+<p>There is a very close relationship between a GLM and a nonlinear
+regression model. We can try to estimate the model above using
+<code>nlm</code> as follows, using the estimates as starting values for
+convenience.</p>
+<pre class="r"><code>m &lt;- nls(count ~ exp(b0 + b1 * concentration + b2 * (strainf == &quot;b&quot;)),
+  data = ceriodaphniastrain, start = list(b0 = 7, b1 = -2, b2 = 0.12))
+summary(m)$coefficients</code></pre>
+<pre><code>   Estimate Std. Error t value  Pr(&gt;|t|)
+b0   4.4821    0.02894  154.86 2.486e-87
+b1  -1.5679    0.06232  -25.16 7.441e-36
+b2  -0.3267    0.04506   -7.25 5.402e-10</code></pre>
+<p>The estimates are not the same. But consider that the GLM assumes
+that <span class="math display">\[
+  \text{Var}(Y_i) = E(Y_i),
+\]</span> so our weights should be <span class="math inline">\(w_i =
+1/E(Y_i)\)</span>. Consider then an iteratively weighted least squares
+algorithm with <span class="math inline">\(w_i =
+1/\hat{y}_i\)</span>.</p>
+<pre class="r"><code>ceriodaphniastrain$w &lt;- 1
+for (i in 1:10) {
+  m &lt;- nls(count ~ exp(b0 + b1 * concentration + b2 * (strainf == &quot;b&quot;)),
+    data = ceriodaphniastrain, start = list(b0 = 7, b1 = -2, b2 = 0.12), 
+    weights = w)
+  ceriodaphniastrain$w &lt;- 1 / predict(m, type = &quot;response&quot;)
+}
+summary(m)$coefficients</code></pre>
+<pre><code>   Estimate Std. Error t value  Pr(&gt;|t|)
+b0    4.455    0.04272 104.273 7.167e-76
+b1   -1.543    0.05087 -30.334 7.309e-41
+b2   -0.275    0.05280  -5.208 1.988e-06</code></pre>
+<p>Compare that with what we obtained using <code>glm</code>.</p>
+<pre class="r"><code>m &lt;- glm(count ~ concentration + strainf, data = ceriodaphniastrain,
+  family = poisson(link = log))
+summary(m)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value   Pr(&gt;|z|)
+(Intercept)      4.455    0.03914 113.819  0.000e+00
+concentration   -1.543    0.04660 -33.111 2.057e-240
+strainfb        -0.275    0.04837  -5.684  1.313e-08</code></pre>
+<p>The parameter estimates are the same, but the standard errors are
+not. Why? The GLM assumes <span class="math inline">\(\text{Var}(Y_i) =
+E(Y_i)\)</span> whereas the iteratively weighted least squares approach
+assumes <span class="math inline">\(\text{Var}(Y_i) \propto
+E(Y_i)\)</span>.</p>
+</div>
+<div id="glms-versus-response-variable-transformations"
+class="section level2">
+<h2>GLMs Versus Response Variable Transformations</h2>
+<p>It is important to note that, for example, the GLM <span
+class="math display">\[
+  \log E(Y_i) = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots +
+\beta_kx_{ik}.
+\]</span> is <em>not</em> equivalent to a linear model with a
+transformed response, <span class="math display">\[
+  E[\log(Y_i)] = \beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \cdots +
+\beta_kx_{ik},
+\]</span> because <span class="math inline">\(\log[E(Y_i)] \neq
+E[\log(Y_i)]\)</span> (although in practice they can produce similar
+results).</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
