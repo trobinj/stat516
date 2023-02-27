@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Nonlinear Regression and Heteroscedasticity</title>
+
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Nonlinear Regression and
+Heteroscedasticity</h1>
+<h3 class="subtitle">Statistics 516, Homework 2</h3>
+
+</div>
+
+
+<p>You can also download a <a href="hw2.pdf">PDF</a> copy of this
+homework assignment.</p>
+<p>This homework assignment concerns specifying and making inferences
+from nonlinear regression models, and methods for accounting for
+heteroscedasticity.</p>
+<div id="instructions" class="section level2">
+<h2>Instructions</h2>
+<ol style="list-style-type: decimal">
+<li><p>This assignment is due by 11:59 PM on Wednesday, March 8th. Email
+me your homework at <a href="mailto:trjohns@uidaho.edu"
+class="email">trjohns@uidaho.edu</a>. Please submit your homework as a
+PDF file. Late assignments will be penalized by 10% if turned-in within
+12 hours of the deadline, and 10% more for each additional 12 hour
+interval.</p></li>
+<li><p>Your solutions must be <strong>typed</strong> and
+<strong>very</strong> neatly organized. I will not try to infer your
+solutions if they are not clearly presented. Mathematical expressions
+need not be typeset perfectly but they should be clear. You may
+substitute letters for symbols (e.g., b1 for <span
+class="math inline">\(\beta_1\)</span>) and use other shortcuts for
+mathematical notation if no meaning is lost.</p></li>
+<li><p>You must include with your solutions the relevant R output
+<strong>and</strong> R code that created them. Be sure that you provide
+sufficient code that I can replicate your results. Include both the code
+and the output within the text of your solutions (not in an appendix)
+using cut-and-paste. Edit your output so as to provide only that which
+is relevant to answering the questions. Use a monospace font (e.g.,
+Courier or Monoco) for R code and output for clarity. Do not use a
+monospace font for text that is not R code or output. You can use the R
+command <code>options(digits = 4)</code> (or some other small number of
+digits) to exert some control over the width of the output by reducing
+the number of digits shown by R.</p></li>
+<li><p>Plots from R Studio can be exported in various formats or
+directly to the clipboard using the “export” menu in the top-left part
+of the plot panel.</p></li>
+<li><p>It is permitted for you to discuss the homework with other
+students in the course. However your work including R code, output, and
+written answers must be your own.</p></li>
+<li><p>You are very welcome to ask me questions. I will be happy to
+clarify what I am asking in any of the questions and will provide you
+some help with solving problems by showing you how to work through
+similar problems from class. I will also be open to helping with any R
+problems. If you email me with a R question, it will usually be helpful
+for you to include enough of your R script so that I can replicate your
+issue. But please avoid saving all your questions for just before the
+assignment is due. I can usually respond quickly to questions, but I
+will sometimes need time to respond.</p></li>
+</ol>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="using-nls-for-linear-models" class="section level2">
+<h2>Using <code>nls</code> for Linear Models</h2>
+<p>Both the <code>nls</code> and the <code>lm</code> functions can
+estimate <em>linear</em> regression models, but their interfaces are
+different. The <code>lm</code> function allows us to specify a model
+<em>symbolically</em> whereas <code>nls</code> requires us to specify
+the model <em>mathematically</em>. In practice we usually use
+<code>lm</code> for linear models because it takes care of some of the
+intricacies of specifying the model (e.g., indicator variables and
+interactions), but in some cases it can be useful to use
+<code>nls</code>, particularly if the linear model you are using has a
+peculiar parameterization. But I think it can be a useful exercise for
+the student to have experience using <code>nls</code> to specify linear
+models.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+Here you will use <code>nls</code> to estimate some of the models you
+encountered in the previous homework assignment. Note that since all of
+these models are linear, you need not worry about specifying good
+starting values. You can safely specify values of zero for all starting
+values.</p>
+<ol style="list-style-type: decimal">
+<li><p>The last homework assignment considered a couple of
+parameterizations of models for the <code>Dopamine</code> data from the
+<strong>BSDA</strong> package. Below the models are estimated using the
+<code>lm</code> function. See the solutions for the previous homework to
+see how these models can be written mathematically.</p>
+<pre class="r"><code>library(BSDA)
+m1 &lt;- lm(dbh ~ group, data = Dopamine)
+summary(m1)$coefficients</code></pre>
+<pre><code>               Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)      164.27      12.59  13.052 4.059e-12
+grouppsychotic    78.33      19.90   3.936 6.587e-04</code></pre>
+<pre class="r"><code>m2 &lt;- lm(dbh ~ -1 + group, data = Dopamine)
+summary(m2)$coefficients</code></pre>
+<pre><code>                  Estimate Std. Error t value  Pr(&gt;|t|)
+groupnonpsychotic    164.3      12.59   13.05 4.059e-12
+grouppsychotic       242.6      15.41   15.74 8.320e-14</code></pre>
+<p>For each of these two models, use the <code>nls</code> function to
+estimate the model parameters once by specifying an indicator variable
+within the model itself (using the <code>==</code> operator), and again
+by using <em>either</em> the <code>ifelse</code> function <em>or</em>
+the <code>case_when</code> function from the <strong>dplyr</strong>
+package. Show the output of summary for all of these estimated models to
+verify that you obtained the same results (there may be minor
+differences several places after the decimal). Be sure the estimates are
+in the same order in the output of <code>summary</code>. This can be
+controlled by the order in which the starting values are specified to
+<code>nls</code>.</p></li>
+<li><p>Another problem in the last homework concerned the
+<code>rat</code> data from the <strong>ALA</strong> package and featured
+a couple of different models. Again, see the solutions for the previous
+homework to see how these models can be written mathematically.<a
+href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<pre class="r"><code>m &lt;- lm(weight ~ treatment + week + treatment:week, data = ALA::rat)
+summary(m)$coefficients</code></pre>
+<pre><code>                         Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)               52.8800      2.648 19.9694 2.758e-41
+treatmentthiouracil        4.8200      3.745  1.2871 2.004e-01
+treatmentthyroxin         -0.7943      4.127 -0.1925 8.477e-01
+week                      26.4800      1.081 24.4944 2.373e-50
+treatmentthiouracil:week  -9.4300      1.529 -6.1680 8.257e-09
+treatmentthyroxin:week     0.6629      1.685  0.3935 6.946e-01</code></pre>
+<pre class="r"><code>m &lt;- lm(weight ~ treatment:week, data = ALA::rat)
+summary(m)$coefficients</code></pre>
+<pre><code>                         Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)                 54.46     1.6141   33.74 1.829e-66
+treatmentcontrol:week       25.95     0.8248   31.47 6.268e-63
+treatmentthiouracil:week    18.13     0.8248   21.98 8.733e-46
+treatmentthyroxin:week      26.35     0.9207   28.62 3.247e-58</code></pre>
+<p>As in the previous problem, use the <code>nls</code> function to
+estimate the model parameters for each model once by specifying an
+indicator variable within the model itself (using the <code>==</code>
+operator), and again by using the <code>case_when</code> function from
+the <strong>dplyr</strong> package (the <code>ifelse</code> function
+could be used, but is cumbersome for more than two cases since it
+requires multiple and nested <code>ifelse</code> statements). Show the
+output of summary for all of these to verify that you obtained the same
+results.</p></li>
+</ol>
+</div>
+<div id="another-michaelis-menten-model" class="section level2">
+<h2>Another Michaelis-Menten Model</h2>
+<p>This problem features using a Michaelis-Menten model similar to that
+featured in class. The data frame <code>inhibitor</code> from the
+<strong>isdals</strong> package is from an experiment conducted by
+students in a biochemistry course at the University of Copenhagen.<a
+href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> The first
+few observations can be seen below.</p>
+<pre class="r"><code>library(isdals)
+data(inhibitor) # required for this package to make the data available
+head(inhibitor)</code></pre>
+<pre><code>  Iconc Sconc    RR
+1     0    10 0.542
+2     0    10 0.763
+3     0    25 1.178
+4     0    25 1.085
+5     0    75 2.265
+6     0    75 1.989</code></pre>
+<p>The variables <code>Sconc</code> and <code>RR</code> are the
+substrate concentration and reaction rate, respectively. As in a typical
+experiment using this model, assays were conducted at several substrate
+concentrations and the reaction rate was observed. But this experiment
+also featured introducing an inhibitor at concentrations of 0, 50, and
+100 <span class="math inline">\(\mu\)</span>moles. The variable
+<code>Iconc</code> is the inhibitor concentration. The plot below shows
+the raw data.</p>
+<pre class="r"><code>library(ggplot2)
+p &lt;- ggplot(inhibitor, aes(x = Sconc, y = RR)) + 
+  theme_minimal() + geom_point() + 
+  facet_wrap(~Iconc, labeller = label_both) + 
+  labs(x = &quot;Substrate Concentration (micro moles)&quot;,
+    y = &quot;Reaction Rate (units unknown)&quot;)
+plot(p)</code></pre>
+<p><img src="hw2_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
+Recall that the basic Michaelis-Menten regression model can be written
+as <span class="math display">\[
+  E(R_i) = \frac{\alpha s_i}{\lambda + s_i},
+\]</span> where <span class="math inline">\(R_i\)</span> and <span
+class="math inline">\(s_i\)</span> are the <span
+class="math inline">\(i\)</span>-th observation of reaction rate and
+substrate concentration, respectively, and <span
+class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\lambda\)</span> here denote the “asymptote” and
+“half-life” parameters, respectively. Here we want to model how the
+inhibitor concentration “interacts” with the substrate concentration in
+the sense that one or both parameters of this model depend on the
+concentration.</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a nonlinear regression model using the <code>nls</code>
+function that allows for each of the three levels of concentration to
+have a different value of the <span
+class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\lambda\)</span> parameters, similar to how the
+example from lecture allowed these parameters to be different for cells
+that were treated or untreated by puromycin. So your model should
+estimate <em>six</em> parameters which we can denote using subscripts as
+<span class="math inline">\(\alpha_0\)</span> and <span
+class="math inline">\(\lambda_0\)</span> for the control condition,
+<span class="math inline">\(\alpha_1\)</span> and <span
+class="math inline">\(\lambda_1\)</span> for a inhibitor concentration
+of 50 <span class="math inline">\(\mu\)</span>moles, and <span
+class="math inline">\(\alpha_2\)</span> and <span
+class="math inline">\(\lambda_2\)</span> for an inhibitor concentration
+of 100 <span class="math inline">\(\mu\)</span>moles. Essentially this
+is a case-wise model like that featured in class but with three cases
+rather than two. I <em>strongly</em> recommend that you use the
+<code>case_wise</code> function from the <strong>dplyr</strong> package
+to manage the case-wise structure of this model.<a href="#fn4"
+class="footnote-ref" id="fnref4"><sup>4</sup></a> Note that you should
+be able to “eyeball” (i.e., guess) the starting values from the plot of
+the raw data. Report the parameter estimates using <code>summary</code>.
+Finally, plot the model by producing a plot similar to that shown above
+but with curves depicting the estimated model.<a href="#fn5"
+class="footnote-ref" id="fnref5"><sup>5</sup></a></p></li>
+<li><p>Using <code>summary</code> you can make inferences about the six
+model parameters, but they do not provide comparisons of the parameters.
+Comparisons can be made using the <code>lincon</code> function from the
+<strong>trtools</strong> package. Use <code>lincon</code> to estimate
+the <em>difference</em> between the corresponding Michaelis-Menten
+parameters between the control condition and the condition with an
+inhibition concentration of 50 <span
+class="math inline">\(\mu\)</span>moles (i.e., <span
+class="math inline">\(\alpha_1 - \alpha_0\)</span> and <span
+class="math inline">\(\lambda_1 - \lambda_0\)</span>), and also between
+the control condition and the condition with an inhibition concentration
+of 100 <span class="math inline">\(\mu\)</span>moles (i.e., <span
+class="math inline">\(\alpha_2 - \alpha_0\)</span> and <span
+class="math inline">\(\lambda_2 - \lambda_0\)</span>).</p></li>
+<li><p>Now consider an alternative parameterization of the model where
+we write the model case-wise as <span class="math display">\[
+  E(R_i) = \frac{\alpha_0 s_i}{\lambda_0 + s_i}
+\]</span> if the <span class="math inline">\(i\)</span>-th observation
+is from the control condition with an inhibitor concentration of zero,
+<span class="math display">\[
+  E(R_i) = \frac{(\alpha_0 + \delta_1)s_i}{\lambda_0 + \tau_1 + s_i}
+\]</span> if the <span class="math inline">\(i\)</span>-th observation
+is from the condition with an inhibitor concentration of 50 <span
+class="math inline">\(\mu\)</span>moles, and <span
+class="math display">\[
+  E(R_i) = \frac{(\alpha_0 + \delta_2)s_i}{\lambda_0 + \tau_2 + s_i}
+\]</span> if the <span class="math inline">\(i\)</span>-th observation
+is from the condition with an inhibitor concentration of 100 <span
+class="math inline">\(\mu\)</span>moles The parameters of this model are
+related to previous parameterization. We can see that <span
+class="math inline">\(\alpha_1 = \alpha_0 + \delta_1\)</span>, <span
+class="math inline">\(\alpha_2 = \alpha_1 + \delta_2\)</span>, <span
+class="math inline">\(\lambda_1 = \lambda_0 + \tau_1\)</span>, and <span
+class="math inline">\(\lambda_2 = \lambda_0 + \tau_2\)</span>. Estimate
+this model using the <code>nls</code> and give the parameter estimates
+using <code>summary</code>. Again, I would strongly recommend you use
+the <code>case_wise</code> function here. Finally plot the model with
+the raw data like you did with the previous model. Your plot should look
+the same as that for the previous model.</p></li>
+<li><p>The model you estimated in the previous problem provides
+estimates of <span class="math inline">\(\delta_1 = \alpha_1 -
+\alpha_0\)</span>, <span class="math inline">\(\delta_2 = \alpha_2 -
+\alpha_0\)</span> as well as <span class="math inline">\(\tau_1 =
+\lambda_1 - \lambda_0\)</span> and <span class="math inline">\(\tau_2 =
+\lambda_2 - \lambda_0\)</span>, so you can use just the output from
+<code>summary</code> to make comparisons with the control condition. And
+you should find that these estimates agree with what you obtained using
+<code>lincon</code> and the first model you estimated. Now use
+<code>lincon</code> with the model you estimated in the previous problem
+to estimate <span class="math inline">\(\alpha_1 = \alpha_0 +
+\delta_1\)</span>, <span class="math inline">\(\alpha_2 = \alpha_0 +
+\delta_2\)</span>, <span class="math inline">\(\lambda_1 = \lambda_0 +
+\tau_1\)</span>, and <span class="math inline">\(\lambda_2 = \lambda_0 +
+\tau_2\)</span>. These inferences should agree with what you obtained
+from <code>summary</code> in the first problem.</p></li>
+<li><p>The models considered above treat the inhibitor concentration as
+a categorical variable (i.e., a factor with three levels). Another
+approach motivated by the biochemistry of the inhibitor is to let the
+<span class="math inline">\(\lambda\)</span> parameter depend on the
+inhibitor concentration so that <span class="math display">\[
+  E(R_i) = \frac{\alpha s_i}{\lambda_0(1 + h_i/\kappa) + s_i},
+\]</span> where <span class="math inline">\(h_i\)</span> is the
+inhibitor concentration for the <span
+class="math inline">\(i\)</span>-th observation. This model has three
+parameters: <span class="math inline">\(\alpha\)</span>, <span
+class="math inline">\(\lambda_0\)</span>, and <span
+class="math inline">\(\kappa\)</span>. Here the inhibitor does not
+affect the asymptote (<span class="math inline">\(\alpha\)</span>), but
+the half-life parameter is a linear function of the inhibitor
+concentration.<a href="#fn6" class="footnote-ref"
+id="fnref6"><sup>6</sup></a> Here <span
+class="math inline">\(\lambda_0\)</span> is the value of the half-life
+parameter when the inhibitor concentration is zero, and <span
+class="math inline">\(\kappa\)</span> is the inhibitor concentration
+necessary to double the half-life parameter from this value.<a
+href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> Estimate
+this nonlinear regression model and report the parameter estimates and
+their confidence intervals using <code>summary</code>.<a href="#fn8"
+class="footnote-ref" id="fnref8"><sup>8</sup></a> Finally plot the model
+with the raw data like you did with the previous models.</p></li>
+</ol>
+</div>
+<div id="aerial-survey-of-snow-geese" class="section level2">
+<h2>Aerial Survey of Snow Geese</h2>
+<p>The data frame <code>snowgeese</code> from the <strong>alr3</strong>
+package is from an unpublished study of aerial survey methods for
+estimating the number of snow geese (<em>Anser caerulescens</em>) in
+their summer range areas west of Hudson Bay in Canada.<a href="#fn9"
+class="footnote-ref" id="fnref9"><sup>9</sup></a> Counts were made
+separately by two observers from an aircraft that flew near flocks of
+geese. For comparison, an exact count of the number of geese in the
+flock was also obtained from a photograph. The first few observations
+can be seen below.</p>
+<pre class="r"><code>library(alr3)
+head(snowgeese)</code></pre>
+<pre><code>  photo obs1 obs2
+1    56   50   40
+2    38   25   30
+3    25   30   40
+4    48   35   45
+5    38   25   30
+6    22   20   20</code></pre>
+<p>Note: To install the <strong>alr3</strong> package use
+<code>install.packages("alr3", repos = "http://R-Forge.R-project.org")</code>
+since it is no longer available on the Comprehensive R Archive Network
+(CRAN) repository, which is the default for
+<code>install.packages</code>.<a href="#fn10" class="footnote-ref"
+id="fnref10"><sup>10</sup></a> The variable <code>photo</code> is the
+exact count of the number of geese in a flock while <code>obs1</code>
+and <code>obs2</code> are the visual counts from the two observers. To
+plot and model these data they need to be reshaped into “long form” so
+that we have one observer count in each row. This can be done as
+follows.</p>
+<pre class="r"><code>library(dplyr)
+library(tidyr)
+goosecount &lt;- snowgeese %&gt;% mutate(flock = 1:n()) %&gt;%
+  pivot_longer(c(obs1, obs2), names_to = &quot;observer&quot;, values_to = &quot;count&quot;)
+head(goosecount)</code></pre>
+<pre><code># A tibble: 6 × 4
+  photo flock observer count
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;    &lt;int&gt;
+1    56     1 obs1        50
+2    56     1 obs2        40
+3    38     2 obs1        25
+4    38     2 obs2        30
+5    25     3 obs1        30
+6    25     3 obs2        40</code></pre>
+<p>Here is a plot of these data.</p>
+<pre class="r"><code>library(ggplot2)
+p &lt;- ggplot(goosecount, aes(x = photo, y = count, color = observer)) + 
+  theme_minimal() + geom_point(alpha = 0.5) + 
+  labs(x = &quot;Photo Count&quot;, y = &quot;Observer Count&quot;, color = &quot;Observer&quot;) + 
+  theme(legend.position = c(0.2, 0.8))
+plot(p)</code></pre>
+<p><img src="hw2_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" />
+The goal here is to use a regression model to investigate the accuracy
+(or lack thereof) of using human observers in aerial surveys to estimate
+the size of snow geese flocks.</p>
+<ol style="list-style-type: decimal">
+<li><p>Here you will use a model like that used for the
+<code>biomass</code> data featured in lecture. The model can be written
+as <span class="math display">\[
+  E(Y_i) =
+  \begin{cases}
+\beta_1 x_i, &amp; \text{if the $i$-th observation is from observer 1},
+\\
+\beta_2 x_i, &amp; \text{if the $i$-th observation is from observer 2},
+  \end{cases}
+\]</span> where <span class="math inline">\(Y_i\)</span> is the observer
+count and <span class="math inline">\(x_i\)</span> is the photo count.
+See the lecture notes for how to specify this model. Estimate this model
+and give the parameter estimates using <code>summary</code>. Also plot
+the model with the raw data.</p></li>
+<li><p>Using the model you estimated estimated above, determine if there
+is a statistically significant difference between <span
+class="math inline">\(\beta_1\)</span> and <span
+class="math inline">\(\beta_2\)</span> using the <code>lincon</code>
+function. Also conduct a test of the null hypothesis <span
+class="math inline">\(\beta_1 = 1\)</span>, and then again for the null
+hypothesis <span class="math inline">\(\beta_2 = 1\)</span>. The reason
+why the null hypotheses <span class="math inline">\(\beta_1 = 1\)</span>
+and <span class="math inline">\(\beta_2 = 1\)</span> are interesting
+here is that if we can show that the slope of the line is greater/less
+than one then we can show that the observers tend to
+overestimate/underestimate the the size of a flock. You can test these
+hypotheses one of two ways: use the <code>lincon</code> function (hint:
+use the <code>b</code> argument for the <code>lincon</code> function and
+note that, for example, <span class="math inline">\(\beta_1 = 1\)</span>
+can also be written as <span class="math inline">\(\beta_1 - 1 =
+0\)</span>), or use a confidence interval to conduct the test. For each
+test be sure to state your conclusion for each test (i.e., reject or do
+not reject the null hypothesis). Use a significance level of <span
+class="math inline">\(\alpha\)</span> = 0.05.</p></li>
+<li><p>As with the <code>biomass</code> data, these data show
+considerable heteroscedasticity. As shown in lecture, use an iteratively
+weighted least squares approach assuming that <span
+class="math inline">\(\text{Var}(Y_i) \propto E(Y_i)^p\)</span> for some
+value of <span class="math inline">\(p\)</span> to determine your
+weights. Try different values of <span class="math inline">\(p\)</span>
+and decide what you think is a reasonable value of <span
+class="math inline">\(p\)</span> to address the heteroscedasticity based
+on a plot of the studentized residuals against the predicted values.
+Provide your residual plot for that value of <span
+class="math inline">\(p\)</span>, and then repeat what you did in the
+previous problem using estimates obtained using the iteratively weighted
+least squares with your choice of <span
+class="math inline">\(p\)</span>.</p></li>
+</ol>
+</div>
+<div id="iron-retention-in-rats" class="section level2">
+<h2>Iron Retention in Rats</h2>
+<p>The data frame <code>ironretention</code> from the
+<strong>trtools</strong> package is from a randomized experiment on the
+retention of two iron ions, ferrous (Fe2+) and ferric (Fe3+),
+administered to mice at three different concentrations (0.3, 1.2, and
+10.2 millimolars).<a href="#fn11" class="footnote-ref"
+id="fnref11"><sup>11</sup></a> The response variable is the percent of
+iron retained. The data are shown in the plot below.<a href="#fn12"
+class="footnote-ref" id="fnref12"><sup>12</sup></a></p>
+<pre class="r"><code>library(trtools)
+library(ggplot2)
+p &lt;- ggplot(ironretention, aes(x = factor(concentration), y = retention, color = ion)) +
+  geom_point(alpha = 0.5, position = position_dodge(width = 0.25)) + 
+  labs(x = &quot;Concentration (millimolars)&quot;, 
+    y = &quot;Percent Iron Retained&quot;, color = &quot;Iron Ion&quot;) + 
+  theme_minimal() + theme(legend.pos = c(0.9, 0.8))
+plot(p)</code></pre>
+<p><img src="hw2_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" />
+Some descriptive statistics for these data can be obtained as
+follows.</p>
+<pre class="r"><code>library(dplyr)
+ironretention %&gt;% group_by(concentration, ion) %&gt;% 
+  summarize(mean = mean(retention), sd = sd(retention), obs = n())</code></pre>
+<pre><code># A tibble: 6 × 5
+# Groups:   concentration [3]
+  concentration ion      mean    sd   obs
+          &lt;dbl&gt; &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1           0.3 ferric  11.8   7.03    18
+2           0.3 ferrous 12.6   6.08    18
+3           1.2 ferric   8.20  5.45    18
+4           1.2 ferrous  9.63  6.69    18
+5          10.2 ferric   3.70  2.03    18
+6          10.2 ferrous  5.94  2.81    18</code></pre>
+<p>Notice that the variability of the observations of percent iron
+retention tends to be higher when the mean retention is higher.</p>
+<p>In what follows we will treat concentration as a categorical
+variable. We can see that it is a numeric variable in the data frame
+using <code>str</code> (structure).</p>
+<pre class="r"><code>str(ironretention)</code></pre>
+<pre><code>&#39;data.frame&#39;:   108 obs. of  3 variables:
+ $ retention    : num  2.71 6.38 9.56 10.62 17.9 ...
+ $ concentration: num  0.3 0.3 0.3 0.3 0.3 0.3 1.2 1.2 1.2 1.2 ...
+ $ ion          : chr  &quot;ferrous&quot; &quot;ferrous&quot; &quot;ferrous&quot; &quot;ferrous&quot; ...</code></pre>
+<p>We can use the following code to create a variable <code>concf</code>
+which is a factor created from the variable
+<code>concentration</code>.</p>
+<pre class="r"><code>ironretention$concf &lt;- factor(ironretention$concentration)</code></pre>
+<p>That <code>concf</code> is a factor can be confirmed by using
+<code>str(ironretention)</code>.<a href="#fn13" class="footnote-ref"
+id="fnref13"><sup>13</sup></a> In what follows you will start with the
+following linear model estimated by (ordinary/unweighted) least
+squares.</p>
+<pre class="r"><code>m &lt;- lm(retention ~ concf + ion + concf:ion, data = ironretention)
+summary(m)$coefficients</code></pre>
+<pre><code>                     Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)           11.7500      1.265  9.2882 3.061e-15
+concf1.2              -3.5461      1.789 -1.9821 5.015e-02
+concf10.2             -8.0511      1.789 -4.5002 1.805e-05
+ionferrous             0.8894      1.789  0.4972 6.201e-01
+concf1.2:ionferrous    0.5389      2.530  0.2130 8.318e-01
+concf10.2:ionferrous   1.3483      2.530  0.5329 5.952e-01</code></pre>
+<p>Note that this model can be written as <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \beta_3 x_{i3} +
+\beta_4 x_{i4} + \beta_5 x_{i5},
+\]</span> where <span class="math inline">\(Y_i\)</span> is the <span
+class="math inline">\(i\)</span>-th observation of iron retention, <span
+class="math display">\[
+  x_{i1} =
+  \begin{cases}
+    1, &amp; \text{if the $i$-th observation of concentration is 1.2},
+\\
+    0, &amp; \text{otherwise},
+  \end{cases}
+\]</span> <span class="math display">\[
+  x_{i2} =
+  \begin{cases}
+    1, &amp; \text{if the $i$-th observation of concentration is 10.2},
+\\
+    0, &amp; \text{otherwise},
+  \end{cases}
+\]</span> <span class="math display">\[
+  x_{i3} =
+  \begin{cases}
+    1, &amp; \text{if the $i$-th observation is iron ion is ferrous}, \\
+    0, &amp; \text{otherwise},
+  \end{cases}
+\]</span> <span class="math inline">\(x_{i4} = x_{i1}x_{i3}\)</span> and
+<span class="math inline">\(x_{i5} = x_{i2}x_{i3}\)</span>. So the model
+can be written case-wise as <span class="math display">\[
+  E(Y_i) =
+  \begin{cases}
+  \beta_0, &amp; \text{if concentration is 0.3 and the ion is ferric},
+\\
+  \beta_0 + \beta_1, &amp; \text{if the concentration is 1.2 and the ion
+is ferric}, \\
+  \beta_0 + \beta_2, &amp; \text{if the concentration is 10.2 and the
+ion is ferric}, \\
+  \beta_0 + \beta_3, &amp; \text{if concentration is 0.3 and the ion is
+ferrous}, \\
+  \beta_0 + \beta_1 + \beta_3 + \beta_4, &amp; \text{if the
+concentration is 1.2 and the ion is ferrous}, \\
+  \beta_0 + \beta_2 + \beta_3 + \beta_5, &amp; \text{if the
+concentration is 10.2 and the ion is ferrous}.
+  \end{cases}
+\]</span> This model specifies an interaction between concentration and
+ion so that the difference in the expected iron retention between the
+two ions can be different at each of the three concentrations.<a
+href="#fn14" class="footnote-ref" id="fnref14"><sup>14</sup></a></p>
+<ol style="list-style-type: decimal">
+<li><p>Based on the model defined above, use either the
+<code>contrast</code> function from the <strong>trtools</strong> package
+or functions from the <strong>emmeans</strong> package to estimate (a)
+the expected iron retention at each of the six combinations of
+concentration and ion and (b) the <em>difference</em> in the expected
+iron retention between the two ions at each of the three concentrations
+(i.e., the difference between ferrous and ferric at concentrations of
+0.3, 1.2, and 10.2 millimolars).</p></li>
+<li><p>Use a residual plot to check for heteroscedasticity. Comment
+briefly on if you believe there is evidence of heteroscedasticity and
+why. Be sure to include your plot.</p></li>
+<li><p>In models where the response variable is a percent so that <span
+class="math inline">\(0 \le Y_i \le 100\)</span> as it is here, it has
+been suggested that an appropriate variance structure might be <span
+class="math display">\[
+  \text{Var}(Y_i) \propto [E(Y_i)/100]^p[1-E(Y_i)/100]^p,
+\]</span> where <span class="math inline">\(p \ge 1\)</span>.<a
+href="#fn15" class="footnote-ref" id="fnref15"><sup>15</sup></a> Use an
+<em>iteratively weighted least squares</em> algorithm similar to that we
+used in class, but specify your weights so that they are the
+<em>reciprocal</em> of <span
+class="math inline">\([E(Y_i)/100]^p[1-E(Y_i)/100]^p\)</span> where each
+<span class="math inline">\(E(Y_i)\)</span> is estimated using <span
+class="math inline">\(\hat{y}_i\)</span> so that <span
+class="math display">\[
+  w_i = \frac{1}{(\hat{y}_i/100)^p(1-\hat{y}_i/100)^p}.
+\]</span> Be careful that you compute the weights correctly.<a
+href="#fn16" class="footnote-ref" id="fnref16"><sup>16</sup></a> Try
+this for values of <span class="math inline">\(p\)</span> of 1, 2, 3, 4,
+and 5.<a href="#fn17" class="footnote-ref"
+id="fnref17"><sup>17</sup></a> For each of <span
+class="math inline">\(p\)</span> produce a plot of the studentized
+residuals against the predicted values. Comment briefly on what you
+might think might be an appropriate value (or values) of <span
+class="math inline">\(p\)</span> to produce appropriate weights to
+address any heteroscedasticity. Then using what you believe is the best
+value of <span class="math inline">\(p\)</span> to address any
+heteroscedasticity, estimate the model using weighted least squares
+based on that value of <span class="math inline">\(p\)</span> and repeat
+what you did in the first problem. Compare the estimates and standard
+errors of these results with those you did before, and comment briefly
+on if or how they changed.</p></li>
+<li><p>Since the explanatory variables are categorical and there are
+multiple observations per treatment condition, another approach to
+dealing with the heteroscedasticity is to let the variance vary over the
+treatment conditions so that <span class="math display">\[
+\text{Var}(Y_i) =
+  \begin{cases}
+  \sigma_1^2, &amp; \text{if concentration is 0.3 and the ion is
+ferric}, \\
+  \sigma_2^2, &amp; \text{if the concentration is 1.2 and the ion is
+ferric}, \\
+  \sigma_3^2, &amp; \text{if the concentration is 10.2 and the ion is
+ferric}, \\
+  \sigma_4^2, &amp; \text{if concentration is 0.3 and the ion is
+ferrous}, \\
+  \sigma_5^2, &amp; \text{if the concentration is 1.2 and the ion is
+ferrous}, \\
+  \sigma_6^2, &amp; \text{if the concentration is 10.2 and the ion is
+ferrous}.
+\end{cases}
+\]</span> If these variances were known then the weights for the
+observations in each treatment condition would be the reciprocals of
+these variances (e.g., the weight for the observations in the first
+treatment condition would be <span class="math inline">\(w_i =
+1/\sigma_1^2\)</span>). These variances are not known but can be
+estimated from the data. Use the sample variances from the six treatment
+conditions (i.e., <span class="math inline">\(s_1^2, s_2^2, \dots,
+s_6^2\)</span>) to create weights and estimate the model using weighted
+least squares with these weights. Repeat what you did in the first
+problem and comment briefly on if and how your inferences
+changed.</p></li>
+</ol>
+</div>
+<div id="modeling-the-biopotency-of-methionine-in-turkeys"
+class="section level2">
+<h2>Modeling the Biopotency of Methionine in Turkeys</h2>
+<p><strong>Note</strong>: This problem is extra credit for students in
+Stat 436, but required for students in Stat 516.</p>
+<p>This problem concerns data from a study of the effects of varying
+doses and sources of methionine (an essential amino acid) on the growth
+of young turkeys.<a href="#fn18" class="footnote-ref"
+id="fnref18"><sup>18</sup></a> The data are not, to my knowledge,
+included in an existing R package, but they can be entered into a data
+frame called <code>turkeys</code> as follows.</p>
+<pre class="r"><code>turkeys &lt;- data.frame(
+  weight = c(674, 764, 795, 796, 826, 782, 834, 836, 830),
+  pens = c(10, 5, 2, 2, 5, 5, 2, 2, 5),
+  dosea = c(c(0, 0.12, 0.22, 0.32, 0.44), rep(0, 4)),
+  doseb = c(rep(0, 5), c(0.12, 0.22, 0.32, 0.44))
+)
+turkeys</code></pre>
+<pre><code>  weight pens dosea doseb
+1    674   10  0.00  0.00
+2    764    5  0.12  0.00
+3    795    2  0.22  0.00
+4    796    2  0.32  0.00
+5    826    5  0.44  0.00
+6    782    5  0.00  0.12
+7    834    2  0.00  0.22
+8    836    2  0.00  0.32
+9    830    5  0.00  0.44</code></pre>
+<p>Each observation of <code>weight</code> is the average weight (in
+grams) of a given number of <code>pens</code>, where each pen contained
+15 turkeys. The turkeys in a given pen were given a dose of one of two
+sources of methionine, with the doses recorded as the percent of the
+total diet. Note that 10 pens were not given any additional methionine.
+The researchers varied the number of pens for a given dose as part of an
+optimal experimental design. To plot these data it is useful to create a
+couple of new variables.</p>
+<pre class="r"><code>library(dplyr)
+turkeys &lt;- turkeys %&gt;% 
+  mutate(dose = dosea + doseb) %&gt;%
+  mutate(source = case_when(
+    dose == 0 ~ &quot;none&quot;,
+    dosea &gt; 0 ~ &quot;a&quot;,
+    doseb &gt; 0 ~ &quot;b&quot;)
+  )
+turkeys</code></pre>
+<pre><code>  weight pens dosea doseb dose source
+1    674   10  0.00  0.00 0.00   none
+2    764    5  0.12  0.00 0.12      a
+3    795    2  0.22  0.00 0.22      a
+4    796    2  0.32  0.00 0.32      a
+5    826    5  0.44  0.00 0.44      a
+6    782    5  0.00  0.12 0.12      b
+7    834    2  0.00  0.22 0.22      b
+8    836    2  0.00  0.32 0.32      b
+9    830    5  0.00  0.44 0.44      b</code></pre>
+<pre class="r"><code>library(ggplot2)
+p &lt;- ggplot(turkeys, aes(x = dose, y = weight, color = source)) + 
+  theme_minimal() + geom_point(aes(size = pens)) + 
+  scale_size(breaks = c(2, 5, 10)) + 
+  labs(x = &quot;Dose of Methionine (% of diet)&quot;, y = &quot;Mean Weight (g)&quot;, 
+    color = &quot;Source&quot;, size = &quot;Number of Pens&quot;)
+plot(p)</code></pre>
+<p><img src="hw2_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" />
+Here you will consider modeling expected mean weight as a function of
+dose and source of methionine, while also accounting the number of pens
+used for mean weight. The basic model you will be using has the form
+<span class="math display">\[
+  E(W) = \alpha + (\gamma - \alpha)2^{-d/\lambda},
+\]</span> where <span class="math inline">\(W\)</span> is the (mean)
+weight and <span class="math inline">\(d\)</span> is dose of methionine.
+Here <span class="math inline">\(\alpha\)</span> is the asymptote
+representing the expected weight approached as <span
+class="math inline">\(d\)</span> is increases, <span
+class="math inline">\(\gamma\)</span> is the expected weight when no
+methionine is given, and <span class="math inline">\(\lambda\)</span> is
+a “half-life” parameter interpreted as the dose of methionine that
+results in an expected weight half way between <span
+class="math inline">\(\gamma\)</span> and <span
+class="math inline">\(\alpha\)</span> so that if <span
+class="math inline">\(d = \lambda\)</span> then <span
+class="math inline">\(E(W) = (\alpha + \gamma)/2\)</span>. But here you
+will be extending this model to account for modeling different sources
+of methionine. The assumption will be that if the biopotency of
+methionine varies depending on the source, then this will be reflected
+in differences in the value of <span
+class="math inline">\(\lambda\)</span>.</p>
+<p>Because the number of pens used to compute the average weight varied
+by dose, the variance of the average weight will be inversely
+proportional to the number of pens — i.e., <span
+class="math inline">\(\text{Var}(Y_i) \propto 1/n_i\)</span> where <span
+class="math inline">\(n_i\)</span> is the number of pens averaged for
+the <span class="math inline">\(i\)</span>-th observation (similar to
+the example from lecture on 2/17). So in what follows use the number of
+pens to specify weights to estimate the model parameters using
+<em>weighted</em> least squares.</p>
+<ol style="list-style-type: decimal">
+<li><p>Consider the regression model <span class="math display">\[
+  E(W_i) =
+  \begin{cases}
+\gamma, &amp; \text{if no methionine was given}, \\
+\alpha + (\gamma - \alpha)2^{-d_i/\lambda_a}, &amp;
+   \text{if methionine was given from source $a$}, \\
+\alpha + (\gamma - \alpha)2^{-d_i/\lambda_b}, &amp;
+   \text{if methionine was given from source $b$}.
+  \end{cases}
+\]</span> Note that if the dose is zero then the expected weight is
+<span class="math inline">\(\gamma\)</span>, since <span
+class="math inline">\(\alpha + (\gamma - \alpha)2^{-d/\lambda} =
+\gamma\)</span> if <span class="math inline">\(d = 0\)</span>. Estimate
+this model using the <code>nls</code> function and report the parameter
+estimates by giving the output from <code>summary</code>.<a href="#fn19"
+class="footnote-ref" id="fnref19"><sup>19</sup></a> I would recommend
+using the <code>case_when</code> function from the
+<strong>dplyr</strong> package to specify this model in
+<code>nls</code>. Plot the model with the raw data. Finally, use the
+<code>lincon</code> function to determine if there is a statistically
+significant difference between <span
+class="math inline">\(\lambda_a\)</span> and <span
+class="math inline">\(\lambda_b\)</span>, meaning that the biopotency of
+methionine does depend on the source (assume a significance level of
+<span class="math inline">\(\alpha\)</span> = 0.05).</p></li>
+<li><p>Another way to write the model that avoids having to explicitly
+write the model case-wise is <span class="math display">\[
+  E(W_i) = \alpha + (\gamma - \alpha)2^{-(a_i/\lambda_a +
+b_i/\lambda_b)},
+\]</span> where <span class="math inline">\(a_i\)</span> and <span
+class="math inline">\(b_i\)</span> are the doses of methionine from
+sources <span class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>, respectively (i.e., these are the
+variables <code>dosea</code> and <code>doseb</code> in the data frame).
+Estimate this model using the <code>nls</code> function and report the
+parameter estimates using the output from <code>summary</code>. You
+should get the same results as you obtained in the previous
+problem.</p></li>
+</ol>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>I have sometimes toyed with the idea of
+<em>starting</em> the class by teaching students to use <code>nls</code>
+rather than <code>lm</code> to help them better appreciate and
+understand what <code>lm</code> is doing for them.<a href="#fnref1"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Note that here you may want to use <code>ALA::rat</code>
+to refer to the data frame because there is a data frame of the same
+name in the <strong>alr3</strong> package which you will be using in a
+later problem. If you load the <strong>alr3</strong> package after the
+<strong>ALA</strong> package during the same R session then you run into
+a name conflict. Using <code>ALA::rat</code> avoids that problem.<a
+href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Source: Ekstrom, C. T. &amp; Sorensen, H. (2010).
+<em>Introduction to statistical data analysis for the life
+sciences</em>. CRC Press.<a href="#fnref3"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>It could, in principle, be done using indicator
+variables or even the <code>ifelse</code> function, but the code would
+be more complex.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>A plot like this is a good way to determine if you made
+significant mistake in estimating your model. If you do not produce
+curves that look consistent with the raw data you may have made a
+mistake.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>We could alternatively write the model as <span
+class="math display">\[
+  E(R_i) = \frac{\alpha s_i}{\lambda_i + s_i},
+\]</span> where <span class="math inline">\(\lambda_i = \lambda_0(1 +
+h_i/\kappa)\)</span> to show how the half-life parameter <span
+class="math inline">\(\lambda_i\)</span> is now indexed by the
+observation since it depends on the inhibitor concentration, <span
+class="math inline">\(h_i\)</span>.<a href="#fnref6"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>To see why we can interpret <span
+class="math inline">\(\kappa\)</span> this way, note that if <span
+class="math inline">\(h_i = \kappa\)</span> then <span
+class="math inline">\(\lambda_0(1 + h_i/\kappa) = 2\lambda_0\)</span>.<a
+href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>To specify your starting values try the following
+strategy. The <span class="math inline">\(\alpha\)</span> parameter is
+the asymptote for the curve, regardless of the inhibitor concentration,
+so you can guess this from the plot of the raw data. And because <span
+class="math inline">\(\lambda_0\)</span> is the value of the half-life
+parameter when the concentration is zero, you can guess this from the
+plot or use an estimate from one of the previous models. For <span
+class="math inline">\(\kappa\)</span> try guessing the value of the
+half-life parameter when the inhibitor concentration is at, say, <span
+class="math inline">\(h_i = 50\)</span>, or use an estimate from one of
+the previous models. Call this guess/estimate <span
+class="math inline">\(\hat\lambda_1\)</span>. We have that <span
+class="math inline">\(\lambda_1 = \lambda_0(1 + h/\kappa)\)</span>.
+Replace <span class="math inline">\(\lambda_0\)</span> and <span
+class="math inline">\(\lambda_1\)</span> in that expression with
+guesses/estimates as described above and then solve for <span
+class="math inline">\(\kappa\)</span> to get a starting value for that
+parameter.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
+<li id="fn9"><p>Source: Cook, R. D. &amp; Jacobsen, J. O. (1978).
+<em>Analysis of the 1977 West Hudson Bay snow goose surveys</em>.
+Unpublished report, Canadian Wildlife Service.<a href="#fnref9"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn10"><p>The <strong>alr3</strong> package was replaced with a
+newer package, <strong>alr4</strong>, but unfortunately the
+<code>snowgeese</code> data are not included with this newer package.<a
+href="#fnref10" class="footnote-back">↩︎</a></p></li>
+<li id="fn11"><p>Rice, J. A. (1998). <em>Mathematical statistics and
+data analysis</em>. Pacific Grove, CA: Wadsworth &amp; Brook/Cole.<a
+href="#fnref11" class="footnote-back">↩︎</a></p></li>
+<li id="fn12"><p>Note the use of the <code>position</code> argument in
+<code>geom_point</code>. Without that argument the points denoting the
+ion would be in the same position over the abscissa. But by specifying
+<code>position = position_dodge(width = 0.25)</code> we “dodge” the
+points by moving them slightly sideways (with the amount determined by
+the <code>width</code> argument to <code>position_dodge</code>).<a
+href="#fnref12" class="footnote-back">↩︎</a></p></li>
+<li id="fn13"><p>Notice that the variable <code>ion</code> is not a
+factor but is instead a <em>character</em> (<code>chr</code>) variable
+(i.e., a word or phrase, what is sometimes called a “string”). A
+character variable is not treated quite the same as a factor in R, and
+sometimes this is an issue, but most regression modeling functions will
+automatically convert a character variable to a factor when they are
+used in the model formula so the distinction is not generally a concern
+unless we try to use functions to manipulate the variable that are
+specifically designed for factors (e.g., <code>level</code>,
+<code>reorder</code>, and the functions in the <strong>forcats</strong>
+package).<a href="#fnref13" class="footnote-back">↩︎</a></p></li>
+<li id="fn14"><p>Models with interactions can often be confusing and
+intimidating. The parameterization that is used by default is selected
+largely for computational convenience, and to some degree by tradition.
+Perhaps a simpler way to look at this model is with an alternative
+parameterization.</p>
+<pre class="r"><code>m &lt;- lm(retention ~ -1 + concf:ion, data = ironretention)
+summary(m)$coefficients</code></pre>
+<pre><code>                     Estimate Std. Error t value  Pr(&gt;|t|)
+concf0.3:ionferric     11.750      1.265   9.288 3.061e-15
+concf1.2:ionferric      8.204      1.265   6.485 3.220e-09
+concf10.2:ionferric     3.699      1.265   2.924 4.259e-03
+concf0.3:ionferrous    12.639      1.265   9.991 8.511e-17
+concf1.2:ionferrous     9.632      1.265   7.614 1.386e-11
+concf10.2:ionferrous    5.937      1.265   4.693 8.400e-06</code></pre>
+<p>Here there is effectively an indicator variable (formed as the
+product of two indicator variables) for each combination of
+concentration and ion, so the model can be written case-wise as <span
+class="math display">\[
+  E(Y_i) =
+  \begin{cases}
+  \beta_1, &amp; \text{if concentration is 0.3 and the ion is ferric},
+\\
+  \beta_2, &amp; \text{if the concentration is 1.2 and the ion is
+ferric}, \\
+  \beta_3, &amp; \text{if the concentration is 10.2 and the ion is
+ferric}, \\
+  \beta_4, &amp; \text{if concentration is 0.3 and the ion is ferrous},
+\\
+  \beta_5, &amp; \text{if the concentration is 1.2 and the ion is
+ferrous}, \\
+  \beta_6, &amp; \text{if the concentration is 10.2 and the ion is
+ferrous}.
+  \end{cases}
+\]</span> Note that this is the <em>same</em> model, just written (i.e.,
+parameterized) differently. But this parameterization shows that a model
+with two categorical variables and an interaction between them
+effectively treats each distinct combination of categories as a
+category, so we can view this model as one with <em>one</em> factor
+formed by the six combinations of the levels of two factors. Fortunately
+when we are using functions like <code>contrast</code> or
+<code>emmeans</code> for inferences we do not need to be too concerned
+about the specific parameterization.<a href="#fnref14"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn15"><p>If <span class="math inline">\(Y_i\)</span> is a
+<em>proportion</em> so that <span class="math inline">\(0 \le Y_i \le
+1\)</span>, the division by 100 is omitted so that <span
+class="math inline">\(\text{Var}(Y_i) \propto
+E(Y_i)^p[1-E(Y_i)]^p\)</span>.<a href="#fnref15"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn16"><p>Because these weights are a more complicated function
+of the predicted values you might find it useful to compute the weights
+in a couple of steps where you first save the predicted values to the
+data frame and then you compute the weights using the <code>with</code>
+function so that you do not need to write
+<code>ironretention$yhat</code> to reference the predicted values. Here
+is how that would look like for the example in class on 2/24.</p>
+<pre class="r"><code>daphniastrat$yhat &lt;- predict(m)              # save predicted values
+daphniastrat$w &lt;- with(daphniastrat, 1/yhat) # compute weights</code></pre>
+<p>Note that you will compute the weights differently here and not use
+<code>1/yhat</code>.<a href="#fnref16"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn17"><p>Although we are only considering integer values of
+<span class="math inline">\(p\)</span>, it could be any real number
+(e.g., <span class="math inline">\(p\)</span> = 1.5).<a href="#fnref17"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn18"><p>Source: Noll, S. L., Waibel, P. E., Cook, R. D., &amp;
+Witmer, J. A. (1984). Biopotency of methionine sources for young
+turkeys. <em>Poultry Science</em>, <em>63</em>, 2458–2470.<a
+href="#fnref18" class="footnote-back">↩︎</a></p></li>
+<li id="fn19"><p>The models you are estimated here may be somewhat
+sensitive to specifying good starting values. If you have difficulties I
+would recommend that you start by <em>not</em> estimating <span
+class="math inline">\(\lambda_a\)</span> and <span
+class="math inline">\(\lambda_b\)</span> but instead insert values in
+the model based on guessing their values from the plot (similar to how I
+guessed the value of the <span class="math inline">\(h\)</span>
+parameter for the <code>ToothGrowth</code> data from lecture). Then use
+the estimates of <span class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\gamma\)</span> you get as starting values for
+those parameters, and your guesses of <span
+class="math inline">\(\lambda_a\)</span> and <span
+class="math inline">\(\lambda_b\)</span> as starting values for those
+parameters, and proceed to estimate the model with all four unknown
+parameters.<a href="#fnref19" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
