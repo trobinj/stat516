@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.8.12)  27 FEB 2023 13:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2022.8.12)  28 FEB 2023 13:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -578,7 +578,7 @@ input line 641.
 (pdftex.def)             Requested size: 469.75941pt x 231.1982pt.
 [8 <./hw2_files/figure-latex/unnamed-chunk-8-1.pdf>]
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-685.
+684.
 (/usr/share/texmf/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 ) [9] [10] [11]
@@ -586,13 +586,13 @@ File: ts1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 File: hw2_files/figure-latex/unnamed-chunk-16-1.pdf Graphic file (type pdf)
 <use hw2_files/figure-latex/unnamed-chunk-16-1.pdf>
 Package pdftex.def Info: hw2_files/figure-latex/unnamed-chunk-16-1.pdf  used on
- input line 977.
+ input line 976.
 (pdftex.def)             Requested size: 469.76523pt x 233.39601pt.
 [12 <./hw2_files/figure-latex/unnamed-chunk-16-1.pdf>] [13] (./hw2.aux) ) 
 Here is how much of TeX's memory you used:
  14228 strings out of 478287
  224280 string characters out of 5849289
- 564762 words of memory out of 5000000
+ 563762 words of memory out of 5000000
  31891 multiletter control sequences out of 15000+600000
  543905 words of font info for 188 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -617,7 +617,7 @@ mf/fonts/type1/public/lm/lmri8.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy
 s/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtk10.pfb>
 </usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type
 1/public/lm/lmtt8.pfb></usr/share/texmf/fonts/type1/public/lm/lmtti10.pfb>
-Output written on hw2.pdf (13 pages, 511371 bytes).
+Output written on hw2.pdf (13 pages, 511316 bytes).
 PDF statistics:
  352 PDF objects out of 1000 (max. 8388607)
  269 compressed objects within 3 object streams
