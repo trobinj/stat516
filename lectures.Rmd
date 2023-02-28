@@ -75,7 +75,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Introduction to Poisson regression](lecture-02-27-2023.html). The [second homework assignment](hw2.html) is now available.
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Interpretation of Poisson regression models using rate ratios](lecture-03-01-2023.html).
 
 `r i <- i + 1; d[i]` 
  

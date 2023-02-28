@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Wednesday, Mar 1</title>
+
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Wednesday, Mar 1</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-03-01-2023.pdf">PDF</a> copy
+of this lecture.</p>
+<div id="parameter-interpretation-with-log-link-functions"
+class="section level2">
+<h2>Parameter Interpretation With Log Link Functions</h2>
+<p>A GLM with a log link function, like a Poisson regression model, has
+the form <span class="math display">\[
+  \log E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots +
+\beta_k x_{ik},
+\]</span> or <span class="math display">\[
+  E(Y_i) = \exp(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots +
+\beta_k x_{ik}),
+\]</span></p>
+<p>which can also be written as a “multiplicative model” of the form
+<span class="math display">\[
+  E(Y_i) = e^{\beta_0}e^{\beta_1 x_{i1}}e^{\beta_2 x_{i2}} \cdots
+e^{\beta_k x_{ik}}.
+\]</span> Recall that <span class="math inline">\(e^{a+b} =
+e^ae^b\)</span>. For this reason the parameters <span
+class="math inline">\(\beta_1, \beta_2, \dots, \beta_k\)</span> or
+linear functions thereof are not interpreted the same way as in the
+<em>additive</em> model <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k
+x_{ik},
+\]</span> but they are still relatively easy to interpret in terms of
+<em>multiplicative</em> rather than <em>additive</em> changes in <span
+class="math inline">\(E(Y)\)</span>.</p>
+</div>
+<div id="rate-ratios-quantitative-explanatory-variable"
+class="section level2">
+<h2>Rate Ratios (Quantitative Explanatory Variable)</h2>
+<p>Consider the model <span class="math display">\[
+    \log E(Y) = \beta_0 + \beta_1 x,
+\]</span> and let <span class="math display">\[
+    \log E(Y_a) = \beta_0 + \beta_1 (x+1) \ \ \ \text{and} \ \ \ \log
+E(Y_b) = \beta_0 + \beta_1 x
+\]</span> for an arbitrary value of <span
+class="math inline">\(x\)</span>. Then the <em>difference</em> in the
+log of the expected values is <span class="math display">\[
+    \log E(Y_a) - \log E(Y_b) = \underbrace{\beta_0 + \beta_1
+(x+1)}_{\log E(Y_a)} - \underbrace{(\beta_0 + \beta_1 x)}_{\log E(Y_b)}
+= \beta_1,
+\]</span> meaning that <span class="math inline">\(\beta_1\)</span> is
+the <em>additive</em> change in <span class="math inline">\(\log
+E(Y)\)</span> per unit increase in <span
+class="math inline">\(x\)</span>.</p>
+<p>Now consider the same model written as <span class="math display">\[
+    E(Y) = e^{\beta_0}e^{\beta_1 x},
+\]</span> and let <span class="math display">\[
+    E(Y_a) = e^{\beta_0}e^{\beta_1 (x+1)} \ \ \ \text{and} \ \ \
+    E(Y_b) = e^{\beta_0}e^{\beta_1 x}
+\]</span> for an arbitrary value of <span
+class="math inline">\(x\)</span>. Then the <em>ratio</em> of the
+expected values is <span class="math display">\[
+    \frac{E(Y_a)}{E(Y_b)} = \frac{\overbrace{e^{\beta_0}e^{\beta_1
+(x+1)}}^{E(Y_a)}}{\underbrace{e^{\beta_0}e^{\beta_1 x}}_{E(Y_b)}} =
+\frac{e^{\beta_0}e^{\beta_1 x}e^{\beta_1}}{e^{\beta_0}e^{\beta_1 x}} =
+e^{\beta_1} \Rightarrow E(Y_a) = E(Y_b)e^{\beta_1},
+\]</span> so that <span class="math inline">\(E(Y)\)</span> changes by a
+<em>factor</em> of <span class="math inline">\(e^{\beta_1}\)</span> per
+unit increase in <span class="math inline">\(x\)</span>. The
+“exponentiated” parameter, <span
+class="math inline">\(e^{\beta_1}\)</span>, is sometimes called a “rate
+ratio” because it is often the ratio of two rates when the counts are
+per unit space, time, or something else.</p>
+<p><strong>Example</strong>: Consider again the
+<code>ceriodaphniastrain</code> data and model.</p>
+<pre class="r"><code>library(trtools)
+ceriodaphniastrain$strainf &lt;- factor(ceriodaphniastrain$strain, 
+  labels = c(&quot;a&quot;,&quot;b&quot;))
+m &lt;- glm(count ~ concentration + strainf, 
+  family = poisson, data = ceriodaphniastrain) # log link is default
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>              Estimate Std. Error z value   Pr(&gt;|z|)  2.5 %  97.5 %
+(Intercept)      4.455    0.03914 113.819  0.000e+00  4.377  4.5306
+concentration   -1.543    0.04660 -33.111 2.057e-240 -1.635 -1.4522
+strainfb        -0.275    0.04837  -5.684  1.313e-08 -0.370 -0.1803</code></pre>
+<pre class="r"><code>exp(cbind(coef(m), confint(m))) # coef extracts the parameter estimates only</code></pre>
+<pre><code>                        2.5 % 97.5 %
+(Intercept)   86.0252 79.6152 92.817
+concentration  0.2137  0.1950  0.234
+strainfb       0.7596  0.6907  0.835</code></pre>
+<p>Note: It only makes sense to apply the exponential function to the
+point estimates and the endpoints of the confidence interval. A standard
+error of <span class="math inline">\(e^{\hat\beta_1}\)</span> could be
+obtained, but it is <strong>not</strong> equal to the exponentiated
+standard error of <span class="math inline">\(\hat\beta_1\)</span>. A
+test concerning <span class="math inline">\(e^{\beta_1}\)</span> can be
+done using either the confidence interval or by stated the hypotheses in
+terms of <span class="math inline">\(\beta_1\)</span> (e.g., the null
+hypothesis that <span class="math inline">\(e^{\beta_1} = 1\)</span> is
+the same as the null hypothesis that <span class="math inline">\(\beta_1
+= 0\)</span>).</p>
+<p>Another approach is to use <code>lincon</code> and the
+<code>tf</code> (transformation function) argument.</p>
+<pre class="r"><code>lincon(m, tf = exp)</code></pre>
+<pre><code>              estimate   lower   upper
+(Intercept)    86.0252 79.6730 92.8838
+concentration   0.2137  0.1951  0.2342
+strainfb        0.7596  0.6909  0.8351</code></pre>
+<p>Note that the confidence interval endpoints are not quite the same as
+what we obtained using <code>confint</code>. This is because
+<code>confint</code> and <code>lincon</code> use different approaches to
+confidence intervals (more on that later).</p>
+<p><strong>Example</strong>: Consider a model for the expected number of
+matings of African elephants as a function of age.</p>
+<pre class="r"><code>library(Sleuth3)
+head(case2201)</code></pre>
+<pre><code>  Age Matings
+1  27       0
+2  28       1
+3  28       1
+4  28       1
+5  28       3
+6  29       0</code></pre>
+<pre class="r"><code>m &lt;- glm(Matings ~ Age, family = poisson, data = case2201)
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>            Estimate Std. Error z value  Pr(&gt;|z|)    2.5 %   97.5 %
+(Intercept) -1.58201    0.54462  -2.905 3.675e-03 -2.66670 -0.52893
+Age          0.06869    0.01375   4.997 5.812e-07  0.04168  0.09564</code></pre>
+<pre class="r"><code>exp(cbind(m$coefficients, confint(m))) </code></pre>
+<pre><code>                     2.5 % 97.5 %
+(Intercept) 0.2056 0.06948 0.5892
+Age         1.0711 1.04256 1.1004</code></pre>
+</div>
+<div id="percent-change-quantitative-explanatory-variable"
+class="section level2">
+<h2>Percent Change (Quantitative Explanatory Variable)</h2>
+<p>The <em>percent change</em> in the expected response is <span
+class="math display">\[
+  100\% \times \left[\frac{E(Y_a)-E(Y_b)}{E(Y_b)}\right] = 100\% \times
+\left[E(Y_a)/E(Y_b) - 1\right],
+\]</span><br />
+where <span class="math inline">\(E(Y_a)\)</span> and <span
+class="math inline">\(E(Y_b)\)</span> are the expected responses at two
+different points (<span class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>) defined in terms of the explanatory
+variable(s).</p>
+<ol style="list-style-type: decimal">
+<li><p>Note that if this is <em>positive</em> then it is a percent
+<em>increase</em>, whereas if it is negative then it is a percent
+<em>decrease</em>.</p></li>
+<li><p>The ratio <span class="math inline">\(E(Y_a)/E(Y_b)\)</span> is
+the <em>rate ratio</em>.</p></li>
+</ol>
+<p><strong>Example</strong>: Suppose we have the model <span
+class="math inline">\(\log E(Y) = \beta_0 + \beta_1 x\)</span> where
+<span class="math inline">\(x\)</span> is a quantitative variable and
+<span class="math inline">\(\beta_1 = 0.22\)</span>. Then <span
+class="math inline">\(e^{\beta_1} \approx 1.25\)</span>. So when <span
+class="math inline">\(x\)</span> increases by one unit (i.e., to <span
+class="math inline">\(x + 1\)</span>), — i.e., from <span
+class="math inline">\(E(Y_b) = e^{\beta_0}e^{\beta_1x}\)</span> to <span
+class="math inline">\(E(Y_a) = e^{\beta_0}e^{\beta_1(x+1)}\)</span> then
+the expected response <em>increases</em> by a <em>factor</em> of <span
+class="math display">\[
+  E(Y_a)/E(Y_b) = e^{\beta_1} \approx 1.25,
+\]</span> and because <span class="math display">\[
+  100\% \times \left[1.25 - 1\right] = 25\%.
+\]</span><br />
+we can say that it <em>increases</em> by 25%.</p>
+<p><strong>Example</strong>: Consider again the model for the elephant
+matings data.</p>
+<pre class="r"><code>m &lt;- glm(Matings ~ Age, family = poisson, data = case2201)
+exp(cbind(m$coefficients, confint(m))) </code></pre>
+<pre><code>                     2.5 % 97.5 %
+(Intercept) 0.2056 0.06948 0.5892
+Age         1.0711 1.04256 1.1004</code></pre>
+<p>The percent change in the expected count per unit (year) increase in
+Age is approximately 100%(1.07 - 1) = 7% (i.e., a 7% increase).</p>
+<p><strong>Example</strong>: Suppose we have the model <span
+class="math inline">\(\log E(Y) = \beta_0 + \beta_1 x\)</span> where
+<span class="math inline">\(x\)</span> is a quantitative variable and
+<span class="math inline">\(\beta_1 = -0.22\)</span>. Then <span
+class="math inline">\(e^{\beta_1} \approx 0.8\)</span>. So when <span
+class="math inline">\(x\)</span> increases by one unit (i.e., to <span
+class="math inline">\(x + 1\)</span>), — i.e., from <span
+class="math inline">\(E(Y_b) = e^{\beta_0}e^{\beta_1x}\)</span> to <span
+class="math inline">\(E(Y_a) = e^{\beta_0}e^{\beta_1(x+1)}\)</span> then
+the expected response <em>decreases</em> by a <em>factor</em> of <span
+class="math display">\[
+  E(Y_a)/E(Y_b) = e^{\beta_1} \approx 0.8,
+\]</span> or because <span class="math display">\[
+  100\% \times \left[0.8 - 1\right] = -20\%
+\]</span><br />
+we can say that it <em>decreases</em> by 20%.</p>
+<p><strong>Example</strong>: Consider again the model for the
+<code>ceriodaphniastrain</code> data.</p>
+<pre class="r"><code>m &lt;- glm(count ~ concentration + strainf, family = poisson, data = ceriodaphniastrain) 
+exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                        2.5 % 97.5 %
+(Intercept)   86.0252 79.6152 92.817
+concentration  0.2137  0.1950  0.234
+strainfb       0.7596  0.6907  0.835</code></pre>
+<p>The percent change in the expected count per unit increase in
+concentration is approximately 100%(0.21 - 1) = -79% (i.e., a 79%
+decrease or reduction).</p>
+</div>
+<div id="rate-ratios-categorical-explanatory-variable"
+class="section level2">
+<h2>Rate Ratios (Categorical Explanatory Variable)</h2>
+<p>Consider the model <span class="math display">\[
+    \log E(Y) = \beta_0 + \beta_1 x, \ \ \text{or, equivalently,} \ \
+    E(Y) = e^{\beta_0}e^{\beta_1 x},
+\]</span> where <span class="math display">\[
+    x =
+    \begin{cases}
+        1, &amp; \text{if the observation is in group $a$}, \\
+        0, &amp; \text{if the observation is in group $b$}.
+    \end{cases}
+\]</span> Then <span class="math display">\[
+    E(Y) =
+    \begin{cases}
+        e^{\beta_0}e^{\beta_1}, &amp; \text{if the observation is in
+group $a$}, \\
+        e^{\beta_0}, &amp; \text{if the observation is in group $b$}.
+    \end{cases}
+\]</span> Let <span class="math display">\[
+  E(Y_a) = e^{\beta_0}e^{\beta_1} \ \ \ \text{and} \ \ \ E(Y_b) =
+e^{\beta_0}.
+\]</span> Then the <em>ratio</em> of the expected values is <span
+class="math display">\[
+    \frac{E(Y_a)}{E(Y_b)} = \frac{e^{\beta_0}e^{\beta_1}}{e^{\beta_0}} =
+e^{\beta_1} \Leftrightarrow E(Y_a) = E(Y_b)e^{\beta_1}
+\]</span> so that <span class="math inline">\(E(Y_a)\)</span> is <span
+class="math inline">\(e^{\beta_1}\)</span> times that of <span
+class="math inline">\(E(Y_b)\)</span>. Also <span
+class="math display">\[
+    \frac{E(Y_b)}{E(Y_a)} = \frac{e^{\beta_0}}{e^{\beta_0}e^{\beta_1}} =
+\frac{1}{e^{\beta_1}} = e^{-\beta_1}.
+\]</span> so that <span class="math inline">\(E(Y_b)\)</span> is <span
+class="math inline">\(1/e^{\beta_1}\)</span> times that of <span
+class="math inline">\(E(Y_a)\)</span>.</p>
+<p><strong>Example</strong>: Consider again the
+<code>ceriodaphniastrain</code> data and model.</p>
+<pre class="r"><code>m &lt;- glm(count ~ concentration + strainf, 
+  family = poisson, data = ceriodaphniastrain) 
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>              Estimate Std. Error z value   Pr(&gt;|z|)  2.5 %  97.5 %
+(Intercept)      4.455    0.03914 113.819  0.000e+00  4.377  4.5306
+concentration   -1.543    0.04660 -33.111 2.057e-240 -1.635 -1.4522
+strainfb        -0.275    0.04837  -5.684  1.313e-08 -0.370 -0.1803</code></pre>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                        2.5 % 97.5 %
+(Intercept)   86.0252 79.6152 92.817
+concentration  0.2137  0.1950  0.234
+strainfb       0.7596  0.6907  0.835</code></pre>
+<p>Alternatively we can parameterize the model.</p>
+<pre class="r"><code>ceriodaphniastrain$strainf &lt;- relevel(ceriodaphniastrain$strainf, ref = &quot;b&quot;)
+m &lt;- glm(count ~ concentration + strainf, 
+  family = poisson, data = ceriodaphniastrain) 
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>              Estimate Std. Error z value   Pr(&gt;|z|)   2.5 % 97.5 %
+(Intercept)      4.180    0.04303  97.137  0.000e+00  4.0945  4.263
+concentration   -1.543    0.04660 -33.111 2.057e-240 -1.6349 -1.452
+strainfa         0.275    0.04837   5.684  1.313e-08  0.1803  0.370</code></pre>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                       2.5 % 97.5 %
+(Intercept)   65.3444 60.008 71.034
+concentration  0.2137  0.195  0.234
+strainfa       1.3165  1.198  1.448</code></pre>
+<p><strong>Example</strong>: Consider these data from a stratified
+random sampling design and a Poisson regression model.</p>
+<pre class="r"><code>library(trtools)
+p &lt;- ggplot(daphniastrat, aes(x = layer, y = count)) + 
+  geom_dotplot(binaxis = &quot;y&quot;, binwidth = 1) + 
+  coord_flip() + theme_minimal() + 
+  labs(x = &quot;&quot;, y = &quot;Number of Daphnia (per liter)&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-03-01-2023_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>daphniastrat$layer &lt;- relevel(daphniastrat$layer, ref = &quot;thermocline&quot;)
+m &lt;- glm(count ~ layer, family = poisson, data = daphniastrat)
+summary(m)$coefficients</code></pre>
+<pre><code>                 Estimate Std. Error z value   Pr(&gt;|z|)
+(Intercept)        2.4248    0.09407  25.776 1.648e-146
+layerepilimnion    0.5456    0.10683   5.107  3.272e-07
+layerhypolimnion  -1.8748    0.21751  -8.619  6.745e-18</code></pre>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                           2.5 %  97.5 %
+(Intercept)      11.3000 9.34251 13.5134
+layerepilimnion   1.7257 1.40501  2.1367
+layerhypolimnion  0.1534 0.09808  0.2309</code></pre>
+</div>
+<div id="percent-largersmaller-quantitative-explanatory-variable"
+class="section level2">
+<h2>Percent Larger/Smaller (Quantitative Explanatory Variable)</h2>
+<p>The <em>percent change</em> in the expected response is <span
+class="math display">\[
+  100\% \times \left[\frac{E(Y_a)-E(Y_b)}{E(Y_b)}\right] = 100\% \times
+\left[E(Y_a)/E(Y_b) - 1\right],
+\]</span><br />
+where <span class="math inline">\(E(Y_a)\)</span> and <span
+class="math inline">\(E(Y_b)\)</span> are the expected responses at two
+different points (<span class="math inline">\(a\)</span> and <span
+class="math inline">\(b\)</span>) defined in terms of the explanatory
+variable(s).</p>
+<ol style="list-style-type: decimal">
+<li><p>Note that if this is <em>positive</em> then <span
+class="math inline">\(E(Y_a)\)</span> is that percent <em>larger</em>
+than <span class="math inline">\(E(Y_b)\)</span>, whereas if this is
+<em>negative</em> then <span class="math inline">\(E(Y_b)\)</span> is
+that percent <em>smaller</em> than <span
+class="math inline">\(E(Y_a)\)</span>.</p></li>
+<li><p>The ratio <span class="math inline">\(E(Y_a)/E(Y_b)\)</span> is
+the <em>rate ratio</em>.</p></li>
+</ol>
+<p><strong>Example</strong>: Suppose we have the model <span
+class="math inline">\(\log E(Y) = \beta_0 + \beta_1 x\)</span> where
+<span class="math inline">\(x\)</span> is an indicator variable for
+category <span class="math inline">\(a\)</span> and <span
+class="math inline">\(\beta_1 = 0.22\)</span>. Then <span
+class="math inline">\(e^{\beta_1} \approx 1.25\)</span>, <span
+class="math inline">\(E(Y_a) = e^{\beta_0}e^{\beta_1}\)</span> and <span
+class="math inline">\(E(Y_b) = e^{\beta_0}\)</span>, and <span
+class="math inline">\(E(Y_a)\)</span> is about 1.25 times
+<em>larger</em> than <span class="math inline">\(E(Y_b)\)</span> because
+<span class="math display">\[
+  E(Y_a)/E(Y_b) = e^{\beta_1} \approx 1.25,
+\]</span> and because <span class="math display">\[
+  100\% \times \left[1.25 - 1\right] = 25\%.
+\]</span><br />
+we can say that <span class="math inline">\(E(Y_a)\)</span> is about 25%
+<em>larger</em> than <span class="math inline">\(E(Y_b)\)</span>.</p>
+<p><strong>Example</strong>: Suppose we have the model <span
+class="math inline">\(\log E(Y) = \beta_0 + \beta_1 x\)</span> where
+<span class="math inline">\(x\)</span> is an indicator variable for
+category <span class="math inline">\(a\)</span> and <span
+class="math inline">\(\beta_1 = -0.22\)</span>. Then <span
+class="math inline">\(e^{\beta_1} \approx 0.8\)</span>, <span
+class="math inline">\(E(Y_a) = e^{\beta_0}e^{\beta_1}\)</span> and <span
+class="math inline">\(E(Y_b) = e^{\beta_0}\)</span>, and <span
+class="math inline">\(E(Y_a)\)</span> is about 0.8 times
+<em>smaller</em> than <span class="math inline">\(E(Y_b)\)</span>
+because <span class="math display">\[
+  E(Y_a)/E(Y_b) = e^{\beta_1} \approx 0.8,
+\]</span> and because <span class="math display">\[
+  100\% \times \left[0.8 - 1\right] = -20\%.
+\]</span><br />
+we can say that <span class="math inline">\(E(Y_a)\)</span> is about 20%
+<em>smaller</em> than <span class="math inline">\(E(Y_b)\)</span>.</p>
+<p><strong>Example</strong>: Consider again the model for the daphnia
+data.</p>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                           2.5 %  97.5 %
+(Intercept)      11.3000 9.34251 13.5134
+layerepilimnion   1.7257 1.40501  2.1367
+layerhypolimnion  0.1534 0.09808  0.2309</code></pre>
+<p>The expected number of daphnia per liter in the epilimnion layer is
+estimated to be about 100%(1.73-1) = 73% more than in the thermocline
+layer. And because 100%(0.15-1) = -85% we estimate that the the expected
+number of daphia per liter in the hypolimnion layer is 85% less than it
+is in the thermocline layer.</p>
+</div>
+<div id="contrasts-with-log-link-functions" class="section level2">
+<h2>Contrasts With Log Link Functions</h2>
+<p>With a log link function a “contrast” as produced by the
+<code>contrast</code> function has the general form <span
+class="math display">\[
+  \log E(Y_a) - \log E(Y_b) = \log\left[\frac{E(Y_a)}{E(Y_b)}\right],
+\]</span> where the indices <span class="math inline">\(a\)</span> and
+<span class="math inline">\(b\)</span> denote specific values of the
+explanatory variables. If we apply the exponential function to the
+contrast then it becomes <span class="math display">\[
+  \exp[\log E(Y_a) - \log E(Y_b)] = \frac{E(Y_a)}{E(Y_b)},
+\]</span> So applying the exponential function to contrasts allows us to
+interpret them as ratios.</p>
+<p><strong>Example</strong>: Consider again the stratified random
+sampling design. Suppose we want to compare the epilimnion and
+thermocline layers to the hypolimnion layer. We can use
+<code>contrast</code> and apply the exponential function
+(<code>exp</code> in R) through the argument <code>tf</code> (for
+“transformation function”). Note that this function is only applied to
+the estimates and the confidence intervals.</p>
+<pre class="r"><code>trtools::contrast(m,
+    a = list(layer = c(&quot;epilimnion&quot;,&quot;thermocline&quot;)),
+    b = list(layer = &quot;hypolimnion&quot;),
+    cnames = c(&quot;epil vs hypo&quot;,&quot;therm vs hypo&quot;))</code></pre>
+<pre><code>              estimate     se lower upper tvalue  df    pvalue
+epil vs hypo     2.420 0.2025 2.023 2.817 11.950 Inf 6.519e-33
+therm vs hypo    1.875 0.2175 1.448 2.301  8.619 Inf 6.745e-18</code></pre>
+<pre class="r"><code>trtools::contrast(m,
+    a = list(layer = c(&quot;epilimnion&quot;,&quot;thermocline&quot;)),
+    b = list(layer = &quot;hypolimnion&quot;),
+    cnames = c(&quot;epil/hypo&quot;,&quot;therm/hypo&quot;), tf = exp)</code></pre>
+<pre><code>           estimate lower  upper
+epil/hypo    11.250 7.564 16.733
+therm/hypo    6.519 4.256  9.985</code></pre>
+<p>The following gives us inferences for the <em>logarithm</em> of the
+expected count for each layer.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(layer = c(&quot;epilimnion&quot;,&quot;thermocline&quot;,&quot;hypolimnion&quot;)),
+    cnames = c(&quot;epilimnion&quot;,&quot;thermocline&quot;,&quot;hypolimnion&quot;))</code></pre>
+<pre><code>            estimate      se  lower  upper tvalue  df     pvalue
+epilimnion     2.970 0.05064 2.8712 3.0697 58.661 Inf  0.000e+00
+thermocline    2.425 0.09407 2.2404 2.6092 25.776 Inf 1.648e-146
+hypolimnion    0.550 0.19612 0.1657 0.9344  2.805 Inf  5.036e-03</code></pre>
+<p>To produce the estimates of the expected counts we need to apply the
+exponential function.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(layer = c(&quot;epilimnion&quot;,&quot;thermocline&quot;,&quot;hypolimnion&quot;)),
+    cnames = c(&quot;epilimnion&quot;,&quot;thermocline&quot;,&quot;hypolimnion&quot;), tf = exp)</code></pre>
+<pre><code>            estimate  lower  upper
+epilimnion    19.500 17.658 21.535
+thermocline   11.300  9.397 13.588
+hypolimnion    1.733  1.180  2.546</code></pre>
+<p>The <strong>emmeans</strong> package can also produce inferences for
+expected counts and rate ratios for categorical explanatory variables if
+we specify <code>type = "response"</code>.</p>
+<pre class="r"><code>library(emmeans)
+emmeans(m, ~ layer, type = &quot;response&quot;)</code></pre>
+<pre><code> layer        rate    SE  df asymp.LCL asymp.UCL
+ thermocline 11.30 1.063 Inf      9.40     13.59
+ epilimnion  19.50 0.987 Inf     17.66     21.54
+ hypolimnion  1.73 0.340 Inf      1.18      2.55
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~ layer), type = &quot;response&quot;, adjust = &quot;none&quot;, infer = TRUE)</code></pre>
+<pre><code> contrast                   ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ thermocline / epilimnion   0.579 0.0619 Inf      0.47     0.714    1  -5.107  &lt;.0001
+ thermocline / hypolimnion  6.519 1.4180 Inf      4.26     9.985    1   8.619  &lt;.0001
+ epilimnion / hypolimnion  11.250 2.2787 Inf      7.56    16.733    1  11.950  &lt;.0001
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>Another tool that you can use if you want inferences about the
+expected response is the <code>glmint</code> function from the
+<strong>trtools</strong> package.</p>
+<pre class="r"><code>d &lt;- data.frame(layer = c(&quot;epilimnion&quot;,&quot;thermocline&quot;,&quot;hypolimnion&quot;))
+glmint(m, newdata = d) # syntax similar to predict and nlsint</code></pre>
+<pre><code>     fit    low    upp
+1 19.500 17.658 21.535
+2 11.300  9.397 13.588
+3  1.733  1.180  2.546</code></pre>
+<p><strong>Example</strong>: Consider again the model for the
+<code>ceriodaphniastrain</code> data. Consider first the effect of
+increasing concentration by one percent.</p>
+<pre class="r"><code>m &lt;- glm(count ~ concentration + strainf, 
+    family = poisson, data = ceriodaphniastrain)
+summary(m)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value   Pr(&gt;|z|)
+(Intercept)      4.180    0.04303  97.137  0.000e+00
+concentration   -1.543    0.04660 -33.111 2.057e-240
+strainfa         0.275    0.04837   5.684  1.313e-08</code></pre>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                       2.5 % 97.5 %
+(Intercept)   65.3444 60.008 71.034
+concentration  0.2137  0.195  0.234
+strainfa       1.3165  1.198  1.448</code></pre>
+<p>We can estimate the rate ratio for a one unit increase in
+concentration for each strain.</p>
+<pre class="r"><code>trtools::contrast(m,
+    a = list(concentration = 1, strainf = c(&quot;a&quot;,&quot;b&quot;)),
+    b = list(concentration = 0, strainf = c(&quot;a&quot;,&quot;b&quot;)),
+    cnames = c(&quot;a&quot;,&quot;b&quot;), tf = exp)</code></pre>
+<pre><code>  estimate  lower  upper
+a   0.2137 0.1951 0.2342
+b   0.2137 0.1951 0.2342</code></pre>
+<p>Here is how we can do that with the <strong>emmeans</strong> package.
+This statement will give us the expected response for concentrations one
+unit apart for each strain.</p>
+<pre class="r"><code>emmeans(m, ~concentration|strainf, at = list(concentration = c(1,0)), type = &quot;response&quot;)</code></pre>
+<pre><code>strainf = b:
+ concentration rate    SE  df asymp.LCL asymp.UCL
+             1 14.0 0.608 Inf      12.8      15.2
+             0 65.3 2.812 Inf      60.1      71.1
+
+strainf = a:
+ concentration rate    SE  df asymp.LCL asymp.UCL
+             1 18.4 0.730 Inf      17.0      19.9
+             0 86.0 3.367 Inf      79.7      92.9
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre>
+<p>Now we can compare them.</p>
+<pre class="r"><code>pairs(emmeans(m, ~concentration|strainf, at = list(concentration = c(1,0)), 
+  type = &quot;response&quot;), infer = TRUE)</code></pre>
+<pre><code>strainf = b:
+ contrast                        ratio      SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ concentration1 / concentration0 0.214 0.00996 Inf     0.195     0.234    1 -33.110  &lt;.0001
+
+strainf = a:
+ contrast                        ratio      SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ concentration1 / concentration0 0.214 0.00996 Inf     0.195     0.234    1 -33.110  &lt;.0001
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>We can estimate the rate ratio comparing the strains at difference
+concentrations.</p>
+<pre class="r"><code>trtools::contrast(m,
+    a = list(concentration = c(0, 1, 2), strainf = &quot;a&quot;),
+    b = list(concentration = c(0, 1, 2), strainf = &quot;b&quot;),
+    cnames = c(&quot;0%&quot;, &quot;1%&quot;, &quot;2%&quot;), tf = exp)</code></pre>
+<pre><code>   estimate lower upper
+0%    1.316 1.197 1.447
+1%    1.316 1.197 1.447
+2%    1.316 1.197 1.447</code></pre>
+<p>We can also use <code>contrast</code> to estimate the expected count
+for, say, strain <code>a</code> at different concentration values.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(concentration = c(0, 1, 2), strainf = &quot;a&quot;), 
+  cnames = c(&quot;0%&quot;, &quot;1%&quot;, &quot;2%&quot;), tf = exp)</code></pre>
+<pre><code>   estimate  lower  upper
+0%   86.025 79.673 92.884
+1%   18.385 17.010 19.873
+2%    3.929  3.378  4.571</code></pre>
+<p>We can also use the <strong>emmeans</strong> package for inferences
+about expected counts and rate ratios for categorical explanatory
+variables.</p>
+<pre class="r"><code>library(emmeans)
+emmeans(m, ~ strainf, type = &quot;response&quot;,
+  at = list(concentration = 0))</code></pre>
+<pre><code> strainf rate   SE  df asymp.LCL asymp.UCL
+ b       65.3 2.81 Inf      60.1      71.1
+ a       86.0 3.37 Inf      79.7      92.9
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~ strainf, type = &quot;response&quot;,
+  at = list(concentration = 0)), reverse = TRUE)</code></pre>
+<pre><code> contrast ratio     SE  df null z.ratio p.value
+ a / b     1.32 0.0637 Inf    1   5.684  &lt;.0001
+
+Tests are performed on the log scale </code></pre>
+<p>Now suppose we add an interaction between concentration and
+strain.</p>
+<pre class="r"><code>m &lt;- glm(count ~ concentration + strainf + concentration:strainf, 
+    family = poisson, data = ceriodaphniastrain)
+summary(m)$coefficients</code></pre>
+<pre><code>                       Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)              4.1444    0.05101  81.252 0.000e+00
+concentration           -1.4725    0.07007 -21.015 4.800e-98
+strainfa                 0.3367    0.06704   5.022 5.114e-07
+concentration:strainfa  -0.1253    0.09385  -1.336 1.817e-01</code></pre>
+<pre class="r"><code>trtools::contrast(m,
+    a = list(concentration = 1, strainf = c(&quot;a&quot;,&quot;b&quot;)),
+    b = list(concentration = 0, strainf = c(&quot;a&quot;,&quot;b&quot;)),
+    cnames = c(&quot;a&quot;,&quot;b&quot;), tf = exp)</code></pre>
+<pre><code>  estimate  lower  upper
+a   0.2023 0.1790 0.2287
+b   0.2293 0.1999 0.2631</code></pre>
+<pre class="r"><code>trtools::contrast(m,
+    a = list(concentration = c(0, 1, 2), strainf = &quot;a&quot;),
+    b = list(concentration = c(0, 1, 2), strainf = &quot;b&quot;),
+    cnames = c(&quot;0%&quot;, &quot;1%&quot;, &quot;2%&quot;), tf = exp)</code></pre>
+<pre><code>   estimate  lower upper
+0%    1.400 1.2279 1.597
+1%    1.235 1.0816 1.411
+2%    1.090 0.8132 1.460</code></pre>
+<p>Now the rate ratio for concentration depends on strain and the rate
+ratio for strain depends on concentration when there is an interaction
+term.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
