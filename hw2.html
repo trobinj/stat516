@@ -465,7 +465,7 @@ class="math inline">\(\lambda_2\)</span> for an inhibitor concentration
 of 100 <span class="math inline">\(\mu\)</span>moles. Essentially this
 is a case-wise model like that featured in class but with three cases
 rather than two. I <em>strongly</em> recommend that you use the
-<code>case_wise</code> function from the <strong>dplyr</strong> package
+<code>case_when</code> function from the <strong>dplyr</strong> package
 to manage the case-wise structure of this model.<a href="#fn4"
 class="footnote-ref" id="fnref4"><sup>4</sup></a> Note that you should
 be able to “eyeball” (i.e., guess) the starting values from the plot of
@@ -509,7 +509,7 @@ class="math inline">\(\lambda_1 = \lambda_0 + \tau_1\)</span>, and <span
 class="math inline">\(\lambda_2 = \lambda_0 + \tau_2\)</span>. Estimate
 this model using the <code>nls</code> and give the parameter estimates
 using <code>summary</code>. Again, I would strongly recommend you use
-the <code>case_wise</code> function here. Finally plot the model with
+the <code>case_when</code> function here. Finally plot the model with
 the raw data like you did with the previous model. Your plot should look
 the same as that for the previous model.</p></li>
 <li><p>The model you estimated in the previous problem provides
