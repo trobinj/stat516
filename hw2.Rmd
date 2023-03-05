@@ -240,10 +240,10 @@ $x_{i4} = x_{i1}x_{i3}$ and $x_{i5} = x_{i2}x_{i3}$. So the model can be written
 $$
   E(Y_i) = 
   \begin{cases}
-  \beta_0, & \text{if concentration is 0.3 and the ion is ferric}, \\
+  \beta_0, & \text{if the concentration is 0.3 and the ion is ferric}, \\
   \beta_0 + \beta_1, & \text{if the concentration is 1.2 and the ion is ferric}, \\
   \beta_0 + \beta_2, & \text{if the concentration is 10.2 and the ion is ferric}, \\
-  \beta_0 + \beta_3, & \text{if concentration is 0.3 and the ion is ferrous}, \\
+  \beta_0 + \beta_3, & \text{if the concentration is 0.3 and the ion is ferrous}, \\
   \beta_0 + \beta_1 + \beta_3 + \beta_4, & \text{if the concentration is 1.2 and the ion is ferrous}, \\
   \beta_0 + \beta_2 + \beta_3 + \beta_5, & \text{if the concentration is 10.2 and the ion is ferrous}. 
   \end{cases}
@@ -270,10 +270,10 @@ Be careful that you compute the weights correctly.[^with] Try this for values of
 $$
 \text{Var}(Y_i) = 
   \begin{cases}
-  \sigma_1^2, & \text{if concentration is 0.3 and the ion is ferric}, \\
+  \sigma_1^2, & \text{if the concentration is 0.3 and the ion is ferric}, \\
   \sigma_2^2, & \text{if the concentration is 1.2 and the ion is ferric}, \\
   \sigma_3^2, & \text{if the concentration is 10.2 and the ion is ferric}, \\
-  \sigma_4^2, & \text{if concentration is 0.3 and the ion is ferrous}, \\
+  \sigma_4^2, & \text{if the concentration is 0.3 and the ion is ferrous}, \\
   \sigma_5^2, & \text{if the concentration is 1.2 and the ion is ferrous}, \\
   \sigma_6^2, & \text{if the concentration is 10.2 and the ion is ferrous}. 
 \end{cases}
@@ -300,10 +300,10 @@ Here there is effectively an indicator variable (formed as the product of two in
 $$
   E(Y_i) = 
   \begin{cases}
-  \beta_1, & \text{if concentration is 0.3 and the ion is ferric}, \\
+  \beta_1, & \text{if the concentration is 0.3 and the ion is ferric}, \\
   \beta_2, & \text{if the concentration is 1.2 and the ion is ferric}, \\
   \beta_3, & \text{if the concentration is 10.2 and the ion is ferric}, \\
-  \beta_4, & \text{if concentration is 0.3 and the ion is ferrous}, \\
+  \beta_4, & \text{if the concentration is 0.3 and the ion is ferrous}, \\
   \beta_5, & \text{if the concentration is 1.2 and the ion is ferrous}, \\
   \beta_6, & \text{if the concentration is 10.2 and the ion is ferrous}. 
   \end{cases}
