@@ -83,7 +83,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Introduction to logistic regression](lecture-03-06-2023.html). 
 
-`r i <- i + 1; d[i]` Second homework assignment due.
+`r i <- i + 1; d[i]` [Examples of logistic regression and use of odds ratios](lecture-03-08-2023.html). Second homework assignment due.
 
 `r i <- i + 1; d[i]` 
  
