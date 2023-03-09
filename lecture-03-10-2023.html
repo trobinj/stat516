@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Friday, Mar 10</title>
+
+<script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Friday, Mar 10</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-03-10-2023.pdf">PDF</a> copy
+of this lecture.</p>
+<!-- Introduce using emtrends to estimate rate and odds ratios, along with the pairs function to compare them. Note that you need to have type = "response" and tran = "log" (for odds ratios at least) to do this. -->
+<div id="using-the-emmeans-package-for-poisson-and-logistic-regression"
+class="section level2">
+<h2>Using the <strong>emmeans</strong> Package for Poisson and Logistic
+Regression</h2>
+<p>The <strong>emmeans</strong> package can be used to produce some of
+the same inferences that are obtained using <code>contrast</code> with
+respect to estimated expected rates/probabilities as well as rate/odds
+ratios.</p>
+<p><strong>Example</strong>: Consider the following Poisson regression
+model for the <code>ceriodaphniastrain</code> data.</p>
+<pre class="r"><code>fleas &lt;- trtools::ceriodaphniastrain
+fleas$strain &lt;- factor(fleas$strain, levels = c(1,2), labels = c(&quot;a&quot;,&quot;b&quot;))
+m &lt;- glm(count ~ concentration * strain, family = poisson, data = fleas) 
+summary(m)$coefficients</code></pre>
+<pre><code>                      Estimate Std. Error z value   Pr(&gt;|z|)
+(Intercept)             4.4811    0.04350 103.008  0.000e+00
+concentration          -1.5979    0.06244 -25.592 1.862e-144
+strainb                -0.3367    0.06704  -5.022  5.114e-07
+concentration:strainb   0.1253    0.09385   1.336  1.817e-01</code></pre>
+<p>We can compute the expected count for a concentration of two for each
+strain using <code>contrast</code>.</p>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(strain = c(&quot;a&quot;,&quot;b&quot;), concentration = 2))</code></pre>
+<pre><code> estimate lower upper
+    3.616 2.970 4.402
+    3.318 2.671 4.122</code></pre>
+<p>And we can do it using <code>emmeans</code> if we specify
+<code>type = "response"</code> and use the <code>at</code> argument to
+specify an quantitative explanatory variables.</p>
+<pre class="r"><code>library(emmeans)
+emmeans(m, ~ strain, type = &quot;response&quot;, at = list(concentration = 2))</code></pre>
+<pre><code> strain rate    SE  df asymp.LCL asymp.UCL
+ a      3.62 0.363 Inf      2.97      4.40
+ b      3.32 0.367 Inf      2.67      4.12
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre>
+<p>Note that <code>emmeans</code> does produce a valid standard error on
+the scale of the expected count/rate which
+<code>trtools::contrast</code> does not (by default), and that
+<code>trtools::contrast</code> will show the test statistic and p-value
+on the log scale if we omit the <code>tf = exp</code> argument.</p>
+<p>We can compute the rate ratio to compare the two strains at a given
+concentration.</p>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(strain = &quot;a&quot;, concentration = 2),
+  b = list(strain = &quot;b&quot;, concentration = 2))</code></pre>
+<pre><code> estimate  lower upper
+     1.09 0.8132  1.46</code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~ strain, type = &quot;response&quot;, 
+  at = list(concentration = 2)), infer = TRUE)</code></pre>
+<pre><code> contrast ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ a / b     1.09 0.163 Inf     0.813      1.46    1   0.576  0.5648
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>What about the rate ratio for the effect of concentration?</p>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(strain = c(&quot;a&quot;,&quot;b&quot;), concentration = 2),
+  b = list(strain = c(&quot;a&quot;,&quot;b&quot;), concentration = 1))</code></pre>
+<pre><code> estimate  lower  upper
+   0.2023 0.1790 0.2287
+   0.2293 0.1999 0.2631</code></pre>
+<pre class="r"><code>emmeans(m, ~concentration|strain, at = list(concentration = c(2,1)), type = &quot;response&quot;)</code></pre>
+<pre><code>strain = a:
+ concentration  rate    SE  df asymp.LCL asymp.UCL
+             2  3.62 0.363 Inf      2.97      4.40
+             1 17.87 0.815 Inf     16.34     19.54
+
+strain = b:
+ concentration  rate    SE  df asymp.LCL asymp.UCL
+             2  3.32 0.367 Inf      2.67      4.12
+             1 14.47 0.725 Inf     13.11     15.96
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~concentration|strain, at = list(concentration = c(2,1)), type = &quot;response&quot;))</code></pre>
+<pre><code>strain = a:
+ contrast                        ratio     SE  df null z.ratio p.value
+ concentration2 / concentration1 0.202 0.0126 Inf    1 -25.592  &lt;.0001
+
+strain = b:
+ contrast                        ratio     SE  df null z.ratio p.value
+ concentration2 / concentration1 0.229 0.0161 Inf    1 -21.015  &lt;.0001
+
+Tests are performed on the log scale </code></pre>
+<p>We can also make inferences to <em>compare</em> the two rate
+ratios.</p>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(strain = &quot;b&quot;, concentration = 2),
+  b = list(strain = &quot;b&quot;, concentration = 1),
+  u = list(strain = &quot;a&quot;, concentration = 2),
+  v = list(strain = &quot;a&quot;, concentration = 1))</code></pre>
+<pre><code> estimate  lower upper
+    1.134 0.9431 1.362</code></pre>
+<pre class="r"><code>pairs(pairs(emmeans(m, ~concentration|strain, 
+  at = list(concentration = c(2,1)), type = &quot;response&quot;)), by = NULL, reverse = TRUE)</code></pre>
+<pre><code> contrast                                                                  ratio    SE  df null
+ (concentration2 / concentration1 b) / (concentration2 / concentration1 a)  1.13 0.106 Inf    1
+ z.ratio p.value
+   1.335  0.1817
+
+Tests are performed on the log scale </code></pre>
+<p>This is a ratio of rate ratios. To just get the test statistic you
+can leave off <code>type = "response"</code>.</p>
+<pre class="r"><code>pairs(pairs(emmeans(m, ~concentration|strain, 
+  at = list(concentration = c(2,1)))), by = NULL, reverse = TRUE)</code></pre>
+<pre><code> contrast                                                                  estimate     SE  df
+ (concentration2 - concentration1 b) - (concentration2 - concentration1 a)    0.125 0.0939 Inf
+ z.ratio p.value
+   1.335  0.1817
+
+Results are given on the log (not the response) scale. </code></pre>
+<p><strong>Example</strong>: Consider the following logistic regression
+model for the <code>insecticide data</code>.</p>
+<pre class="r"><code>m &lt;- glm(cbind(deaths, total-deaths) ~ insecticide * deposit, 
+  family = binomial, data = trtools::insecticide)
+summary(m)$coefficients</code></pre>
+<pre><code>                        Estimate Std. Error  z value  Pr(&gt;|z|)
+(Intercept)             -2.81091    0.35845 -7.84177 4.442e-15
+insecticideboth          1.22575    0.67176  1.82468 6.805e-02
+insecticideDDT          -0.03893    0.50722 -0.07676 9.388e-01
+deposit                  0.62207    0.07786  7.98986 1.351e-15
+insecticideboth:deposit  0.37010    0.20897  1.77109 7.655e-02
+insecticideDDT:deposit  -0.14143    0.10376 -1.36301 1.729e-01</code></pre>
+<p>We can use <code>trtools::contrast</code> or <code>emmeans</code> to
+produce estimates of the probability of death for a given insecticide at
+a given deposit value.</p>
+<pre class="r"><code>trtools::contrast(m, tf = plogis,
+  a = list(insecticide = c(&quot;g-BHC&quot;,&quot;both&quot;,&quot;DDT&quot;), deposit = 5),
+  cnames = c(&quot;g-BHC&quot;,&quot;both&quot;,&quot;DDT&quot;))</code></pre>
+<pre><code>      estimate  lower  upper
+g-BHC   0.5743 0.5027 0.6429
+both    0.9669 0.9212 0.9865
+DDT     0.3902 0.3289 0.4550</code></pre>
+<pre class="r"><code>emmeans(m, ~ insecticide, type = &quot;response&quot;, at = list(deposit = 5))</code></pre>
+<pre><code> insecticide  prob     SE  df asymp.LCL asymp.UCL
+ g-BHC       0.574 0.0360 Inf     0.503     0.643
+ both        0.967 0.0149 Inf     0.921     0.987
+ DDT         0.390 0.0323 Inf     0.329     0.455
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the logit scale </code></pre>
+<p>Again, <code>emmeans</code> produces a valid standard error on the
+probability scale while <code>trtools::contrast</code> does not, and
+<code>trtools::contrast</code> will produce test statistics and p-values
+on the logit scale when the <code>tf = plogis</code> argument is
+omitted.</p>
+<p>We can compute odds ratios to compare the insecticides at a given
+deposit.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ insecticide, type = &quot;response&quot;, 
+  at = list(deposit = 5)), adjust = &quot;none&quot;, infer = TRUE)</code></pre>
+<pre><code> contrast       odds.ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ (g-BHC) / both       0.05  0.023 Inf     0.018      0.12    1  -6.275  &lt;.0001
+ (g-BHC) / DDT        2.11  0.423 Inf     1.424      3.12    1   3.724  0.0002
+ both / DDT          45.71 22.260 Inf    17.600    118.72    1   7.849  &lt;.0001
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(insecticide = c(&quot;g-BHC&quot;,&quot;g-BHC&quot;,&quot;both&quot;), deposit = 5),
+  b = list(insecticide = c(&quot;both&quot;,&quot;DDT&quot;,&quot;DDT&quot;), deposit = 5),
+  cnames = c(&quot;g-BHC / both&quot;, &quot;g-BHC / DDT&quot;, &quot;both / DDT&quot;))</code></pre>
+<pre><code>             estimate    lower    upper
+g-BHC / both  0.04613  0.01765   0.1206
+g-BHC / DDT   2.10871  1.42385   3.1230
+both / DDT   45.71097 17.59954 118.7243</code></pre>
+<p>We can flip/reverse the odds ratios if desired (which can also be
+done with rate ratios).</p>
+<pre class="r"><code>pairs(emmeans(m, ~ insecticide, type = &quot;response&quot;, 
+  at = list(deposit = 5)), adjust = &quot;none&quot;, reverse = TRUE, infer = TRUE)</code></pre>
+<pre><code> contrast       odds.ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ both / (g-BHC)     21.677 10.628 Inf     8.293     56.67    1   6.275  &lt;.0001
+ DDT / (g-BHC)       0.474  0.095 Inf     0.320      0.70    1  -3.724  0.0002
+ DDT / both          0.022  0.011 Inf     0.008      0.06    1  -7.849  &lt;.0001
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(insecticide = c(&quot;both&quot;,&quot;DDT&quot;,&quot;DDT&quot;), deposit = 5),
+  b = list(insecticide = c(&quot;g-BHC&quot;,&quot;g-BHC&quot;,&quot;both&quot;), deposit = 5),
+  cnames = c(&quot;both / g-BHC&quot;, &quot;DDT / g-BHC&quot;, &quot;DDT / both&quot;))</code></pre>
+<pre><code>             estimate    lower    upper
+both / g-BHC 21.67723 8.292521 56.66581
+DDT / g-BHC   0.47422 0.320208  0.70232
+DDT / both    0.02188 0.008423  0.05682</code></pre>
+<p>Here is how we can estimate the odds ratios for the effect of
+deposit.</p>
+<pre class="r"><code>emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)), type = &quot;response&quot;)</code></pre>
+<pre><code>insecticide = g-BHC:
+ deposit   prob     SE  df asymp.LCL asymp.UCL
+       2 0.1727 0.0318 Inf    0.1190     0.244
+       1 0.1008 0.0261 Inf    0.0599     0.165
+
+insecticide = both:
+ deposit   prob     SE  df asymp.LCL asymp.UCL
+       2 0.5985 0.0566 Inf    0.4844     0.703
+       1 0.3560 0.0892 Inf    0.2049     0.542
+
+insecticide = DDT:
+ deposit   prob     SE  df asymp.LCL asymp.UCL
+       2 0.1314 0.0271 Inf    0.0867     0.194
+       1 0.0856 0.0232 Inf    0.0497     0.143
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the logit scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)),
+  type = &quot;response&quot;), infer = TRUE)</code></pre>
+<pre><code>insecticide = g-BHC:
+ contrast            odds.ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ deposit2 / deposit1       1.86 0.145 Inf      1.60      2.17    1   7.990  &lt;.0001
+
+insecticide = both:
+ contrast            odds.ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ deposit2 / deposit1       2.70 0.523 Inf      1.84      3.94    1   5.116  &lt;.0001
+
+insecticide = DDT:
+ contrast            odds.ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ deposit2 / deposit1       1.62 0.111 Inf      1.41      1.85    1   7.007  &lt;.0001
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<p>We can also compare the odds ratios.</p>
+<pre class="r"><code>pairs(pairs(emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)))), by = NULL)</code></pre>
+<pre><code> contrast                                                 estimate    SE  df z.ratio p.value
+ (deposit2 - deposit1 g-BHC) - (deposit2 - deposit1 both)   -0.370 0.209 Inf  -1.771  0.1794
+ (deposit2 - deposit1 g-BHC) - (deposit2 - deposit1 DDT)     0.141 0.104 Inf   1.363  0.3605
+ (deposit2 - deposit1 both) - (deposit2 - deposit1 DDT)      0.511 0.206 Inf   2.487  0.0344
+
+Results are given on the log odds ratio (not the response) scale. 
+P value adjustment: tukey method for comparing a family of 3 estimates </code></pre>
+<p>Here I have left off <code>type = "response"</code>. Including it
+will give ratios of odds ratios, which is a bit confusing, but if all we
+care about is whether the odds ratios are significantly different this
+is sufficient. Note that to avoid controlling for familywise Type I
+error rate include the option <code>adjust = "none"</code>.</p>
+</div>
+<div id="relationship-between-poisson-and-logistic-regression"
+class="section level2">
+<h2>Relationship Between Poisson and Logistic Regression</h2>
+<p>Suppose <span class="math inline">\(C_i\)</span> has a binomial
+distribution with parameters <span class="math inline">\(p_i\)</span>
+and <span class="math inline">\(m_i\)</span> so that <span
+class="math display">\[
+  P(C_i = c) = \binom{m_i}{c}p_i^y(1-p_i)^{m_i-c}.
+\]</span> Define the expected count as <span
+class="math inline">\(E(C_i) = m_ip_i = \lambda_i\)</span>. Then <span
+class="math inline">\(p_i = \lambda_i/m_i\)</span> so we can write <span
+class="math display">\[
+  P(C_i = c) =
+\binom{m_i}{c}\left(\frac{\lambda_i}{m_i}\right)^y\left(1-\frac{\lambda_i}{m_i}\right)^{c-y}.
+\]</span> Then it can be shown that <span class="math display">\[
+  \lim_{m_i \rightarrow \infty}
+\binom{m_i}{c}\left(\frac{\lambda_i}{m_i}\right)^y\left(1-\frac{\lambda_i}{m_i}\right)^{m_i-y}
+=
+  \frac{e^{\lambda_i}\lambda_i^y}{y!},
+\]</span> which is the Poisson distribution.</p>
+<p>Thus <em>in practice</em> if <span class="math inline">\(p_i\)</span>
+is small relative to <span class="math inline">\(m_i\)</span> we can
+<em>approximate a binomial distribution with a Poisson
+distribution</em>. Furthermore there is a close relationship between the
+model parameters. In logistic regression we have <span
+class="math display">\[
+  O_i = \exp(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots +
+\beta_k x_{ik}),
+\]</span> where <span class="math inline">\(O_i = p_i/(1-p_i)\)</span>
+is the odds of the event. But when <span
+class="math inline">\(p_i\)</span> is very small then <span
+class="math inline">\(O_i \approx p_i\)</span>.
+<img src="lecture-03-10-2023_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" />
+So then <span class="math display">\[
+  p_i \approx \exp(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots +
+\beta_k x_{ik}),
+\]</span> and because <span class="math inline">\(E(C_i) =
+m_ip_i\)</span>, <span class="math display">\[
+  E(C_i) \approx \exp(\log(m_i) + \beta_0 + \beta_1 x_{i1} + \beta_2
+x_{i2} + \cdots + \beta_k x_{ik}),
+\]</span> where <span class="math inline">\(\log(m_i)\)</span> is used
+as an offset in a Poisson regression model. That is, we can model a
+proportion (approximately) as a rate in a Poisson regression model for
+events that are rare and when <span class="math inline">\(m_i\)</span>
+(i.e., the denominator of the proportion) is relatively large. This is
+relatively common in large-scale observational studies.</p>
+<p><strong>Example</strong>: Consider the following data on the
+incidence of lung cancer in four Danish cities.</p>
+<pre class="r"><code>library(ISwR) # for eba1977 data
+head(eba1977)</code></pre>
+<pre><code>        city   age  pop cases
+1 Fredericia 40-54 3059    11
+2    Horsens 40-54 2879    13
+3    Kolding 40-54 3142     4
+4      Vejle 40-54 2520     5
+5 Fredericia 55-59  800    11
+6    Horsens 55-59 1083     6</code></pre>
+<pre class="r"><code>p &lt;- ggplot(eba1977, aes(x = age, y = cases/pop)) + 
+  geom_point() + facet_grid(city ~ .) + coord_flip() + 
+  labs(x = &quot;Age Range&quot;, y = &quot;Cases of Lung Cancer Per Captia&quot;) +
+  theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-03-10-2023_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" />
+Consider both a logistic and Poisson regression models to compare the
+cities while controlling for age.</p>
+<pre class="r"><code>m.b &lt;- glm(cbind(cases, pop-cases) ~ city + age, family = binomial, data = eba1977)
+cbind(summary(m.b)$coefficients, confint(m.b))</code></pre>
+<pre><code>            Estimate Std. Error z value   Pr(&gt;|z|)   2.5 %    97.5 %
+(Intercept)  -5.6262     0.2008 -28.021 9.132e-173 -6.0385 -5.249799
+cityHorsens  -0.3345     0.1827  -1.830  6.719e-02 -0.6946  0.023561
+cityKolding  -0.3764     0.1890  -1.991  4.646e-02 -0.7504 -0.007412
+cityVejle    -0.2760     0.1891  -1.459  1.444e-01 -0.6503  0.093162
+age55-59      1.1070     0.2490   4.445  8.771e-06  0.6159  1.596828
+age60-64      1.5291     0.2325   6.577  4.812e-11  1.0760  1.991225
+age65-69      1.7819     0.2305   7.732  1.061e-14  1.3335  2.240675
+age70-74      1.8727     0.2365   7.918  2.415e-15  1.4105  2.341695
+age75+        1.4289     0.2512   5.688  1.289e-08  0.9328  1.922467</code></pre>
+<pre class="r"><code>m.p &lt;- glm(cases ~ offset(log(pop)) + city + age, family = poisson, data = eba1977)
+cbind(summary(m.p)$coefficients, confint(m.p))</code></pre>
+<pre><code>            Estimate Std. Error z value   Pr(&gt;|z|)   2.5 %    97.5 %
+(Intercept)  -5.6321     0.2003 -28.125 4.911e-174 -6.0433 -5.256725
+cityHorsens  -0.3301     0.1815  -1.818  6.899e-02 -0.6878  0.025582
+cityKolding  -0.3715     0.1878  -1.978  4.789e-02 -0.7432 -0.004967
+cityVejle    -0.2723     0.1879  -1.450  1.472e-01 -0.6441  0.094356
+age55-59      1.1010     0.2483   4.434  9.230e-06  0.6114  1.589441
+age60-64      1.5186     0.2316   6.556  5.528e-11  1.0672  1.979110
+age65-69      1.7677     0.2294   7.704  1.314e-14  1.3213  2.224503
+age70-74      1.8569     0.2353   7.891  3.005e-15  1.3970  2.323556
+age75+        1.4197     0.2503   5.672  1.408e-08  0.9254  1.911381</code></pre>
+<p>The expected proportion/rate of cases in Fredericia appears to be the
+highest. Let’s compare that city with the others while controlling for
+age.</p>
+<pre class="r"><code>trtools::contrast(m.b, 
+  a = list(city = &quot;Fredericia&quot;, age = &quot;40-54&quot;),
+  b = list(city = c(&quot;Horsens&quot;,&quot;Kolding&quot;,&quot;Vejle&quot;), age = &quot;40-54&quot;),
+  cnames = c(&quot;vs Horsens&quot;,&quot;vs Kolding&quot;,&quot;vs Vejle&quot;), tf = exp)</code></pre>
+<pre><code>           estimate  lower upper
+vs Horsens    1.397 0.9766 1.999
+vs Kolding    1.457 1.0059 2.110
+vs Vejle      1.318 0.9097 1.909</code></pre>
+<pre class="r"><code>trtools::contrast(m.p, 
+  a = list(city = &quot;Fredericia&quot;, age = &quot;40-54&quot;, pop = 1),
+  b = list(city = c(&quot;Horsens&quot;,&quot;Kolding&quot;,&quot;Vejle&quot;), age = &quot;40-54&quot;, pop = 1),
+  cnames = c(&quot;vs Horsens&quot;,&quot;vs Kolding&quot;,&quot;vs Vejle&quot;), tf = exp)</code></pre>
+<pre><code>           estimate  lower upper
+vs Horsens    1.391 0.9746 1.985
+vs Kolding    1.450 1.0035 2.095
+vs Vejle      1.313 0.9086 1.897</code></pre>
+<p>Note that since there is no interaction in the model, contrasts for
+city will not depend on the age group. We can also compute the estimated
+expected proportion (i.e., probability) or expected rate for each
+model.</p>
+<pre class="r"><code>trtools::contrast(m.b, a = list(city = levels(eba1977$city), age = &quot;40-54&quot;), tf = plogis)</code></pre>
+<pre><code> estimate    lower    upper
+ 0.003589 0.002424 0.005311
+ 0.002571 0.001701 0.003885
+ 0.002466 0.001625 0.003741
+ 0.002726 0.001787 0.004155</code></pre>
+<pre class="r"><code>trtools::contrast(m.p, a = list(city = levels(eba1977$city), age = &quot;40-54&quot;, pop = 1), tf = exp)</code></pre>
+<pre><code> estimate    lower    upper
+ 0.003581 0.002419 0.005303
+ 0.002574 0.001704 0.003890
+ 0.002470 0.001628 0.003747
+ 0.002727 0.001789 0.004158</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(city = levels(eba1977$city), age = levels(eba1977$age))
+cbind(d, trtools::glmint(m.b, newdata = d))</code></pre>
+<pre><code>         city   age      fit      low      upp
+1  Fredericia 40-54 0.003589 0.002424 0.005311
+2     Horsens 40-54 0.002571 0.001701 0.003885
+3     Kolding 40-54 0.002466 0.001625 0.003741
+4       Vejle 40-54 0.002726 0.001787 0.004155
+5  Fredericia 55-59 0.010780 0.007192 0.016129
+6     Horsens 55-59 0.007739 0.005135 0.011648
+7     Kolding 55-59 0.007424 0.004884 0.011270
+8       Vejle 55-59 0.008201 0.005378 0.012487
+9  Fredericia 60-64 0.016348 0.011360 0.023473
+10    Horsens 60-64 0.011755 0.008104 0.017024
+11    Kolding 60-64 0.011278 0.007702 0.016489
+12      Vejle 60-64 0.012454 0.008520 0.018170
+13 Fredericia 65-69 0.020952 0.014654 0.029876
+14    Horsens 65-69 0.015086 0.010513 0.021604
+15    Kolding 65-69 0.014476 0.009925 0.021069
+16      Vejle 65-69 0.015979 0.010956 0.023252
+17 Fredericia 70-74 0.022898 0.015845 0.032986
+18    Horsens 70-74 0.016496 0.011299 0.024025
+19    Kolding 70-74 0.015830 0.010679 0.023407
+20      Vejle 70-74 0.017471 0.011844 0.025703
+21 Fredericia   75+ 0.014812 0.009872 0.022169
+22    Horsens   75+ 0.010646 0.007042 0.016065
+23    Kolding   75+ 0.010214 0.006661 0.015633
+24      Vejle   75+ 0.011280 0.007368 0.017232</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(city = levels(eba1977$city), age = levels(eba1977$age), pop = 1)
+cbind(d, trtools::glmint(m.p, newdata = d))</code></pre>
+<pre><code>         city   age pop      fit      low      upp
+1  Fredericia 40-54   1 0.003581 0.002419 0.005303
+2     Horsens 40-54   1 0.002574 0.001704 0.003890
+3     Kolding 40-54   1 0.002470 0.001628 0.003747
+4       Vejle 40-54   1 0.002727 0.001789 0.004158
+5  Fredericia 55-59   1 0.010769 0.007174 0.016167
+6     Horsens 55-59   1 0.007742 0.005133 0.011676
+7     Kolding 55-59   1 0.007427 0.004883 0.011297
+8       Vejle 55-59   1 0.008202 0.005375 0.012517
+9  Fredericia 60-64   1 0.016351 0.011335 0.023587
+10    Horsens 60-64   1 0.011755 0.008092 0.017075
+11    Kolding 60-64   1 0.011277 0.007690 0.016536
+12      Vejle 60-64   1 0.012453 0.008506 0.018231
+13 Fredericia 65-69   1 0.020976 0.014623 0.030090
+14    Horsens 65-69   1 0.015080 0.010488 0.021681
+15    Kolding 65-69   1 0.014467 0.009899 0.021141
+16      Vejle 65-69   1 0.015976 0.010929 0.023354
+17 Fredericia 70-74   1 0.022932 0.015810 0.033263
+18    Horsens 70-74   1 0.016486 0.011266 0.024123
+19    Kolding 70-74   1 0.015816 0.010646 0.023497
+20      Vejle 70-74   1 0.017466 0.011810 0.025830
+21 Fredericia   75+   1 0.014811 0.009848 0.022273
+22    Horsens   75+   1 0.010647 0.007034 0.016116
+23    Kolding   75+   1 0.010214 0.006654 0.015681
+24      Vejle   75+   1 0.011280 0.007358 0.017292</code></pre>
+<p>We can use this to make some helpful plots of the estimated rates (or
+probabilities) of lung cancer.</p>
+<pre class="r"><code>d &lt;- expand.grid(age = levels(eba1977$age), city = levels(eba1977$city), pop = 1)
+d &lt;- cbind(d, trtools::glmint(m.p, newdata = d))
+p &lt;- ggplot(eba1977, aes(x = age, y = cases/pop)) +
+  geom_pointrange(aes(y = fit, ymin = low, ymax = upp), 
+    shape = 21, fill = &quot;white&quot;, data = d, color = grey(0.5)) +
+  geom_point() + facet_grid(city ~ .) + coord_flip() + 
+  labs(x = &quot;Age Range&quot;, y = &quot;Cases of Lung Cancer Per Captia&quot;) +
+  theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-03-10-2023_files/figure-html/unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p &lt;- ggplot(eba1977, aes(x = city, y = cases/pop)) +
+  geom_pointrange(aes(y = fit, ymin = low, ymax = upp), 
+    shape = 21, fill = &quot;white&quot;, data = d, color = grey(0.5)) +
+  geom_point() + facet_grid(age ~ .) + coord_flip() +
+  labs(x = &quot;City&quot;, y = &quot;Cases of Lung Cancer Per Captia&quot;) +
+  theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-03-10-2023_files/figure-html/unnamed-chunk-20-2.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p &lt;- ggplot(eba1977, aes(x = age, y = cases/pop, color = city)) +
+  geom_pointrange(aes(y = fit, ymin = low, ymax = upp), 
+    shape = 21, fill = &quot;white&quot;, data = d, 
+      position = position_dodge(width = 0.5)) + 
+  geom_point(position = position_dodge(width = 0.5)) + 
+  coord_flip() + 
+  labs(x = &quot;Age Range&quot;, y = &quot;Cases of Lung Cancer Per Captia&quot;, 
+       color = &quot;City&quot;) + 
+  theme_minimal() + theme(legend.position = c(0.9,0.3))
+plot(p)</code></pre>
+<p><img src="lecture-03-10-2023_files/figure-html/unnamed-chunk-20-3.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="separation-and-infinite-parameter-estimates"
+class="section level2">
+<h2>Separation and Infinite Parameter Estimates</h2>
+<p>Some GLMs are prone to numerical problems due to (nearly) infinite
+parameter estimates.</p>
+<p><strong>Example</strong>: Consider the following data.</p>
+<pre class="r"><code>mydata &lt;- data.frame(m = rep(20, 10), c = rep(c(0,20), c(4,6)), x = 1:10)
+mydata</code></pre>
+<pre><code>    m  c  x
+1  20  0  1
+2  20  0  2
+3  20  0  3
+4  20  0  4
+5  20 20  5
+6  20 20  6
+7  20 20  7
+8  20 20  8
+9  20 20  9
+10 20 20 10</code></pre>
+<pre class="r"><code>p &lt;- ggplot(mydata, aes(x = x, y = c/m)) + theme_minimal() +
+  geom_point() + scale_x_continuous(breaks = 1:10)
+plot(p)</code></pre>
+<p><img src="lecture-03-10-2023_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" />
+If we try to estimate a logistic regression model we get errors and some
+extreme estimates, standard errors, and confidence intervals.</p>
+<pre class="r"><code>m &lt;- glm(cbind(c,m-c) ~ x, family = binomial, data = mydata)</code></pre>
+<pre><code>Warning: glm.fit: algorithm did not converge</code></pre>
+<pre><code>Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre class="r"><code>summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error   z value Pr(&gt;|z|)
+(Intercept)  -212.11     114489 -0.001853   0.9985
+x              47.12      25082  0.001879   0.9985</code></pre>
+<pre class="r"><code>confint(m)</code></pre>
+<pre><code>Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre><code>Warning: glm.fit: algorithm did not converge</code></pre>
+<pre><code>Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre><code>             2.5 % 97.5 %
+(Intercept) -29559 -28057
+x             7969   1966</code></pre>
+<p>But we can still plot the model.</p>
+<pre class="r"><code>d &lt;- data.frame(x = seq(1, 10, length = 1000))
+d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
+p &lt;- p + geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-03-10-2023_files/figure-html/unnamed-chunk-23-1.png" width="100%" style="display: block; margin: auto;" />
+The problem is that the estimation procedure “wants” the curve to be a
+step function, but that only occurs as <span
+class="math inline">\(\beta_1 \rightarrow \infty\)</span>, and the value
+of <span class="math inline">\(x\)</span> where the estimated expected
+response is 0.5 equals <span
+class="math inline">\(-\beta_0/\beta_1\)</span>, and for the step
+function that would be 4.5, so the estimation procedure “wants” the
+estimate of <span class="math inline">\(\beta_0\)</span> to be <span
+class="math inline">\(-\beta_15.5 = -\infty\)</span>. This is called
+<em>separation</em>. It is fairly obvious with a single explanatory
+variable, but much less so with multiple explanatory variables. The
+example above shows <em>complete separation</em> because we can separate
+the values of <span class="math inline">\(y\)</span> based on the values
+of <span class="math inline">\(x\)</span>. <em>Quasi-separation</em>
+occurs when this is almost true as in the following example.</p>
+<pre class="r"><code>mydata &lt;- data.frame(m = rep(20, 50), x = seq(1, 10, length = 50), 
+  c = rep(c(0,20,0,20), c(24,1,1,24)))
+
+m &lt;- glm(cbind(c,m-c) ~ x, family = binomial, data = mydata)</code></pre>
+<pre><code>Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre class="r"><code>summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)  -39.231      5.542  -7.079 1.448e-12
+x              7.133      1.006   7.087 1.371e-12</code></pre>
+<pre class="r"><code>confint(m)</code></pre>
+<pre><code>Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre><code>              2.5 %  97.5 %
+(Intercept) -51.696 -29.767
+x             5.414   9.397</code></pre>
+<pre class="r"><code>d &lt;- data.frame(x = seq(1, 10, length = 10000))
+d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
+
+p &lt;- ggplot(mydata, aes(x = x, y = c/m)) + theme_minimal()
+p &lt;- p + geom_point() + geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-03-10-2023_files/figure-html/unnamed-chunk-24-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>Example</strong>: Consider the following data.</p>
+<pre class="r"><code>mydata &lt;- data.frame(m = c(100,100), c = c(25,100), group = c(&quot;control&quot;,&quot;treatment&quot;))
+mydata</code></pre>
+<pre><code>    m   c     group
+1 100  25   control
+2 100 100 treatment</code></pre>
+<pre class="r"><code>m &lt;- glm(cbind(c,m-c) ~ group, family = binomial, data = mydata)
+summary(m)$coefficients</code></pre>
+<pre><code>               Estimate Std. Error    z value  Pr(&gt;|z|)
+(Intercept)      -1.099  2.309e-01 -4.7571308 1.964e-06
+grouptreatment   28.410  5.169e+04  0.0005496 9.996e-01</code></pre>
+<pre class="r"><code>confint(m)</code></pre>
+<pre><code>Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<pre><code>                   2.5 %     97.5 %
+(Intercept)       -1.571    -0.6611
+grouptreatment -1849.427 18872.0265</code></pre>
+<p>A similar problem can happen in Poisson regression where the observed
+count or rate in a category is zero.</p>
+<p><strong>Example</strong>: Consider the following data and model.</p>
+<pre class="r"><code>mydata &lt;- data.frame(y = c(20, 10, 50, 15, 0), x = letters[1:5])
+mydata</code></pre>
+<pre><code>   y x
+1 20 a
+2 10 b
+3 50 c
+4 15 d
+5  0 e</code></pre>
+<pre class="r"><code>m &lt;- glm(y ~ x, family = poisson, data = mydata)
+summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error    z value  Pr(&gt;|z|)
+(Intercept)   2.9957  2.236e-01 13.3973220 6.268e-41
+xb           -0.6931  3.873e-01 -1.7896983 7.350e-02
+xc            0.9163  2.646e-01  3.4632534 5.337e-04
+xd           -0.2877  3.416e-01 -0.8422469 3.996e-01
+xe          -25.2983  4.225e+04 -0.0005988 9.995e-01</code></pre>
+<pre class="r"><code>confint(m)</code></pre>
+<pre><code>Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred
+
+Warning: glm.fit: fitted rates numerically 0 occurred</code></pre>
+<pre><code>Error: no valid set of coefficients has been found: please supply starting values</code></pre>
+<p>There are some solutions to this problem, depending on the
+circumstances.</p>
+<ol style="list-style-type: decimal">
+<li><p>In simple cases such as the logistic regression example with a
+control and treatment group, a nonparametric approach could be used for
+a significance test (e.g., Fisher’s exact test).</p></li>
+<li><p>In some cases with a categorical explanatory variable, we can
+omit the level(s) where the observed count is zero (in Poisson
+regression), or the observed proportion is 0 or 1 (in logistic
+regression). Clearly this precludes inferences concerning that level or
+its relationship with other levels.</p></li>
+<li><p>For logistic regression (or similar models) a “penalized” or
+“bias-reduced” estimation method can be used (see the
+<strong>logistf</strong> and <strong>brglm</strong> packages).</p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

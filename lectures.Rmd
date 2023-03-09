@@ -85,7 +85,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Examples of logistic regression and use of odds ratios](lecture-03-08-2023.html). Second homework assignment due.
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Using the **emmeans** package with Poisson and logistic regression, the relationship between Poisson and logistic regression, and separation and infinite parameter estimates](lecture-03-10-2023.html).
  
 ***
 
