@@ -600,7 +600,7 @@ Intervals are back-transformed from the log odds ratio scale
 Tests are performed on the log odds ratio scale </code></pre>
 <p>Here is how we can estimate the odds ratios for the effect of
 deposit.</p>
-<pre class="r"><code>emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)), type = &quot;response&quot;) # odds</code></pre>
+<pre class="r"><code>emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)), type = &quot;response&quot;) # probability</code></pre>
 <pre><code>insecticide = g-BHC:
  deposit   prob     SE  df asymp.LCL asymp.UCL
        2 0.1727 0.0318 Inf    0.1190     0.244
