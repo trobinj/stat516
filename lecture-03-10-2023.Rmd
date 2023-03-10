@@ -155,7 +155,7 @@ pairs(emmeans(m, ~ insecticide*deposit, type = "response",
 
 Here is how we can estimate the odds ratios for the effect of deposit.
 ```{r}
-emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)), type = "response") # odds
+emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)), type = "response") # probability
 pairs(emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)),
   type = "response"), infer = TRUE) # odds ratios
 ```
@@ -347,7 +347,7 @@ There are some solutions to this problem, depending on the circumstances.
 
 0. In some cases with a categorical explanatory variable, we can omit the level(s) where the observed count is zero (in Poisson regression), or the observed proportion is 0 or 1 (in logistic regression). Clearly this precludes inferences concerning that level or its relationship with other levels.
 
-0. For logistic regression (or similar models) a "penalized" or "bias-reduced" estimation method can be used (see the **logistf** and **brglm** packages). 
+0. For logistic regression (or similar models) a "penalized" or "bias-reduced" estimation method can be used for quasi-separation (see the **logistf** and **brglm** packages). 
 
 
 
