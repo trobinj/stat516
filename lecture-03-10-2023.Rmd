@@ -62,10 +62,13 @@ We can compute the expected count for a concentration of two for each strain usi
 trtools::contrast(m, tf = exp,
   a = list(strain = c("a","b"), concentration = 2))
 ```
-And we can do it using `emmeans` if we specify `type = "response"` and use the `at` argument to specify an quantitative explanatory variables. 
+And we can do it using `emmeans` if we specify `type = "response"` and use the `at` argument to specify the value of any quantitative explanatory variables. 
 ```{r}
 library(emmeans)
 emmeans(m, ~ strain, type = "response", at = list(concentration = 2))
+emmeans(m, ~ strain|concentration, type = "response", at = list(concentration = c(1,2,3)))
+emmeans(m, ~ concentration|strain, type = "response", at = list(concentration = c(1,2,3)))
+emmeans(m, ~ concentration*strain, type = "response", at = list(concentration = c(1,2,3)))
 ```
 Note that `emmeans` does produce a valid standard error on the scale of the expected count/rate which `trtools::contrast` does not (by default), and that `trtools::contrast` will show the test statistic and p-value on the log scale if we omit the `tf = exp` argument. 
 
@@ -76,14 +79,22 @@ trtools::contrast(m, tf = exp,
   b = list(strain = "b", concentration = 2))
 pairs(emmeans(m, ~ strain, type = "response", 
   at = list(concentration = 2)), infer = TRUE)
+pairs(emmeans(m, ~ strain*concentration, type = "response", 
+  at = list(concentration = c(1,2,3))), by = "concentration", infer = TRUE)
+pairs(emmeans(m, ~ strain|concentration, type = "response", 
+  at = list(concentration = c(1,2,3))), infer = TRUE)
 ```
 What about the rate ratio for the effect of concentration?
 ```{r}
 trtools::contrast(m, tf = exp,
   a = list(strain = c("a","b"), concentration = 2),
   b = list(strain = c("a","b"), concentration = 1))
-emmeans(m, ~concentration|strain, at = list(concentration = c(2,1)), type = "response")
-pairs(emmeans(m, ~concentration|strain, at = list(concentration = c(2,1)), type = "response"))
+emmeans(m, ~concentration|strain, 
+  at = list(concentration = c(2,1)), type = "response")
+pairs(emmeans(m, ~concentration|strain, 
+  at = list(concentration = c(2,1)), type = "response"))
+pairs(emmeans(m, ~concentration*strain,
+  at = list(concentration = c(2,1)), type = "response"), by = "strain")
 ```
 We can also make inferences to *compare* the two rate ratios.
 ```{r}
@@ -134,17 +145,25 @@ trtools::contrast(m, tf = exp,
   b = list(insecticide = c("g-BHC","g-BHC","both"), deposit = 5),
   cnames = c("both / g-BHC", "DDT / g-BHC", "DDT / both"))
 ```
+We can estimate the odds ratios at several values of deposit.
+```{r}
+pairs(emmeans(m, ~ insecticide|deposit, type = "response", 
+  at = list(deposit = c(4,5,6))), adjust = "none", infer = TRUE)
+pairs(emmeans(m, ~ insecticide*deposit, type = "response", 
+  at = list(deposit = c(4,5,6))), by = "deposit", adjust = "none", infer = TRUE)
+```
+
 Here is how we can estimate the odds ratios for the effect of deposit.
 ```{r}
-emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)), type = "response")
+emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)), type = "response") # odds
 pairs(emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)),
-  type = "response"), infer = TRUE)
+  type = "response"), infer = TRUE) # odds ratios
 ```
 We can also compare the odds ratios.
 ```{r}
 pairs(pairs(emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)))), by = NULL)
 ```
-Here I have left off `type = "response"`. Including it will give ratios of odds ratios, which is a bit confusing, but if all we care about is whether the odds ratios are significantly different this is sufficient. Note that to avoid controlling for familywise Type I error rate include the option `adjust = "none"`. 
+Here I have left off `type = "response"`. Including it will give ratios of odds ratios, which is a bit confusing, but if all we care about is whether the odds ratios are significantly different this is sufficient. Note that to avoid controlling for family-wise Type I error rate include the option `adjust = "none"`. 
 
 ## Relationship Between Poisson and Logistic Regression
 
@@ -189,9 +208,9 @@ $$
 $$
 and because $E(C_i) = m_ip_i$,
 $$
-  E(C_i) \approx \exp(\log(m_i) + \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}),
+  E(C_i) \approx \exp(\log m_i + \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}),
 $$
-where $\log(m_i)$ is used as an offset in a Poisson regression model. That is, we can model a proportion (approximately) as a rate in a Poisson regression model for events that are rare and when $m_i$ (i.e., the denominator of the proportion) is relatively large. This is relatively common in large-scale observational studies.
+where $\log m_i$ is used as an offset in a Poisson regression model. That is, we can model a proportion (approximately) as a rate in a Poisson regression model for events that are rare and when $m_i$ (i.e., the denominator of the proportion) is relatively large. This is relatively common in large-scale observational studies.
 
 **Example**: Consider the following data on the incidence of lung cancer in four Danish cities.
 ```{r}
