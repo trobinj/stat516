@@ -97,7 +97,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` The [solutions](hw2-solutions.html) for the second homework assignment are now available.
+`r i <- i + 1; d[i]` [Maximum likelihood, likelihood-based tests and confidence intervals, Wald tests and confidence intervals](lecture-03-20-2023.html). The [solutions](hw2-solutions.html) for the second homework assignment are now available.
 
 `r i <- i + 1; d[i]`  
 

@@ -11,9 +11,7 @@ This site contains material for Dr. Johnson's *Applied Regression Modeling* cour
 
 <center>
 
-![https://xkcd.com/2537](https://imgs.xkcd.com/comics/painbow_award.png)
-
-Amusingly there is a [R package](https://github.com/steveharoz/painbow) if you want to use this color scheme with `ggplot`. 
+![https://xkcd.com/2599](https://imgs.xkcd.com/comics/spacecraft_debris_odds_ratio.png)
 
 </center>
 
