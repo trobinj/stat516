@@ -97,7 +97,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` The [solutions](hw2-solutions.html) for the second homework assignment are now available.
 
 `r i <- i + 1; d[i]`  
 
