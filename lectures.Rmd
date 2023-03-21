@@ -99,7 +99,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Maximum likelihood, likelihood-based tests and confidence intervals, Wald tests and confidence intervals](lecture-03-20-2023.html). The [solutions](hw2-solutions.html) for the second homework assignment are now available.
 
-`r i <- i + 1; d[i]`  
+`r i <- i + 1; d[i]` [Over-dispersion and quasi-likelihood](lecture-03-22-2023.html). 
 
 `r i <- i + 1; d[i]` Third homework assignment assigned.
  
