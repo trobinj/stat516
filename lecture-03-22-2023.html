@@ -442,8 +442,8 @@ AIC: 596.6
 Number of Fisher Scoring iterations: 5</code></pre>
 <p>If the model is correct and there is no over-dispersion, the residual
 deviance has approximate a <span class="math inline">\(\chi^2\)</span>
-distribution with degrees of freedom equal to its degrees of freedom. We
-can use this as an informal test for over-dispersion.</p>
+distribution with degrees of freedom equal to the residual degrees of
+freedom. We can use this as an informal test for over-dispersion.</p>
 <pre class="r"><code>f &lt;- function(x) dchisq(x, 36)
 curve(f, from = 0, to = 500, n = 1000) </code></pre>
 <p><img src="lecture-03-22-2023_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /></p>
