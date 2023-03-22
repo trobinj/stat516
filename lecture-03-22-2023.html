@@ -290,7 +290,7 @@ class="math display">\[
 \]</span> Over-dispersion is fairly common in practice, but
 under-dispersion is relatively rare.</p>
 <div id="over-dispersion-in-poisson-regression" class="section level3">
-<h3>over-dispersion in Poisson Regression</h3>
+<h3>Over-dispersion in Poisson Regression</h3>
 <p>If <span class="math inline">\(Y_i\)</span> has a <em>Poisson</em>
 distribution, then <span class="math display">\[
     \text{Var}(Y_i) = E(Y_i),
@@ -302,7 +302,7 @@ class="math display">\[
 \]</span></p>
 </div>
 <div id="over-dispersion-in-binomial-regression" class="section level3">
-<h3>over-dispersion in Binomial Regression</h3>
+<h3>Over-dispersion in Binomial Regression</h3>
 <p>If <span class="math inline">\(C_i\)</span> has a <em>binomial</em>
 distribution, and <span class="math inline">\(Y_i = C_i/m_i\)</span>,
 then <span class="math display">\[
@@ -320,7 +320,7 @@ leading to incorrect test statistics and confidence intervals.</p>
 </div>
 </div>
 <div id="causes-of-over-dispersion" class="section level2">
-<h2>Causes of over-dispersion</h2>
+<h2>Causes of Over-dispersion</h2>
 <ol style="list-style-type: decimal">
 <li><p>Wrong assumed distribution for the response variable.</p></li>
 <li><p>Unobserved explanatory variables that vary over
@@ -511,11 +511,11 @@ p &lt;- ggplot(fishing, aes(x = eta, y = res)) + theme_minimal() +
   geom_hline(yintercept = c(-2, 2), linetype = 3)
 plot(p)</code></pre>
 <p><img src="lecture-03-22-2023_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" />
-over-dispersion is not the only issue here. The variance of the
+Over-dispersion is not the only issue here. The variance of the
 residuals is not constant.</p>
 </div>
 <div id="solutions-to-over-dispersion" class="section level2">
-<h2>Solutions to over-dispersion</h2>
+<h2>Solutions to Over-dispersion</h2>
 <p>There are several potential solutions to over-dispersion.</p>
 <ol style="list-style-type: decimal">
 <li><p>Quasi-likelihood. Specify a variance structure other than the one
@@ -526,7 +526,7 @@ exponential family).</p></li>
 </ol>
 <div id="quasi-likelihood-solutions-to-over-dispersion"
 class="section level3">
-<h3>Quasi-Likelihood Solutions to over-dispersion</h3>
+<h3>Quasi-Likelihood Solutions to Over-dispersion</h3>
 <p>The Poisson and binomial distributions assume the variance structures
 <span class="math display">\[
   \text{Var}(Y_i) = \phi E(Y_i) \ \ \ \text{and} \ \ \ \text{Var}(Y_i) =

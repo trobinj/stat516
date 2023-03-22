@@ -61,7 +61,7 @@ $$
 $$
 Over-dispersion is fairly common in practice, but under-dispersion is relatively rare.
 
-### over-dispersion in Poisson Regression
+### Over-dispersion in Poisson Regression
 
 If $Y_i$ has a *Poisson* distribution, then
 $$
@@ -72,7 +72,7 @@ $$
     \text{Var}(Y_i) > E(Y_i).
 $$
 
-### over-dispersion in Binomial Regression
+### Over-dispersion in Binomial Regression
 
 If $C_i$ has a *binomial* distribution, and $Y_i = C_i/m_i$, then
 $$
@@ -85,7 +85,7 @@ $$
 
 In general, failing to account for over-dispersion (or a misspefication of the variance structure in general) may yield incorrect standard errors (usually too small in the case of over-dispersion), leading to incorrect test statistics and confidence intervals. 
 
-## Causes of over-dispersion
+## Causes of Over-dispersion
 
 1. Wrong assumed distribution for the response variable. 
 
@@ -205,9 +205,9 @@ p <- ggplot(fishing, aes(x = eta, y = res)) + theme_minimal() +
   geom_hline(yintercept = c(-2, 2), linetype = 3)
 plot(p)
 ```
-over-dispersion is not the only issue here. The variance of the residuals is not constant.
+Over-dispersion is not the only issue here. The variance of the residuals is not constant.
   
-## Solutions to over-dispersion
+## Solutions to Over-dispersion
 
 There are several potential solutions to over-dispersion.
 
@@ -217,7 +217,7 @@ There are several potential solutions to over-dispersion.
 
 3. Use a robust estimator of the standard errors.
 
-### Quasi-Likelihood Solutions to over-dispersion
+### Quasi-Likelihood Solutions to Over-dispersion
 
 The Poisson and binomial distributions assume the variance structures
 $$
