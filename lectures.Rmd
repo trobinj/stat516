@@ -101,7 +101,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Over-dispersion and quasi-likelihood](lecture-03-22-2023.html). 
 
-`r i <- i + 1; d[i]` Third homework assignment assigned.
+`r i <- i + 1; d[i]` [R demonstration of Poisson and logistic regression](lecture-03-24-2023.html). Third homework assignment assigned.
  
 ***
 
