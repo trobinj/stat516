@@ -66,76 +66,42 @@ The plot clearly shows the incomplete nature of the fractional factorial design.
     ```
 Note that here `m` is a model object created using the `glm` function. 
 
-    <!-- **Solution**: The results can be replicated as follows. Note that the output above indicates that only the "main effects" of spray, field, and year were specified. We can see that there are indicator variables for spray, field, and year, but no interaction terms.  -->
-    <!-- ```{r} -->
-    <!-- m <- glm(count ~ spray + field + year, family = poisson, data = skylark) -->
-    <!-- cbind(summary(m)$coefficients, confint(m)) -->
-    <!-- ``` -->
-
-```{r, echo = FALSE}
-f <- round(exp(coef(m))[2],2)
-```
+    **Solution**: The results can be replicated as follows. Note that the output above indicates that only the "main effects" of spray, field, and year were specified. We can see that there are indicator variables for spray, field, and year, but no interaction terms.
+    ```{r}
+    m <- glm(count ~ spray + field + year, family = poisson, data = skylark)
+    cbind(summary(m)$coefficients, confint(m))
+    ```
 
 2. What is the estimated rate ratio for the effect of spraying? How can this be interpreted?
 
-<!--     **Solution**: The quantity we want to estimate is $e^{\beta_1}$ which is the "rate ratio" for the effect of spraying. This gives the "multiplicative effect" of spraying --- i.e., the ratio of the expected count when spraying to the expected count when not spraying. You could compute this in R or with a hand calculator by computing `exp(-0.4561258)`. Also we can do this in R as follows. -->
-<!--     ```{r} -->
-<!--     exp(cbind(coef(m), confint(m))) -->
-<!--     ``` -->
-<!-- Note that I've included the endpoints of the confidence intervals as well. If you just wanted the point estimate you could use `exp(coef(m))`. The function `coef` extracts the parameter estimates from the model object `m`. -->
-
-<!-- 3. Replicate the result that was obtained in the previous problem using the `contrast` function and the `tf = exp` option. Note that you will need to specify a field and a year, but since the model does not contain any interactions between spray and those variables the multiplicative effect of spray will not depend on the field or year you specify. -->
-
-<!--     **Solution**: Here is how we could make inferences about the spray effect using the `contrast` function. -->
-<!--     ```{r} -->
-<!--     trtools::contrast(m, tf = exp, -->
-<!--         a = list(spray = "yes", field = "Ke", year = "1992"), -->
-<!--         b = list(spray = "no", field = "Ke", year = "1992")) -->
-<!--     ``` -->
-<!-- Also we can "flip" the rate ratio. -->
-<!--     ```{r} -->
-<!--     trtools::contrast(m, tf = exp, -->
-<!--         a = list(spray = "no", field = "Ke", year = "1992"), -->
-<!--         b = list(spray = "yes", field = "Ke", year = "1992")) -->
-<!--     ``` -->
-<!-- This shows that if a field is not sprayed the the expected number of fledglings is about 1.58 (58%) higher than when it is sprayed. Again, note that the field and year does not matter since there are no interactions between spray and either of those variables, so the multiplicative effect of spray will be the same regardless of the field and year. You could verify this by specifying a different field and/or year. Note that there are slight differences in the confidence intervals obtained here and in the previous problem. That is because `confint` computes a profile likelihood confidence interval whereas `contrast` computes a Wald confidence interval. Also note that while we were mainly interested in the effect of spray here, we could easily compare different fields or years.  -->
-
-<!--     You can also use the **emmeans** package to estimate rate ratios, provided that the explanatory variable in question is categorical. Here is how you can use it to estimate the rate ratios for every combination of year and field (note that they are all the same for this model). -->
-<!--     ```{r} -->
-<!--     library(emmeans) -->
-<!--     pairs(emmeans(m, ~ spray | field*year),  -->
-<!--       type = "response", infer = TRUE) -->
-<!--     ``` -->
+    **Solution**: We can estimate this rate ratio several ways. Note that since there is no interaction involving `spray` the field and year does not matter.
+    ```{r}
+    trtools::contrast(m, tf = exp,
+      a = list(spray = "yes", field = "Ke", year = "1992"),
+      b = list(spray = "no", field = "Ke", year = "1992"))
+    library(emmeans)
+    pairs(emmeans(m, ~spray|field*year, type = "response"), infer = TRUE)
+    pairs(emmeans(m, ~spray, type = "response"), reverse = TRUE, infer = TRUE)
+    exp(cbind(coef(m), confint(m)))
+    ```
   
-3. What is the estimated expected number of fledgelings for each condition? 
-  
-<!--     **Solution**: For example, the expected counts with and without spraying for field `Ke` in 1992 is -->
-<!--     ```{r} -->
-<!--     trtools::contrast(m, a = list(spray = c("yes","no"), field = "Ke", year = "1992"), -->
-<!--         tf = exp, cnames = c("spray","no spray")) -->
-<!--     ``` -->
-<!-- Also note that the ratio of these estimated expected counts (spray divided by no spray) is about `r round(f,2)` which is what we estimated earlier. If you wanted to estimate a bunch of expected counts it might be easier to use `glmint`. Below I have estimated the estimated expected count for every combination of spray, field, and year. Note that `glmint` does not require you to specify a transformation function. It knows what function to use based on the model.  -->
-<!--     ```{r} -->
-<!--     d <- expand.grid(spray = c("yes","no"), field = c("Ke","Kr","Ku","Rd"),  -->
-<!--         year = c("1992","1993","1994","1995")) -->
-<!--     cbind(d, glmint(m, newdata = d)) -->
-<!--     ``` -->
-<!-- Here `fit` is the estimated expected count, and `low` and `upp` are the endpoints of the confidence interval for the expected count. Note that even though observations were not made at every combination of spray, field, and year, we can still *estimate* the expected counts for each combination. But we can only do this by assuming (implicitly when specifying the model) that there are no interactions among these variables. We could add a layer to the plot above to show the estimates and confidence intervals for the expected counts. -->
-<!--     ```{r, fig.height = 6} -->
-<!--     d <- cbind(d, glmint(m, newdata = d)) -->
-<!--     p <- p + geom_pointrange(aes(y = fit, ymin = low, ymax = upp),  -->
-<!--       shape = 21, fill = "white", data = d) + geom_point() -->
-<!--     plot(p) -->
-<!--     ``` -->
-<!--     Note that I "added" a layer after `geom_pointrange` to show points corresponding to the observed counts so that they would be on top of the points showing the estimated expected counts. -->
+3. What is the estimated expected number of fledglings for each condition? 
 
-<!--     Here is how to use the **emmeans** package to estimate the expected counts (rates) for each combination of spray, field, and year. -->
-<!--     ```{r} -->
-<!--     library(emmeans) -->
-<!--     emmeans(m, ~ spray*field*year, type = "response") -->
-<!--     emmeans(m, ~ spray|field*year, type = "response") -->
-<!--     ``` -->
-    
+    **Solution**: We can estimate this a couple of ways. 
+    ```{r}
+    trtools::contrast(m, tf = exp, 
+      a = list(spray = c("no", "yes"), field = "Ke", year = "1992"),
+      cnames = c("no spray", "spray"))
+    emmeans(m, ~spray|field*year, type = "response")
+    d <- expand.grid(spray = c("yes", "no"), field = c("Ke","Kr","Ku","Rd"),
+      year = c("1992","1993","1994","1995"))
+    cbind(d, trtools::glmint(m, newdata = d))
+    d <- cbind(d, glmint(m, newdata = d))
+    p <- p + geom_pointrange(aes(y = fit, ymin = low, ymax = upp),
+      shape = 21, fill = "white", data = d) + geom_point()
+    plot(p)
+    ```
+  
 ## Aflatoxicol and Liver Tumors in Trout
 
 The data in the data frame `ex2116` in the **Sleuth3** package are from an experiment that investigated the relationship between aflatoxicol and liver tumors in trout. The figure below shows the proportion of trout in each tank that developed liver tumors as well as the dose of aflatoxicol to which the trout were exposed. Aflatoxicol is a metabolite of Aflatoxin B1, a toxic by-product produced by a mold that infects some nuts and grains. Twenty tanks of rainbow trout embryos were exposed to one of five doses of aflatoxicol for one hour. The number of fish in each tank that developed liver tumors one year later was then observed. The plot below shows the data. 
@@ -163,6 +129,19 @@ where $\eta_i = \beta_0 + \beta_1 d_i$. Note that by definition $E(Y_i)$ is also
     cbind(summary(m)$coefficients, confint(m))
     ```
 Next estimate the odds ratio for the effect of increasing dose by 0.05 ppm using the `contrast` function.[^ppm] How is this odds ratio interpreted?
+
+    **Solution**: We can estimate the model as follows.
+    ```{r}
+    m <- glm(cbind(Tumor, Total - Tumor) ~ Dose, family = binomial, data = ex2116)
+    summary(m)$coefficients
+    ```
+    The odds ratio can be estimated as follows.
+    ```{r}
+    trtools::contrast(m,
+      a = list(Dose = 0.1),
+      b = list(Dose = 0.05), tf = exp)
+    pairs(emmeans(m, ~Dose, at = list(Dose = c(0.1, 0.05)), type = "response"), infer = TRUE)
+    ```
     
 0. Now consider a model where we use the base-2 logarithm of dose as the explanatory variable so that $$\eta_i = \beta_0 + \beta_1 \log_2(d_i).$$ Recall that the function $\log_2$ is known to R as `log2`. Estimate this model using `glm`. You should be able to replicate the following results.
     ```{r, echo = 2}
@@ -170,6 +149,19 @@ Next estimate the odds ratio for the effect of increasing dose by 0.05 ppm using
     cbind(summary(m)$coefficients, confint(m))
     ```
 Here increasing the base-2 logarithm of dose by one unit is the same thing as *doubling* dose, and so the effect on the odds ratio of doubling dose will be the same regardless of what you double (e.g., 0.05 to 1 ppm, 0.1 to 0.2 ppm, etc.).[^doubling] How is this odds ratio interpreted?
+
+    **Solution**: We can estimate the model as follows.
+    ```{r}
+    m <- glm(cbind(Tumor, Total-Tumor) ~ log2(Dose), family = binomial, data = ex2116)
+    cbind(summary(m)$coefficients, confint(m))
+    ```
+    Here is how to estimate the odds ratio for the effect of doubling the dose.
+    ```{r}
+    trtools::contrast(m,
+      a = list(Dose = 0.2),
+      b = list(Dose = 0.1), tf = exp)
+    pairs(emmeans(m, ~Dose, at = list(Dose = c(0.2, 0.1)), type = "response"), infer = TRUE)
+    ```
 
 0. Rather than trying to decide between using dose or some transformation of dose in the model, we can instead define dose as a 5-level factor. There are two ways we could specify dose as a factor. One would be to create a new variable.
     ```{r}
@@ -181,7 +173,96 @@ The levels of `Dosef` will be the original values of `Dose` but converted to str
     ```
 Another approach is to replace `Dose` in the model formula with `factor(Dose)`. Use the `contrast` function to estimate the odds ratio for the odds of tumor development at 0.025 ppm versus 0.01 ppm, 0.05 ppm versus 0.01 ppm, 0.1 ppm versus 0.01 ppm, and 0.25 ppm versus 0.01 ppm.[^string] How are these odds ratios interpreted?
 
+    **Solution**: Here is how to estimate this model.
+    ```{r}
+    m <- glm(cbind(Tumor, Total-Tumor) ~ factor(Dose), family = binomial, data = ex2116)
+    cbind(summary(m)$coefficients, confint(m))
+    ```
+    The odds ratios can be estimated as follows.
+    ```{r}
+    trtools::contrast(m, tf = exp,
+      a = list(Dose = c(0.025,0.05,0.1,0.25)),
+      b = list(Dose = 0.01))
+    contrast(emmeans(m, ~Dose, type = "response"), method = "trt.vs.ctrl",
+      ref = 1, adjust = "none", infer = TRUE)
+    ```
+
 0. Estimate the odds and probability of tumor development at each value of dose used in the study for any of the three models.
+
+    **Solution**: For the odds we need to use `contrast` from **trtools**. I am going to use the model from the previous problem.
+    ```{r}
+    trtools::contrast(m, a = list(Dose = c(0.01,0.025,0.05,0.1,0.25)),
+      cnames = c(0.01,0.025,0.05,0.1,0.25), tf = exp)
+    ```
+    There are several ways to estimate the probabilities.
+    ```{r}
+    trtools::contrast(m, a = list(Dose = c(0.01,0.025,0.05,0.1,0.25)),
+      cnames = c(0.01,0.025,0.05,0.1,0.25), tf = plogis)
+    emmeans(m, ~Dose, type = "response")
+    ```
+    
+Here are plots of the three models we considered for the aflatoxicol data.
+```{r, echo = TRUE, fig.height = 4}
+p <- ggplot(ex2116, aes(x = Dose, y = Tumor/Total)) + 
+   geom_point(alpha = 0.5) + theme_classic() + ylim(0, 1) + 
+   labs(x = "Dose (ppm)", y = "Proportion of Trout With Liver Tumors")
+
+m <- glm(cbind(Tumor, Total-Tumor) ~ Dose, family = binomial, data = ex2116)
+d <- data.frame(Dose = seq(0.01, 0.25, length = 100))
+d$yhat <- predict(m, newdata = d, type = "response")
+p1 <- p + geom_line(aes(y = yhat), data = d) + ggtitle("Dose")
+
+m <- glm(cbind(Tumor, Total-Tumor) ~ log2(Dose), family = binomial, data = ex2116)
+d <- data.frame(Dose = seq(0.01, 0.25, length = 100))
+d$yhat <- predict(m, newdata = d, type = "response")
+p2 <- p + geom_line(aes(y = yhat), data = d) + ggtitle("Log Dose")
+
+m <- glm(cbind(Tumor, Total-Tumor) ~ factor(Dose), family = binomial, data = ex2116)
+d <- data.frame(Dose = unique(ex2116$Dose))
+d$yhat <- predict(m, newdata = d, type = "response")
+p3 <- p + geom_point(aes(y = yhat), data = d, pch = 3, size = 3) + ggtitle("Dose as Factor")
+
+cowplot::plot_grid(p1, p2, p3, nrow = 1) 
+```
+Note that the three models do not appear to fit the data equally well. Using the logarithm of dose as an explanatory variable appears to be a better fit than using dose, but both models appear to systematically over-estimate or under-estimate the probability of tumor development. Treating dose as a factor may be a better model here. This is even more clear when looking at residual plots.
+```{r, echo = TRUE, fig.height = 4}
+m1 <- glm(cbind(Tumor, Total-Tumor) ~ Dose, family = binomial, data = ex2116)
+m2 <- glm(cbind(Tumor, Total-Tumor) ~ log2(Dose), family = binomial, data = ex2116)
+m3 <- glm(cbind(Tumor, Total-Tumor) ~ factor(Dose), family = binomial, data = ex2116)
+
+d1 <- ex2116
+d1$yhat <- predict(m1)
+d1$residual <- rstudent(m1)
+
+d2 <- ex2116
+d2$yhat <- predict(m2)
+d2$residual <- rstudent(m2)
+
+d3 <- ex2116
+d3$yhat <- predict(m3)
+d3$residual <- rstudent(m3)
+
+p <- ggplot(d1, aes(x = yhat, y = residual)) + theme_classic() + 
+  geom_point(alpha = 0.5) + ylim(-8,6) + 
+  geom_hline(yintercept = c(-2,2), linetype = 3) + 
+  labs(x = "Predicted Log-Odds", y = "Studentized Residual")
+p1 <- p + ggtitle("Dose")
+
+p <- ggplot(d2, aes(x = yhat, y = residual)) + theme_classic() + 
+  geom_point(alpha = 0.5) + ylim(-8,6) + 
+  geom_hline(yintercept = c(-2,2), linetype = 3) + 
+  labs(x = "Predicted Log-Odds", y = NULL)
+p2 <- p + ggtitle("Log Dose")
+
+p <- ggplot(d3, aes(x = yhat, y = residual)) + theme_classic() + 
+  geom_point(alpha = 0.5) + ylim(-8,6) + 
+  geom_hline(yintercept = c(-2,2), linetype = 3) + 
+  labs(x = "Predicted Log-Odds", y = NULL)
+p3 <- p + ggtitle("Dose as Factor")
+
+cowplot::plot_grid(p1, p2, p3, nrow = 1) 
+```
+Based on the residuals, the model with dose as a factor appears to provide the best fit to the data. But there may be another model that uses dose as a quantitative explanatory variable (i.e., not a factor) that would be a good fit to these data.  
 
 [^ppm]: Here $e^{\beta_1}$ would be the odds ratio for the effect of increasing dose by 1 ppm. However that is probably not a realistic effect as it would be a relatively large increase in dose. The study only considered up to 0.25 ppm. Using `contrast` is convenient here to estimate the odds ratio for the effect of an arbitrary change in dose. 
 
