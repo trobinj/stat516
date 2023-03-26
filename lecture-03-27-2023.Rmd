@@ -1,0 +1,327 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "03-27-2023"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"), comment = "")
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+suppressWarnings(library(kableExtra))
+```
+
+```{r options, echo = FALSE}
+options(digits = 4, width = 100)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+## Distributions for Over-dispersion
+
+One way to model over-dispersion is to assume a model of the form
+$$
+  g[E(Y_i)] = \beta_0 + \beta_1 x_{i1} + \cdots + \beta_k x_{ik} + \zeta_i,
+$$
+where $\zeta_i$ is an *unobserved* unit-specific random quantity that represents one or more unobserved explanatory variables that vary over units. 
+
+### The Negative Binomial Distribution
+
+Suppose that $Y_i$ has a Poisson distribution *conditional* on $\zeta_i$, and $e^{\zeta_i}$ has a *gamma* distribution such that $E(e^{\gamma_i}) = 1$ and $\text{Var}(e^{\gamma_i}) = \alpha > 0$. The *marginal* distribution of $Y_i$ is then a *negative binomial distribution*, with mean structure
+$$
+  g[E(Y_i)] = \eta_i,
+$$
+and variance structure
+$$
+  \text{Var}(Y_i) = E(Y_i) + \alpha E(Y_i)^2 \ge E(Y_i).
+$$
+The Poisson distribution is a special case where $\alpha = 0$. This variance structure *does not* have the form 
+$$
+  \text{Var}(Y_i) = \phi V[E(Y_i)]
+$$
+unless $\alpha$ is known (which it normally is not), so this model is not a traditional GLM. But we can make inferences using maximum likelihood.
+
+**Example**: Consider our model for the trawl fishing data. Here we will consider a negative binomial regression model.
+```{r, warning = FALSE}
+library(COUNT)
+data(fishing)
+
+library(MASS) # for the glm.nb function (note there is no family argument)
+
+m <- glm.nb(totabund ~ period * meandepth + offset(log(sweptarea)),
+  link = log, data = fishing)
+
+d <- expand.grid(sweptarea = 1, period = levels(fishing$period), 
+  meandepth = seq(800, 5000, length = 100))
+d$yhat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(fishing, aes(x = meandepth, y = totabund/sweptarea)) + 
+  geom_point(alpha = 0.5) + facet_wrap(~ period) + theme_minimal() + 
+  labs(x = "Mean Trawl Depth (meters)",
+    y = "Fish Caught Per Square Meter Trawled") + 
+  geom_line(aes(y = yhat), data = d)
+plot(p)
+
+summary(m) # note that what glm.nb calls theta equals 1/alpha
+plot(predict(m), rstudent(m), main = "Residual Plot")
+```
+Interestingly inferences based on the negative binomial model are very similar to those obtained using quasi-likelihood assuming the variance structure $V(Y_i) = \phi E(Y_i)^2$. Here are the parameter estimates, standard errors, and confidence intervals.
+```{r}
+m.negbn <- glm.nb(totabund ~ period * meandepth + offset(log(sweptarea)),
+  link = log, data = fishing)
+m.quasi <- glm(totabund ~ period * meandepth + offset(log(sweptarea)),
+  family = quasi(link = "log", variance = "mu^2"), data = fishing)
+cbind(summary(m.negbn)$coefficients, confint(m.negbn))
+cbind(summary(m.quasi)$coefficients, confint(m.quasi))
+```
+Here are the estimates of the rate ratios for period at several different depths.
+```{r}
+library(trtools)
+contrast(m.negbn, 
+  a = list(meandepth = c(1000,2000,3000,4000,5000), period = "2000-2002", sweptarea = 1),
+  b = list(meandepth = c(1000,2000,3000,4000,5000), period = "1977-1989", sweptarea = 1),
+  cnames = c("1000m","2000m","3000m","4000m","5000m"), tf = exp)
+contrast(m.quasi, 
+  a = list(meandepth = c(1000,2000,3000,4000,5000), period = "2000-2002", sweptarea = 1),
+  b = list(meandepth = c(1000,2000,3000,4000,5000), period = "1977-1989", sweptarea = 1),
+  cnames = c("1000m","2000m","3000m","4000m","5000m"), tf = exp)
+```
+Here are the tests (likelihood ratio and $F$) for the "effect" of period. The null model assumes that expected abundance per unit area trawled is the same each period at a given depth. Put another way, the null model assumes that the rate ratio for period is one for all depths. 
+```{r}
+m.negbn.null <- glm.nb(totabund ~ meandepth + offset(log(sweptarea)),
+  link = log, data = fishing)
+anova(m.negbn.null, m.negbn)
+m.quasi.null <- glm(totabund ~ meandepth + offset(log(sweptarea)),
+  family = quasi(link = "log", variance = "mu^2"), data = fishing)
+anova(m.quasi.null, m.quasi, test = "F")
+```
+Note: When using `anova` for a negative binomial model (estimated using the `glm.nb` function) we omit the `test = "LRT"` option which we use for generalized linear models. Somewhat confusingly, the `anova` function will do a likelihood ratio test for a `glm.nb` object, but will throw an error if we try to change the test type (even if we ask for a likelihood ratio test). 
+
+## Heteroscedastic Consistent (Robust) Standard Errors
+
+An alternative is to accept that the specified variance structure is incorrect and estimate standard errors in a way that provides *consistent* estimates despite the misspecification of the variance structure.[^consistency]
+
+Note: I needed to specify the data set as `trtools::rotifer` below as there is a data set of the same name in another package that was loaded earlier. It's actually the same data but in a different format from the data frame in the **trtools** package.
+
+**Example**: Consider the logistic regression model for the `rotifer` data from the **trtools** package. 
+```{r}
+m <- glm(cbind(y, total - y) ~ species + density + species:density,
+  family = binomial, data = trtools::rotifer)
+```
+Here are the parameter estimates and standard errors, with and without using the robust standard error estimates.
+```{r, message = FALSE}
+library(sandwich) # for the vcovHC function
+library(lmtest)   # for coeftest and coefci functions
+cbind(summary(m)$coefficients, confint(m))
+cbind(coeftest(m, vcov = vcovHC), coefci(m, vcov = vcovHC))
+```
+An alternative to using `coeftest` and `coefci` is `lincon(m, fcov = vcovHC)`. Now compare our inferences for the odds ratios for the effect of a 0.01 increase in density.
+```{r}
+contrast(m,
+  a = list(density = 0.02, species = c("kc","pm")),
+  b = list(density = 0.01, species = c("kc","pm")),
+  cnames = c("kc","pm"), tf = exp)
+contrast(m,
+  a = list(density = 0.02, species = c("kc","pm")),
+  b = list(density = 0.01, species = c("kc","pm")),
+  cnames = c("kc","pm"), tf = exp, fcov = vcovHC)
+```
+For comparison consider also the results when using quasi-likelihood.
+```{r, message = FALSE}
+m <- glm(cbind(y, total - y) ~ species + density + species:density,
+  family = quasibinomial, data = trtools::rotifer)
+cbind(summary(m)$coefficients, confint(m))
+contrast(m,
+  a = list(density = 0.02, species = c("kc","pm")),
+  b = list(density = 0.01, species = c("kc","pm")),
+  cnames = c("kc","pm"), tf = exp)
+```
+Recall that heteroscedastic consistent standard errors are best used with generous sample sizes. For modest sample sizes (such as this experiment) quasi-likelihood is probably better.
+
+[^consistency]: Consistency is a rather technical condition, but roughly speaking a *consistent estimator* is one such that its sampling distribution becomes increasingly concentrated around the value being estimated as $n$ increases. 
+
+## Generalized Linear Models Revisited
+
+Recall that a generalized linear model (GLM) has the form
+$$
+  g[E(Y_i)] = \underbrace{\beta_0 + \beta_1 x_{i1} + \beta_1 x_{i2} + \cdots + \beta_k x_{ik}}_{\eta_i},
+$$
+where $g$ is the *link function* and $\eta_i$ is the *linear predictor* or *systematic component*. This is the *mean structure* of the model.
+
+The *variance structure* of a GLM is
+$$
+  \text{Var}(Y_i) = \phi V[E(Y_i)],
+$$
+where $\phi$ is a *dispersion parameter* and $V$ is the *variance function*. 
+
+If we define $h = g^{-1}$ so that $E(Y_i) = h(\eta_i)$ we can write a GLM concisely as
+\begin{align}
+  E(Y_i) & = h(\eta_i) \\
+  \text{Var}(Y_i) & = \phi V[h(\eta_i)]
+\end{align}
+to define the *mean structure* and a *variance structure* for $Y_i$, respectively, by specifying the mean and variance of $Y_i$ to be functions of $x_{i1}, x_{i2}, \dots, x_{ik}$. 
+
+The specification of a generalized linear model therefore requires three components.
+
+1. The *systematic component* $\eta_i = \beta_0 + \beta_1 x_{i1} + \beta_1 x_{i2} + \cdots + \beta_k x_{ik}$.
+
+0. The *link function* $g$ for the mean structure $g[E(Y_i)] = \eta_i$. 
+
+0. The *distribution* of the response variable $Y_i$, which implies the variance structure $\text{Var}(Y_i) = \phi V[E(Y_i)]$, or we can specify the variance structure *directly*.
+
+Four common distributions from the exponential family of distributions (normal/Gaussian, Poisson, gamma, and inverse-Gaussian) imply variance structures of the form 
+$$
+  \text{Var}(Y_i) = \phi E(Y_i)^p
+$$
+The values of $p$ are $p$ = 0 (normal/Gaussian), $p$ = 1 (Poisson if $\phi = 1$), $p$ = 2 (gamma), and $p$ = 3 (inverse-Gaussian). Also note that when using quasi-likelihood we can use other values of $p$ via the `tweedie` function from the **statmod** package.
+
+## GLMs for Gamma-Distributed Response Variables
+
+If $Y_i$ has a *gamma* distribution then $Y_i$ is a positive and continuous random variable, and $\text{Var}(Y_i) = \phi E(Y_i)^2$. Such models are sometimes suitable for response variables that are bounded below by zero and right-skewed. Common link functions include the *log* and *inverse* functions. With a log link function we have a mean structure like that for Poisson regression where
+$$
+  \log E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik},
+$$
+or 
+$$
+  E(Y_i) = \exp(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}),
+$$
+so the effects of explanatory variables and contrasts can be interpreted by applying the exponential function $e^x$ and interpreting the effects as multiplicative factors or percent increase/decrease or percent larger/smaller.
+
+**Example**: Consider again the cancer survival time data.
+```{r}
+library(Stat2Data)
+data(CancerSurvival)
+CancerSurvival$Organ <- with(CancerSurvival, reorder(Organ, Survival, mean))
+p <- ggplot(CancerSurvival, aes(x = Organ, y = Survival)) +
+  geom_jitter(height = 0, width = 0.25) + 
+  labs(y = "Survival Time (Days)") + theme_classic()
+plot(p)
+```
+A gamma model might be appropriate here. First consider a model with a log link function.  
+```{r, message = FALSE}
+m <- glm(Survival ~ Organ, family = Gamma(link = log), data = CancerSurvival)
+cbind(summary(m)$coefficients, confint(m))
+```
+We might compare the survival times to the type of cancer with lowest expected survival time.
+```{r}
+contrast(m, tf = exp,
+  a = list(Organ = c("Stomach","Colon","Ovary","Breast")),
+  b = list(Organ = "Bronchus"), 
+  cnames = paste(c("Stomach","Colon","Ovary","Breast"), "/", "Bronchus", sep = ""))
+```
+
+Now suppose we specify the same variance structure directly. Note that the results are *identical*. 
+```{r}
+m <- glm(Survival ~ Organ, family = quasi(link = log, variance = "mu^2"), data = CancerSurvival)
+cbind(summary(m)$coefficients, confint(m))
+contrast(m, tf = exp,
+  a = list(Organ = c("Stomach","Colon","Ovary","Breast")),
+  b = list(Organ = "Bronchus"), 
+  cnames = paste(c("Stomach","Colon","Ovary","Breast"), "/", "Bronchus", sep = ""))
+```
+Naturally we should check the residuals to see if the variance structure is reasonable.
+```{r}
+plot(predict(m), rstandard(m), main = "Residual Plot")
+```
+
+**Example**: Consider the following observations of dry weight (in grams) and rostro-carinal length (in mm) of a species of barnacles sampled from the inter-tidal zones near Punta Lens and Punta de la Barca along the Atlantic coast of Spain. 
+```{r}
+library(npregfast)
+head(barnacle)
+p <- ggplot(barnacle, aes(x = RC, y = DW))
+p <- p + geom_point(alpha = 0.25) + facet_wrap(~ F) + theme_minimal()
+p <- p + labs(x = "Rostro-Carinal Length (mm)", y = "Dry Weight (g)")
+plot(p)
+```
+A common allometric regression model would have the form
+$$
+  E(Y_i) = ax_i^b
+$$
+where $Y_i$ is the dry weight for the $i$-th observation, and $x_i$ is the rostro-carinal length for the $i$-th observation. We can also write this as
+$$
+  \log E(Y_i) = \log a + b\log x_i
+$$
+or, equivalently,
+$$
+    E(Y_i) = \exp(\log a + b\log x_i)
+$$  
+or
+$$
+  E(Y_i) = \exp(\beta_0 + \beta_1 \log x_i)
+$$
+where $\beta_0 = \log a$ and $\beta_1 = b$. This is basically a log-linear model since we can write
+$$
+  \log E(Y_i) = \beta_0 + \beta_1 \log x_i.
+$$
+Because dry weight is continuous and positive, with the variability appearing to increase with the expected dry weight, we might specify a gamma distribution for dry weight.
+```{r}
+barnacle <- subset(barnacle, DW > 0) # remove observations of zero weight to avoid errors
+m <- glm(DW ~ F + log(RC) + F:log(RC), family = Gamma(link = log), data = barnacle)
+summary(m)$coefficients
+d <- expand.grid(F = c("barca","lens"), RC = seq(2.3, 24, length = 100))
+d$yhat <- predict(m, newdata = d, type = "response")
+p <- p + geom_line(aes(y = yhat), color = "red", data = d)
+plot(p)
+# effect of a 20% increase in RC
+contrast(m, tf = exp,
+    a = list(F = c("barca","lens"), RC = 6),
+    b = list(F = c("barca","lens"), RC = 5), 
+    cnames = c("barca","lens"))
+# comparing the two locations at different values of RC
+contrast(m, tf = exp,
+    a = list(F = "lens", RC = c(10,15,20)),
+    b = list(F = "barca", RC = c(10,15,20)),
+    cnames = c("10mm","15mm","20mm"))
+```
+Checking the residuals.
+```{r, fig.height = 5}
+plot(predict(m), rstudent(m), main = "Residual Plot")
+abline(-2,0)
+abline(2,0)
+```
+Note: Eliminating a couple of observations due to having a zero dry weight is not of much consequence here since there are so many observations. But if there were fewer observations this would not be a good idea. A better approach would be to just specify the same model using `quasi`. Note that using `quasi` with `variance = "mu^2"` is effectively equivalent to using `family = gamma`.  
+```{r}
+m <- glm(DW ~ F + log(RC) + F:log(RC), data = barnacle,
+  family = quasi(link = "log", variance = "mu^2"))
+summary(m)$coefficients
+# effect of a 20% increase in RC
+contrast(m, tf = exp,
+    a = list(F = c("barca","lens"), RC = 6),
+    b = list(F = c("barca","lens"), RC = 5), 
+    cnames = c("barca","lens"))
+# comparing the two locations at different values of RC
+contrast(m, tf = exp,
+    a = list(F = "lens", RC = c(10,15,20)),
+    b = list(F = "barca", RC = c(10,15,20)),
+    cnames = c("10mm","15mm","20mm"))
+```
+Checking the residuals.
+```{r, fig.height = 5}
+plot(predict(m), rstudent(m), main = "Residual Plot")
+abline(-2,0)
+abline(2,0)
+```
+
+Inverse-gaussian GLMs are similar. There the variance increases a bit faster with the expected response. To estimate such a model use `family = inverse.gaussian`. An equivalent model is to use `quasi` with `variance = mu^3`. 
