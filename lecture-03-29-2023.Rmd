@@ -363,7 +363,7 @@ m.nr <- glm(cbind(dead, exposed - dead) ~ concentration, data = bliss,
   family = binomial(link = logitnr(0.1)), start = c(-14.8, 0.25))
 summary(m.nr)$coefficients
 ```
-The interpretation of an odds ratio for this model would be for the odds of death *due to carbon disulphide* (rather than "natural causes"). 
+Note that `logitnr` is from the **trtools** package. The interpretation of an odds ratio for this model would be for the odds of death *due to carbon disulphide* (rather than "natural causes"). 
 ```{r}
 d <- data.frame(concentration = seq(40, 80, length = 100))
 d$yhat <- predict(m, newdata = d, type = "response")

@@ -586,9 +586,10 @@ summary(m.nr)$coefficients</code></pre>
 <pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)
 (Intercept)   -19.1284    2.12267  -9.011 2.033e-19
 concentration   0.3138    0.03403   9.220 2.982e-20</code></pre>
-<p>The interpretation of an odds ratio for this model would be for the
-odds of death <em>due to carbon disulphide</em> (rather than “natural
-causes”).</p>
+<p>Note that <code>logitnr</code> is from the <strong>trtools</strong>
+package. The interpretation of an odds ratio for this model would be for
+the odds of death <em>due to carbon disulphide</em> (rather than
+“natural causes”).</p>
 <pre class="r"><code>d &lt;- data.frame(concentration = seq(40, 80, length = 100))
 d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
 d$yhat.nr &lt;- predict(m.nr, newdata = d, type = &quot;response&quot;)
