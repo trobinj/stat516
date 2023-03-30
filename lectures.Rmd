@@ -109,7 +109,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Alternative link functions](lecture-03-29-2023.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Marginal effects](lecture-03-31-2023.html).
  
 ***
 
