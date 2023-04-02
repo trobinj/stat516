@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Monday, Apr 3</title>
+
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Monday, Apr 3</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-04-03-2023.pdf">PDF</a> copy
+of this lecture.</p>
+<!-- Make clear that the order in which the parameter names are specified to dmethod must be the same as how they appear in the summary output.  -->
+<div id="review-of-linear-combinations" class="section level2">
+<h2>Review of Linear Combinations</h2>
+<p>Consider a regression model with parameters <span
+class="math inline">\(\beta_0, \beta_1, \dots, \beta_k\)</span>. A
+<em>linear combination</em> is a <em>linear function</em> of the form
+<span class="math display">\[
+  \ell = a_0\beta_0 + a_1\beta_1 + a_2\beta_2 + \cdots + a_k\beta_k + b,
+\]</span> where <span class="math inline">\(a_0, a_1, \dots,
+a_k\)</span> and <span class="math inline">\(b\)</span> are
+user-specified coefficients (frequently <span
+class="math inline">\(b=0\)</span>, and to simplify what follows assume
+<span class="math inline">\(b=0\)</span>). Often (but not always)
+quantities of interest can be expressed as linear combinations.</p>
+<p><strong>Example</strong>: Consider the linear model <span
+class="math display">\[
+    E(G_i) = \beta_0 + \beta_1 d_i + \beta_2 t_i + \beta_3d_it_i.
+\]</span> for the <code>whiteside</code> data, where <span
+class="math inline">\(G_i\)</span> is gas consumption, <span
+class="math inline">\(t_i\)</span> is temperature, and <span
+class="math inline">\(d_i\)</span> is an indicator variable for
+<em>after</em> insulation such that <span class="math display">\[
+  d_i =
+  \begin{cases}
+    1, &amp; \text{if the $i$-th observation is after insulation}, \\
+    0, &amp; \text{otherwise}.
+  \end{cases}
+\]</span> Then we can write the model case-wise as <span
+class="math display">\[
+E(G_i) =
+\begin{cases}
+        \beta_0 + \beta_2 t_i, &amp; \text{if $i$-th observation is
+before insulation}, \\
+        \beta_0 + \beta_1 + (\beta_2 + \beta_3) t_i, &amp; \text{if
+$i$-th observation is after insulation}.
+\end{cases}
+\]</span> Several quantities that might be of interest can be written as
+linear combinations. The <code>lincon</code> and <code>contrast</code>
+functions facilitate inferences regarding linear combinations. First we
+specify the model.</p>
+<pre class="r"><code>m &lt;- lm(Gas ~ Insul + Temp + Insul:Temp, data = MASS::whiteside)
+summary(m)$coefficients</code></pre>
+<pre><code>                Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)       6.8538    0.13596  50.409 7.997e-46
+InsulAfter       -2.1300    0.18009 -11.827 2.316e-16
+Temp             -0.3932    0.02249 -17.487 1.976e-23
+InsulAfter:Temp   0.1153    0.03211   3.591 7.307e-04</code></pre>
+<p>Now consider the following linear combinations.</p>
+<p>1.<span class="math inline">\(\!\)</span> Rate of change before
+insulation: <span class="math display">\[\ell = 0\beta_0 + 0\beta_1 +
+1\beta_2 + 0\beta_3 = \beta_2.\]</span></p>
+<pre class="r"><code>library(trtools)
+lincon(m, a = c(0,0,1,0))</code></pre>
+<pre><code>            estimate      se   lower   upper tvalue df    pvalue
+(0,0,1,0),0  -0.3932 0.02249 -0.4384 -0.3481 -17.49 52 1.976e-23</code></pre>
+<pre class="r"><code>contrast(m, 
+  a = list(Insul = &quot;Before&quot;, Temp = 1),
+  b = list(Insul = &quot;Before&quot;, Temp = 0))</code></pre>
+<pre><code> estimate      se   lower   upper tvalue df    pvalue
+  -0.3932 0.02249 -0.4384 -0.3481 -17.49 52 1.976e-23</code></pre>
+<p>2.<span class="math inline">\(\!\)</span> Rate of change after
+insulation: <span class="math display">\[\ell = 0\beta_0 + 0\beta_1 +
+1\beta_2 + 1\beta_3 = \beta_2 + \beta_3.\]</span></p>
+<pre class="r"><code>lincon(m, a = c(0,0,1,1))</code></pre>
+<pre><code>            estimate      se   lower   upper tvalue df    pvalue
+(0,0,1,1),0  -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
+<pre class="r"><code>contrast(m, 
+  a = list(Insul = &quot;After&quot;, Temp = 1),
+  b = list(Insul = &quot;After&quot;, Temp = 0))</code></pre>
+<pre><code> estimate      se   lower   upper tvalue df    pvalue
+  -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
+<p>3.<span class="math inline">\(\!\)</span> Expected gas consumption
+before insulation at 5C: <span class="math display">\[\ell = 1\beta_0 +
+0\beta_1 + 5\beta_2 + 0\beta_3 = \beta_0 + 5\beta_2.\]</span></p>
+<pre class="r"><code>lincon(m, a = c(1,0,0,5))</code></pre>
+<pre><code>            estimate     se lower upper tvalue df    pvalue
+(1,0,0,5),0     7.43 0.2671 6.894 7.966  27.82 52 6.734e-33</code></pre>
+<pre class="r"><code>contrast(m, a = list(Insul = &quot;Before&quot;, Temp = 5))</code></pre>
+<pre><code> estimate      se lower upper tvalue df    pvalue
+    4.888 0.06383  4.76 5.016  76.57 52 3.885e-55</code></pre>
+<div id="technical-details" class="section level3">
+<h3>Technical Details</h3>
+<p>To estimate <span class="math inline">\(\ell\)</span> we simply
+replace <span class="math inline">\(\beta_0, \beta_1, \dots,
+\beta_k\)</span> with estimates to obtain <span class="math display">\[
+  \hat\ell = a_0\hat\beta_0 + a_1\hat\beta_1 + \cdots + a_k\hat\beta_k.
+\]</span> To compute the variance of <span
+class="math inline">\(\hat\ell\)</span> we use the result that <span
+class="math display">\[
+  \text{Var}(\hat\ell) = \sum_{\vphantom{j&#39;=0}
+j=0}^k\sum_{\mathstrut j&#39;=0}^k
+a_ja_{j&#39;}\text{Cov}(\hat\beta_j,\hat\beta_{j&#39;}),
+\]</span> where <span
+class="math inline">\(\text{Cov}(\hat\beta_j,\hat\beta_{j&#39;})\)</span>
+is the <em>covariance</em> between the estimators <span
+class="math inline">\(\hat\beta_j\)</span> and <span
+class="math inline">\(\hat\beta_{j&#39;}\)</span>, and note that the
+covariance of an estimator with itself is its <em>variance</em> — i.e.,
+<span class="math inline">\(\text{Cov}(\hat\beta_j,\hat\beta_{j}) =
+\text{Var}(\hat\beta_j)\)</span>.</p>
+<p><strong>Example</strong>: If we had the model <span
+class="math inline">\(E(Y_i) = \beta_0 + \beta_1 x_i\)</span> then the
+covariances can be arranged in a <em>matrix</em> as <span
+class="math display">\[
+\begin{bmatrix}
+\text{Cov}(\hat\beta_0,\hat\beta_0) &amp;
+\text{Cov}(\hat\beta_0,\hat\beta_1) \\
+\text{Cov}(\hat\beta_1,\hat\beta_0) &amp;
+\text{Cov}(\hat\beta_1,\hat\beta_1)
+\end{bmatrix} =
+\begin{bmatrix}
+\text{Var}(\hat\beta_0) &amp; \text{Cov}(\hat\beta_0,\hat\beta_1) \\
+\text{Cov}(\hat\beta_0,\hat\beta_1) &amp; \text{Var}(\hat\beta_1)
+\end{bmatrix},
+\]</span> noting that the covariance of a variable with itself is its
+<em>variance</em>, and covariances are symmetric in the sense that <span
+class="math inline">\(\text{Cov}(\hat\beta_0,\hat\beta_1) =
+\text{Cov}(\hat\beta_0,\hat\beta_1)\)</span>. If we wanted to compute
+the variance of the linear combination <span class="math inline">\(\ell
+= 1\beta_0 + 5\beta_1\)</span> so that <span class="math inline">\(a_0 =
+1\)</span> and <span class="math inline">\(a_1 = 5\)</span>, then the
+variance of <span class="math inline">\(\hat\ell\)</span> would be <span
+class="math display">\[
+  \text{Var}(\hat\ell) = 1 \times 1 \times \text{Var}(\hat\beta_0) +
+             1 \times 5 \times \text{Cov}(\hat\beta_0,\hat\beta_1) +
+             5 \times 1 \times \text{Cov}(\hat\beta_0,\hat\beta_1) +
+             5 \times 5 \times \text{Var}(\hat\beta_1),
+\]</span> which simplifies to <span class="math display">\[
+  \text{Var}(\hat\ell) = \text{Var}(\hat\beta_0) +
+10\text{Cov}(\hat\beta_0,\hat\beta_1) +
+  25\text{Var}(\hat\beta_1).
+\]</span></p>
+<p>Typically we only have estimates of the variances and covariances so
+we can only compute an estimate of <span
+class="math inline">\(\text{Var}(\hat\ell)\)</span> denoted as <span
+class="math inline">\(\widehat{\text{Var}}(\hat\ell)\)</span>. The
+square root of this estimate is the <em>standard error</em> you usually
+see reported by R functions like <code>contrast</code> and
+<code>lincon</code>. The confidence interval for <span
+class="math inline">\(\ell\)</span> is then <span
+class="math display">\[
+  \hat\ell \pm t\sqrt{\widehat{\text{Var}}(\hat\ell)} \ \ \text{or} \ \
+  \hat\ell \pm z\sqrt{\widehat{\text{Var}}(\hat\ell)},
+\]</span><br />
+and the test statistic is <span class="math display">\[
+  \frac{\hat\ell - \ell}{\sqrt{\widehat{\text{Var}}(\hat\ell)}},
+\]</span> where typically <span class="math inline">\(\ell = 0\)</span>
+because the null hypothesis is that <span class="math inline">\(H_0\!:
+\ell = 0\)</span>. This is the test statistic you typically see reported
+by R functions like <code>contrast</code> and <code>lincon</code>.</p>
+</div>
+</div>
+<div id="the-delta-method" class="section level2">
+<h2>The Delta Method</h2>
+<p>The <em>delta method</em> is used to approximate the sampling
+distribution of a <em>nonlinear</em> function of model parameters.</p>
+<p><strong>Example</strong>: Consider a logistic regression model for
+the <code>bliss</code> data.
+<img src="lecture-04-03-2023_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" />
+The model can be written as <span class="math display">\[
+    \log\left[\frac{E(Y)}{1-E(Y)}\right] = \beta_0 + \beta_1 x,
+\]</span> where <span class="math inline">\(x\)</span> is concentration.
+The <span class="math inline">\(\text{LD}_{50}\)</span> is the value of
+<span class="math inline">\(x\)</span> (e.g., dose, concentration) such
+that the expected proportion of deaths is 0.5 so that <span
+class="math display">\[
+  \log\left[\frac{0.5}{1-0.5}\right] = \beta_0 + \beta_1\text{LD}_{50}.
+\]</span> Solving for <span
+class="math inline">\(\text{LD}_{50}\)</span> gives <span
+class="math display">\[
+    \text{LD}_{50} = \frac{-\beta_0}{\beta_1}.
+\]</span> An estimator of <span
+class="math inline">\(\text{LD}_{50}\)</span> is <span
+class="math display">\[
+    \widehat{\text{LD}}_{50} = \frac{-\hat\beta_0}{\hat\beta_1},
+\]</span> but this is a <em>nonlinear</em> function of <span
+class="math inline">\(\hat\beta_0\)</span> and <span
+class="math inline">\(\hat\beta_1\)</span>.</p>
+<div id="technical-details-1" class="section level3">
+<h3>Technical Details</h3>
+<p>The delta method uses the following results:</p>
+<ol style="list-style-type: decimal">
+<li><p>Nonlinear functions of the model parameters can be “locally
+approximated” by a <em>linear</em> function (see below).</p></li>
+<li><p>As <span class="math inline">\(n\)</span> increases sampling
+distributions become increasingly “concentrated” in a location near the
+actual quantity being estimated.</p></li>
+<li><p>If the sampling distribution of <span
+class="math inline">\(\hat\beta_0,\hat\beta_1,\dots,\hat\beta_k\)</span>
+is approximately (multivariate) normal, then the sampling distribution
+of an (approximately) linear function of these estimators is also
+approximately normal.</p></li>
+</ol>
+<p>Let <span
+class="math inline">\(f(\beta_0,\beta_1,\dots,\beta_k)\)</span> be a
+function of <span class="math inline">\(\beta_0, \beta_1, \dots,
+\beta_k\)</span> such as <span class="math inline">\(f(\beta_0,\beta_1)
+= -\beta_0/\beta_1\)</span>. Using some calculus it can be shown that in
+many practical cases we can <em>approximate</em> <span
+class="math inline">\(f(\beta_0,\beta_1,\dots,\beta_k)\)</span> at any
+specific point (i.e., “locally”) by <span class="math display">\[
+  \ell \approx c + d_0\beta_0 + d_1\beta_1 + \cdots + d_k\beta_k,
+\]</span> where <span class="math inline">\(c\)</span> is a constant.
+The coefficients <span class="math inline">\(d_0, d_1, \dots,
+d_1\)</span> are the <em>partial derivatives</em> of <span
+class="math inline">\(f(\beta_0,\beta_1,\dots,\beta_k)\)</span> at given
+values of <span class="math inline">\(\beta_0, \beta_1, \dots,
+\beta_k\)</span> so that <span class="math display">\[
+  d_j = \frac{\partial f(\beta_0,\beta_1,\dots,\beta_k)}{\partial
+\beta_j}.
+\]</span> We approximate <span
+class="math inline">\(f(\beta_0,\beta_1,\dots,\beta_k)\)</span> at <span
+class="math inline">\(f(\hat\beta_0,\hat\beta_1,\dots,\hat\beta_k)\)</span>.
+Then we can compute <span class="math display">\[
+  \text{Var}[f(\hat\beta_0,\hat\beta_1,\dots,\hat\beta_k)] \approx
+\sum_{\vphantom{j&#39;=0} j=0}^k\sum_{j&#39;=0}^k
+d_jd_{j&#39;}\text{Cov}(\hat\beta_j,\hat\beta_{j&#39;}),
+\]</span> where the partial derivatives are evaluated at the parameter
+estimates. The main mathematical challenge perhaps is evaluating the
+partial derivatives. This may be done <em>analytically</em> or
+<em>numerically</em>.</p>
+<p><strong>Example</strong>: Consider again the problem of making
+inferences regarding <span class="math inline">\(\text{LD}_{50} =
+-\beta_0/\beta_1\)</span>. The <code>dmethod</code> function from the
+<strong>trtools</strong> package implements the delta method, using
+<em>numerically approximated</em> derivatives for greater
+flexibility.</p>
+<pre class="r"><code>library(trtools)
+m &lt;- glm(cbind(dead, exposed - dead) ~ concentration, family = binomial, data = bliss)
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)    2.5 %   97.5 %
+(Intercept)   -14.8084    1.28976  -11.48 1.633e-30 -17.4785 -12.4089
+concentration   0.2492    0.02138   11.65 2.250e-31   0.2095   0.2935</code></pre>
+<pre class="r"><code>dmethod(m, pfunc = &quot;-b0/b1&quot;, pname = c(&quot;b0&quot;,&quot;b1&quot;))</code></pre>
+<pre><code> estimate     se lower upper tvalue  df pvalue
+    59.43 0.5287 58.39 60.47  112.4 Inf      0</code></pre>
+<p><strong>Example</strong>: The “instantaneous” marginal effect of dose
+for the logistic model for the <code>bliss</code> data is the slope of a
+tangent line at a given value of dose (<span
+class="math inline">\(x\)</span>). A little calculus shows that this is
+<span class="math display">\[
+    \frac{\partial}{\partial x}\frac{e^{\beta_0+\beta_1x}}{1 +
+e^{\beta_0+\beta_1x}} =
+    \frac{\beta_1e^{\beta_0 + \beta_1 x}}{(1 + e^{\beta_0 + \beta_1
+x})^2}.
+\]</span> Here is the estimate of the instantaneous marginal effect at
+the (estimated) <span class="math inline">\(\text{LD}_{50}\)</span> from
+above.</p>
+<pre class="r"><code>dmethod(m, pfunc = &quot;b1*exp(b0+b1*59.43)/(1+exp(b0+b1*59.43))^2&quot;, pname = c(&quot;b0&quot;,&quot;b1&quot;))</code></pre>
+<pre><code> estimate       se   lower   upper tvalue  df    pvalue
+  0.06229 0.005346 0.05181 0.07277  11.65 Inf 2.245e-31</code></pre>
+<p>The <code>margeff</code> function does the same thing but computes
+the derivative above numerically.</p>
+<pre class="r"><code>margeff(m, delta = 0.001,
+ a = list(concentration = 59.43 + 0.001),
+ b = list(concentration = 59.43))</code></pre>
+<pre><code> estimate       se   lower   upper tvalue  df    pvalue
+  0.06229 0.005346 0.05181 0.07277  11.65 Inf 2.247e-31</code></pre>
+<p>Since <span class="math inline">\(\text{LD}_{50} =
+-\beta_0/\beta_1\)</span> we can substitute this for <span
+class="math inline">\(x\)</span> in the expression for the instantaneous
+marginal effect. Simplifying gives <span class="math display">\[
+    \frac{\beta_1e^{\beta_0 + \beta_1 (-\beta_0/\beta_1)}}{(1 +
+e^{\beta_0 + \beta_1 (-\beta_0/\beta_1)})^2} = \beta_1/4.
+\]</span> So then we have</p>
+<pre class="r"><code>dmethod(m, pfunc = &quot;b1/4&quot;, pname = c(&quot;b0&quot;,&quot;b1&quot;))</code></pre>
+<pre><code> estimate       se   lower   upper tvalue  df   pvalue
+  0.06229 0.005346 0.05181 0.07277  11.65 Inf 2.25e-31</code></pre>
+<p>but since <span class="math inline">\(\beta_1/4 = a_0\beta_0 +
+a_1\beta_1\)</span> where <span class="math inline">\(a_0 = 0\)</span>
+and <span class="math inline">\(a_1 = 1/4\)</span> we can do this using
+<code>lincon</code> as well.</p>
+<pre class="r"><code>lincon(m, a = c(0,0.25))</code></pre>
+<pre><code>          estimate       se   lower   upper tvalue  df   pvalue
+(0,1/4),0  0.06229 0.005346 0.05181 0.07277  11.65 Inf 2.25e-31</code></pre>
+<p>It is useful to note that when the function is a linear combination,
+<code>dmethod</code> will produce the same results as
+<code>lincon</code>. But it provides a slightly different interface
+which can be useful since it does not require us to figure out the
+coefficients <span class="math inline">\(a_0, a_1, \dots,
+a_k\)</span>.</p>
+<p><strong>Example</strong>: Now consider the <em>discrete</em> marginal
+effect of increasing dose from 50 to 60 mg/liter. This is <span
+class="math display">\[
+  \frac{e^{\beta_0+\beta_160}}{1 + e^{\beta_0+\beta_160}} -
+  \frac{e^{\beta_0+\beta_150}}{1 + e^{\beta_0+\beta_150}}.
+\]</span> This is a nonlinear function of <span
+class="math inline">\(\beta_0\)</span> and <span
+class="math inline">\(\beta_1\)</span>. We can apply the delta method as
+follows.</p>
+<pre class="r"><code>dmethod(m, pfunc = &quot;plogis(b0 + b1*60) - plogis(b0 + b1*50)&quot;, pname = c(&quot;b0&quot;,&quot;b1&quot;))</code></pre>
+<pre><code> estimate      se  lower  upper tvalue  df    pvalue
+   0.4483 0.02796 0.3935 0.5031  16.03 Inf 7.657e-58</code></pre>
+<p>Note that the R function <code>plogis</code> is <span
+class="math inline">\(e^{x}/(1+e^{x})\)</span> so that saves us a little
+typing. The <code>margeff</code> function does the same thing but is
+maybe easier to use here.</p>
+<pre class="r"><code>margeff(m, a = list(concentration = 60), b = list(concentration = 50))</code></pre>
+<pre><code> estimate      se  lower  upper tvalue  df    pvalue
+   0.4483 0.02796 0.3935 0.5031  16.03 Inf 7.657e-58</code></pre>
+<p><strong>Example</strong>: Consider a polynomial regression model for
+the expected tensile strength as a function of percent hardwood such
+that <span class="math display">\[
+  E(S_i) = \beta_0 + \beta_1 p_i + \beta_2 p_i^2,
+\]</span> where <span class="math inline">\(S_i\)</span> is tensile
+strength and <span class="math inline">\(p_i\)</span> is percent
+hardwood. Here is what the estimated model looks like.</p>
+<pre class="r"><code>library(GLMsData)
+data(paper) 
+m &lt;- lm(Strength ~ Hardwood + I(Hardwood^2), data = paper)
+summary(m)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)    -6.6742    3.39971  -1.963 6.725e-02
+Hardwood       11.7640    1.00278  11.731 2.854e-09
+I(Hardwood^2)  -0.6345    0.06179 -10.270 1.894e-08</code></pre>
+<pre class="r"><code>d &lt;- data.frame(Hardwood = seq(1, 15, length = 100))
+d$yhat &lt;- predict(m, newdata = d)
+p &lt;- ggplot(paper, aes(x = Hardwood, y = Strength)) + 
+  geom_point() + theme_classic() + 
+  geom_line(aes(y = yhat), data = d) + 
+  labs(x = &quot;Percent Hardwood&quot;, y = &quot;Tensile Strength (psi)&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-04-03-2023_files/figure-html/unnamed-chunk-14-1.png" width="100%" style="display: block; margin: auto;" />
+Now consider the problem of estimating (a) the value of percent hardwood
+at which expected tensile strength is maximized, and (b) the maximum
+expected tensile strength. The percent hardwood that maximizes expected
+tensile strength (<span class="math inline">\(p_m\)</span>) can be
+derived as <span class="math display">\[
+    \frac{d (\beta_0 + \beta_1 p + \beta_2 p^2)}{d p} = \beta_1 +
+2\beta_2p = 0 \Rightarrow p_m = \frac{-\beta_1}{2\beta_2}.
+\]</span> Now if we replace <span class="math inline">\(p\)</span> with
+<span class="math inline">\(p_m\)</span> in <span
+class="math inline">\(E(S) = \beta_0 + \beta_1 p + \beta_2 p^2\)</span>
+we find the maximum expected tensile strength (<span
+class="math inline">\(s_m\)</span>) to be <span class="math display">\[
+    s_m = \beta_0 + \beta_1 \frac{-\beta_1}{2\beta_2} +
+    \beta_2 \left(\frac{-\beta_1}{2\beta_2}\right)^2
+=  \frac{4\beta_0\beta_2 - \beta_1^2}{4\beta_2}.
+\]</span> Both <span class="math inline">\(p_m\)</span> and <span
+class="math inline">\(s_m\)</span> are nonlinear functions of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span> and <span
+class="math inline">\(\beta_2\)</span>.</p>
+<pre class="r"><code>dmethod(m, pfunc = &quot;-b1/(2*b2)&quot;, pname = c(&quot;b0&quot;,&quot;b1&quot;,&quot;b2&quot;))</code></pre>
+<pre><code> estimate     se lower upper tvalue  df pvalue
+     9.27 0.2344  8.81 9.729  39.55 Inf      0</code></pre>
+<pre class="r"><code>dmethod(m, pfunc = &quot;(4*b0*b2-b1^2)/(4*b2)&quot;, pname = c(&quot;b0&quot;,&quot;b1&quot;,&quot;b2&quot;))</code></pre>
+<pre><code> estimate    se lower upper tvalue  df     pvalue
+    47.85 1.495 44.92 50.78  32.01 Inf 7.656e-225</code></pre>
+<p>Whenever possible try to check these kinds of estimates against a
+plot of the data and/or model to catch errors.</p>
+<p><strong>Example</strong>: Consider a study on moth coloration and
+predation.</p>
+<pre class="r"><code>library(Sleuth3)
+m &lt;- glm(cbind(Removed, Placed - Removed) ~ Distance + Morph + 
+  Distance:Morph, data = case2102, family = binomial)
+
+d &lt;- expand.grid(Distance = seq(0, 100, length = 100), Morph = c(&quot;light&quot;,&quot;dark&quot;))
+d$yhat &lt;- predict(m, d, type = &quot;response&quot;)
+
+p &lt;- ggplot(case2102, aes(x = Distance, y = Removed/Placed)) + 
+  geom_point(aes(fill = Morph), size = 2, shape = 21) + 
+  geom_line(aes(y = yhat, linetype = Morph), data = d) + 
+  scale_fill_manual(values = c(&quot;black&quot;,&quot;white&quot;)) + theme_classic() + 
+  labs(y = &quot;Observed/Expected Proportion&quot;, x = &quot;Distance from Liverpool (km)&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-04-03-2023_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" />
+Suppose we want to estimate the point at which the two curves
+<em>cross</em>. First consider the model parameterization.</p>
+<pre class="r"><code>summary(m)$coefficients</code></pre>
+<pre><code>                    Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)         -1.12899   0.197906  -5.705 1.166e-08
+Distance             0.01850   0.005645   3.277 1.048e-03
+Morphlight           0.41126   0.274490   1.498 1.341e-01
+Distance:Morphlight -0.02779   0.008085  -3.437 5.884e-04</code></pre>
+<p>This model can be written as <span class="math display">\[
+    E(Y_i) = \frac{e^{\eta_i}}{1 + e^{\eta_i}},
+\]</span> where <span class="math inline">\(Y_i\)</span> is the <span
+class="math inline">\(i\)</span>-th observation of the proportion of
+removed moths, and the linear predictor <span
+class="math inline">\(\eta_i\)</span> is parameterized as <span
+class="math display">\[
+    \eta_i =
+    \begin{cases}
+        \beta_0 + \beta_1 d_i, &amp; \text{if the morph of the $i$-th
+observation is dark}, \\
+        \beta_0 + \beta_2 + (\beta_1 + \beta_3) d_i,
+        &amp; \text{if the morph of the $i$-th observation is light},
+    \end{cases}
+\]</span> where <span class="math inline">\(d_i\)</span> is the distance
+from Liverpool for the <span class="math inline">\(i\)</span>-th
+observation. Let <span class="math inline">\(d_c\)</span> be the
+distance at which the expected proportions are equal for both light and
+dark moths, then <span class="math inline">\(d_c\)</span> must satisfy
+the equation <span class="math display">\[
+    \beta_0 + \beta_1 d_c = \beta_0 + \beta_2 + (\beta_1 + \beta_3)d_c.
+\]</span> Solving this equation for <span
+class="math inline">\(d_c\)</span> gives <span class="math inline">\(d_c
+= -\beta_2/\beta_3\)</span> (assuming that <span
+class="math inline">\(\beta_3 \neq 0\)</span>). Note that <span
+class="math inline">\(d_c\)</span> is a nonlinear function of <span
+class="math inline">\(\beta_2\)</span> and <span
+class="math inline">\(\beta_3\)</span>. Inferences concerning <span
+class="math inline">\(d_c\)</span> can be made using the delta
+method.</p>
+<pre class="r"><code>dmethod(m, pfunc = &quot;-b2/b3&quot;, pname = c(&quot;b0&quot;,&quot;b1&quot;,&quot;b2&quot;,&quot;b3&quot;))</code></pre>
+<pre><code> estimate    se lower upper tvalue  df  pvalue
+     14.8 6.563 1.937 27.66  2.255 Inf 0.02413</code></pre>
+<p><strong>Example</strong>: Suppose we want to estimate the values of
+<em>two</em> explanatory variables that maximize (or minimize) and
+expected response.</p>
+<pre class="r"><code>m &lt;- lm(Yield ~ Time + Temp + I(Time^2) + I(Temp^2) + 
+ I(Time*Temp), data = rsm::ChemReact)
+
+d &lt;- expand.grid(Time = seq(77, 93, length = 100),
+ Temp = seq(160, 185, length = 100))
+d$yhat &lt;- predict(m, newdata = d)
+
+p &lt;- ggplot(d, aes(x = Time, y = Temp, z = yhat))
+p &lt;- p + geom_contour(bins = 20) + theme_classic()
+plot(p)</code></pre>
+<p><img src="lecture-04-03-2023_files/figure-html/unnamed-chunk-19-1.png" width="100%" style="display: block; margin: auto;" />
+The model is <span class="math display">\[
+    E(Y_i) = \beta_0 + \beta_1 \text{time}_i + \beta_2 \text{temp}_i +
+    \beta_3 \text{time}_i^2 + \beta_4 \text{temp}_i^2 + \beta_5
+\text{time}_i\text{temp}_i,
+\]</span> where <span class="math inline">\(Y_i\)</span> is yield. Let
+<span class="math inline">\(a_m\)</span> and <span
+class="math inline">\(b_m\)</span> be the values of time and
+temperature, respectively, that maximize <span
+class="math inline">\(E(Y)\)</span>. These satisfy <span
+class="math display">\[\begin{align*}
+    \frac{\partial (\beta_0 + \beta_1 a_m + \beta_2 b_m +
+    \beta_3 a_m^2 + \beta_4 b_m^2 + \beta_5 a_m b_m)}{\partial a_m}
+&amp; = 0, \\
+    \frac{\partial (\beta_0 + \beta_1 a_m + \beta_2 b_m +
+    \beta_3 a_m^2 + \beta_4 b_m^2 + \beta_5 a_m b_m)}{\partial b_m}
+&amp; = 0.
+\end{align*}\]</span> Solving this system of equations for <span
+class="math inline">\(a_m\)</span> and <span
+class="math inline">\(b_m\)</span> we get <span class="math display">\[
+    a_m = \frac{2\beta_1\beta_4 -
+\beta_2\beta_5}{\beta_5^2-4\beta_3\beta_4}
+    \ \ \ \text{and} \ \ \
+    b_m = \frac{2\beta_2\beta_3 -
+\beta_1\beta_5}{\beta_5^2-4\beta_3\beta_4}.
+\]</span> These can be estimated as follows.</p>
+<pre class="r"><code>dmethod(m, pfunc = &quot;(2*b1*b4 - b2*b5)/(b5^2 - 4*b3*b4)&quot;,
+  pname = c(&quot;b0&quot;,&quot;b1&quot;,&quot;b2&quot;,&quot;b3&quot;,&quot;b4&quot;,&quot;b5&quot;))</code></pre>
+<pre><code> estimate    se lower upper tvalue  df     pvalue
+    86.86 2.738  81.5 92.23  31.72 Inf 7.422e-221</code></pre>
+<pre class="r"><code>dmethod(m, pfunc = &quot;(2*b2*b3 - b1*b5)/(b5^2 - 4*b3*b4)&quot;,
+  pname = c(&quot;b0&quot;,&quot;b1&quot;,&quot;b2&quot;,&quot;b3&quot;,&quot;b4&quot;,&quot;b5&quot;))</code></pre>
+<pre><code> estimate    se lower upper tvalue  df pvalue
+    176.7 3.759 169.3   184     47 Inf      0</code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
