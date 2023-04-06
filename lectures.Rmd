@@ -125,7 +125,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` 
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` Fourth homework assignment assigned.
  
 ***
 
