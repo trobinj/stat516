@@ -11,7 +11,7 @@ This site contains material for Dr. Johnson's *Applied Regression Modeling* cour
 
 <center>
 
-![https://xkcd.com/1260](http://imgs.xkcd.com/comics/ld50.png)
+![https://xkcd.com/2110](http://imgs.xkcd.com/comics/error_bars.png)
 
 </center>
 
