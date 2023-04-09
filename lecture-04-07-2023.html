@@ -11,7 +11,7 @@
 
 
 
-<title>Wednesday, Apr 5</title>
+<title>Friday, Apr 7</title>
 
 <script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -263,12 +263,12 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Wednesday, Apr 5</h1>
+<h1 class="title toc-ignore">Friday, Apr 7</h1>
 
 </div>
 
 
-<p>You can also download a <a href="lecture-04-05-2023.pdf">PDF</a> copy
+<p>You can also download a <a href="lecture-04-07-2023.pdf">PDF</a> copy
 of this lecture.</p>
 <div id="censoring-specification" class="section level2">
 <h2>Censoring Specification</h2>
@@ -685,18 +685,18 @@ head(d)</code></pre>
 <pre><code>  time    est    lcl    ucl species
 1  0.0 1.0000 1.0000 1.0000     dog
 2  0.5 1.0000 1.0000 1.0000     dog
-3  1.0 0.9999 0.9999 0.9999     dog
+3  1.0 0.9999 0.9999 1.0000     dog
 4  1.5 0.9989 0.9985 0.9993     dog
-5  2.0 0.9953 0.9938 0.9964     dog
-6  2.5 0.9869 0.9837 0.9896     dog</code></pre>
+5  2.0 0.9953 0.9937 0.9966     dog
+6  2.5 0.9869 0.9835 0.9898     dog</code></pre>
 <pre class="r"><code>tail(d)</code></pre>
 <pre><code>     time    est    lcl    ucl species
-397  97.5 0.2611 0.2405 0.2832   human
-398  98.0 0.2583 0.2379 0.2803   human
-399  98.5 0.2556 0.2352 0.2775   human
-400  99.0 0.2529 0.2325 0.2747   human
-401  99.5 0.2502 0.2299 0.2720   human
-402 100.0 0.2475 0.2274 0.2692   human</code></pre>
+397  97.5 0.2611 0.2400 0.2832   human
+398  98.0 0.2583 0.2374 0.2803   human
+399  98.5 0.2556 0.2348 0.2775   human
+400  99.0 0.2529 0.2321 0.2748   human
+401  99.5 0.2502 0.2295 0.2720   human
+402 100.0 0.2475 0.2269 0.2693   human</code></pre>
 <pre class="r"><code>p &lt;- ggplot(d, aes(x = time, y = est)) + 
   geom_line(aes(linetype = species)) + 
   labs(x = &quot;Time (years)&quot;, y = &quot;S(t)&quot;, linetype = &quot;Species&quot;) + 
