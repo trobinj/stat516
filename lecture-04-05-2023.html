@@ -867,25 +867,37 @@ activitylow:I(thorax * 10)   0.053903    0.06914   0.77963  4.356e-01
 activitymany:I(thorax * 10)  0.003059    0.06732   0.04545  9.638e-01
 activityhigh:I(thorax * 10)  0.139291    0.06520   2.13649  3.264e-02
 Log(scale)                  -1.697073    0.06350 -26.72553 2.378e-157</code></pre>
-<p>The <code>emtrends</code> function from the <strong>emmeans</strong>
-package can be used here to estimate the effect of thorax size (per 0.1
-mm increase) on longevity.</p>
-<pre class="r"><code>emtrends(m, ~activity, var = &quot;I(thorax*10)&quot;, 
-   type = &quot;response&quot;, tran = &quot;log&quot;, infer = c(TRUE,TRUE))</code></pre>
-<pre><code> activity I(thorax*10).trend     SE  df lower.CL upper.CL t.ratio p.value
- isolated              0.236 0.0444 113    0.148    0.324   5.323  &lt;.0001
- one                   0.213 0.0535 113    0.107    0.319   3.977  0.0001
- low                   0.290 0.0530 113    0.185    0.395   5.473  &lt;.0001
- many                  0.239 0.0506 113    0.139    0.340   4.728  &lt;.0001
- high                  0.376 0.0478 113    0.281    0.470   7.864  &lt;.0001
+<p>Here is how we can estimate this effect using the
+<strong>emmeans</strong> package.</p>
+<pre class="r"><code>m &lt;- survreg(Surv(longevity) ~ activity * thorax, dist = &quot;lognormal&quot;, data = fruitfly)
+pairs(emmeans(m, ~thorax|activity, at = list(thorax = c(0.5,0.4)), 
+  type = &quot;response&quot;), infer = TRUE)</code></pre>
+<pre><code>activity = isolated:
+ contrast              ratio     SE  df lower.CL upper.CL null t.ratio p.value
+ thorax0.5 / thorax0.4  1.27 0.0562 113     1.16     1.38    1   5.323  &lt;.0001
 
-Confidence level used: 0.95 </code></pre>
-<p>Note that the <code>type = "response"</code> and
-<code>tran = "log"</code> options are necessary here to get
-<code>emtrends</code> to estimate the multiplicative effect of thorax
-length. Unfortunately the <strong>emmeans</strong> package function
-cannot be used with a <code>flexsurvreg</code> object, but we can get
-the effects of thorax length through clever re-parameterization.</p>
+activity = one:
+ contrast              ratio     SE  df lower.CL upper.CL null t.ratio p.value
+ thorax0.5 / thorax0.4  1.24 0.0662 113     1.11     1.38    1   3.977  0.0001
+
+activity = low:
+ contrast              ratio     SE  df lower.CL upper.CL null t.ratio p.value
+ thorax0.5 / thorax0.4  1.34 0.0709 113     1.20     1.48    1   5.473  &lt;.0001
+
+activity = many:
+ contrast              ratio     SE  df lower.CL upper.CL null t.ratio p.value
+ thorax0.5 / thorax0.4  1.27 0.0643 113     1.15     1.40    1   4.728  &lt;.0001
+
+activity = high:
+ contrast              ratio     SE  df lower.CL upper.CL null t.ratio p.value
+ thorax0.5 / thorax0.4  1.46 0.0695 113     1.32     1.60    1   7.864  &lt;.0001
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>Unfortunately the <strong>emmeans</strong> package function cannot be
+used with a <code>flexsurvreg</code> object, but we can get the effects
+of thorax length through clever re-parameterization.</p>
 <pre class="r"><code>m &lt;- flexsurvreg(Surv(longevity) ~ activity + activity:I(thorax*10),
    dist = &quot;lognormal&quot;, data = fruitfly)
 print(m)</code></pre>

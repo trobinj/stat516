@@ -333,12 +333,13 @@ Suppose there was an interaction between thorax length (in 0.1 mm units) and the
 m <- survreg(Surv(longevity) ~ activity * I(thorax*10), dist = "lognormal", data = fruitfly)
 summary(m)$table
 ```
-The `emtrends` function from the **emmeans** package can be used here to estimate the effect of thorax size (per 0.1 mm increase) on longevity.
+Here is how we can estimate this effect using the **emmeans** package.
 ```{r}
-emtrends(m, ~activity, var = "I(thorax*10)", 
-   type = "response", tran = "log", infer = c(TRUE,TRUE))
+m <- survreg(Surv(longevity) ~ activity * thorax, dist = "lognormal", data = fruitfly)
+pairs(emmeans(m, ~thorax|activity, at = list(thorax = c(0.5,0.4)), 
+  type = "response"), infer = TRUE)
 ```
-Note that the `type = "response"` and `tran = "log"` options are necessary here to get `emtrends` to estimate the multiplicative effect of thorax length. Unfortunately the **emmeans** package function cannot be used with a `flexsurvreg` object, but we can get the effects of thorax length through clever re-parameterization.
+Unfortunately the **emmeans** package function cannot be used with a `flexsurvreg` object, but we can get the effects of thorax length through clever re-parameterization.
 ```{r}
 m <- flexsurvreg(Surv(longevity) ~ activity + activity:I(thorax*10),
    dist = "lognormal", data = fruitfly)
