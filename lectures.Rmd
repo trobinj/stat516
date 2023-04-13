@@ -125,7 +125,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Proportional hazards models --- continued, discrete survival time models](lecture-04-12-2023.html).
 
-`r i <- i + 1; d[i]` Fourth homework assignment assigned.
+`r i <- i + 1; d[i]` [Sequential categorical regression models](lecture-04-14-2023.html). Fourth homework assignment assigned.
  
 ***
 
