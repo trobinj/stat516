@@ -589,11 +589,11 @@ function of the model parameters: <span class="math inline">\(\lambda_h
 class="math inline">\(\lambda_h\)</span> denotes the value of the
 Michaelis constant when the inhibitor concentration is <span
 class="math inline">\(h\)</span>. Use the delta method to estimate <span
-class="math inline">\(h_0\)</span>, <span
-class="math inline">\(h_{25}\)</span>, and <span
-class="math inline">\(h_{50}\)</span> (i.e., the values of the Michaelis
-constant when the inhibitor concentration is 0, 25, and 50 micro
-moles).</p></li>
+class="math inline">\(\lambda_0\)</span>, <span
+class="math inline">\(\lambda_{25}\)</span>, and <span
+class="math inline">\(\lambda_{50}\)</span> (i.e., the values of the
+Michaelis constant when the inhibitor concentration is 0, 25, and 50
+micro moles).</p></li>
 <li><p>Consider an alternative parameterization of the model such that
 <span class="math display">\[
   E(R_i) = \frac{\alpha s_i}{\lambda_0 + \delta h_i + s_i}.
@@ -614,9 +614,9 @@ class="math inline">\(\delta = \lambda_0/\kappa\)</span> and compute a
 starting value for <span class="math inline">\(\delta\)</span> from
 estimates of <span class="math inline">\(\lambda_0\)</span> and <span
 class="math inline">\(\kappa\)</span> from the previous model. Next
-compute estimates of <span class="math inline">\(h_0\)</span>, <span
-class="math inline">\(h_{25}\)</span>, and <span
-class="math inline">\(h_{50}\)</span> like you did in the previous
+compute estimates of <span class="math inline">\(\lambda_0\)</span>,
+<span class="math inline">\(\lambda_{25}\)</span>, and <span
+class="math inline">\(\lambda_{50}\)</span> like you did in the previous
 problem but with this alternative parameterization <em>two</em> ways:
 once using the <code>dmethod</code> function like before, and again by
 using the <code>lincon</code> function since now <span
@@ -628,21 +628,22 @@ nearly the same standard errors as in the previous problem where you
 estimated these quantities.<a href="#fn4" class="footnote-ref"
 id="fnref4"><sup>4</sup></a></p></li>
 <li><p>Consider the previous problem where you estimated <span
-class="math inline">\(h_0\)</span>, <span
-class="math inline">\(h_{25}\)</span>, and <span
-class="math inline">\(h_{50}\)</span>. Now suppose you want to estimate
-the <em>differences</em> between these parameter — i.e., <span
-class="math inline">\(h_{25} - h_0\)</span>, <span
-class="math inline">\(h_{50} - h_{25}\)</span>, and <span
-class="math inline">\(h_{50} - h_{0}\)</span>. That is, how much larger
-(or smaller) is the Michaelis parameter at one inhibitor concentration
-versus another. Use <em>either</em> the <code>dmethod</code> or
-<code>lincon</code> function to estimate these three quantities (note
-that to use <code>lincon</code> you will need to use the
-parameterization in the previous problem, but <code>dmethod</code> can
-be applied to either parameterization). <strong>Note</strong>: This
-problem is <em>extra credit</em> for students in Stat 436, but
-<em>required</em> for students in Stat 516.</p></li>
+class="math inline">\(\lambda_0\)</span>, <span
+class="math inline">\(\lambda_{25}\)</span>, and <span
+class="math inline">\(\lambda_{50}\)</span>. Now suppose you want to
+estimate the <em>differences</em> between these parameter — i.e., <span
+class="math inline">\(\lambda_{25} - \lambda_0\)</span>, <span
+class="math inline">\(\lambda_{50} - \lambda_{25}\)</span>, and <span
+class="math inline">\(\lambda_{50} - \lambda_0\)</span>. That is, how
+much larger (or smaller) is the Michaelis parameter at one inhibitor
+concentration versus another. Use <em>either</em> the
+<code>dmethod</code> or <code>lincon</code> function to estimate these
+three quantities (note that to use <code>lincon</code> you will need to
+use the parameterization in the previous problem, but
+<code>dmethod</code> can be applied to either parameterization).
+<strong>Note</strong>: This problem is <em>extra credit</em> for
+students in Stat 436, but <em>required</em> for students in Stat
+516.</p></li>
 <li><p>Consider the problem of making inferences concerning the expected
 reaction rate for given substrate and inhibitor concentrations – i.e.,
 <span class="math inline">\(E(R)\)</span> for given values of <span
