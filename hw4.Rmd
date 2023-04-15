@@ -164,7 +164,7 @@ where $\lambda_i = \lambda_0(1 + h_i/\kappa)$ to emphasize how this is simply a 
 
 1. Estimate the nonlinear regression model described above. Note that you can refer to the solutions for the second homework for code to do this. Give the parameter estimates using summary to verify that you estimated the model correctly (you should get the same results as were given in the solutions in the second homework assignment).
 
-0. We can write the Michaelis constant as a *nonlinear* function of the model parameters: $\lambda_h = \lambda_0(1 + h/\kappa)$, where $\lambda_h$ denotes the value of the Michaelis constant when the inhibitor concentration is $h$. Use the delta method to estimate $h_0$, $h_{50}$, and $h_{100}$ (i.e., the values of the Michaelis constant when the inhibitor concentration is 0, 25, and 50 micro moles).
+0. We can write the Michaelis constant as a *nonlinear* function of the model parameters: $\lambda_h = \lambda_0(1 + h/\kappa)$, where $\lambda_h$ denotes the value of the Michaelis constant when the inhibitor concentration is $h$. Use the delta method to estimate $h_0$, $h_{25}$, and $h_{50}$ (i.e., the values of the Michaelis constant when the inhibitor concentration is 0, 25, and 50 micro moles).
 
 0. Consider an alternative parameterization of the model such that 
 $$
