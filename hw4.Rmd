@@ -127,7 +127,7 @@ where $a$ is the age at which the effect is computed, and the parameters $\alpha
 
 [^vonbderivative]: This can be derived as 
 $$
-  \frac{d}{da} \left[\alpha + (\delta - \alpha)2^{x/\gamma}\right] = \frac{(\alpha - \delta)2^{-a/\gamma}\log(2)}{\gamma}.
+  \frac{d}{da} \left[\alpha + (\delta - \alpha)2^{-x/\gamma}\right] = \frac{(\alpha - \delta)2^{-a/\gamma}\log(2)}{\gamma}.
 $$
 
 [^weisberg]: Source: Weisberg, S. (2014). *Applied linear regression* (4th edition). Wiley. 
