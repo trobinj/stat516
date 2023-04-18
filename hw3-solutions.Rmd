@@ -15,7 +15,7 @@ header-includes:
 knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
 ```
 
-`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](hw3.pdf) copy of this homework assignment.", sep = ""), "")`
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](hw3-solutions.pdf) copy of this homework assignment.", sep = ""), "")`
 
 ```{r options, echo = FALSE}
 options(digits = 4, width = 100)
