@@ -131,7 +131,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Sequential models --- continued, proportional odds models](lecture-04-17-2023.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Multinomial logit models](lecture-04-19-2023.html). 
 
 `r i <- i + 1; d[i]` 
  
