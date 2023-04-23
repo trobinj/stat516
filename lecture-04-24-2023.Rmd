@@ -1,0 +1,347 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "04-24-2023"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"), comment = "")
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+```
+
+```{r options, echo = FALSE}
+options(digits = 4, width = 100)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+<!-- This needs some reworking. A couple of things to do is to (a) point out how the fixed effects approach is limited to inferences that vary *within* units, and (b) maybe better explain conditional maximum likelihood via surrogate models. -->
+
+## Fixed Effects Approach
+
+The fixed effects approach is to specify the many-leveled factor as we might normally do with a factor with fewer levels. The term "fixed effects" is used to distinguish it from the "random effects" approach which we will discuss later. The question then is if and how having such a factor compromises inferences. 
+
+**Example**: Consider again the `baserun` data.
+```{r}
+library(dplyr)
+library(tidyr)
+baselong <- trtools::baserun %>% mutate(player = factor(letters[1:n()])) %>% 
+  pivot_longer(cols = c(round, narrow, wide), names_to = "route", values_to = "time")
+head(baselong)
+```
+Consider a fixed effects model with an effect for player (but no interaction with route).
+```{r}
+m.fix <- lm(time ~ route + player, data = baselong)
+summary(m.fix)$coefficients
+```
+For comparison, we will also consider the marginal model using GEE, which should produce fairly accurate inferences.
+```{r}
+library(geepack)
+m.gee <- geeglm(time ~ route, data = baselong, 
+  id = player, corstr = "exchangeable")
+trtools::lincon(m.gee) # easy way to get something like summary(m.gee)$coefficients
+```
+Here are the inferences for the expected time for each route, and the differences in the expected time between routes.
+```{r}
+library(emmeans)
+# Note: The player we choose does not matter.
+pairs(emmeans(m.fix, ~route, at = list(player = "a")), infer = TRUE, adjust = "none")
+pairs(emmeans(m.gee, ~route), infer = TRUE, adjust = "none")
+```
+In *linear* models a fixed effects approach where the factor does not interact with other explanatory variables can produce valid inferences. But some inferences for explanatory variables that are confounded with the factor are not possible. 
+
+**Example**: Consider the following data on orthodontic measurements on children over time. 
+```{r}
+library(bayeslongitudinal) 
+head(Dental)
+p <- ggplot(Dental, aes(x = age, y = distance)) + 
+  geom_line(aes(group = id), color = grey(0.75)) + 
+  geom_point(size = 1) + facet_wrap(~ gender) + 
+  labs(x = "Age (years)", y = "Distance (mm)") + theme_minimal()
+plot(p)
+```
+Age could be treated as a quantitative or categorical variable here. But the problem with the fixed effects approach is inferences for differences in expected distance between male and female children.
+```{r}
+m.fix <- lm(distance ~ id + age + gender, data = Dental)
+summary(m.fix)$coefficients
+```
+Notice that there is no indicator variable of gender! The `lm` function recognized that it is confounded with subject and removed it. We can see this if we construct a table of the number of observations by subject and sex.
+```{r}
+with(Dental, table(id, gender))
+```
+These factors are *nested* (i.e., the variable `id` is nested in the variable `gender`). 
+
+By changing the order of the explanatory variables we can get sex in the model but then we lose a subject indicator variable. 
+```{r}
+m.fix <- lm(distance ~ age * gender + id, data = Dental)
+summary(m.fix)$coefficients
+```
+If we wanted to compare the boys and girls, we could *in principle* estimate the average expected response for each sex, and the difference in these average expected responses (at a given age).
+```{r}
+emmeans(m.fix, ~ gender, at = list(age = 14))
+pairs(emmeans(m.fix, ~ gender, at = list(age = 14)))
+```
+But there is maybe a limitation of such inferences --- they are *for these particular children* (i.e., these 16 boys and 11 girls). We will see if/how we can generalize these inferences to other boys and girls of a given sex or age. 
+
+We also have a problem if we specify an interaction involving subject.
+```{r}
+m.fix <- lm(distance ~ id*age + gender*age, data = Dental)
+summary(m.fix)$coefficients
+```
+Note that there are no terms for gender
+
+### Fixed Effects and Nonlinear Models
+
+Fixed effects *can* produce valid inferences for nonlinear models (including generalized linear models), but not necessarily. It depends, in part, on the *number of parameters* relative to the number of observations.
+
+**Example**: Recall the meta-analysis of 26 studies of the effect of nicotine gum on smoking cessation.
+```{r, fig.height = 5}
+library(dplyr)  
+library(tidyr) 
+quitsmoke <- HSAUR3::smoking
+quitsmoke$study <- rownames(quitsmoke)
+quitsmoke.quits <- quitsmoke %>% dplyr::select(study, qt, qc) %>% 
+  rename(gum = qt, control = qc) %>%
+  pivot_longer(cols = c(gum,control), names_to = "treatment", values_to = "quit")
+quitsmoke.total <- quitsmoke %>% dplyr::select(study, tt, tc) %>% 
+  rename(gum = tt, control = tc) %>%
+  pivot_longer(cols = c(gum,control), names_to = "treatment", values_to = "total")
+quitsmoke <- full_join(quitsmoke.quits, quitsmoke.total) %>% mutate(study = factor(study)) %>% arrange(study)
+head(quitsmoke)
+p <- ggplot(quitsmoke, aes(x = study, y = quit/total, 
+    size = total, fill = treatment)) +
+  geom_point(pch = 21) + coord_flip() + guides(size = "none") + 
+  scale_fill_manual(values = c("White","Black")) + theme_minimal() + 
+  labs(x = "", y = "Proportion of Patients Quitting", fill = "Treatment:") + 
+  theme(legend.position = "top")
+plot(p)
+```
+Here is a fixed-effects logistic regression model.
+```{r}
+m <- glm(cbind(quit, total-quit) ~ treatment + study,
+  family = binomial, data = quitsmoke)
+summary(m)$coefficients
+```
+We can estimate the odds ratio for the effect of treatment as follows.
+```{r}
+rbind(pairs(emmeans(m, ~ treatment | study, type = "response"),
+  reverse = TRUE), adjust = "none")
+```
+Note that using `rbind` makes the output a bit more compact. Here is how we can do that using `contrast` from **trtools**.
+```{r}
+trtools::contrast(m,
+  a = list(treatment = "gum", study = unique(quitsmoke$study)),
+  b = list(treatment = "control", study = unique(quitsmoke$study)),
+  tf = exp, cnames = unique(quitsmoke$study))
+```
+Since the odds ratio is assumed to be the same for each study, we can just pick an arbitrary study.
+```{r}
+pairs(emmeans(m, ~ treatment | study, type = "response", 
+  at = list(study = "Blondal89")), adjust = "none", reverse = TRUE)
+trtools::contrast(m,
+  a = list(treatment = "gum", study = "Blondal89"),
+  b = list(treatment = "control", study = "Blondal89"),
+  tf = exp)
+```
+Here is a model where the effect of nicotine gum varies over study.
+```{r}
+m <- glm(cbind(quit, total-quit) ~ treatment * study,
+  family = binomial, data = quitsmoke)
+summary(m)$coefficients
+rbind(pairs(emmeans(m, ~ treatment | study, type = "response"),
+  reverse = TRUE), adjust = "none")
+```
+The `contrast` function will let you estimate the *average* odds ratio (using the delta method).
+```{r}
+trtools::contrast(m,
+  a = list(treatment = "gum", study = unique(quitsmoke$study)),
+  b = list(treatment = "control", study = unique(quitsmoke$study)),
+  tf = function(x) mean(exp(x)))
+```
+These inferences are probably fine because while there can be a relatively large number of parameters, there are many observations per study as well. Where we can get into trouble is when there are only a few observations per level of the many-leveled factor. 
+
+## The Incidental Parameter Problem and Fixed Effects Models
+
+**Example**: Consider simulated data for a logistic regression model where we observe $m$ observations of a binary response variable for each of $n$ subjects. If we include a fixed effect for subject, the number of parameters is 1 + $n$ and the number of binary observations is $nm$ ($m$ per subject). We will use a relatively large total sample size of $nm$ = 1000, which *should* produce good estimates of the parameter for the effect of the explanatory variable, which has a value of $\beta_1$ = 1.
+
+Here we have $n$ = 1000 subjects with $m$ = 2 observations per subject (1001 parameters).
+```{r, cache = TRUE}
+set.seed(101)
+n <- 1000
+m <- 2
+d <- data.frame(x = runif(n*m, -3, 3), z = rep(rnorm(n), each = m))
+d$y <- rbinom(n*m, 1, plogis(d$x + d$z))
+d$subject <- rep(1:n, each = m)
+
+m <- glm(y ~ x + factor(subject), family = binomial, data = d)
+head(summary(m)$coefficients)
+```
+
+Here we have $n$ = 100 subjects with $m$ = 20 observations per subject (21 parameters).
+```{r, cache = TRUE}
+set.seed(101)
+n <- 100
+m <- 20
+d <- data.frame(x = runif(n*m, -3, 3), z = rep(rnorm(n), each = m))
+d$y <- rbinom(n*m, 1, plogis(d$x + d$z))
+d$subject <- rep(1:n, each = m)
+
+m <- glm(y ~ x + factor(subject), family = binomial, data = d)
+head(summary(m)$coefficients)
+```
+Having too many parameters relative to the number of observations causes problems.
+
+### Conditional Maximum Likelihood
+
+```{r, echo = FALSE}
+library(survival)
+```
+
+In some models (namely logistic and Poisson regression), we can handle the incidental parameter problem if it only involves a "main effect" by using what is called a *conditional likelihood* which in a sense removes the effect of the factor. Consider again our data with $n$ = 1000 subjects and $m$ = 2 binary observations per subject.
+```{r, cache = TRUE}
+set.seed(101)
+n <- 1000
+m <- 2
+d <- data.frame(x = runif(n*m, -3, 3), z = rep(rnorm(n), each = m))
+d$y <- rbinom(n*m, 1, plogis(d$x + d$z))
+d$subject <- rep(1:n, each = m)
+
+library(survival) # for the clogit function
+m <- clogit(y ~ x + strata(subject), data = d)
+summary(m)
+```
+The `clogit` function requires that the response is *binary*, so to apply it to the smoking cessation data we would need to reformat the data.
+```{r}
+quitsmoke <- quitsmoke %>% mutate(noquit = total - quit) %>% dplyr::select(-total) %>% 
+  pivot_longer(cols = c(quit, noquit), names_to = "outcome", values_to = "count")
+head(quitsmoke)
+quitsmoke <- quitsmoke %>% uncount(count) %>% mutate(y = ifelse(outcome == "quit", 1, 0))
+head(quitsmoke)
+m <- clogit(y ~ treatment + strata(study), data = quitsmoke)
+summary(m)
+```
+Poisson regression is an interesting special case when using either a fixed effects approach or conditional maximum likelihood. Here the two approaches produce the same results. 
+
+**Example**: Consider the following data from a case-control study that compared the number of *naevi* between children with (`case`) and without (`control`) spina bifida.
+```{r}
+library(dplyr)
+library(tidyr)
+library(trtools) # for the naevi data
+naevi$set <- factor(1:nrow(naevi)) # data frame naevi is from trtools package
+head(naevi)
+naevilong <- naevi %>% pivot_longer(cols = c(case, control), 
+  names_to = "child", values_to = "count")
+head(naevilong)
+p <- ggplot(naevilong, aes(x = age, y = count, fill = child)) + 
+  facet_wrap(~ sex) + geom_point(shape = 21) + 
+  scale_fill_manual(values = c("black","white")) + 
+  labs(x = "Age", y = "Number of Naevi", fill = "Child") + theme_minimal()
+plot(p)
+```
+The children have been matched by age and sex. But there may be other variables that are correlated with age and sex that are also related to the number of naevi, and these will potential cause a "set effect" on the counts. There are several ways we could handle this.
+```{r}
+m <- glm(count ~ child + set, family = poisson, data = naevilong)
+head(summary(m)$coefficients)
+```
+Note that we omit age and sex since those variables vary between but not within sets and are thus "redundant" with the effect of set (if you include them it will not change inferences concerning the effect of child). Let's estimate the effect of being a case.
+```{r}
+trtools::contrast(m, tf = exp,
+  a = list(child = "case", set = "1"), 
+  b = list(child = "control", set = "1"))
+```
+Note that the set does not matter.
+
+There is a trick to using conditional maximum likelihood here. It can be done by using logistic regression.
+```{r}
+m <- glm(cbind(case, control) ~ 1, family = binomial, data = naevi)
+summary(m)$coefficients
+```
+Strange model. But look at this.
+```{r}
+trtools::lincon(m, tf = exp)
+```
+There's maybe no real advantage to using conditional maximum likelihood here via logistic regression except that in problems with *many* levels it is computationally faster.
+
+**Example**: Consider data from a study of the effect of three antibiotics on leprosy bacilli. Note that if you want to install **ALA** you will need to use `install.packages("ALA", repos = "http://R-Forge.R-project.org")` because it is not kept on the default repository. 
+```{r}
+library(ALA)
+head(leprosy)
+p <- ggplot(leprosy, aes(x = drug, y = nBacilli, fill = period)) +
+  geom_dotplot(binaxis = "y", method = "histodot", 
+    stackdir = "center", binwidth = 1, 
+    position = position_dodge(width = 0.5)) + 
+  scale_fill_manual(values = c("white","black")) + 
+  labs(x = "Drug", y = "Number of Bacilli", fill = "Period") + 
+  theme_minimal()
+plot(p)
+```
+First a fixed effects approach.
+```{r}
+m <- glm(nBacilli ~ factor(id) + drug*period, family = poisson, data = leprosy)
+summary(m)$coefficients
+```
+Now we can estimate the rate ratio for the effect of period for each drug.
+```{r}
+pairs(emmeans(m, ~ period | drug, type = "response"),
+  reverse = TRUE, infer = TRUE)
+```
+Interestingly for this particular model we could actually drop `factor(id)` from the model entirely as it is nested with drug. We would obtain the same inferences! But do not assume that this is the case in general.
+
+Note how `rbind` makes the output a bit more compact. Nice feature.
+```{r}
+rbind(pairs(emmeans(m, ~ period | drug, type = "response"),
+  reverse = TRUE, infer = TRUE), adjust = "none")
+```
+How do we compare the rate ratios between drugs? Here are a couple of approaches. 
+```{r}
+pairs(pairs(emmeans(m, ~ period | drug, type = "response"),
+  reverse = TRUE), by = NULL, adjust = "none")
+pairs(rbind(pairs(emmeans(m, ~ period | drug, type = "response"),
+  reverse = TRUE)), adjust = "none")
+```
+Now consider conditional maximum likelihood using logistic regression.
+```{r}
+leprosylong <- leprosy %>% 
+  pivot_wider(names_from = "period", values_from = "nBacilli")
+head(leprosylong)
+m <- glm(cbind(post, pre) ~ drug, family = binomial, data = leprosylong)
+summary(m)$coefficients
+```
+Our estimates of the "odds" of a bacilli in the post period equals the estimated rate ratio for the effect of a drug.
+```{r}
+trtools::contrast(m, tf = exp,
+  a = list(drug = c("A","B","C")), cnames = c("A","B","C"))
+```
+
+When there are more than two observations per level, conditional maximum likelihood can be done using a multinomial logistic regression model. But there's no advantage to using conditional maximum likelihood here either since we can get the same results using a more straightforward fixed effects approach. 
+
+### Limitations of the Fixed Effects Approach
+
+1. Some inferences may be impossible. Meaningful inferences are largely limited to variables that vary *within* the levels of the fixed effect. 
+0. Possibly poor inferences in nonlinear or generalized linear models. 
+0. More computationally intensive (although there are workarounds). 
+
+
