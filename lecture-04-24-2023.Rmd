@@ -85,7 +85,7 @@ plot(p)
 ```
 Age could be treated as a quantitative or categorical variable here. But the problem with the fixed effects approach is inferences for differences in expected distance between male and female children.
 ```{r}
-m.fix <- lm(distance ~ id + age + gender, data = Dental)
+m.fix <- lm(distance ~ factor(id) + age + gender, data = Dental)
 summary(m.fix)$coefficients
 ```
 Notice that there is no indicator variable of gender! The `lm` function recognized that it is confounded with subject and removed it. We can see this if we construct a table of the number of observations by subject and sex.
@@ -96,7 +96,7 @@ These factors are *nested* (i.e., the variable `id` is nested in the variable `g
 
 By changing the order of the explanatory variables we can get sex in the model but then we lose a subject indicator variable. 
 ```{r}
-m.fix <- lm(distance ~ age * gender + id, data = Dental)
+m.fix <- lm(distance ~ age * gender + factor(id), data = Dental)
 summary(m.fix)$coefficients
 ```
 If we wanted to compare the boys and girls, we could *in principle* estimate the average expected response for each sex, and the difference in these average expected responses (at a given age).
@@ -108,7 +108,7 @@ But there is maybe a limitation of such inferences --- they are *for these parti
 
 We also have a problem if we specify an interaction involving subject.
 ```{r}
-m.fix <- lm(distance ~ id*age + gender*age, data = Dental)
+m.fix <- lm(distance ~ factor(id)*age + gender*age, data = Dental)
 summary(m.fix)$coefficients
 ```
 Note that there are no terms for gender

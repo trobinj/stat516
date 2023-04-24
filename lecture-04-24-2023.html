@@ -375,13 +375,37 @@ plot(p)</code></pre>
 Age could be treated as a quantitative or categorical variable here. But
 the problem with the fixed effects approach is inferences for
 differences in expected distance between male and female children.</p>
-<pre class="r"><code>m.fix &lt;- lm(distance ~ id + age + gender, data = Dental)
+<pre class="r"><code>m.fix &lt;- lm(distance ~ factor(id) + age + gender, data = Dental)
 summary(m.fix)$coefficients</code></pre>
-<pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)
-(Intercept) 18.71963    1.52595 12.2675 6.228e-22
-id          -0.05194    0.05356 -0.9698 3.344e-01
-age          0.66019    0.09779  6.7513 8.587e-10
-genderGirl  -3.02227    0.84903 -3.5597 5.613e-04</code></pre>
+<pre><code>             Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)   14.1130    0.98569  14.318 8.880e-24
+factor(id)2    1.6250    1.01229   1.605 1.124e-01
+factor(id)3    2.3750    1.01229   2.346 2.144e-02
+factor(id)4    3.5000    1.01229   3.458 8.761e-04
+factor(id)5    1.2500    1.01229   1.235 2.205e-01
+factor(id)6   -0.2500    1.01229  -0.247 8.056e-01
+factor(id)7    1.6250    1.01229   1.605 1.124e-01
+factor(id)8    2.0000    1.01229   1.976 5.163e-02
+factor(id)9   -0.2500    1.01229  -0.247 8.056e-01
+factor(id)10  -2.8750    1.01229  -2.840 5.717e-03
+factor(id)11   5.0000    1.01229   4.939 4.216e-06
+factor(id)12   6.3750    1.01229   6.298 1.529e-08
+factor(id)13   2.0000    1.01229   1.976 5.163e-02
+factor(id)14   2.8750    1.01229   2.840 5.717e-03
+factor(id)15   5.2500    1.01229   5.186 1.581e-06
+factor(id)16   1.6250    1.01229   1.605 1.124e-01
+factor(id)17   5.0000    1.01229   4.939 4.216e-06
+factor(id)18   2.3750    1.01229   2.346 2.144e-02
+factor(id)19   2.5000    1.01229   2.470 1.565e-02
+factor(id)20   3.7500    1.01229   3.704 3.883e-04
+factor(id)21   8.1250    1.01229   8.026 7.181e-12
+factor(id)22   2.2500    1.01229   2.223 2.906e-02
+factor(id)23   2.8750    1.01229   2.840 5.717e-03
+factor(id)24   2.8750    1.01229   2.840 5.717e-03
+factor(id)25   3.5000    1.01229   3.458 8.761e-04
+factor(id)26   4.5000    1.01229   4.445 2.795e-05
+factor(id)27   1.6250    1.01229   1.605 1.124e-01
+age            0.6602    0.06161  10.716 3.952e-17</code></pre>
 <p>Notice that there is no indicator variable of gender! The
 <code>lm</code> function recognized that it is confounded with subject
 and removed it. We can see this if we construct a table of the number of
@@ -420,41 +444,116 @@ id   Boy Girl
 is nested in the variable <code>gender</code>).</p>
 <p>By changing the order of the explanatory variables we can get sex in
 the model but then we lose a subject indicator variable.</p>
-<pre class="r"><code>m.fix &lt;- lm(distance ~ age * gender + id, data = Dental)
+<pre class="r"><code>m.fix &lt;- lm(distance ~ age * gender + factor(id), data = Dental)
 summary(m.fix)$coefficients</code></pre>
-<pre><code>               Estimate Std. Error t value  Pr(&gt;|t|)
-(Intercept)    17.35354    1.75589  9.8830 1.347e-16
-age             0.78437    0.12620  6.2155 1.102e-08
-genderGirl      0.33085    2.33265  0.1418 8.875e-01
-id             -0.05194    0.05321 -0.9762 3.312e-01
-age:genderGirl -0.30483    0.19771 -1.5418 1.262e-01</code></pre>
+<pre><code>                 Estimate Std. Error    t value  Pr(&gt;|t|)
+(Intercept)     1.437e+01     1.0988  1.308e+01 1.834e-21
+age             7.844e-01     0.0775  1.012e+01 6.442e-16
+genderGirl      1.728e+00     1.6568  1.043e+00 3.001e-01
+factor(id)2     1.625e+00     0.9803  1.658e+00 1.014e-01
+factor(id)3     2.375e+00     0.9803  2.423e+00 1.770e-02
+factor(id)4     3.500e+00     0.9803  3.570e+00 6.105e-04
+factor(id)5     1.250e+00     0.9803  1.275e+00 2.060e-01
+factor(id)6    -2.500e-01     0.9803 -2.550e-01 7.994e-01
+factor(id)7     1.625e+00     0.9803  1.658e+00 1.014e-01
+factor(id)8     2.000e+00     0.9803  2.040e+00 4.468e-02
+factor(id)9    -2.500e-01     0.9803 -2.550e-01 7.994e-01
+factor(id)10   -2.875e+00     0.9803 -2.933e+00 4.395e-03
+factor(id)11    5.000e+00     0.9803  5.100e+00 2.274e-06
+factor(id)12    4.750e+00     0.9803  4.845e+00 6.190e-06
+factor(id)13    3.750e-01     0.9803  3.825e-01 7.031e-01
+factor(id)14    1.250e+00     0.9803  1.275e+00 2.060e-01
+factor(id)15    3.625e+00     0.9803  3.698e+00 3.999e-04
+factor(id)16    7.863e-16     0.9803  8.021e-16 1.000e+00
+factor(id)17    3.375e+00     0.9803  3.443e+00 9.237e-04
+factor(id)18    7.500e-01     0.9803  7.651e-01 4.465e-01
+factor(id)19    8.750e-01     0.9803  8.926e-01 3.748e-01
+factor(id)20    2.125e+00     0.9803  2.168e+00 3.320e-02
+factor(id)21    6.500e+00     0.9803  6.630e+00 3.768e-09
+factor(id)22    6.250e-01     0.9803  6.375e-01 5.256e-01
+factor(id)23    1.250e+00     0.9803  1.275e+00 2.060e-01
+factor(id)24    1.250e+00     0.9803  1.275e+00 2.060e-01
+factor(id)25    1.875e+00     0.9803  1.913e+00 5.942e-02
+factor(id)26    2.875e+00     0.9803  2.933e+00 4.395e-03
+age:genderGirl -3.048e-01     0.1214 -2.511e+00 1.410e-02</code></pre>
 <p>If we wanted to compare the boys and girls, we could <em>in
 principle</em> estimate the average expected response for each sex, and
 the difference in these average expected responses (at a given age).</p>
 <pre class="r"><code>emmeans(m.fix, ~ gender, at = list(age = 14))</code></pre>
-<pre><code> gender emmean    SE  df lower.CL upper.CL
- Boy      27.6 0.555 103     26.5     28.7
- Girl     23.7 0.711 103     22.3     25.1
+<pre><code> gender emmean   SE df lower.CL upper.CL
+ Boy      27.3 0.29 79     26.7     27.9
+ Girl     24.1 0.35 79     23.4     24.8
 
+Results are averaged over the levels of: id 
 Confidence level used: 0.95 </code></pre>
 <pre class="r"><code>pairs(emmeans(m.fix, ~ gender, at = list(age = 14)))</code></pre>
-<pre><code> contrast   estimate   SE  df t.ratio p.value
- Boy - Girl     3.94 1.03 103   3.818  0.0002</code></pre>
+<pre><code> contrast   estimate    SE df t.ratio p.value
+ Boy - Girl     3.24 0.454 79   7.122  &lt;.0001
+
+Results are averaged over the levels of: id </code></pre>
 <p>But there is maybe a limitation of such inferences — they are <em>for
 these particular children</em> (i.e., these 16 boys and 11 girls). We
 will see if/how we can generalize these inferences to other boys and
 girls of a given sex or age.</p>
 <p>We also have a problem if we specify an interaction involving
 subject.</p>
-<pre class="r"><code>m.fix &lt;- lm(distance ~ id*age + gender*age, data = Dental)
+<pre class="r"><code>m.fix &lt;- lm(distance ~ factor(id)*age + gender*age, data = Dental)
 summary(m.fix)$coefficients</code></pre>
-<pre><code>                Estimate Std. Error t value  Pr(&gt;|t|)
-(Intercept)    19.236375     5.4206  3.5488 0.0005868
-id             -0.148500     0.2682 -0.5536 0.5810510
-age             0.613208     0.4829  1.2698 0.2070315
-genderGirl     -0.972648     4.2520 -0.2287 0.8195226
-id:age          0.008778     0.0239  0.3673 0.7141351
-age:genderGirl -0.186330     0.3788 -0.4919 0.6238531</code></pre>
+<pre><code>                   Estimate Std. Error    t value  Pr(&gt;|t|)
+(Intercept)       1.725e+01     3.2882  5.246e+00 2.665e-06
+factor(id)2      -3.050e+00     4.6502 -6.559e-01 5.147e-01
+factor(id)3      -2.850e+00     4.6502 -6.129e-01 5.425e-01
+factor(id)4       2.400e+00     4.6502  5.161e-01 6.079e-01
+factor(id)5       2.350e+00     4.6502  5.054e-01 6.154e-01
+factor(id)6      -2.500e-01     4.6502 -5.376e-02 9.573e-01
+factor(id)7      -3.000e-01     4.6502 -6.451e-02 9.488e-01
+factor(id)8       4.200e+00     4.6502  9.032e-01 3.704e-01
+factor(id)9       8.500e-01     4.6502  1.828e-01 8.556e-01
+factor(id)10     -3.700e+00     4.6502 -7.957e-01 4.297e-01
+factor(id)11      1.700e+00     4.6502  3.656e-01 7.161e-01
+factor(id)12      5.000e-02     4.6502  1.075e-02 9.915e-01
+factor(id)13     -2.400e+00     4.6502 -5.161e-01 6.079e-01
+factor(id)14     -1.250e+00     4.6502 -2.688e-01 7.891e-01
+factor(id)15      7.450e+00     4.6502  1.602e+00 1.150e-01
+factor(id)16     -3.600e+00     4.6502 -7.742e-01 4.422e-01
+factor(id)17      1.700e+00     4.6502  3.656e-01 7.161e-01
+factor(id)18     -2.300e+00     4.6502 -4.946e-01 6.229e-01
+factor(id)19      2.500e+00     4.6502  5.376e-01 5.931e-01
+factor(id)20     -2.850e+00     4.6502 -6.129e-01 5.425e-01
+factor(id)21      4.000e+00     4.6502  8.602e-01 3.935e-01
+factor(id)22      2.800e+00     4.6502  6.021e-01 5.496e-01
+factor(id)23     -4.000e+00     4.6502 -8.602e-01 3.935e-01
+factor(id)24     -1.445e+01     4.6502 -3.107e+00 3.008e-03
+factor(id)25      1.850e+00     4.6502  3.978e-01 6.923e-01
+factor(id)26     -3.750e+00     4.6502 -8.064e-01 4.235e-01
+factor(id)27     -3.000e-01     4.6502 -6.451e-02 9.488e-01
+age               3.750e-01     0.2929  1.280e+00 2.060e-01
+factor(id)2:age   4.250e-01     0.4143  1.026e+00 3.095e-01
+factor(id)3:age   4.750e-01     0.4143  1.147e+00 2.566e-01
+factor(id)4:age   1.000e-01     0.4143  2.414e-01 8.102e-01
+factor(id)5:age  -1.000e-01     0.4143 -2.414e-01 8.102e-01
+factor(id)6:age   7.705e-15     0.4143  1.860e-14 1.000e+00
+factor(id)7:age   1.750e-01     0.4143  4.224e-01 6.744e-01
+factor(id)8:age  -2.000e-01     0.4143 -4.828e-01 6.312e-01
+factor(id)9:age  -1.000e-01     0.4143 -2.414e-01 8.102e-01
+factor(id)10:age  7.500e-02     0.4143  1.810e-01 8.570e-01
+factor(id)11:age  3.000e-01     0.4143  7.242e-01 4.721e-01
+factor(id)12:age  5.750e-01     0.4143  1.388e+00 1.708e-01
+factor(id)13:age  4.000e-01     0.4143  9.656e-01 3.386e-01
+factor(id)14:age  3.750e-01     0.4143  9.052e-01 3.694e-01
+factor(id)15:age -2.000e-01     0.4143 -4.828e-01 6.312e-01
+factor(id)16:age  4.750e-01     0.4143  1.147e+00 2.566e-01
+factor(id)17:age  3.000e-01     0.4143  7.242e-01 4.721e-01
+factor(id)18:age  4.250e-01     0.4143  1.026e+00 3.095e-01
+factor(id)19:age  6.119e-15     0.4143  1.477e-14 1.000e+00
+factor(id)20:age  6.000e-01     0.4143  1.448e+00 1.533e-01
+factor(id)21:age  3.750e-01     0.4143  9.052e-01 3.694e-01
+factor(id)22:age -5.000e-02     0.4143 -1.207e-01 9.044e-01
+factor(id)23:age  6.250e-01     0.4143  1.509e+00 1.372e-01
+factor(id)24:age  1.575e+00     0.4143  3.802e+00 3.672e-04
+factor(id)25:age  1.500e-01     0.4143  3.621e-01 7.187e-01
+factor(id)26:age  7.500e-01     0.4143  1.810e+00 7.580e-02
+factor(id)27:age  1.750e-01     0.4143  4.224e-01 6.744e-01</code></pre>
 <p>Note that there are no terms for gender</p>
 <div id="fixed-effects-and-nonlinear-models" class="section level3">
 <h3>Fixed Effects and Nonlinear Models</h3>
