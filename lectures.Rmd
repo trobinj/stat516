@@ -145,7 +145,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` **Sixth homework assignment assigned, due by noon on Monday, May 15th**. 
+`r i <- i + 1; d[i]` **Fifth homework assignment assigned, due by noon on Monday, May 15th**. 
 
 `r i <- i + 1; d[i]` 
 
