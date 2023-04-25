@@ -1,0 +1,339 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "04-26-2023"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"), comment = "")
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+```
+
+```{r options, echo = FALSE}
+options(digits = 4, width = 100)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+
+## Random Effects Approach
+
+The random effects approach conceptualizes the parameters associated with the levels of the many-leveled factor as *random variables*. Another way to think of this is that the levels of that factor are a *sample* of levels from a real or conceptual population of levels. 
+
+Note: We sometimes use the term "mixed effects" model for a model where some parameters are modeled as random and some that are not modeled as random (i.e., fixed). Most (but not all) models with random effects also have some fixed effects, and are thus mixed effects models. 
+
+**Example**: Consider again the `baserun` data, but a system of subscripts that distinguishes between the *player* and the *observation within each player* so that $Y_{ij}$ is the $j$-th observation of running time for the $i$-th player.
+```{r}
+library(trtools)
+head(baserun)
+```
+If we were to ignore the effect of player we could write a model for these data as
+$$
+  E(Y_{ij}) = \beta_0 + \beta_1 x_{ij1} + \beta_2 x_{ij2},
+$$
+where $x_{i1}$ and $x_{i2}$ are indicator variables for two of the three routes.
+
+In the *fixed effects* approach we include an indicator variable for each player, so the model would become
+$$
+  E(Y_{ij}) = \beta_0 + \beta_1 x_{ij1} + \beta_2 x_{ij2} + \beta_3 x_{ij3} + \beta_4 x_{ij4} + \cdots + \beta_{23} x_{ij23},
+$$
+where $x_{ij3}, x_{ij4}, \dots, x_{ij23}$ are the 21 indicator variables for the 22 players. 
+
+In the *random effects* approach we would view $\beta_3, \beta_4, \dots, \beta_{23}$ as *random variables*. To distinguish the random from the non-random (fixed) parameters I will change the symbols for the indicator variables and the parameters corresponding to the players and write the model as
+$$
+  E(Y_{ij}) = \beta_0 + \beta_1 x_{ij1} + \beta_2 x_{ij2} + \delta_1 z_{ij1} + \delta_2 z_{ij2} + \dots + \delta_{22} z_{ij22}.
+$$
+Note also that here we have 22 rather than 21 indicator variables (each player has their own parameter). A more compact way to write this model is
+$$
+  E(Y_{ij}) = \beta_0 + \beta_1 x_{ij1} + \beta_2 x_{ij2} + \underbrace{\delta_1 z_{ij1} + \delta_2 z_{ij2} + \dots + \delta_{22} z_{ij22}}_{\delta_i} = \beta_0 + \beta_1 x_{ij1} + \beta_2 x_{ij2} + \delta_i,
+$$
+so that $\delta_i$ represents the "random effect" of the $i$-th player. 
+
+Another way to write this model is
+$$
+  Y_{ij} = \beta_0 + \beta_1 x_{ij1} + \beta_2 x_{ij2} + \delta_i + \epsilon_{ij},
+$$
+where $\epsilon_{ij}$ is the usual random error term, which is implicitly assumed to be normally-distributed. Thus on the right-hand side of the above expression we have *two* random variables on the right-hand side: $\delta_i$ and $\epsilon_{ij}$. 
+
+To complete the model a distribution is needed to be assumed for each $\delta_i$. Typically they are assumed to be normally distributed with zero mean and some variance $\sigma_{\delta}^2$ so that we write $\delta_i \sim N(0,\sigma_{\delta}^2)$. Because the $\delta_i$ have a mean of zero they can be viewed as a "deviation" of the effect of the $i$-th player from a (conceptual) average player. 
+
+The presence of the random $\delta_i$ parameters fundamentally changes the likelihood function. Specialized inferential methods are (usually) necessary to arrive at correct inferences when random effects are specified. As with other approaches functions to implement these methods require that the data be in "long form" so we reshape the `baserun` data.
+```{r}
+library(dplyr)
+library(tidyr)
+baselong <- trtools::baserun %>% mutate(player = factor(letters[1:n()])) %>% 
+  pivot_longer(cols = c(round, narrow, wide), names_to = "route", values_to = "time")
+head(baselong)
+```
+The `lmer` function from the **lme4** package can estimate a *linear mixed effects regression* model with normally-distributed random effects. The model above can be estimated as follows.
+```{r}
+library(lme4)
+m <- lmer(time ~ route + (1 | player), data = baselong)
+summary(m)
+```
+Profile likelihood confidence intervals for $\sigma_{\delta}^2$ (the variance of the $\delta_i$ parameters), $\sigma^2$ (the variance of $\epsilon_{ij}$), and $\beta_0$, $\beta_1$, and $\beta_2$ can be obtained using `confint`.
+```{r}
+confint(m)
+```
+Using `lincon` will produce Wald confidence intervals for $\beta_0$, $\beta_1$, and $\beta_2$.
+```{r}
+trtools::lincon(m)
+```
+Other inferences can be made using `trtools::contrast` and the **emmeans** package, but note that player is never specified when using these functions. These tools provide inferences only for the "fixed effects" of the model. We can estimate the expected running time for each route.
+```{r}
+library(emmeans)
+
+emmeans(m, ~route)
+trtools::contrast(m, a = list(route = c("narrow","round","wide")),
+  cnames = c("narrow","round","wide"))
+```
+Notice that `emmeans` uses the "Kenward-Roger" method of computing approximate degrees of freedom. The issue of degrees of freedom is a difficult problem in models with random effects. Some statisticians suggest just using Wald methods which specify infinite degrees of freedom as an approximation (which is the default in my functions). This can be done using the `lmer.df = "asymptotic"` option.
+```{r}
+emmeans(m, ~route, lmer.df = "asymptotic")
+```
+We can also compare the routes as before. 
+```{r}
+pairs(emmeans(m, ~ route, lmer.df = "asymptotic"), adjust = "none", infer = TRUE)
+trtools::contrast(m, a = list(route = c("narrow","round","wide")), 
+  cnames = c("narrow","round","wide"))
+trtools::contrast(m, 
+  a = list(route = c("narrow","narrow","round")),
+  b = list(route = c("round","wide","wide")),
+  cnames = c("narrow - round","narrow - wide","round - wide"))
+```
+
+Some built-in functions also allow us to plot estimates of the $\delta_i$ parameters.
+```{r, message = TRUE}
+lattice::dotplot(ranef(m, condVar = TRUE))
+```
+Alternatively you can use the `ranef` function to return these estimates and plot them using `ggplot` or something else.
+```{r}
+d <- as.data.frame(ranef(m))
+head(d)
+d <- d %>% mutate(lower = condval - 1.96 * condsd, upper = condval + 1.96 * condsd)
+head(d)
+p <- ggplot(d, aes(x = grp, y = condval)) +
+  geom_linerange(aes(ymin = lower, ymax = upper)) +
+  geom_point(size = 1.5) + 
+  theme_minimal() + coord_flip() + 
+  labs(x = "Player", y = "Estimated Player Effect")
+plot(p)
+```
+
+**Example**: Now consider again the `Sitka` data. 
+```{r}
+library(MASS)
+head(Sitka, 10)
+p <- ggplot(Sitka, aes(x = Time, y = exp(size))) +
+  geom_line(aes(group = tree), alpha = 0.75, linewidth = 0.1) +
+  facet_wrap(~ treat) + geom_point(size = 0.5) + 
+  labs(y = "Size (height times squared diameter)", 
+    x = "Days Since January 1, 1988") + theme_minimal()
+plot(p)
+```
+First let's consider the model
+
+$$
+  E(Y_{ij}) = \beta_0 + \beta_1 x_{ij1} + \beta_2 x_{ij2} + \beta_3 x_{ij3} + \delta_i,
+$$
+where $Y_{ij}$ is the $j$-th observation of size for the $i$-th tree, $x_{ij1}$ is an indicator for treatment (ozone), $x_{ij2}$ is time, and $x_{ij3} = x_{ij1}x_{ij2}$. 
+```{r}
+m <- lmer(exp(size) ~ treat * Time + (1 | tree), data = Sitka)
+summary(m)
+```
+
+```{r}
+Sitka$yhat.sub <- predict(m)               # for each tree (with deltas)
+Sitka$yhat.avg <- predict(m, re.form = NA) # for the "average" tree (deltas = 0)
+
+p <- ggplot(Sitka, aes(x = Time, y = exp(size))) + 
+  labs(y = "Size (height times squared diameter)", 
+    x = "Days Since January 1, 1988") + 
+  theme_minimal() + facet_wrap(~treat) + 
+  geom_line(aes(y = yhat.sub, group = tree), color = grey(0.75)) + 
+  geom_line(aes(y = yhat.avg), size = 0.75) + 
+  geom_point(size = 0.5)
+plot(p)
+```
+This doesn't really capture differences in the growth rates between trees (i.e., an *interaction* between tree and time). Such a model could be written as
+$$
+  E(Y_{ij}) = \beta_0 + \beta_1 x_{ij1} + \beta_2 x_{ij2} + \beta_3 x_{ij3} + \delta_i + \gamma_i x_{ij2},
+$$
+where now there are *two* random parameters for each tree: $\delta_i$ and $\gamma_i$. We can also write this model as 
+$$
+  E(Y_{ij}) = 
+  \begin{cases}
+    \beta_0 + \delta_i + (\beta_2 + \gamma_i)t_{ij}, & \text{if the treatment is control}, \\
+    \beta_0 + \beta_1 + \delta_i + (\beta_2 + \beta_3 + \gamma_i)t_{ij}, & \text{if the treatment is ozone},
+  \end{cases}
+$$
+where $t_{ij}$ is time. 
+This means that the linear relationship between time and expected size varies over treatment conditions, but also trees --- i.e., each tree has its own intercept and slope (rate). 
+```{r}
+m <- lmer(exp(size) ~ treat * Time + (1 + Time | tree), data = Sitka)
+```
+Oh no! Models with random effects are cranky. But let's take the advice of the warning and re-scale time from days to weeks. 
+```{r}
+m <- lmer(exp(size) ~ treat * I(Time/7) + (1 + I(Time/7) | tree), data = Sitka)
+```
+That *probably* is not a problem. I suspect it is due to the very high correlation between the random intercept and slope parameters. But changing the optimizer seems to avoid the error.
+```{r}
+library(optimx)
+m <- lmer(exp(size) ~ treat * I(Time/7) + (1 + I(Time/7) | tree), data = Sitka,
+  control = lmerControl(optimizer = "optimx", optCtrl = list(method = "nlminb")))
+summary(m) 
+```
+I found that you get more or less the same result even without changing the optimizer. Here's a plot. 
+```{r}
+Sitka$yhat.sub <- predict(m)               # for each tree (with deltas)
+Sitka$yhat.avg <- predict(m, re.form = NA) # for the "average" tree (deltas = 0)
+
+p <- ggplot(Sitka, aes(x = Time, y = exp(size))) + 
+  labs(y = "Size (height times squared diameter)", 
+    x = "Days Since January 1, 1988") + 
+  theme_minimal() + facet_wrap(~treat) + 
+  geom_line(aes(y = yhat.sub, group = tree), color = grey(0.75)) +
+  geom_line(aes(y = yhat.avg), size = 0.75) + 
+  geom_point(size = 0.5)
+plot(p)
+```
+Now we can estimate and compare the (average) growth rates in the control and ozone conditions (per 100 days with `contrast` and per day with `emtrends`). 
+```{r}
+trtools::contrast(m,
+  a = list(Time = 2, treat = c("control","ozone")),
+  b = list(Time = 1, treat = c("control","ozone")),
+  cnames = c("control","ozone"))
+trtools::contrast(m,
+  a = list(Time = 2, treat = "control"),
+  b = list(Time = 1, treat = "control"),
+  u = list(Time = 2, treat = "ozone"),
+  v = list(Time = 1, treat = "ozone"))
+pairs(emmeans(m, ~Time|treat, at = list(Time = c(2,1)), lmer.df = "asymptotic"))
+pairs(pairs(emmeans(m, ~Time|treat, at = list(Time = c(2,1)), lmer.df = "asymptotic")), by = NULL, )
+```
+We can plot estimates of the $\delta_i$ and $\gamma_i$ parameters for each tree.
+```{r, message = FALSE, fig.height = 6}
+lattice::dotplot(ranef(m, condVar = TRUE))
+d <- as.data.frame(ranef(m))
+head(d)
+d <- d %>% mutate(lower = condval - 1.96 * condsd, upper = condval + 1.96 * condsd)
+head(d)
+p <- ggplot(d, aes(x = grp, y = condval, color = term)) +
+  geom_linerange(aes(ymin = lower, ymax = upper)) + 
+  geom_point(size = 1) + 
+  theme_minimal() + coord_flip() + 
+  labs(x = "Tree", y = "Estimated Tree Effects", color = "Term") +
+  theme(axis.text.y = element_text(size = 5)) 
+plot(p)
+```
+
+**Example**: Consider again the smoking cessation meta analysis data.
+```{r}
+library(dplyr)  
+library(tidyr) 
+quitsmoke <- HSAUR3::smoking
+quitsmoke$study <- rownames(quitsmoke)
+quitsmoke.quits <- quitsmoke %>% dplyr::select(study, qt, qc) %>% 
+  rename(gum = qt, control = qc) %>%
+  gather(gum, control, key = treatment, value = quit)
+quitsmoke.total <- quitsmoke %>% dplyr::select(study, tt, tc) %>% 
+  rename(gum = tt, control = tc) %>%
+  gather(gum, control, key = treatment, value = total)
+quitsmoke <- full_join(quitsmoke.quits, quitsmoke.total) %>% 
+  mutate(study = factor(study)) %>% arrange(study)
+head(quitsmoke)
+```
+We can introduce a random "study effect" into a logistic regression model to create a *generalized linear mixed effects regression* model. This would be written as
+$$
+  \log\left[\frac{E(Y_{ij})}{1 - E(Y_{ij})}\right] = \beta_0 + \beta_1 x_{ij} + \delta_i,
+$$
+where $Y_{ij}$ is the $j$-th proportion of people quitting in the $i$-th study, and $x_{ij}$ is an indicator variable for treatment (gum). This model can be estimated as follows.
+```{r}
+m <- glmer(cbind(quit, total - quit) ~ treatment + (1 | study),
+  family = binomial, data = quitsmoke)
+summary(m)
+```
+We can estimate the odds ratio for the treatment, which is assumed to be the same for every study in this model.
+```{r}
+trtools::contrast(m, tf = exp,
+  a = list(treatment = "gum"),
+  b = list(treatment = "control"))
+pairs(emmeans(m, ~ treatment, type = "response"), reverse = TRUE)
+```
+We can extend the model so that the treatment effect varies over studies (i.e., an interaction between treatment and study). 
+```{r}
+m <- glmer(cbind(quit, total - quit) ~ treatment + (1 + treatment | study),
+  family = binomial, data = quitsmoke)
+summary(m)
+```
+Now our odds ratios are for a "typical" study.
+```{r}
+trtools::contrast(m, tf = exp,
+  a = list(treatment = "gum"),
+  b = list(treatment = "control"))
+pairs(emmeans(m, ~ treatment, type = "response"), reverse = TRUE)
+```
+
+Note: In logistic regression, if your response variable is *binary* (i.e., not aggregated counts) use the option `nAGQ = x` where `x` is maybe 21+. 
+```{r}
+m <- glmer(cbind(quit, total - quit) ~ treatment + (1 | study),
+  family = binomial, data = quitsmoke, nAGQ = 31)
+summary(m)
+```
+It can also be used in other GLMERs. Because of the complexity of the likelihood function in these models, there are many different numerical approaches to estimation. 
+
+**Example**: Consider a random effects approach for the `leprosy` data.
+```{r}
+library(ALA)
+head(leprosy)
+p <- ggplot(leprosy, aes(x = drug, y = nBacilli, fill = period)) +
+  geom_dotplot(binaxis = "y", method = "histodot", 
+    stackdir = "center", binwidth = 1, 
+    position = position_dodge(width = 0.5)) + 
+  scale_fill_manual(values = c("white","black")) + 
+  labs(x = "Drug", y = "Number of Bacilli", fill = "Period") +
+  theme_minimal()
+plot(p)
+m <- glmer(nBacilli ~ drug * period + (1 | id), 
+  family = poisson, data = leprosy)
+summary(m)
+```
+Estimated ratios for each drug.
+```{r}
+pairs(emmeans(m, ~ period | drug, type = "response"), 
+  reverse = TRUE, infer = TRUE)
+trtools::contrast(m, tf = exp,
+  a = list(period = "post", drug = c("A","B","C")),
+  b = list(period = "pre", drug = c("A","B","C")),
+  cnames = c("A","B","C"))
+```
+We can also compare the rate ratios.
+```{r}
+pairs(pairs(emmeans(m, ~ period | drug, type = "response"), 
+  reverse = TRUE), by = NULL, adjust = "none")
+```
+
+

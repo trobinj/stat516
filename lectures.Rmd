@@ -137,9 +137,9 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` [Fixed-effects models](lecture-04-24-2023.html). 
+`r i <- i + 1; d[i]` [Fixed effects models](lecture-04-24-2023.html). 
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Random effects models](lecture-04-26-2023.html).
 
 `r i <- i + 1; d[i]` 
  
