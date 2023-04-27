@@ -141,7 +141,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Random effects models](lecture-04-26-2023.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Nonlinear regression with random effects, cross and nested random effects](lecture-04-28-2023.html). 
  
 ***
 
