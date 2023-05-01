@@ -145,7 +145,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` [Model selection](lecture-05-01-2023.html). **Fifth homework assignment assigned, due by noon on Monday, May 15th**. 
+`r i <- i + 1; d[i]` [Model selection](lecture-05-01-2023.html). The [solutions](hw4-solutions.html) to the fourth homework assignment are now available. **Fifth homework assignment assigned, due by noon on Monday, May 15th**. 
 
 `r i <- i + 1; d[i]` 
 

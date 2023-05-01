@@ -1,0 +1,619 @@
+---
+title: "Over-Dispersion, Marginal Effects, the Delta Method, and Survival Analysis"
+subtitle: Statistics 516, Homework 4 (Solutions)
+output:
+  html_document:
+    theme: readable
+  pdf_document: default
+header-includes:
+  - \usepackage{booktabs}
+  - \usepackage{float}
+  - \usepackage{array}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](hw4-solutions.pdf) copy of this homework assignment.", sep = ""), "")`
+
+```{r options, echo = FALSE}
+options(digits = 4, width = 100)
+```
+
+## Lip Cancer in Scotland: Over-dispersion
+
+Recall the model for the lip cancer data from Scotland used in the [previous homework](hw3-solutions.html). Here is the model and a plot of the raw data with the estimated rate of lip cancer per person-year by percent of the population engaged in outdoor activity. 
+```{r, fig.height = 7}
+library(epiR)
+library(dplyr)
+library(ggplot2)
+
+data(epi.SClip)
+
+lipcancer <- epi.SClip %>% 
+  mutate(district = factor(district, levels = rev(sort(unique(district))))) %>% 
+  mutate(percent = paste(prop.ag, "%", sep = "")) %>%
+  mutate(percent = reorder(percent, prop.ag)) %>% 
+  select(district, cases, population, percent)
+
+m <- glm(cases ~ offset(log(population)) + percent, family = poisson, data = lipcancer)
+
+d <- data.frame(percent = sort(unique(lipcancer$percent)), population = 1)
+d$yhat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(lipcancer, aes(y = district, x = cases/population)) +
+  theme_minimal() + geom_point(aes(size = population)) + 
+  facet_grid(percent ~ ., scales = "free_y", space = "free_y") + 
+  labs(y = NULL, x = "Cases per Person-Year", size = "Person-Years:") + 
+  scale_x_continuous(labels = scales::label_number()) + 
+  theme(axis.text.y = element_text(size = 7), legend.position = "top") + 
+  geom_vline(aes(xintercept = yhat), data = d, linetype = 2)
+plot(p)
+```
+This model does not account for variation in the lip cancer rate over *districts* other than that accounted for by the percent of the population engaged in outdoor activity (i.e., two districts with the same or approximately the same percent of the population engaged in outdoor activity may differ in other ways leading to differences in the lip cancer rate). Failing to account for this could lead to over-dispersion, which you will investigate in this problem. 
+
+1. Create an appropriate residual plot to detect over-dispersion, and examine the residual deviance and degrees of freedom for the Poisson regression model. Explain whether or not you see evidence of over-dispersion and why.
+
+    **Solution**: Here is my residual plot using studentized residuals (but the standardized Pearson or deviance residuals would also work). 
+    ```{r}
+    lipcancer$yhat <- predict(m)
+    lipcancer$residual <- rstudent(m)
+    p <- ggplot(lipcancer, aes(x = yhat, y = residual, color = percent)) + 
+      theme_minimal() + geom_point() + 
+      geom_hline(yintercept = c(-2, 2), linetype = 2) + 
+      labs(x = "Predicted Value (log scale)", 
+        y = "Studentized Residual", 
+        color = "Percent of\nOutdoor\nActivity")
+    plot(p)
+    ```
+    This is fancier than is necessary. Something simple like `plot(predict(m), rstudent(m))` would suffice. But in any case we can see that a bit more than 5% of the residuals are outside the (-2, 2) interval. Also if you look at the output of `summary` you might note that the residual deviance is `r summary(m)$deviance` is more than four times larger than the residual degrees of freedom is `r summary(m)$df.residual`. These results suggest some over-dispersion.
+
+0. Estimate the model specified above using *quasi*-likelihood by using the argument `family = quasipoisson`. This will assume a variance structure of $\text{Var}(Y_i) = \phi E(Y_i)$ rather than $\text{Var}(Y_i) = E(Y_i)$ as is assumed when using maximum likelihood with an assumed Poisson distribution for the observed count. Report the parameter estimates and their standard errors using the `summary` function. Compare these to the estimates and standard errors obtained previously and briefly discuss what has or has not changed. Finally create an appropriate residual plot and briefly explain if you think the over-dispersion has been successfully resolved and why based on that plot.[^residualdeviance]
+
+    **Solution**: We can estimate this model using quasi-likelihood as follows.
+    ```{r}
+    m.quasi <- glm(cases ~ offset(log(population)) + percent,
+      family = quasipoisson, data = lipcancer)
+    summary(m.quasi)$coefficients
+    ```
+    Here are the parameter estimates and standard errors when not using quasi-likelihood.
+    ```{r}
+    summary(m)$coefficients
+    ```
+    The point estimates are the same, but the standard errors are larger when using quasi-likelihood. Failing to account for over-dispersion can lead to underestimates standard errors. It is important to note that quasi-likelihood can change the point estimates as well. It depends on what variance structure we specify, and the model itself. For example, if there was a "megaphone" pattern and we used `family = quasi(link = "log", variance = "mu^2")` which assumes that $\text{Var}(Y_i) = \phi E(Y_i)^2$, then the point estimates would not have been the same. 
+    
+    Here is the residual plot we get after using quasi-likelihood (same code as before). 
+    ```{r}
+    lipcancer$yhat <- predict(m.quasi)
+    lipcancer$residual <- rstudent(m.quasi)
+    p <- ggplot(lipcancer, aes(x = yhat, y = residual, color = percent)) + 
+      theme_minimal() + geom_point() + 
+      geom_hline(yintercept = c(-2, 2), linetype = 2) + 
+      labs(x = "Predicted Value (log scale)", 
+        y = "Studentized Residual", 
+        color = "Percent of\nOutdoor\nActivity")
+    plot(p)
+    ```
+    This is an improvement. Relatively few residuals are outside (-2, 2). Also there is no strange shape to the residuals so we do not need to consider alternative variance structures.
+
+0. In the [last homework assignment](hw3-solutions.html) you were asked to make inferences by estimating the expected number of cases of lip cancer per 100K (i.e., 100,000) person-years, and also the rate ratios comparing the rate of lip cancer at 1%, 7%, 10%, 16%, and 24% versus 0% of the population involved in outdoor activity. Do this again but based on the model you estimated earlier using quasi-likelihood (you do not need to provide interpretations of the rate ratios this time, just report them). Use either `contrast` or functions from the **emmeans** package so that you are also provided with confidence intervals for all of your inferences. Compare these estimates and the associated confidence intervals to what was obtained in the last homework when you did not account for any (potential) over-dispersion, and briefly discuss what has and has not changed. 
+
+    **Solution**: I am going to use the **emmeans** package here. First I will estimate the lip cancer rate per 100,000 person-years.
+    ```{r}
+    library(emmeans)
+    emmeans(m, ~percent, type = "response", offset = log(100000))
+    emmeans(m.quasi, ~percent, type = "response", offset = log(100000))
+    ```
+    The point estimates are the same, as we would expect since the parameter estimates are the same, but the confidence intervals are now wider. Failing to account for over-dispersion can lead to confidence intervals that are too narrow due to underestimates standard errors. Here are the rate ratios.
+    ```{r}
+    emmeans::contrast(emmeans(m, ~percent, offset = log(1), type = "response"),
+  method = "trt.vs.ctrl", ref = 1, infer = TRUE, adjust = "none")
+    emmeans::contrast(emmeans(m.quasi, ~percent, offset = log(1), type = "response"),
+  method = "trt.vs.ctrl", ref = 1, infer = TRUE, adjust = "none")
+    ```
+    The rate ratios are the same, but their confidence intervals are wider. Again, this is due to their standard errors being underestimated by failing to account for over-dispersion. Incidentally, the standard errors shown here are not those standard errors used to compute the confidence intervals. Those confidence intervals are computed using the standard errors on the log scale to produce confidence intervals on the log scale, which are then "back-transformed" (i.e., exponentiated in this case) to produce the confidence intervals you see (this is what is meant by the `Intervals are back-transformed from the log scale' message). The standard errors shown above are on the scale of the rates and rate ratios, and are computed using the delta method. These are not used to compute confidence intervals. It is usually more accurate to compute these on the log scale and then transform. But they can serve as useful reference for the (im)precision of the estimators.
+
+[^residualdeviance]: You cannot use the residual deviance to diagnose if a quasi-likelihood approach is appropriate. It only works when you assume a Poisson or binomial distribution. But the residual plot may exhibit other issues that have not been resolved such as we observed for the model for the fish trawling data in lecture on [February 22](lecture-02-22-2023.html). 
+
+## A Von Bertalanffy Model for Walleye Growth
+
+The [Von Bertalanffy model](https://en.wikipedia.org/wiki/Von_Bertalanffy_function) is frequently used to model growth in animals. The parameters of this model are frequently estimated using nonlinear regression. One form of this model is
+$$
+  E(Y) = \alpha + (\delta - \alpha)2^{-x/\gamma},
+$$
+where $Y$ is some measure of size and $x$ is age. The parameters are the asymptote of expected size as age increases ($\alpha$), the "intercept" meaning the expected size at age zero ($\delta$), and the "half-life" which is age at which the expected size is half way between $\delta$ and $\alpha$ ($\gamma$). An example of using this model was shown in [lecture on February 10](lecture-02-10-2023.html) that featured data on [Walleye (*Sander vitreus*)](https://en.wikipedia.org/wiki/Walleye) from Butternut Lake, Wisconsin, during three different periods.[^weisberg] Here is a plot of the data.
+```{r}
+library(alr4)
+library(ggplot2)
+walleye$periodf <- factor(walleye$period, levels = 1:3,
+  labels = c("pre-1991", "1991-1996", "1997-2000"))
+p <- ggplot(walleye, aes(y = length, x = age)) + facet_wrap(~ periodf) + 
+  theme_minimal() + geom_point(alpha = 0.25, size = 0.5) +
+  labs(x = "Age (years)", y = "Length (mm)", 
+    title = "Length and Age of Walleye During Three Management Periods",
+    subtitle = "Butternut Lake, Wisconsin")
+plot(p)
+```
+In that lecture a regression model was featured where the $\alpha$ and $\gamma$ parameters could vary over period. This model can be written as
+$$
+  E(L_i) = 
+  \begin{cases}
+    \alpha_1 + (\delta - \alpha_1)2^{-a_i/\gamma_1}, & \text{if the $i$-th observation is from the pre-1991 period}, \\
+    \alpha_2 + (\delta - \alpha_2)2^{-a_i/\gamma_2}, & \text{if the $i$-th observation is from the 1991-1996 period}, \\
+    \alpha_3 + (\delta - \alpha_3)2^{-a_i/\gamma_3}, & \text{if the $i$-th observation is from the 1997-2000 period},
+  \end{cases}
+$$
+where $L_i$ and $a_i$ are the length and age of the $i$-th observation, respectively. The lecture featured some methods of making inferences for this model. Here you will estimate marginal effects and use the delta method for making the same or other inferences. 
+
+1. Estimate the nonlinear regression model described above. Note that you can refer to the lecture notes from that lecture for code to do this. Give the parameter estimates using `summary` to verify that you estimated the model correctly (you should get the same results as were given in lecture). 
+
+    **Solution**: Here is how we can estimate this model (as also shown in lecture). 
+    ```{r}
+    library(dplyr)
+    m <- nls(length ~ case_when(
+    periodf == "pre-1991"  ~ alpha1 + (delta - alpha1) * 2^(-age / gamma1),
+    periodf == "1991-1996" ~ alpha2 + (delta - alpha2) * 2^(-age / gamma2),
+    periodf == "1997-2000" ~ alpha3 + (delta - alpha3) * 2^(-age / gamma3)), 
+    start = list(alpha1 = 500, alpha2 = 500, alpha3 = 500,
+      delta = 200, gamma1 = 5, gamma2 = 5, gamma3 = 5), data = walleye)
+    summary(m)$coefficients
+    ```
+
+0. In lecture I showed how to use the `lincon` function to estimate $\alpha_2 - \alpha_1$, $\alpha_3 - \alpha_1$, $\gamma_2 - \gamma_1$, and $\gamma_3 - \gamma_1$. These inferences may be useful if one wants to compare the asymptote and half-life parameters between the first period and the two latter periods. These are *linear* functions of the model parameters (which is why we can use the `lincon` function). But you can also apply the delta method here which reduces to the same calculations as those used by `lincon` since these quantities are linear functions of the model parameters (i.e., no linear approximation is necessary). And an advantage of using `dmethod` is that the interface may be a bit more intuitive since it does not require specifying coefficients. Use the `dmethod` function to produce estimates, standard errors, confidence intervals, and tests (that the quantity equals zero) for each of the four differences above. If you do this correctly you should get the same results as those given by `lincon` in lecture.
+
+    **Solution**: Here is how to estimate these quantities. Note that I will save some typing by defining an array of parameter names called `parameternames`. 
+    ```{r}
+    library(trtools)
+    parameternames <- c("alpha1","alpha2","alpha3","delta","gamma1","gamma2","gamma3")
+    dmethod(m, pfunc = "alpha2 - alpha1", pname = parameternames)
+    dmethod(m, pfunc = "alpha3 - alpha1", pname = parameternames)
+    dmethod(m, pfunc = "gamma2 - gamma1", pname = parameternames)
+    dmethod(m, pfunc = "gamma3 - gamma1", pname = parameternames)
+    ```
+    Another shortcut you can use is to use `names(coef(m))` to extract the parameter names directly from the model object (although this only works for some kinds of regression objects). So you could use, for example, something like the following.
+    ```{r, eval = FALSE}
+    dmethod(m, pfunc = "alpha2 - alpha1", pname = names(coef(m)))
+    ```
+    
+    There is one difference in the inferences given by `dmethod` and `lincon` and that is how those functions determine the degrees of freedom. The `dmethod` function always uses an infinite degrees of freedom, which is equivalent to a Wald test when using maximum likelihood, whereas `lincon` will use the residual degrees of freedom for several model types. The reason for this is that `dmethod` is designed to be a bit more general. This is a bit of an excuse because there is no reason why `dmethod` could not use the residual degrees of freedom. I just have not added that functionality. In many cases this will make little difference. The only time you might see a difference in a confidence interval or p-value is when the sample size is relatively small relative to the number of parameters. But with `dmethod` you can *manually* specify the degrees of freedom using the `df` argument. The appropriate degrees of freedom to use for this model can be seen from `summary`.
+    ```{r}
+    summary(m)
+    ```
+    The residual degrees of freedom is `r summary(m)$df[2]`. So you could manually specify the degrees of freedom as follows, for example.
+    ```{r}
+    dmethod(m, pfunc = "alpha2 - alpha1", pname = names(coef(m)), df = 3191)
+    ```
+    But because the degrees of freedom is so large there is no noticeable difference.
+    
+0. Suppose we want to estimate the increase in the expected length between an age of zero and an age of ten years for a given period. And also suppose we want to estimate the difference in the expected length at an age of ten years between the third and the first period, and also between the second and the first period. These five quantities are all examples of *discrete* marginal effects. Estimate these marginal effects using the `margeff` function. 
+
+    **Solution**: Here are the estimates of the expected growth from age zero to age ten for each period.
+    ```{r}
+    periods <- unique(walleye$periodf)
+    margeff(m,
+      a = list(age = 10, periodf = periods),
+      b = list(age = 0,  periodf = periods),
+      cnames = periods)
+    ```
+    Here are the estimates of the difference in expected length at age ten between the periods.
+    ```{r}
+    margeff(m, 
+      a = list(age = 10, periodf = c("1991-1996","1997-2000")),
+      b = list(age = 10, periodf = "pre-1991"),
+      cnames = c("1991-1996 vs pre-1991","1997-2000 vs pre-1991"))
+    ```
+
+0. The *instantaneous* marginal effect for age is the rate of growth at a given age (i.e., how fast are the walleye growing per unit of age at that particular age). Note that because of the shape of the curves the instantaneous marginal effect is positive, but decreases with age (i.e., older walleye grow slower than younger walleye). Use the `margeff` function to estimate the instantaneous marginal effect for each period at ages of zero, one, and ten years.
+
+    **Solution**: Here are the instantaneous marginal effects at age zero, one, and ten years.
+    ```{r}
+    periods <- unique(walleye$periodf)
+    margeff(m, delta = 0.001,
+      a = list(age = 0 + 0.001, periodf = periods),
+      b = list(age = 0, periodf = periods),
+      cnames = paste(periods, "at age 0"))
+    margeff(m, delta = 0.001,
+      a = list(age = 1 + 0.001, periodf = periods),
+      b = list(age = 1, periodf = periods),
+      cnames = paste(periods, "at age 1"))
+    margeff(m, delta = 0.001,
+      a = list(age = 10 + 0.001, periodf = periods),
+      b = list(age = 10, periodf = periods),
+      cnames = paste(periods, "at age 10"))
+    ```
+
+0. The instantaneous marginal effect can be written as
+$$
+  \frac{(\alpha_j-\delta)2^{-a/\gamma_j}\log(2)}{\gamma_j},
+$$
+where $a$ is the age at which the effect is computed, and the parameters $\alpha$ and $\gamma$ have a $j$ index corresponding to the period (i.e., $j = 1, 2, 3$).[^vonbderivative] You can use the `margeff` function to estimate the instantaneous marginal effect like you did in the previous problem, but that function is just an easier interface to the code underlying the `dmethod` function. Use the `dmethod` function to estimate the instantaneous marginal effect for each period at an age of one year. You should get (nearly) the same results as you got in the previous problem when using the `margeff` function. 
+
+    **Solution**: Here are the instantenous marginal effect for the first, second, and third periods.
+    ```{r}
+    dmethod(m, pfunc = "(alpha1-delta)*2^(-1/gamma1)*log(2)/gamma1",
+      pname = names(coef(m)))
+    dmethod(m, pfunc = "(alpha2-delta)*2^(-1/gamma2)*log(2)/gamma2",
+      pname = names(coef(m)))
+    dmethod(m, pfunc = "(alpha3-delta)*2^(-1/gamma3)*log(2)/gamma3",
+      pname = names(coef(m)))
+    ```
+    This can actually be done in one statement by creating a function that returns a vector of values.
+    ```{r}
+    dmethod(m, pfunc = "(c(alpha1,alpha2,alpha3)-delta) * 
+      2^(-1/c(gamma1,gamma2,gamma3))*log(2)/c(gamma1,gamma2,gamma3)",
+      pname = names(coef(m)))
+    ```
+    One of the strengths of R is ability to "vectorize" calculations. 
+    
+0. In the previous problem you estimated the instantaneous marginal effect at an age of one year for each period. Now suppose you want to compare these effects between the periods. Specifically suppose you want to compare the effect during the first period to that during the second and third periods. Use the `dmethod` function to estimate the *difference* in the instantaneous marginal effect at an age of one year between the first and second period, and also between the first and third period. **Note**: This problem is *extra credit* for students in Stat 436, but *required* for students in Stat 516.
+
+    **Solution**: The difference in the instantaneous marginal effect between period $j$ and $k$ can be written as
+    $$
+    \frac{(\alpha_j-\delta)2^{-a/\gamma_j}\log(2)}{\gamma_j} - 
+    \frac{(\alpha_k-\delta)2^{-a/\gamma_k}\log(2)}{\gamma_k}.
+    $$
+    Here is the difference in the instantaneous marginal effect at an age of one year between the first and second periods.
+    ```{r}
+    dmethod(m, pfunc = "(alpha1-delta)*2^(-1/gamma1)*log(2)/gamma1 - 
+      (alpha2-delta)*2^(-1/gamma2)*log(2)/gamma2", 
+      pname = names(coef(m)))
+    ```
+    And here is the difference between the first and third periods.
+    ```{r}
+    dmethod(m, pfunc = "(alpha1-delta)*2^(-1/gamma1)*log(2)/gamma1 - 
+      (alpha3-delta)*2^(-1/gamma3)*log(2)/gamma3", 
+      pname = names(coef(m)))
+    ```
+
+[^vonbderivative]: This can be derived as 
+$$
+  \frac{d}{da} \left[\alpha + (\delta - \alpha)2^{-x/\gamma}\right] = \frac{(\alpha - \delta)2^{-a/\gamma}\log(2)}{\gamma}.
+$$
+
+[^weisberg]: Source: Weisberg, S. (2014). *Applied linear regression* (4th edition). Wiley. 
+
+## Estimating the Michaelis Constant
+
+A Michaelis-Menten regression model has the form
+$$
+  E(R_i) = \frac{\alpha s_i}{\lambda + s_i},
+$$
+where $R_i$ and $s_i$ are the $i$-th observations of the expected reaction rate and the substrate concentration, respectively, $\alpha$ is the asymptote parameter (i.e., the limit of expected reaction rate as $s$ increases), and $\lambda$ is the "half-life" parameter which gives the substrate concentration where the expected reaction rate is half way between zero and $\alpha$. The $\lambda$ parameter is sometimes called the *Michaelis constant* and is often a parameter of interest.  
+
+In the [second homework assignment](hw2-solutions.html) there was a problem where the Michaelis constant was modeled as a function of the concentration of an inhibitor for the following data.
+```{r}
+library(isdals)
+data(inhibitor)
+library(ggplot2)
+p <- ggplot(inhibitor, aes(x = Sconc, y = RR)) + 
+  theme_minimal() + geom_point() + 
+  facet_wrap(~Iconc, labeller = label_both) + 
+  labs(x = "Substrate Concentration (micro moles)",
+    y = "Reaction Rate (units unknown)")
+plot(p)
+```
+The model was
+$$
+  E(R_i) = \frac{\alpha s_i}{\lambda_0(1 + h_i/\kappa) + s_i},
+$$
+where $h_i$ is the inhibitor concentration, $\lambda_0$ is a parameter that is the value of the Michaelis constant when the inhibitor concentration is zero, and $\kappa$ is a parameter which can be interpreted as the inhibitor concentration necessary to double the Michaelis constant. Note that the model can alternatively be written as
+$$
+  E(R_i) = \frac{\alpha s_i}{\lambda_i + s_i},
+$$
+where $\lambda_i = \lambda_0(1 + h_i/\kappa)$ to emphasize how this is simply a Michaelis-Menten model where the Michaelis constant is allowed to vary as a function of the inhibitor concentration. 
+
+1. Estimate the nonlinear regression model described above. Note that you can refer to the solutions for the second homework for code to do this. Give the parameter estimates using summary to verify that you estimated the model correctly (you should get the same results as were given in the solutions in the second homework assignment).
+
+    **Solution**: Here is the estimated model.
+    ```{r}
+    m <- nls(RR ~ alpha * Sconc / (lambda0 * (1 + Iconc / kappa) + Sconc),
+      data = inhibitor, start = list(alpha = 3, lambda0 = 36, kappa = 41))
+    summary(m)$coefficients
+    ```
+
+0. We can write the Michaelis constant as a *nonlinear* function of the model parameters: $\lambda_h = \lambda_0(1 + h/\kappa)$, where $\lambda_h$ denotes the value of the Michaelis constant when the inhibitor concentration is $h$. Use the delta method to estimate $\lambda_0$, $\lambda_{25}$, and $\lambda_{50}$ (i.e., the values of the Michaelis constant when the inhibitor concentration is 0, 25, and 50 micro moles).
+
+    **Solution**: The estimated Michaelis constants can be computed as follows. 
+    ```{r}
+    dmethod(m, pfunc = "lambda0 * (1 + 0/kappa)", pname = names(coef(m)))
+    dmethod(m, pfunc = "lambda0 * (1 + 25/kappa)", pname = names(coef(m)))
+    dmethod(m, pfunc = "lambda0 * (1 + 50/kappa)", pname = names(coef(m)))
+    ```
+    Note that if $h$ is zero then the Michaelis constant is just $\lambda_0$, and inferences for that are already given by `summary`. 
+
+0. Consider an alternative parameterization of the model such that 
+$$
+  E(R_i) = \frac{\alpha s_i}{\lambda_0 + \delta h_i + s_i}.
+$$
+This model can also be written as
+$$
+  E(R_i) = \frac{\alpha s_i}{\lambda_i + s_i},
+$$
+where $\lambda_i = \lambda_0 + \delta h_i$. So here the Michaelis constant for a given inhibitor concentration can be written as a *linear* function of the model parameters: $\lambda_h = \lambda_0 + \delta h$. The parameter $\delta$ is the rate of change in the Michaelis constant per unit increase in the inhibitor concentration. Estimate this model, noting that for a starting value for $\delta$ you can use the relationship between the two parameterizations that $\delta = \lambda_0/\kappa$ and compute a starting value for $\delta$ from estimates of $\lambda_0$ and $\kappa$ from the previous model. Next compute estimates of $\lambda_0$, $\lambda_{25}$, and $\lambda_{50}$ like you did in the previous problem but with this alternative parameterization *two* ways: once using the `dmethod` function like before, and again by using the `lincon` function since now $\lambda_h$ is now a *linear* function of the model parameters. Note that you should get the same estimates and standard errors with each approach from this model using `dmethod` and `lincon`, and the same estimates and nearly the same standard errors as in the previous problem where you estimated these quantities.[^standarderrors]
+
+    **Solution**: Here is the estimated model.
+    ```{r}
+    m <- nls(RR ~ alpha * Sconc / (lambda0 + delta * Iconc + Sconc),
+      data = inhibitor, start = list(alpha = 3, lambda0 = 36, delta = 1))
+    summary(m)$coefficients    
+    ```
+    First I will estimate $\lambda_0$, $\lambda_{25}$, and $\lambda_{50}$ using the delta method to compute approximate standard errors.
+    ```{r}
+    dmethod(m, pfunc = "lambda0", pname = names(coef(m)))
+    dmethod(m, pfunc = "lambda0 + delta * 25", pname = names(coef(m)))
+    dmethod(m, pfunc = "lambda0 + delta * 50", pname = names(coef(m)))
+    ```
+    Next I will use `lincon`. 
+    ```{r}
+    lincon(m, a = c(0, 1, 0))
+    lincon(m, a = c(0, 1, 25))
+    lincon(m, a = c(0, 1, 50))
+    ```
+    Note that `dmethod` and `lincon` give the same results. 
+
+0. Consider the previous problem where you estimated $\lambda_0$, $\lambda_{25}$, and $\lambda_{50}$. Now suppose you want to estimate the *differences* between these parameter --- i.e., $\lambda_{25} - \lambda_0$, $\lambda_{50} - \lambda_{25}$, and $\lambda_{50} - \lambda_0$. That is, how much larger (or smaller) is the Michaelis parameter at one inhibitor concentration versus another. Use *either* the `dmethod` or `lincon` function to estimate these three quantities (note that to use `lincon` you will need to use the parameterization in the previous problem, but `dmethod` can be applied to either parameterization). **Note**: This problem is *extra credit* for students in Stat 436, but *required* for students in Stat 516.
+
+    **Solution**: Here is how this can be done using `dmethod`. I am using the model parameterized such that $\lambda_h = \lambda_0 + \delta h$. First I will use the delta method. But first note that we can simplify these differences. In general, note that
+    $$
+      \lambda_h - \lambda_{h'} = 
+      \lambda_0 + \delta h - (\lambda_0 + \delta h') = 
+      \delta(h - h')
+    $$
+    for any values $h$ and $h'$. So therefore $\lambda_{25} - \lambda_0 = \delta 25$, $\lambda_{50} - \lambda_{25} = \delta 25$, and $\lambda_{50} - \lambda_0 = \delta 50$. So these differences are proportional to $\delta$. Note that two of these are the same. Here are the estimates of the two distinct quantities.
+    ```{r}
+    dmethod(m, "delta*25", pname = names(coef(m)))
+    dmethod(m, "delta*50", pname = names(coef(m)))
+    ```
+    This can also be done using `lincon` since these quantities are a linear function of the model parameters.
+    ```{r}
+    lincon(m, a = c(0, 0, 25))
+    lincon(m, a = c(0, 0, 50))
+    ```
+    Here I will show how to do this with the other parameterization. First we will need to estimate the model again.
+    ```{r}
+    m <- nls(RR ~ alpha * Sconc / (lambda0 * (1 + Iconc / kappa) + Sconc),
+      data = inhibitor, start = list(alpha = 3, lambda0 = 36, kappa = 41))
+    ```
+    Now note that for this parameterization we have that
+    $$
+      \lambda_h - \lambda_{h'} = \lambda_0(1 + h/\kappa) - [\lambda_0(1 + h/\kappa)] = \lambda_0(h - h')/\kappa.
+    $$
+    Here are the estimates using this parameterization.
+    ```{r}
+    dmethod(m, pfunc = "lambda0*25/kappa", pname = names(coef(m)))
+    dmethod(m, pfunc = "lambda0*50/kappa", pname = names(coef(m)))
+    ```
+    But `lincon` cannot be used here because the quantity is not a linear function of the model parameters.
+
+0. Consider the problem of making inferences concerning the expected reaction rate for given substrate and inhibitor concentrations -- i.e., $E(R)$ for given values of $h$ and $s$ where
+$$
+  E(R) = \frac{\alpha s}{\lambda_0(1 + h/\kappa) + s}
+$$
+if you use the first parameterization, or
+$$
+  E(R) = \frac{\alpha s}{\lambda_0 + \delta h + s}
+$$
+if you use the second parameterization. The estimate of this quantity is what you get when you use the `predict` function such as when making a plot. For a nonlinear regression model this quantity is, by definition, a nonlinear function of the model parameters. But for a nonlinear regression model estimated using `nls`, the `predict` function does not provide a standard error, which can be used to construct a confidence interval. For a linear model the calculations of the standard error are relatively straight forward, but this is not the case for a nonlinear model. But the standard error can be approximated using the delta method. The `nlsint` function in the **trtools** package does this. Here is how to use it if you wanted to estimate the expected reaction rate for a substrate concentration of 200 and inhibitor concentrations of 0, 25, and 50 micro moles
+    ```{r, eval = FALSE}
+    library(trtools) # for the nlsint function
+    d <- expand.grid(Sconc = 200, Iconc = c(0, 25, 50))
+    nlsint(m, newdata = d)
+    ```
+    Note that here `m` would be the model object created by the `nls` function. The `nlsint` is a user-friendly interface to code that is effectively the same as what is used by the `dmethod` function. Use the `dmethod` function to produce estimates, standard errors, and confidence intervals for the expected reaction rates for a substrate concentration of 200 and inhibitor concentrations of 0, 25, and 50 micro moles. If you do this correctly you should get the same results as those returned by the `nlsint` function. Run the code above using the `nlsint` function to verify this.
+    
+    **Solution**: Here are the estimated expected responses with standard errors approximated using the delta method. I am using the first parameterization.
+    ```{r}
+    
+    dmethod(m, pfunc = "alpha * 200 / (lambda0 * (1 + c(0,25,50)/kappa) + 200)",
+      pname = names(coef(m)), fname = c(0, 25, 50))
+    ```
+    You could alternatively use three separate `dmethod` statements. Note that `dmethod` has an optional argument `fname` (function name) for the output (like the `cnames` argument of `contrast`). Here are the same results using `nlsint`.
+    ```{r}
+    d <- expand.grid(Sconc = 200, Iconc = c(0, 25, 50))
+    nlsint(m, newdata = d)
+    ```
+    Note that when using `nlsint` it can be useful to merge the output of `nlsint` with the input data.
+    ```{r}
+    cbind(d, nlsint(m, newdata = d))
+    ```
+
+[^standarderrors]: The standard errors can be slightly different due to the fact that the delta method uses an approximation to obtain the standard errors which can differ slightly depending on how the model is parameterized. 
+
+## Spring Failure Data
+
+The data frame `springs` in the **SMPractials** package contains data from an experiment that investigated the survival of springs under varying degrees of stress. A total of 60 springs were divided into six groups of ten springs each, and then each group was subjected to a different level of stress. The number of cycles of stress were counted until each spring failed.[^time] Some of the observations at lower levels of stress are right-censored because the experiment was terminated before all springs had failed. Here are the first few observations with a new variable `censored` created for plotting purposes (note that the variable `cens` is a traditional status variable such that it assumes a value of one if the observation is *not* censored).
+```{r, message = FALSE}
+library(SMPracticals)
+springs$censored <- factor(springs$cens, levels = 0:1, labels = c("yes","no"))
+head(springs)
+```
+The `stress` variable is stored as a factor which we can verify with the `str` function.
+```{r}
+str(springs)
+```
+The following shows a dot plot of the data with the number of cycles until failure "binned" slightly for display purposes.
+```{r}
+library(ggplot2)
+p <- ggplot(springs, aes(x = stress, y = cycles)) + 
+  geom_dotplot(aes(fill = censored), binwidth = 200,
+    binaxis = "y", stackdir = "center", method = "histodot") + 
+  scale_fill_manual(values = c("white", grey(0.65))) + 
+  labs(x = "Stress (newtons per square mm)", 
+    y = "Thousands of Cycles Until Failure", fill = "Censored?") + 
+  theme_minimal() + theme(legend.position = c(0.85, 0.85))
+plot(p)
+```
+Here you will use parametric survival models to model the data to determine how stress is related to survival of springs.
+
+[^time]: Strictly speaking the number of cycles until failure isn't the same thing as *time* until failure. Nevertheless a survival model might still be very useful here. If the cycles were evenly spaced then the number of cycles would be proportional to time, and given that there are so many cycles we can think of a continuous distribution as being a reasonable approximation to the number of cycles, which is a discrete random variable. Also there is nothing in the *mathematics* of survival models that requires that the response variable be time-to-event. It could be any positive and (approximately) continuous random variable. 
+
+1. Estimate an accelerated failure time model with stress as the explanatory variable and specifying a Weibull distribution for the thousands of cycles until failure. Note that in this model stress will be treated as a factor because it is stored that way in the data frame. Report the parameter estimates and their standard errors (the appropriate R output is sufficient). For each of the six values of stress considered in the experiment, produce plots of the survival, hazard, and probability density functions with the number of thousands of cycles ranging from 0 to 20000, and also estimate the expected number of thousands of cycles for each of these six stress levels. Write a brief summary that describes the effect of stress at 750, 800, 850, 900, and 950 newtons per square mm versus the lowest stress of 700 newtons per square mm. For example, how much smaller is the survival time at, for example, 750 versus 700 newtons per square mm? 
+
+    **Solution**: I will show how to do this with both `survreg` and `flexsurvreg`.
+    ```{r}
+    library(survival)
+    library(flexsurv)
+    m <- survreg(Surv(cycles, cens) ~ stress, dist = "weibull", data = springs)
+    summary(m)$table
+    ```
+    To interpret the model, we can exponentiate the model parameters. The lowest stress level is the reference level.
+    ```{r}
+    exp(cbind(coef(m), confint(m)))
+    ```
+    Thus we can say the following.
+    
+    *At 750 newtons per square mm the expected survival time is about 50% less than it is at 700 newtons per square mm.*
+    
+    *At 800 newtons per square mm the expected survival time is about 93% less than it is at 700 newtons per square mm.*
+
+    *At 850 newtons per square mm the expected survival time is about 98% less than it is at 700 newtons per square mm.*
+    
+    *At 900 newtons per square mm the expected survival time is about 98.5% less than it is at 700 newtons per square mm.*
+    
+    *At 950 newtons per square mm the expected survival time is about 99% less than it is at 700 newtons per square mm.*
+    
+    Here is another way you can get estimate these quantities using the **emmeans** package.
+    ```{r}
+    emmeans::contrast(emmeans(m, ~stress, type = "response"), method = "trt.vs.ctrl",
+      ref = 1, adjust = "none", infer = TRUE)
+    ```
+    Note that we can "flip" these ratios.
+    ```{r}
+    emmeans::contrast(emmeans(m, ~stress, type = "response"), method = "trt.vs.ctrl",
+      ref = 1, adjust = "none", infer = TRUE, reverse = TRUE)
+    ```
+    So we can also say the following.
+    
+    *At 700 newtons per square mm the expected survival time is about 2 times longer than it is at 750 newtons per square mm.*
+    
+    *At 700 newtons per square mm the expected survival time is about 14.5 times longer than it is at 800 newtons per square mm.*
+
+    *At 700 newtons per square mm the expected survival time is about 42.6 times longer than it is at 850 newtons per square mm.*
+    
+    *At 700 newtons per square mm the expected survival time is about 68.3 tmes longer than it is at 900 newtons per square mm.*
+    
+    *At 700 newtons per square mm the expected survival time is about 87.4 times longer than it is at 950 newtons per square mm.*
+    
+    If we use `flexsurvreg` then these inferences are provided for us by the default output.
+    ```{r}
+    m <- flexsurvreg(Surv(cycles, cens) ~ stress, dist = "weibull", data = springs)
+    print(m)
+    ```
+    Finally I will create the plots.
+    ```{r}
+    library(ggplot2)
+    d <- data.frame(stress = unique(springs$stress))
+    d <- summary(m, newdata = d, t = seq(0, 20000, length = 1000),
+      type = "survival", tidy = TRUE, B = 0)
+    p <- ggplot(d, aes(x = time, y = est, color = stress)) + 
+      geom_line() + theme_minimal() + 
+      labs(x = "Thousands of Cycles", y = "S(t)", 
+        color = "Stress (newtons per square mm)",
+        title = "Survival Functions") + 
+      theme(legend.position = c(0.8, 0.7))
+    plot(p)
+    d <- data.frame(stress = unique(springs$stress))
+    d <- summary(m, newdata = d, t = seq(0, 20000, length = 1000),
+      type = "hazard", tidy = TRUE, B = 0)
+    p <- ggplot(d, aes(x = time, y = est, color = stress)) + 
+      geom_line() + theme_minimal() + 
+      labs(x = "Thousands of Cycles", y = "h(t)", 
+        color = "Stress (newtons per square mm)",
+        title = "Hazard Functions") + 
+      theme(legend.position = c(0.2, 0.7))
+    plot(p)
+    d <- data.frame(stress = unique(springs$stress))
+    d <- summary(m, newdata = d, t = seq(0, 20000, length = 1000),
+      fn = function(t, ...) dweibull(t, ...), tidy = TRUE, B = 0)
+    p <- ggplot(d, aes(x = time, y = est, color = stress)) + 
+      geom_line() + theme_minimal() + 
+      labs(x = "Thousands of Cycles", y = "f(t)", 
+        color = "Stress (newtons per square mm)",
+        title = "Probability Density Functions") + 
+      theme(legend.position = c(0.8, 0.7))
+    plot(p)
+    ```
+    We can obtain estimates of the expected number of cycles until failure (in thousands of cycles) as follows.
+    ```{r}
+    d <- data.frame(stress = unique(springs$stress))
+    summary(m, newdata = d, type = "mean", tidy = TRUE)
+    ```
+    
+2. Estimate a Weibull accelerated failure time model like you did in the last problem, but now treating stress as a *quantitative* explanatory variable. To do this you will need to convert it from a factor to a number. The following creates a new variable `stressx` that is a quantitative version of `stress`.[^asnumeric]
+    ```{r}
+    springs$stressx <- as.numeric(as.character(springs$stress))
+    ```
+Create plots of the survival, hazard, and probability density functions for the same six values of stress like you did in the previous problem. For your interpretation of the effect of stress in this model, explain by how much time until failure changes if stress is increased by a given amount. 
+
+    **Solution**: Here is the estimated model (using `flexsurvreg`).
+    ```{r}
+    m <- flexsurvreg(Surv(cycles, cens) ~ stressx, dist = "weibull", data = springs)
+    print(m)
+    ```
+    From this we can see that *for every unit increase in stress the time until failure (in thousands of cycles) decreases by about 2%*. Here are the plots.
+    ```{r}
+    d <- data.frame(stressx = unique(springs$stressx))
+    d <- summary(m, newdata = d, t = seq(0, 20000, length = 1000),
+      type = "survival", tidy = TRUE, B = 0)
+    p <- ggplot(d, aes(x = time, y = est, color = factor(stressx))) + 
+      geom_line() + theme_minimal() + 
+      labs(x = "Thousands of Cycles", y = "S(t)", 
+        color = "Stress (newtons per square mm)",
+        title = "Survival Functions") + 
+      theme(legend.position = c(0.8, 0.7))
+    plot(p)
+    d <- data.frame(stressx = unique(springs$stressx))
+    d <- summary(m, newdata = d, t = seq(0, 20000, length = 1000),
+      type = "hazard", tidy = TRUE, B = 0)
+    p <- ggplot(d, aes(x = time, y = est, color = factor(stressx))) + 
+      geom_line() + theme_minimal() + 
+      labs(x = "Thousands of Cycles", y = "h(t)", 
+        color = "Stress (newtons per square mm)",
+        title = "Hazard Functions") + 
+      theme(legend.position = c(0.2, 0.7))
+    plot(p)
+    d <- data.frame(stressx = unique(springs$stressx))
+    d <- summary(m, newdata = d, t = seq(0, 20000, length = 1000),
+      fn = function(t, ...) dweibull(t, ...), tidy = TRUE, B = 0)
+    p <- ggplot(d, aes(x = time, y = est, color = factor(stressx))) + 
+      geom_line() + theme_minimal() + 
+      labs(x = "Thousands of Cycles", y = "f(t)", 
+        color = "Stress (newtons per square mm)",
+        title = "Probability Density Functions") + 
+      theme(legend.position = c(0.8, 0.7))
+    plot(p)
+    ```
+    We can obtain estimates of the expected number of cycles until failure (in thousands of cycles) as follows.
+    ```{r}
+    d <- data.frame(stressx = seq(700, 950, by = 50))
+    summary(m, newdata = d, type = "mean", tidy = TRUE)
+    ```
+
+3. For the model where stress is treated as a categorical variable, report and interpret the hazard ratios comparing the lowest stress condition with the other five conditions. For the model where stress is treated as a quantitative variable, report and interpret the hazard ratio for the effect of an increase in stress. 
+
+    **Solution**: The easy way to do this is to use `flexsurvreg` with `dist = "weibullPH"`. First I will estimate the model with stress treated as a factor.
+    ```{r}
+    m <- flexsurvreg(Surv(cycles, cens) ~ stress, dist = "weibullPH", data = springs)
+    print(m)
+    ```
+    The hazard ratios are given in the `exp(est)` column. Here we can conclude the following.
+    
+    *At 750 newtons per square mm the hazard rate is about 5.9 times higher than it is at 700 newtons per square mm.*
+
+    *At 800 newtons per square mm the hazard rate is about 923 times higher than it is at 700 newtons per square mm.*
+    
+    *At 850 newtons per square mm the hazard rate is about 14300 times higher than it is at 700 newtons per square mm.*
+    
+    *At 900 newtons per square mm the hazard rate is about 47800 times higher than it is at 700 newtons per square mm.*    
+    
+    *At 950 newtons per square mm the hazard rate is about 89600 times higher than it is at 700 newtons per square mm.*    
+    
+    Now I will estimate the model using stress as a quantitative variable.
+    ```{r}
+    m <- flexsurvreg(Surv(cycles, cens) ~ stressx, dist = "weibullPH", data = springs)
+    print(m)
+    ```
+    From this we can conclude the following: *For every unit increase in stress (where units are newtons per square mm), the hazard ratio increases by about 3%*.
+    
+[^asnumeric]: Using something like `as.numeric(cycles$stress)` will not in general work because factors levels are stored as integers with character labels associated with them, and will only return those integers. By using `as.character` first we create a character variable where the "values" are the original level labels, which in this case are numbers stored as strings. These are then coerced into numbers by using `as.numeric`. 
