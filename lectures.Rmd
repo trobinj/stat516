@@ -147,7 +147,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Model selection](lecture-05-01-2023.html). The [solutions](hw4-solutions.html) to the fourth homework assignment are now available. The [fifth homework assignment](hw5.html) is now available. 
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Generalized additive models](lecture-05-03-2023.html).
 
 `r i <- i + 1; d[i]`
 
