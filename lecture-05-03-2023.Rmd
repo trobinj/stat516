@@ -233,6 +233,7 @@ p2 <- p
 cowplot::plot_grid(p1, p2, ncol = 1, align = "v")
 ```
 In principle we could use cross-validation or a related technique (e.g. AIC) to try to identify a good trade-off. But a better approach is to use *penalization/regularization*. 
+
 ## Penalized Splines
 
 Instead of trying to select the number of knots or basis functions, we could specify a "generous" number of knots/functions and introduce a penalty for "wiggliness" in the estimation. Suppose we have the model

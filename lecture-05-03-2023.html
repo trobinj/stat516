@@ -358,7 +358,10 @@ trade-off.</p>
 <p><img src="lecture-05-03-2023_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" /><img src="lecture-05-03-2023_files/figure-html/unnamed-chunk-4-2.png" width="100%" style="display: block; margin: auto;" /><img src="lecture-05-03-2023_files/figure-html/unnamed-chunk-4-3.png" width="100%" style="display: block; margin: auto;" />
 In principle we could use cross-validation or a related technique
 (e.g. AIC) to try to identify a good trade-off. But a better approach is
-to use <em>penalization/regularization</em>. ## Penalized Splines</p>
+to use <em>penalization/regularization</em>.</p>
+</div>
+<div id="penalized-splines" class="section level2">
+<h2>Penalized Splines</h2>
 <p>Instead of trying to select the number of knots or basis functions,
 we could specify a “generous” number of knots/functions and introduce a
 penalty for “wiggliness” in the estimation. Suppose we have the model
