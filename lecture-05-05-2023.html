@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Friday, May 5</title>
+
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Friday, May 5</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-05-05-2023.pdf">PDF</a> copy
+of this lecture.</p>
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<p>The following packages are being used.</p>
+<pre class="r"><code>library(dplyr)      # data manipulation
+library(tidyr)      # data manipulation
+library(lubridate)  # working with dates
+library(forcats)    # working with factors
+library(whereami)   # find current directory
+library(ggplot2)    # graphics
+library(mgcv)       # GAMs
+library(trtools)    # inference tools
+library(emmeans)    # inference tools
+options(digits = 4) # control number of digits displayed</code></pre>
+<div id="import-and-process-tick-count-data" class="section level2">
+<h2>Import and Process Tick Count Data</h2>
+<p>Here I can use <code>dirname(thisfile())</code> to find the directory
+containing this Rmarkdown file, so I do not have to specify the full
+path to the data file. Note that <code>thisfile()</code> is from the
+<strong>whereami</strong> package. I have the data stored in a
+sub-directory (“tickdata”) of the directory containing this Rmarkdown
+file.</p>
+<pre class="r"><code>ticks &lt;- read.csv(paste(dirname(thisfile()), 
+  &quot;/tickdata/tick_data_Robenstein.csv&quot;, sep = &quot;&quot;))
+names(ticks) &lt;- c(&quot;moose&quot;,&quot;mortality&quot;,&quot;ticks&quot;,&quot;size&quot;,&quot;date&quot;,&quot;gmu&quot;,&quot;sex&quot;,&quot;note&quot;)
+head(ticks)</code></pre>
+<pre><code>     moose mortality ticks size       date gmu  sex note
+1 21005370         H     0  100  9/16/2020   1 MALE    1
+2 21005396         H    21  100 10/14/2020   1 MALE    1
+3 21005452         H     0  100  10/5/2020   1 MALE    1
+4 21005506         H     9  100 11/11/2020   1 MALE    1
+5 21005526         H    34  100 11/22/2020   1 MALE    1
+6 21005538         H     1  100  11/5/2020   1 MALE    0</code></pre>
+<p>Here I am going to process the data to get it ready for plotting and
+modeling.</p>
+<pre class="r"><code>ticks &lt;- ticks %&gt;% 
+  mutate(note = factor(note, levels = 0:3,
+    labels = c(&quot;exclude&quot;, &quot;include&quot;, &quot;deterioration&quot;, &quot;nodate&quot;))) %&gt;%
+  mutate(date = mdy(date)) %&gt;%
+  mutate(month = month(date, label = TRUE), year = year(date), day = yday(date)) %&gt;%
+  filter(!is.na(date), month %in% c(&quot;Aug&quot;,&quot;Sep&quot;,&quot;Oct&quot;,&quot;Nov&quot;)) %&gt;%
+  mutate(year = factor(year)) %&gt;% mutate(sex = tolower(sex)) %&gt;%
+  mutate(day = ifelse(year == &quot;2020&quot;, day - 1, day))
+head(ticks)</code></pre>
+<pre><code>     moose mortality ticks size       date gmu  sex    note month year day
+1 21005370         H     0  100 2020-09-16   1 male include   Sep 2020 259
+2 21005396         H    21  100 2020-10-14   1 male include   Oct 2020 287
+3 21005452         H     0  100 2020-10-05   1 male include   Oct 2020 278
+4 21005506         H     9  100 2020-11-11   1 male include   Nov 2020 315
+5 21005526         H    34  100 2020-11-22   1 male include   Nov 2020 326
+6 21005538         H     1  100 2020-11-05   1 male exclude   Nov 2020 309</code></pre>
+</div>
+<div id="import-and-process-game-management-unit-data"
+class="section level2">
+<h2>Import and Process Game Management Unit Data</h2>
+<p>Here I am going to use <code>rename</code> to rename the imported
+variables.</p>
+<pre class="r"><code>gmu &lt;- read.csv(paste(dirname(thisfile()), &quot;/tickdata/tick_study_areas.csv&quot;, sep = &quot;&quot;)) %&gt;%
+  rename(gmu = GMU, area = study.Area, samples = hh_samples)
+head(gmu, 10)</code></pre>
+<pre><code>   gmu          area samples
+1    1         North      27
+2    2         North      36
+3    3         North      19
+4    4         North      24
+5   4A         North       6
+6    5 North Central      18
+7    6 North Central      22
+8    7 North Central       7
+9    8 North Central       9
+10  8A North Central       8</code></pre>
+</div>
+<div id="merging-data-frames-and-filtering" class="section level2">
+<h2>Merging Data Frames and Filtering</h2>
+<pre class="r"><code>ticks &lt;- left_join(ticks, gmu) %&gt;%
+  mutate(area = factor(area)) %&gt;%
+  mutate(area = fct_relevel(area, c(&quot;North&quot;, &quot;North Central&quot;,
+    &quot;Central&quot;, &quot;Southeast&quot;, &quot;Island Park&quot;)))
+head(ticks)</code></pre>
+<pre><code>     moose mortality ticks size       date gmu  sex    note month year day  area samples
+1 21005370         H     0  100 2020-09-16   1 male include   Sep 2020 259 North      27
+2 21005396         H    21  100 2020-10-14   1 male include   Oct 2020 287 North      27
+3 21005452         H     0  100 2020-10-05   1 male include   Oct 2020 278 North      27
+4 21005506         H     9  100 2020-11-11   1 male include   Nov 2020 315 North      27
+5 21005526         H    34  100 2020-11-22   1 male include   Nov 2020 326 North      27
+6 21005538         H     1  100 2020-11-05   1 male exclude   Nov 2020 309 North      27</code></pre>
+<p>Some variables we do not need. Also we are going to discard some
+questionable observations.</p>
+<pre class="r"><code>ticks &lt;- ticks %&gt;% select(-mortality, -samples, -gmu) %&gt;% 
+  filter(note == &quot;include&quot;)
+head(ticks)</code></pre>
+<pre><code>     moose ticks size       date  sex    note month year day  area
+1 21005370     0  100 2020-09-16 male include   Sep 2020 259 North
+2 21005396    21  100 2020-10-14 male include   Oct 2020 287 North
+3 21005452     0  100 2020-10-05 male include   Oct 2020 278 North
+4 21005506     9  100 2020-11-11 male include   Nov 2020 315 North
+5 21005526    34  100 2020-11-22 male include   Nov 2020 326 North
+6 21005546     1  100 2020-11-22 male include   Nov 2020 326 North</code></pre>
+</div>
+<div id="raw-data-visualization" class="section level2">
+<h2>Raw Data Visualization</h2>
+<pre class="r"><code>d09 &lt;- yday(mdy(&quot;09/1/2021&quot;))
+d10 &lt;- yday(mdy(&quot;10/1/2021&quot;))
+d11 &lt;- yday(mdy(&quot;11/1/2021&quot;))
+d12 &lt;- yday(mdy(&quot;12/1/2021&quot;))
+  
+pv &lt;- ggplot(ticks, aes(x = day, y = ticks/size*100, color = year)) + 
+  geom_count(alpha = 0.5) + scale_size_area(max_size = 2) +
+  theme_minimal() + facet_grid(area ~ .) +
+  labs(x = &quot;Day&quot;, y = &quot;Tick Density (ticks per 100 square cm)&quot;, color = &quot;Year&quot;) + 
+  guides(size = &quot;none&quot;) + 
+  scale_x_continuous(breaks = c(d09, d10, d11, d12),
+    labels = c(&quot;9/1&quot;, &quot;10/1&quot;, &quot;11/1&quot;, &quot;12/1&quot;)) + ylim(c(0,250)) + 
+  theme(legend.position = c(0.15, 0.925))
+  
+plot(pv)</code></pre>
+<p><img src="lecture-05-05-2023_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ph &lt;- ggplot(ticks, aes(x = day, y = ticks/size*100, color = year)) + 
+  geom_count(alpha = 0.5) + scale_size_area(max_size = 2) + theme_minimal() + 
+  facet_wrap(~ area, ncol = 5) +
+  labs(x = &quot;Day&quot;, y = &quot;Tick Density (ticks per 100 square cm)&quot;, color = &quot;Year&quot;) + 
+  guides(size = &quot;none&quot;) + 
+  scale_x_continuous(breaks = c(d09, d10, d11, d12),
+    labels = c(&quot;9/1&quot;, &quot;10/1&quot;, &quot;11/1&quot;, &quot;12/1&quot;)) + ylim(c(0,250)) + 
+  theme(legend.position = c(0.3, 0.8), 
+    axis.text.x = element_text(angle = 45, size = 7, hjust = 1))
+  
+plot(ph)</code></pre>
+<p><img src="lecture-05-05-2023_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="modeling" class="section level2">
+<h2>Modeling</h2>
+<p>I used a generalized additive model with a log link function
+estimated using (penalized) quasi-likelihood to deal with considerable
+over-dispersion.</p>
+<pre class="r"><code>m &lt;- gam(ticks ~ offset(log(size)) + s(day) + year + area,
+  family = quasipoisson(link = log), data = ticks)
+summary(m)</code></pre>
+<pre><code>
+Family: quasipoisson 
+Link function: log 
+
+Formula:
+ticks ~ offset(log(size)) + s(day) + year + area
+
+Parametric coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)        -2.0218     0.1855  -10.90  &lt; 2e-16 ***
+year2021            0.6547     0.1488    4.40  1.3e-05 ***
+areaNorth Central  -0.6532     0.2330   -2.80   0.0053 ** 
+areaCentral        -0.7678     0.4119   -1.86   0.0629 .  
+areaSoutheast      -0.0852     0.1937   -0.44   0.6603    
+areaIsland Park     0.0143     0.2002    0.07   0.9431    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Approximate significance of smooth terms:
+        edf Ref.df    F p-value    
+s(day) 2.94   3.71 19.6  &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+R-sq.(adj) =  0.189   Deviance explained = 32.4%
+GCV = 34.323  Scale est. = 55.985    n = 497</code></pre>
+<p>Here we can visualize this model.</p>
+<pre class="r"><code>d &lt;- expand.grid(year = c(&quot;2020&quot;,&quot;2021&quot;), day = 242:334,
+  area = unique(ticks$area), size = 100)
+d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
+
+pv &lt;- pv + geom_line(aes(y = yhat), data = d)
+plot(pv)</code></pre>
+<p><img src="lecture-05-05-2023_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>ph &lt;- ph + geom_line(aes(y = yhat), data = d)
+plot(ph)</code></pre>
+<p><img src="lecture-05-05-2023_files/figure-html/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="model-based-inferences" class="section level2">
+<h2>Model-Based Inferences</h2>
+<p>How much higher is the expected tick density in 2021 than in
+2020?</p>
+<pre class="r"><code>emmeans(m, ~year | area, at = list(day = d10), 
+  type = &quot;response&quot;, offset = log(100), data = ticks)</code></pre>
+<pre><code>area = North:
+ year  rate   SE  df lower.CL upper.CL
+ 2020  9.88 2.05 488     6.57    14.86
+ 2021 19.02 3.69 488    12.99    27.85
+
+area = North Central:
+ year  rate   SE  df lower.CL upper.CL
+ 2020  5.14 1.28 488     3.15     8.38
+ 2021  9.90 2.27 488     6.31    15.52
+
+area = Central:
+ year  rate   SE  df lower.CL upper.CL
+ 2020  4.59 1.87 488     2.06    10.21
+ 2021  8.82 3.59 488     3.97    19.63
+
+area = Southeast:
+ year  rate   SE  df lower.CL upper.CL
+ 2020  9.07 1.92 488     5.99    13.74
+ 2021 17.47 3.36 488    11.97    25.49
+
+area = Island Park:
+ year  rate   SE  df lower.CL upper.CL
+ 2020 10.02 2.13 488     6.60    15.22
+ 2021 19.29 3.81 488    13.09    28.43
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~year | area, at = list(day = d10), 
+  type = &quot;response&quot;, offset = log(100), data = ticks), reverse = TRUE, infer = TRUE)</code></pre>
+<pre><code>area = North:
+ contrast            ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ year2021 / year2020  1.92 0.286 488     1.44     2.58    1   4.401  &lt;.0001
+
+area = North Central:
+ contrast            ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ year2021 / year2020  1.92 0.286 488     1.44     2.58    1   4.401  &lt;.0001
+
+area = Central:
+ contrast            ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ year2021 / year2020  1.92 0.286 488     1.44     2.58    1   4.401  &lt;.0001
+
+area = Southeast:
+ contrast            ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ year2021 / year2020  1.92 0.286 488     1.44     2.58    1   4.401  &lt;.0001
+
+area = Island Park:
+ contrast            ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ year2021 / year2020  1.92 0.286 488     1.44     2.58    1   4.401  &lt;.0001
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p><strong>Note</strong>: Here <code>emmeans</code> needs a bit more
+information that is not contained in the model object, so we pass it the
+data with <code>data = ticks</code>. The <code>contrast</code> function
+will also work here, but it needs to be told the degrees of freedom by
+including the argument <code>df = m$df.residual</code>.</p>
+<p>How about the <em>difference</em> in the expected density for each
+area and the first of October? This is a <em>discrete marginal
+effect</em>, and both area and day matter.</p>
+<pre class="r"><code>trtools::margeff(m, 
+  a = list(year = &quot;2021&quot;, area = unique(ticks$area), day = d10, size = 100),
+  b = list(year = &quot;2020&quot;, area = unique(ticks$area), day = d10, size = 100),
+  cnames = unique(ticks$area), df = m$df.residual)</code></pre>
+<pre><code>              estimate    se  lower  upper tvalue    df    pvalue
+North            9.137 2.610 4.0093 14.265  3.501 488.1 0.0005058
+North Central    4.755 1.442 1.9210  7.589  3.297 488.1 0.0010493
+Central          4.240 1.964 0.3801  8.100  2.158 488.1 0.0313905
+Southeast        8.391 2.352 3.7705 13.012  3.568 488.1 0.0003950
+Island Park      9.269 2.655 4.0512 14.486  3.490 488.1 0.0005259</code></pre>
+<p>Interestingly this can also be done using the
+<strong>emmeans</strong> package through use of the <code>regrid</code>
+function.</p>
+<pre class="r"><code>tmp &lt;- emmeans(m, ~year | area, at = list(day = d10), 
+  type = &quot;response&quot;, offset = log(100), data = ticks)
+pairs(regrid(tmp, type = &quot;response&quot;), reverse = TRUE, infer = TRUE)</code></pre>
+<pre><code>area = North:
+ contrast            estimate   SE  df lower.CL upper.CL t.ratio p.value
+ year2021 - year2020     9.14 2.61 488     4.01    14.27   3.501  0.0005
+
+area = North Central:
+ contrast            estimate   SE  df lower.CL upper.CL t.ratio p.value
+ year2021 - year2020     4.75 1.44 488     1.92     7.59   3.297  0.0010
+
+area = Central:
+ contrast            estimate   SE  df lower.CL upper.CL t.ratio p.value
+ year2021 - year2020     4.24 1.96 488     0.38     8.10   2.158  0.0314
+
+area = Southeast:
+ contrast            estimate   SE  df lower.CL upper.CL t.ratio p.value
+ year2021 - year2020     8.39 2.35 488     3.77    13.01   3.568  0.0004
+
+area = Island Park:
+ contrast            estimate   SE  df lower.CL upper.CL t.ratio p.value
+ year2021 - year2020     9.27 2.66 488     4.05    14.49   3.490  0.0005
+
+Confidence level used: 0.95 </code></pre>
+<p>How about inferences for the <em>average</em> difference across
+areas?</p>
+<pre class="r"><code>emmeans(regrid(pairs(regrid(tmp, type = &quot;response&quot;), reverse = TRUE)), ~1)</code></pre>
+<pre><code> 1       estimate   SE  df lower.CL upper.CL
+ overall     7.16 1.86 488     3.51     10.8
+
+Results are averaged over the levels of: area 
+Confidence level used: 0.95 </code></pre>
+<p>Tricky!</p>
+<p>How much does the expected tick density increase between, say, the
+first day of October and November?</p>
+<pre class="r"><code>emmeans(m, ~ day | year * area, at = list(day = c(d11,d10)),
+  data = ticks, type = &quot;response&quot;)</code></pre>
+<pre><code>year = 2020, area = North:
+ day  rate    SE  df lower.CL upper.CL
+ 305 36.34  6.56 488    25.49    51.82
+ 274  9.33  1.94 488     6.20    14.04
+
+year = 2021, area = North:
+ day  rate    SE  df lower.CL upper.CL
+ 305 69.95 11.98 488    49.95    97.95
+ 274 17.96  3.49 488    12.26    26.30
+
+year = 2020, area = North Central:
+ day  rate    SE  df lower.CL upper.CL
+ 305 18.91  4.30 488    12.10    29.56
+ 274  4.86  1.21 488     2.98     7.92
+
+year = 2021, area = North Central:
+ day  rate    SE  df lower.CL upper.CL
+ 305 36.40  7.67 488    24.06    55.07
+ 274  9.34  2.14 488     5.96    14.65
+
+year = 2020, area = Central:
+ day  rate    SE  df lower.CL upper.CL
+ 305 16.86  6.94 488     7.51    37.87
+ 274  4.33  1.76 488     1.94     9.65
+
+year = 2021, area = Central:
+ day  rate    SE  df lower.CL upper.CL
+ 305 32.46 13.43 488    14.40    73.16
+ 274  8.33  3.39 488     3.75    18.53
+
+year = 2020, area = Southeast:
+ day  rate    SE  df lower.CL upper.CL
+ 305 33.38  6.06 488    23.36    47.70
+ 274  8.57  1.81 488     5.66    12.98
+
+year = 2021, area = Southeast:
+ day  rate    SE  df lower.CL upper.CL
+ 305 64.24 10.67 488    46.35    89.03
+ 274 16.49  3.17 488    11.30    24.07
+
+year = 2020, area = Island Park:
+ day  rate    SE  df lower.CL upper.CL
+ 305 36.87  7.21 488    25.11    54.13
+ 274  9.47  2.01 488     6.23    14.37
+
+year = 2021, area = Island Park:
+ day  rate    SE  df lower.CL upper.CL
+ 305 70.95 13.13 488    49.33   102.06
+ 274 18.22  3.60 488    12.36    26.85
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~ day | year * area, at = list(day = c(d11,d10)),
+  data = ticks, type = &quot;response&quot;), infer = TRUE)</code></pre>
+<pre><code>year = 2020, area = North:
+ contrast        ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ day305 / day274   3.9 0.735 488     2.69     5.64    1   7.211  &lt;.0001
+
+year = 2021, area = North:
+ contrast        ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ day305 / day274   3.9 0.735 488     2.69     5.64    1   7.211  &lt;.0001
+
+year = 2020, area = North Central:
+ contrast        ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ day305 / day274   3.9 0.735 488     2.69     5.64    1   7.211  &lt;.0001
+
+year = 2021, area = North Central:
+ contrast        ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ day305 / day274   3.9 0.735 488     2.69     5.64    1   7.211  &lt;.0001
+
+year = 2020, area = Central:
+ contrast        ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ day305 / day274   3.9 0.735 488     2.69     5.64    1   7.211  &lt;.0001
+
+year = 2021, area = Central:
+ contrast        ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ day305 / day274   3.9 0.735 488     2.69     5.64    1   7.211  &lt;.0001
+
+year = 2020, area = Southeast:
+ contrast        ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ day305 / day274   3.9 0.735 488     2.69     5.64    1   7.211  &lt;.0001
+
+year = 2021, area = Southeast:
+ contrast        ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ day305 / day274   3.9 0.735 488     2.69     5.64    1   7.211  &lt;.0001
+
+year = 2020, area = Island Park:
+ contrast        ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ day305 / day274   3.9 0.735 488     2.69     5.64    1   7.211  &lt;.0001
+
+year = 2021, area = Island Park:
+ contrast        ratio    SE  df lower.CL upper.CL null t.ratio p.value
+ day305 / day274   3.9 0.735 488     2.69     5.64    1   7.211  &lt;.0001
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>What about the <em>difference</em> in the expected densities (i.e.,
+marginal effects)?</p>
+<pre class="r"><code>tmp &lt;- emmeans(m, ~ day | year * area, at = list(day = c(d11,d10)),
+  data = ticks, type = &quot;response&quot;)
+pairs(regrid(tmp, type = &quot;response&quot;), infer = TRUE)</code></pre>
+<pre><code>year = 2020, area = North:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day305 - day274     27.0  5.76 488    15.69     38.3   4.689  &lt;.0001
+
+year = 2021, area = North:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day305 - day274     52.0 10.78 488    30.80     73.2   4.822  &lt;.0001
+
+year = 2020, area = North Central:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day305 - day274     14.1  3.57 488     7.04     21.1   3.934  0.0001
+
+year = 2021, area = North Central:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day305 - day274     27.1  6.53 488    14.23     39.9   4.146  &lt;.0001
+
+year = 2020, area = Central:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day305 - day274     12.5  5.42 488     1.88     23.2   2.311  0.0212
+
+year = 2021, area = Central:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day305 - day274     24.1 10.50 488     3.49     44.8   2.297  0.0221
+
+year = 2020, area = Southeast:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day305 - day274     24.8  5.29 488    14.41     35.2   4.687  &lt;.0001
+
+year = 2021, area = Southeast:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day305 - day274     47.7  9.65 488    28.78     66.7   4.946  &lt;.0001
+
+year = 2020, area = Island Park:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day305 - day274     27.4  6.27 488    15.09     39.7   4.372  &lt;.0001
+
+year = 2021, area = Island Park:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day305 - day274     52.7 11.69 488    29.77     75.7   4.511  &lt;.0001
+
+Confidence level used: 0.95 </code></pre>
+<p>Here is the average marginal effect for each year (i.e., averaging
+across areas).</p>
+<pre class="r"><code>emmeans(regrid(pairs(regrid(tmp, type = &quot;response&quot;))), ~year)</code></pre>
+<pre><code> year estimate   SE  df lower.CL upper.CL
+ 2020     21.2 4.00 488     13.3     29.0
+ 2021     40.7 7.36 488     26.3     55.2
+
+Results are averaged over the levels of: area 
+Confidence level used: 0.95 </code></pre>
+<p>How fast was the expected tick density increasing on the first day of
+October? This is an <em>instantaneous</em> marginal effect.</p>
+<pre class="r"><code>trtools::margeff(m, delta = 0.001, df = m$df.residual,
+  a = list(day = d10 + 0.001, area = unique(ticks$area), year = &quot;2020&quot;, size = 100),
+  b = list(day = d10, area = unique(ticks$area), year = &quot;2020&quot;, size = 100),
+  cnames = unique(ticks$area))</code></pre>
+<pre><code>              estimate     se   lower  upper tvalue    df    pvalue
+North           0.7546 0.1900 0.38121 1.1280  3.971 488.1 8.238e-05
+North Central   0.3927 0.1123 0.17203 0.6133  3.497 488.1 5.140e-04
+Central         0.3501 0.1549 0.04583 0.6545  2.261 488.1 2.422e-02
+Southeast       0.6930 0.1735 0.35209 1.0339  3.994 488.1 7.490e-05
+Island Park     0.7655 0.1942 0.38391 1.1470  3.942 488.1 9.267e-05</code></pre>
+<p>We can approximate this fairly well with the change in the expected
+tick density between the first and second days of October.</p>
+<pre class="r"><code>tmp &lt;- emmeans(m, ~ day | year * area, at = list(day = c(d10 + 1, d10), year = &quot;2020&quot;),
+  data = ticks, type = &quot;response&quot;)
+pairs(regrid(tmp, type = &quot;response&quot;), infer = TRUE)</code></pre>
+<pre><code>year = 2020, area = North:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day275 - day274    0.732 0.185 488   0.3682    1.096   3.953  0.0001
+
+year = 2020, area = North Central:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day275 - day274    0.381 0.109 488   0.1663    0.596   3.487  0.0005
+
+year = 2020, area = Central:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day275 - day274    0.340 0.151 488   0.0437    0.636   2.255  0.0246
+
+year = 2020, area = Southeast:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day275 - day274    0.672 0.168 488   0.3416    1.003   3.995  0.0001
+
+year = 2020, area = Island Park:
+ contrast        estimate    SE  df lower.CL upper.CL t.ratio p.value
+ day275 - day274    0.743 0.189 488   0.3714    1.114   3.931  0.0001
+
+Confidence level used: 0.95 </code></pre>
+<p>Finally consider a comparison of areas.</p>
+<pre class="r"><code>pairs(emmeans(m, ~area | year, at = list(day = d10), type = &quot;response&quot;, 
+  data = ticks), adjust = &quot;none&quot;)</code></pre>
+<pre><code>year = 2020:
+ contrast                    ratio    SE  df null t.ratio p.value
+ North / North Central       1.922 0.448 488    1   2.804  0.0053
+ North / Central             2.155 0.888 488    1   1.864  0.0629
+ North / Southeast           1.089 0.211 488    1   0.440  0.6603
+ North / Island Park         0.986 0.197 488    1  -0.071  0.9431
+ North Central / Central     1.121 0.485 488    1   0.265  0.7913
+ North Central / Southeast   0.567 0.131 488    1  -2.461  0.0142
+ North Central / Island Park 0.513 0.122 488    1  -2.801  0.0053
+ Central / Southeast         0.505 0.209 488    1  -1.653  0.0990
+ Central / Island Park       0.457 0.189 488    1  -1.890  0.0594
+ Southeast / Island Park     0.905 0.179 488    1  -0.503  0.6151
+
+year = 2021:
+ contrast                    ratio    SE  df null t.ratio p.value
+ North / North Central       1.922 0.448 488    1   2.804  0.0053
+ North / Central             2.155 0.888 488    1   1.864  0.0629
+ North / Southeast           1.089 0.211 488    1   0.440  0.6603
+ North / Island Park         0.986 0.197 488    1  -0.071  0.9431
+ North Central / Central     1.121 0.485 488    1   0.265  0.7913
+ North Central / Southeast   0.567 0.131 488    1  -2.461  0.0142
+ North Central / Island Park 0.513 0.122 488    1  -2.801  0.0053
+ Central / Southeast         0.505 0.209 488    1  -1.653  0.0990
+ Central / Island Park       0.457 0.189 488    1  -1.890  0.0594
+ Southeast / Island Park     0.905 0.179 488    1  -0.503  0.6151
+
+Tests are performed on the log scale </code></pre>
+<p>Due to an absence of interactions involving area, neither year or day
+matter.</p>
+<pre class="r"><code>pairs(emmeans(m, ~area, type = &quot;response&quot;, data = ticks), adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast                    ratio    SE  df null t.ratio p.value
+ North / North Central       1.922 0.448 488    1   2.804  0.0053
+ North / Central             2.155 0.888 488    1   1.864  0.0629
+ North / Southeast           1.089 0.211 488    1   0.440  0.6603
+ North / Island Park         0.986 0.197 488    1  -0.071  0.9431
+ North Central / Central     1.121 0.485 488    1   0.265  0.7913
+ North Central / Southeast   0.567 0.131 488    1  -2.461  0.0142
+ North Central / Island Park 0.513 0.122 488    1  -2.801  0.0053
+ Central / Southeast         0.505 0.209 488    1  -1.653  0.0990
+ Central / Island Park       0.457 0.189 488    1  -1.890  0.0594
+ Southeast / Island Park     0.905 0.179 488    1  -0.503  0.6151
+
+Results are averaged over the levels of: year 
+Tests are performed on the log scale </code></pre>
+<p>How about <em>differences</em> in the expected density (here day and
+year matter)?</p>
+<pre class="r"><code>tmp &lt;- emmeans(m, ~area | year, at = list(day = d10), type = &quot;response&quot;, data = ticks)
+pairs(regrid(tmp, type = &quot;response&quot;), infer = TRUE, adjust = &quot;none&quot;)</code></pre>
+<pre><code>year = 2020:
+ contrast                    estimate   SE  df lower.CL upper.CL t.ratio p.value
+ North - North Central          4.475 1.71 488     1.12    7.831   2.620  0.0091
+ North - Central                5.001 2.30 488     0.49    9.512   2.178  0.0299
+ North - Southeast              0.762 1.74 488    -2.65    4.173   0.439  0.6610
+ North - Island Park           -0.134 1.88 488    -3.83    3.565  -0.071  0.9431
+ North Central - Central        0.526 1.93 488    -3.26    4.316   0.273  0.7853
+ North Central - Southeast     -3.713 1.59 488    -6.83   -0.594  -2.339  0.0198
+ North Central - Island Park   -4.610 1.79 488    -8.12   -1.097  -2.578  0.0102
+ Central - Southeast           -4.239 2.21 488    -8.59    0.110  -1.915  0.0560
+ Central - Island Park         -5.135 2.35 488    -9.75   -0.519  -2.186  0.0293
+ Southeast - Island Park       -0.896 1.79 488    -4.42    2.624  -0.500  0.6172
+
+year = 2021:
+ contrast                    estimate   SE  df lower.CL upper.CL t.ratio p.value
+ North - North Central          8.613 3.27 488     2.18   15.046   2.631  0.0088
+ North - Central                9.625 4.32 488     1.15   18.105   2.230  0.0262
+ North - Southeast              1.466 3.35 488    -5.11    8.044   0.438  0.6616
+ North - Island Park           -0.259 3.62 488    -7.38    6.860  -0.071  0.9431
+ North Central - Central        1.012 3.70 488    -6.26    8.283   0.274  0.7846
+ North Central - Southeast     -7.147 3.01 488   -13.06   -1.230  -2.373  0.0180
+ North Central - Island Park   -8.872 3.41 488   -15.57   -2.174  -2.602  0.0095
+ Central - Southeast           -8.159 4.14 488   -16.30   -0.019  -1.969  0.0495
+ Central - Island Park         -9.884 4.40 488   -18.53   -1.234  -2.245  0.0252
+ Southeast - Island Park       -1.725 3.45 488    -8.51    5.057  -0.500  0.6175
+
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

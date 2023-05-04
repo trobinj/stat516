@@ -1,0 +1,233 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "05-05-2023"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"), comment = "")
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+```
+
+```{r options, echo = FALSE}
+options(digits = 4, width = 100)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+# Setup
+
+The following packages are being used.
+```{r, message = FALSE}
+library(dplyr)      # data manipulation
+library(tidyr)      # data manipulation
+library(lubridate)  # working with dates
+library(forcats)    # working with factors
+library(whereami)   # find current directory
+library(ggplot2)    # graphics
+library(mgcv)       # GAMs
+library(trtools)    # inference tools
+library(emmeans)    # inference tools
+options(digits = 4) # control number of digits displayed
+```
+
+## Import and Process Tick Count Data
+
+Here I can use `dirname(thisfile())` to find the directory containing this Rmarkdown file, so I do not have to specify the full path to the data file. Note that `thisfile()` is from the **whereami** package. I have the data stored in a sub-directory ("tickdata") of the directory containing this Rmarkdown file. 
+```{r}
+ticks <- read.csv(paste(dirname(thisfile()), 
+  "/tickdata/tick_data_Robenstein.csv", sep = ""))
+names(ticks) <- c("moose","mortality","ticks","size","date","gmu","sex","note")
+head(ticks)
+```
+Here I am going to process the data to get it ready for plotting and modeling.
+```{r}
+ticks <- ticks %>% 
+  mutate(note = factor(note, levels = 0:3,
+    labels = c("exclude", "include", "deterioration", "nodate"))) %>%
+  mutate(date = mdy(date)) %>%
+  mutate(month = month(date, label = TRUE), year = year(date), day = yday(date)) %>%
+  filter(!is.na(date), month %in% c("Aug","Sep","Oct","Nov")) %>%
+  mutate(year = factor(year)) %>% mutate(sex = tolower(sex)) %>%
+  mutate(day = ifelse(year == "2020", day - 1, day))
+head(ticks)
+```
+
+## Import and Process Game Management Unit Data
+
+Here I am going to use `rename` to rename the imported variables.
+```{r}
+gmu <- read.csv(paste(dirname(thisfile()), "/tickdata/tick_study_areas.csv", sep = "")) %>%
+  rename(gmu = GMU, area = study.Area, samples = hh_samples)
+head(gmu, 10)
+```
+
+## Merging Data Frames and Filtering
+
+```{r}
+ticks <- left_join(ticks, gmu) %>%
+  mutate(area = factor(area)) %>%
+  mutate(area = fct_relevel(area, c("North", "North Central",
+    "Central", "Southeast", "Island Park")))
+head(ticks)
+```
+Some variables we do not need. Also we are going to discard some questionable observations. 
+```{r}
+ticks <- ticks %>% select(-mortality, -samples, -gmu) %>% 
+  filter(note == "include")
+head(ticks)
+```
+
+## Raw Data Visualization
+
+```{r, fig.height = 9, warning = FALSE}
+d09 <- yday(mdy("09/1/2021"))
+d10 <- yday(mdy("10/1/2021"))
+d11 <- yday(mdy("11/1/2021"))
+d12 <- yday(mdy("12/1/2021"))
+  
+pv <- ggplot(ticks, aes(x = day, y = ticks/size*100, color = year)) + 
+  geom_count(alpha = 0.5) + scale_size_area(max_size = 2) +
+  theme_minimal() + facet_grid(area ~ .) +
+  labs(x = "Day", y = "Tick Density (ticks per 100 square cm)", color = "Year") + 
+  guides(size = "none") + 
+  scale_x_continuous(breaks = c(d09, d10, d11, d12),
+    labels = c("9/1", "10/1", "11/1", "12/1")) + ylim(c(0,250)) + 
+  theme(legend.position = c(0.15, 0.925))
+  
+plot(pv)
+```
+```{r, warning = FALSE}
+ph <- ggplot(ticks, aes(x = day, y = ticks/size*100, color = year)) + 
+  geom_count(alpha = 0.5) + scale_size_area(max_size = 2) + theme_minimal() + 
+  facet_wrap(~ area, ncol = 5) +
+  labs(x = "Day", y = "Tick Density (ticks per 100 square cm)", color = "Year") + 
+  guides(size = "none") + 
+  scale_x_continuous(breaks = c(d09, d10, d11, d12),
+    labels = c("9/1", "10/1", "11/1", "12/1")) + ylim(c(0,250)) + 
+  theme(legend.position = c(0.3, 0.8), 
+    axis.text.x = element_text(angle = 45, size = 7, hjust = 1))
+  
+plot(ph)
+```
+
+## Modeling
+
+I used a generalized additive model with a log link function estimated using (penalized) quasi-likelihood to deal with considerable over-dispersion. 
+```{r}
+m <- gam(ticks ~ offset(log(size)) + s(day) + year + area,
+  family = quasipoisson(link = log), data = ticks)
+summary(m)
+```
+Here we can visualize this model.
+```{r, warning = FALSE, fig.height = 9}
+d <- expand.grid(year = c("2020","2021"), day = 242:334,
+  area = unique(ticks$area), size = 100)
+d$yhat <- predict(m, newdata = d, type = "response")
+
+pv <- pv + geom_line(aes(y = yhat), data = d)
+plot(pv)
+```
+```{r, warning = FALSE}
+ph <- ph + geom_line(aes(y = yhat), data = d)
+plot(ph)
+```
+
+## Model-Based Inferences
+
+How much higher is the expected tick density in 2021 than in 2020?
+```{r}
+emmeans(m, ~year | area, at = list(day = d10), 
+  type = "response", offset = log(100), data = ticks)
+pairs(emmeans(m, ~year | area, at = list(day = d10), 
+  type = "response", offset = log(100), data = ticks), reverse = TRUE, infer = TRUE)
+```
+**Note**: Here `emmeans` needs a bit more information that is not contained in the model object, so we pass it the data with `data = ticks`. The `contrast` function will also work here, but it needs to be told the degrees of freedom by including the argument `df = m$df.residual`.
+
+How about the *difference* in the expected density for each area and the first of October? This is a *discrete marginal effect*, and both area and day matter.
+```{r}
+trtools::margeff(m, 
+  a = list(year = "2021", area = unique(ticks$area), day = d10, size = 100),
+  b = list(year = "2020", area = unique(ticks$area), day = d10, size = 100),
+  cnames = unique(ticks$area), df = m$df.residual)
+```
+Interestingly this can also be done using the **emmeans** package through use of the `regrid` function. 
+```{r}
+tmp <- emmeans(m, ~year | area, at = list(day = d10), 
+  type = "response", offset = log(100), data = ticks)
+pairs(regrid(tmp, type = "response"), reverse = TRUE, infer = TRUE)
+```
+How about inferences for the *average* difference across areas?
+```{r}
+emmeans(regrid(pairs(regrid(tmp, type = "response"), reverse = TRUE)), ~1)
+```
+Tricky!
+
+How much does the expected tick density increase between, say, the first day of October and November?
+```{r}
+emmeans(m, ~ day | year * area, at = list(day = c(d11,d10)),
+  data = ticks, type = "response")
+pairs(emmeans(m, ~ day | year * area, at = list(day = c(d11,d10)),
+  data = ticks, type = "response"), infer = TRUE)
+```
+What about the *difference* in the expected densities (i.e., marginal effects)?
+```{r}
+tmp <- emmeans(m, ~ day | year * area, at = list(day = c(d11,d10)),
+  data = ticks, type = "response")
+pairs(regrid(tmp, type = "response"), infer = TRUE)
+```
+Here is the average marginal effect for each year (i.e., averaging across areas). 
+```{r}
+emmeans(regrid(pairs(regrid(tmp, type = "response"))), ~year)
+```
+How fast was the expected tick density increasing on the first day of October? This is an *instantaneous* marginal effect. 
+```{r}
+trtools::margeff(m, delta = 0.001, df = m$df.residual,
+  a = list(day = d10 + 0.001, area = unique(ticks$area), year = "2020", size = 100),
+  b = list(day = d10, area = unique(ticks$area), year = "2020", size = 100),
+  cnames = unique(ticks$area))
+```
+We can approximate this fairly well with the change in the expected tick density between the first and second days of October.
+```{r}
+tmp <- emmeans(m, ~ day | year * area, at = list(day = c(d10 + 1, d10), year = "2020"),
+  data = ticks, type = "response")
+pairs(regrid(tmp, type = "response"), infer = TRUE)
+```
+
+Finally consider a comparison of areas. 
+```{r}
+pairs(emmeans(m, ~area | year, at = list(day = d10), type = "response", 
+  data = ticks), adjust = "none")
+```
+Due to an absence of interactions involving area, neither year or day matter.
+```{r}
+pairs(emmeans(m, ~area, type = "response", data = ticks), adjust = "none")
+```
+How about *differences* in the expected density (here day and year matter)?
+```{r}
+tmp <- emmeans(m, ~area | year, at = list(day = d10), type = "response", data = ticks)
+pairs(regrid(tmp, type = "response"), infer = TRUE, adjust = "none")
+```
