@@ -508,10 +508,20 @@ information that is not contained in the model object, so we pass it the
 data with <code>data = ticks</code>. The <code>contrast</code> function
 will also work here, but it needs to be told the degrees of freedom by
 including the argument <code>df = m$df.residual</code>.</p>
+<pre class="r"><code>trtools::contrast(m, tf = exp, df = m$df.residual,
+  a = list(year = &quot;2021&quot;, area = unique(ticks$area), day = d10, size = 100),
+  b = list(year = &quot;2020&quot;, area = unique(ticks$area), day = d10, size = 100),
+  cnames = unique(ticks$area))</code></pre>
+<pre><code>              estimate lower upper
+North            1.925 1.437 2.578
+North Central    1.925 1.437 2.578
+Central          1.925 1.437 2.578
+Southeast        1.925 1.437 2.578
+Island Park      1.925 1.437 2.578</code></pre>
 <p>How about the <em>difference</em> in the expected density for each
 area and the first of October? This is a <em>discrete marginal
 effect</em>, and both area and day matter.</p>
-<pre class="r"><code>trtools::margeff(m, 
+<pre class="r"><code>margeff(m, 
   a = list(year = &quot;2021&quot;, area = unique(ticks$area), day = d10, size = 100),
   b = list(year = &quot;2020&quot;, area = unique(ticks$area), day = d10, size = 100),
   cnames = unique(ticks$area), df = m$df.residual)</code></pre>
@@ -715,7 +725,7 @@ Results are averaged over the levels of: area
 Confidence level used: 0.95 </code></pre>
 <p>How fast was the expected tick density increasing on the first day of
 October? This is an <em>instantaneous</em> marginal effect.</p>
-<pre class="r"><code>trtools::margeff(m, delta = 0.001, df = m$df.residual,
+<pre class="r"><code>margeff(m, delta = 0.001, df = m$df.residual,
   a = list(day = d10 + 0.001, area = unique(ticks$area), year = &quot;2020&quot;, size = 100),
   b = list(day = d10, area = unique(ticks$area), year = &quot;2020&quot;, size = 100),
   cnames = unique(ticks$area))</code></pre>
