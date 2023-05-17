@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Categorical Response Variables and the Incidental Parameters Problem</title>
+
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Categorical Response Variables and the
+Incidental Parameters Problem</h1>
+<h3 class="subtitle">Statistics 516, Homework 5 (Solutions)</h3>
+
+</div>
+
+
+<p>You can also download a <a href="hw5-solutions.pdf">PDF</a> copy of
+this homework assignment.</p>
+<div id="lip-cancer-in-scotland-the-random-effect-of-district"
+class="section level2">
+<h2>Lip Cancer in Scotland: The Random Effect of District</h2>
+<p>Recall the model for the lip cancer data from Scotland used in the <a
+href="hw3-solutions.html">third</a> and <a
+href="hw4-solutions.html">fourth</a> homework assignments. Here again is
+the code to process and plot the raw data showing the observed rate of
+lip cancer per person-year by percent of the population engaged in
+outdoor activity.</p>
+<pre class="r"><code>library(epiR)
+library(dplyr)
+library(ggplot2)
+
+data(epi.SClip)
+
+lipcancer &lt;- epi.SClip %&gt;% 
+  mutate(district = factor(district, levels = rev(sort(unique(district))))) %&gt;% 
+  mutate(percent = paste(prop.ag, &quot;%&quot;, sep = &quot;&quot;)) %&gt;%
+  mutate(percent = reorder(percent, prop.ag)) %&gt;% 
+  select(district, cases, population, percent)
+
+p &lt;- ggplot(lipcancer, aes(y = district, x = cases/population)) +
+  theme_minimal() + geom_point(aes(size = population), shape = 21) + 
+  facet_grid(percent ~ ., scales = &quot;free_y&quot;, space = &quot;free_y&quot;) + 
+  labs(y = NULL, x = &quot;Cases per Person-Year&quot;, size = &quot;Person-Years:&quot;) + 
+  scale_x_continuous(labels = scales::label_number()) + 
+  theme(axis.text.y = element_text(size = 7), legend.position = &quot;top&quot;)
+plot(p)</code></pre>
+<p><img src="hw5-solutions_files/figure-html/unnamed-chunk-1-1.png" width="100%" style="display: block; margin: auto;" />
+In the previous homework assignment you noted that there may be some
+over-dispersion which may be due to variation in the lip cancer rate
+over districts other than that accounted for by the percent of the
+population engaged in outdoor activity. To account for that
+over-dispersion you used a quasi-likelihood approach to “adjust”
+inferences to the over-dispersion. Another approach that could be used
+is to specify the effect of district as a <em>random effect</em>.<a
+href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate a Poisson regression model like you did in the <a
+href="hw3-solutions.html">third</a> homework assignment, but this time
+specifying a random “main effect” for district. Report the model
+parameter estimates and standard errors using <code>summary</code> or
+<code>lincon</code> so that I can verify that you estimated the model
+correctly.</p>
+<p><strong>Solution</strong>: Here is how to estimate this mixed effects
+model.</p>
+<pre class="r"><code>library(lme4)
+m &lt;- glmer(cases ~ percent + offset(log(population)) + (1 | district),
+  family = poisson, data = lipcancer)
+summary(m)</code></pre>
+<pre><code>Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) [&#39;glmerMod&#39;]
+ Family: poisson  ( log )
+Formula: cases ~ percent + offset(log(population)) + (1 | district)
+   Data: lipcancer
+
+     AIC      BIC   logLik deviance df.resid 
+   355.7    369.9   -170.9    341.7       49 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-1.5491 -0.4031 -0.0435  0.4107  1.4272 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ district (Intercept) 0.339    0.582   
+Number of obs: 56, groups:  district, 56
+
+Fixed effects:
+            Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept) -11.0362     0.3251  -33.95  &lt; 2e-16 ***
+percent1%    -0.0687     0.3932   -0.17  0.86127    
+percent7%     1.1837     0.3723    3.18  0.00148 ** 
+percent10%    1.1775     0.3821    3.08  0.00206 ** 
+percent16%    1.3654     0.3915    3.49  0.00049 ***
+percent24%    1.8539     0.4770    3.89  0.00010 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Correlation of Fixed Effects:
+           (Intr) prcn1% prcn7% prc10% prc16%
+percent1%  -0.825                            
+percent7%  -0.873  0.722                     
+percent10% -0.850  0.704  0.743              
+percent16% -0.830  0.688  0.725  0.707       
+percent24% -0.681  0.564  0.595  0.580  0.566</code></pre>
+<pre class="r"><code>trtools::lincon(m)</code></pre>
+<pre><code>             estimate     se    lower   upper   tvalue  df     pvalue
+(Intercept) -11.03624 0.3251 -11.6734 -10.399 -33.9482 Inf 1.296e-252
+percent1%    -0.06872 0.3932  -0.8395   0.702  -0.1748 Inf  8.613e-01
+percent7%     1.18368 0.3723   0.4540   1.913   3.1793 Inf  1.476e-03
+percent10%    1.17750 0.3821   0.4286   1.926   3.0818 Inf  2.058e-03
+percent16%    1.36544 0.3915   0.5980   2.133   3.4874 Inf  4.878e-04
+percent24%    1.85392 0.4770   0.9191   2.789   3.8869 Inf  1.016e-04</code></pre></li>
+<li><p>Using <code>contrast</code> or the <strong>emmeans</strong>
+package, estimate the expected number of cases of lip cancer per 100K
+person-years for each value of the percent of the population spent in
+outdoor activities.</p>
+<p><strong>Solution</strong>: Here are the estimated rates of cases of
+lip cancer (per 100K person-years).</p>
+<pre class="r"><code>library(emmeans)
+emmeans(m, ~percent, type = &quot;response&quot;, offset = log(100000))</code></pre>
+<pre><code> percent  rate    SE  df asymp.LCL asymp.UCL
+ 0%       1.61 0.524 Inf     0.852      3.05
+ 1%       1.50 0.334 Inf     0.973      2.32
+ 7%       5.26 0.956 Inf     3.685      7.51
+ 10%      5.23 1.051 Inf     3.526      7.75
+ 16%      6.31 1.379 Inf     4.111      9.69
+ 24%     10.28 3.591 Inf     5.187     20.39
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre></li>
+<li><p>In the third homework assignment I asked you to estimate and
+interpret rate ratios that compared the rate of lip cancer at 1%, 7%,
+10%, 16%, and 24% versus 0% of the population involved in outdoor
+activity. This time estimate and interpret rate ratios that compare
+<em>consecutive</em> values of the percent of the population involved in
+outdoor activity (i.e., 0% versus 1%, 1% versus 7%, 7% versus 10%, and
+so on).</p>
+<p><strong>Solution</strong>: I will show you a couple of ways to do
+this. One is to use <code>contrast</code>.</p>
+<pre class="r"><code>trtools::contrast(m, tf = exp,
+  a = list(percent = c(&quot;1%&quot;,&quot;7%&quot;,&quot;10%&quot;,&quot;16%&quot;,&quot;24%&quot;), population = 1),
+  b = list(percent = c(&quot;0%&quot;,&quot;1%&quot;,&quot;7%&quot;,&quot;10%&quot;,&quot;16%&quot;), population = 1),
+  cnames = c(&quot;1% vs 0%&quot;, &quot;7% vs 1%&quot;, &quot;10% vs 7%&quot;, &quot;16% vs 10%&quot;, &quot;24% vs 16%&quot;))</code></pre>
+<pre><code>           estimate  lower upper
+1% vs 0%     0.9336 0.4319 2.018
+7% vs 1%     3.4987 1.9964 6.132
+10% vs 7%    0.9938 0.5846 1.689
+16% vs 10%   1.2068 0.6750 2.157
+24% vs 16%   1.6298 0.7275 3.651</code></pre>
+<p>With a little programming effort we can avoid so much tedious
+typing.</p>
+<pre class="r"><code>pa &lt;- sort(unique(lipcancer$percent))[2:6]
+pb &lt;- sort(unique(lipcancer$percent))[1:5]
+trtools::contrast(m, tf = exp,
+  a = list(percent = pa, population = 1),
+  b = list(percent = pb, population = 1),
+  cnames = paste(pa, &quot;vs&quot;, pb))</code></pre>
+<pre><code>           estimate  lower upper
+1% vs 0%     0.9336 0.4319 2.018
+7% vs 1%     3.4987 1.9964 6.132
+10% vs 7%    0.9938 0.5846 1.689
+16% vs 10%   1.2068 0.6750 2.157
+24% vs 16%   1.6298 0.7275 3.651</code></pre>
+<p>The <code>contrast</code> function in the <strong>emmeans</strong>
+package can also be used to do consecutive paired comparisons.</p>
+<pre class="r"><code>emmeans::contrast(emmeans(m, ~percent, offset = log(1), type = &quot;response&quot;), 
+  method = &quot;consec&quot;, infer = TRUE, adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast  ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ 1% / 0%   0.934 0.367 Inf     0.432      2.02    1  -0.175  0.8613
+ 7% / 1%   3.499 1.002 Inf     1.996      6.13    1   4.375  &lt;.0001
+ 10% / 7%  0.994 0.269 Inf     0.585      1.69    1  -0.023  0.9818
+ 16% / 10% 1.207 0.358 Inf     0.675      2.16    1   0.634  0.5261
+ 24% / 16% 1.630 0.671 Inf     0.728      3.65    1   1.187  0.2353
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>Here is shortcut that gives both the estimated rates and consecutive
+pairwise comparisons.</p>
+<pre class="r"><code>emmeans(m, consec ~ percent, offset = log(100000), 
+  type = &quot;response&quot;, infer = TRUE, adjust = &quot;none&quot;)</code></pre>
+<pre><code>$emmeans
+ percent  rate    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ 0%       1.61 0.524 Inf     0.852      3.05    1   1.466  0.1426
+ 1%       1.50 0.334 Inf     0.973      2.32    1   1.838  0.0661
+ 7%       5.26 0.956 Inf     3.685      7.51    1   9.142  &lt;.0001
+ 10%      5.23 1.051 Inf     3.526      7.75    1   8.229  &lt;.0001
+ 16%      6.31 1.379 Inf     4.111      9.69    1   8.426  &lt;.0001
+ 24%     10.28 3.591 Inf     5.187     20.39    1   6.675  &lt;.0001
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale 
+
+$contrasts
+ contrast  ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ 1% / 0%   0.934 0.367 Inf     0.432      2.02    1  -0.175  0.8613
+ 7% / 1%   3.499 1.002 Inf     1.996      6.13    1   4.375  &lt;.0001
+ 10% / 7%  0.994 0.269 Inf     0.585      1.69    1  -0.023  0.9818
+ 16% / 10% 1.207 0.358 Inf     0.675      2.16    1   0.634  0.5261
+ 24% / 16% 1.630 0.671 Inf     0.728      3.65    1   1.187  0.2353
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>Note that the value of the offset does not affect the rate ratios,
+but it does affect the estimated rates as I had to specify it here to
+give the estimated number of cases of lip cancer per 100K person-years.
+Here is how we could interpret these rate ratios.</p>
+<p><em>The estimated rate of cases of lip cancer is about 6.6% less at
+1% percent of the population engaged in outdoor activity than it is at
+0%</em>.</p>
+<p><em>The estimated rate of cases of lip cancer is about 3.5 times
+higher (250% higher) at 7% percent of the population engaged in outdoor
+activity than it is at 1%</em>.</p>
+<p><em>The estimated rate of cases of lip cancer is about 1% less at 10%
+percent of the population engaged in outdoor activity than it is at
+7%</em>.</p>
+<p><em>The estimated rate of cases of lip cancer is about 1.21 times
+higher (21% higher) at 16% percent of the population engaged in outdoor
+activity than it is at 10%</em>.</p>
+<p><em>The estimated rate of cases of lip cancer is about 1.63 times
+higher (63% higher) at 24% percent of the population engaged in outdoor
+activity than it is at 16%</em>.</p>
+<p>It may be worth noting that only one of these rate ratios is
+statistically significant at conventional significance levels. We can
+also “flip” the rate ratios to put the lower percent in the numerator of
+the ratio.</p>
+<pre class="r"><code>emmeans(m, consec ~ percent, offset = log(100000), 
+  type = &quot;response&quot;, infer = TRUE, adjust = &quot;none&quot;, reverse = TRUE)$contrasts</code></pre>
+<pre><code> contrast  ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ 0% / 1%   1.071 0.4212 Inf     0.496     2.315    1   0.175  0.8613
+ 1% / 7%   0.286 0.0818 Inf     0.163     0.501    1  -4.375  &lt;.0001
+ 7% / 10%  1.006 0.2724 Inf     0.592     1.710    1   0.023  0.9818
+ 10% / 16% 0.829 0.2456 Inf     0.464     1.481    1  -0.634  0.5261
+ 16% / 24% 0.614 0.2525 Inf     0.274     1.375    1  -1.187  0.2353
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>We can interpret these rate ratios as follows.</p>
+<p><em>The estimated rate of cases of lip cancer is about 1.07 times
+higher (7% higher) at 0% percent of the population engaged in outdoor
+activity than it is at 1%</em>.</p>
+<p><em>The estimated rate of cases of lip cancer is about 73% lower at
+1% percent of the population engaged in outdoor activity than it is at
+7%</em>.</p>
+<p><em>The estimated rate of cases of lip cancer is about 1.006 times
+higher (0.6% higher) at 7% percent of the population engaged in outdoor
+activity than it is at 10%</em>.</p>
+<p><em>The estimated rate of cases of lip cancer is about 17% lower at
+10% percent of the population engaged in outdoor activity than it is at
+16%</em>.</p>
+<p><em>The estimated rate of cases of lip cancer is about 39% lower at
+16% percent of the population engaged in outdoor activity than it is at
+24%</em>.</p></li>
+</ol>
+</div>
+<div id="comparing-methods-of-measuring-blood-oxygen-saturation"
+class="section level2">
+<h2>Comparing Methods of Measuring Blood Oxygen Saturation</h2>
+<p>The data frame <code>ox</code> in the <strong>MethComp</strong>
+package is from a study comparing two methods of measuring blood oxygen
+saturation: chemical analysis or using a pulse oximeter.<a href="#fn2"
+class="footnote-ref" id="fnref2"><sup>2</sup></a> Measurements were
+taken using both methods for each of 61 children. Multiple readings
+(replicates) were taken using each method in quick succession. For most
+children there were three replicates per method for a total of six
+measurements per child. Here are first few observations, sorted by the
+child (<code>item</code>).</p>
+<pre class="r"><code>library(dplyr)
+library(tibble) # to use the remove_rownames function
+library(MethComp)
+data(ox)
+ox &lt;- ox %&gt;% arrange(item) %&gt;% remove_rownames()
+head(ox, 12)</code></pre>
+<pre><code>    meth item repl    y
+1     CO    1    1 78.0
+2     CO    1    2 76.4
+3     CO    1    3 77.2
+4  pulse    1    1 71.0
+5  pulse    1    2 72.0
+6  pulse    1    3 73.0
+7     CO    2    1 68.7
+8     CO    2    2 67.6
+9     CO    2    3 68.3
+10 pulse    2    1 68.0
+11 pulse    2    2 67.0
+12 pulse    2    3 68.0</code></pre>
+<p>Note that here <code>meth</code> is the method of measuring oxygen
+saturation (<code>CO</code> is chemical analysis and <code>pulse</code>
+is pulse oximeter), <code>item</code> identifies the child,
+<code>repl</code> is the replicate, and <code>y</code> is the
+measurement of oxygen saturation. The plot below shows the raw data.</p>
+<pre class="r"><code>library(ggplot2)
+p &lt;- ggplot(ox, aes(y = factor(item), x = y, color = meth)) +
+  theme_minimal() + geom_point(alpha = 0.5) + scale_y_discrete(limits = rev) + 
+  labs(y = &quot;Child Identifier&quot;, x = &quot;Oxygen Saturation (Percent)&quot;, color = &quot;Method&quot;)
+plot(p)</code></pre>
+<p><img src="hw5-solutions_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" />
+The plot shows some evidence of an “effect” for the child — i.e.,
+children may naturally vary with respect to their average blood oxygen
+saturation. This can induce a lack of independence of the observations
+among those from the same child. We can also see this in a scatter plot
+of the average measurement for each child by method.<a href="#fn3"
+class="footnote-ref" id="fnref3"><sup>3</sup></a></p>
+<pre class="r"><code>library(tidyr) # to use the pivot_wider function
+oxaverages &lt;- ox %&gt;% group_by(item, meth) %&gt;% 
+  summarize(y = mean(y)) %&gt;% pivot_wider(names_from = meth, values_from = y)
+  
+p &lt;- ggplot(oxaverages, aes(x = CO, y = pulse)) + theme_minimal() + 
+  geom_abline(intercept = 0, slope = 1) + 
+  geom_point(alpha = 0.5) + coord_fixed() + 
+  labs(x = &quot;Chemical Analyis&quot;, y = &quot;Pulse Oximeter&quot;)
+  
+plot(p)</code></pre>
+<p><img src="hw5-solutions_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" />
+The lack of independence is suggested by the strong correlation between
+the average measurements. Here you will consider some different ways to
+account for this (or not).</p>
+<ol style="list-style-type: decimal">
+<li><p>Estimate the following four linear models with the oxygen
+saturation measurement as the response variable and the method of
+measurement as an explanatory variable: a model that ignores the effect
+of child (using the <code>lm</code> function), a marginal model
+estimated using generalized estimating equations that attempts to
+account for the lack of independence of observations from the same child
+(using the <code>geeglm</code> function), a fixed effects model with
+child used as a factor explanatory variable (using the <code>lm</code>
+function), and a mixed effects model with a random “main effect” for
+child (using the <code>lmer</code> function). For each model report the
+parameter estimates and standard errors using either the
+<code>summary</code> or <code>lincon</code> function so that I can
+verify that you estimated the model correctly. When using
+<code>geeglm</code> be sure to use the <em>sorted</em> data frame (see
+the code above) and an exchangeable correlation structure.</p>
+<p><strong>Solution</strong>: First here is the model with no effect for
+child.</p>
+<pre class="r"><code>m1 &lt;- lm(y ~ meth, data = ox)
+trtools::lincon(m1)</code></pre>
+<pre><code>            estimate     se  lower    upper tvalue  df     pvalue
+(Intercept)   75.658 0.9002 73.888 77.42864 84.046 352 4.824e-235
+methpulse     -2.477 1.2731 -4.981  0.02639 -1.946 352  5.245e-02</code></pre>
+<p>Here is the marginal model (note that the normal distribution and
+identity link function are the defaults).</p>
+<pre class="r"><code>library(geepack)
+m2 &lt;- geeglm(y ~ meth, family = gaussian(link = identity), 
+  id = item, corstr = &quot;exchangeable&quot;, data = ox)
+trtools::lincon(m2)</code></pre>
+<pre><code>            estimate     se  lower  upper tvalue  df     pvalue
+(Intercept)   75.650 1.5175 72.665 78.634  49.85 352 1.381e-161
+methpulse     -2.477 0.6385 -3.733 -1.222  -3.88 352  1.248e-04</code></pre>
+<p>Here is the fixed effects model with a fixed effect for child. Note
+that I have trimmed the output a bit since there are 60 indicator
+variables for 61 levels of <code>item</code>.</p>
+<pre class="r"><code>m3 &lt;- lm(y ~ meth + factor(item), data = ox)
+trtools::lincon(m3)[1:5,]</code></pre>
+<pre><code>              estimate     se    lower  upper tvalue  df     pvalue
+(Intercept)     75.839 2.0553  71.7937 79.884 36.900 292 5.841e-112
+methpulse       -2.477 0.5307  -3.5218 -1.433 -4.668 292  4.632e-06
+factor(item)2   -6.667 2.8823 -12.3393 -0.994 -2.313 292  2.142e-02
+factor(item)3    5.350 2.8823  -0.3227 11.023  1.856 292  6.444e-02
+factor(item)4  -10.500 2.8823 -16.1727 -4.827 -3.643 292  3.188e-04</code></pre>
+<p>And here is the mixed effects model.</p>
+<pre class="r"><code>m4 &lt;- lmer(y ~ meth + (1 | item), data = ox)
+trtools::lincon(m4)</code></pre>
+<pre><code>            estimate     se  lower  upper tvalue  df    pvalue
+(Intercept)   75.650 1.4546 72.799 78.501 52.009 Inf 0.000e+00
+methpulse     -2.477 0.5307 -3.517 -1.437 -4.669 Inf 3.033e-06</code></pre></li>
+<li><p>For each of the four models you estimated above, estimate (a) the
+expected blood oxygen saturation observed for each method, and (b) the
+difference in the expected blood oxygen saturation between the two
+methods. This can be done using <code>lincon</code>,
+<code>contrast</code>, or with the <strong>emmeans</strong> package, but
+be sure that you provide estimates and standard errors.</p>
+<p><strong>Solution</strong>: I will use the <strong>emmeans</strong>
+package. I am going to use a shortcut that provides the answers to both
+(a) and (b).</p>
+<pre class="r"><code>emmeans(m1, pairwise ~ meth, infer = TRUE) # ignore</code></pre>
+<pre><code>$emmeans
+ meth  emmean  SE  df lower.CL upper.CL t.ratio p.value
+ CO      75.7 0.9 352     73.9     77.4  84.050  &lt;.0001
+ pulse   73.2 0.9 352     71.4     75.0  81.290  &lt;.0001
+
+Confidence level used: 0.95 
+
+$contrasts
+ contrast   estimate   SE  df lower.CL upper.CL t.ratio p.value
+ CO - pulse     2.48 1.27 352  -0.0264     4.98   1.946  0.0524
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>emmeans(m2, pairwise ~ meth, infer = TRUE) # marginal</code></pre>
+<pre><code>$emmeans
+ meth  emmean   SE  df asymp.LCL asymp.UCL z.ratio p.value
+ CO      75.7 1.52 Inf      72.7      78.6  49.850  &lt;.0001
+ pulse   73.2 1.39 Inf      70.5      75.9  52.740  &lt;.0001
+
+Covariance estimate used: vbeta 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast   estimate    SE  df asymp.LCL asymp.UCL z.ratio p.value
+ CO - pulse     2.48 0.638 Inf      1.23      3.73   3.880  0.0001
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>emmeans(m3, pairwise ~ meth, infer = TRUE) # fixed effect</code></pre>
+<pre><code>$emmeans
+ meth  emmean    SE  df lower.CL upper.CL t.ratio p.value
+ CO      75.7 0.378 292     74.9     76.4 200.080  &lt;.0001
+ pulse   73.2 0.378 292     72.4     73.9 193.530  &lt;.0001
+
+Results are averaged over the levels of: item 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast   estimate    SE  df lower.CL upper.CL t.ratio p.value
+ CO - pulse     2.48 0.531 292     1.43     3.52   4.668  &lt;.0001
+
+Results are averaged over the levels of: item 
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>emmeans(m4, pairwise ~ meth, infer = TRUE) # random effect</code></pre>
+<pre><code>$emmeans
+ meth  emmean   SE   df lower.CL upper.CL t.ratio p.value
+ CO      75.7 1.45 64.2     72.7     78.6  52.010  &lt;.0001
+ pulse   73.2 1.45 64.2     70.3     76.1  50.310  &lt;.0001
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast   estimate    SE  df lower.CL upper.CL t.ratio p.value
+ CO - pulse     2.48 0.531 292     1.43     3.52   4.669  &lt;.0001
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre>
+<p>Note that for the fixed effects model the estimates of the expected
+blood oxygen saturation for each method are <em>averaged</em> over the
+children. They can vary from child to child as seen below which shows
+the estimates for the first three children.</p>
+<pre class="r"><code>emmeans(m3, ~ meth | item, at = list(item = 1:3))</code></pre>
+<pre><code>item = 1:
+ meth  emmean   SE  df lower.CL upper.CL
+ CO      75.8 2.06 292     71.8     79.9
+ pulse   73.4 2.06 292     69.3     77.4
+
+item = 2:
+ meth  emmean   SE  df lower.CL upper.CL
+ CO      69.2 2.06 292     65.1     73.2
+ pulse   66.7 2.06 292     62.6     70.7
+
+item = 3:
+ meth  emmean   SE  df lower.CL upper.CL
+ CO      81.2 2.06 292     77.1     85.2
+ pulse   78.7 2.06 292     74.7     82.8
+
+Confidence level used: 0.95 </code></pre>
+<p>The estimate of the differences in these expectations, however, do
+not depend on the child.</p>
+<pre class="r"><code>emmeans(m3, pairwise ~ meth | item, 
+  at = list(item = 1:3), infer = TRUE)$contrast</code></pre>
+<pre><code>item = 1:
+ contrast   estimate    SE  df lower.CL upper.CL t.ratio p.value
+ CO - pulse     2.48 0.531 292     1.43     3.52   4.668  &lt;.0001
+
+item = 2:
+ contrast   estimate    SE  df lower.CL upper.CL t.ratio p.value
+ CO - pulse     2.48 0.531 292     1.43     3.52   4.668  &lt;.0001
+
+item = 3:
+ contrast   estimate    SE  df lower.CL upper.CL t.ratio p.value
+ CO - pulse     2.48 0.531 292     1.43     3.52   4.668  &lt;.0001
+
+Confidence level used: 0.95 </code></pre></li>
+<li><p>Compare the parameter estimates and standard errors you obtained
+for the quantities you estimated in the previous problem across the four
+models. Discuss briefly what did and did not change (much).</p>
+<p><strong>Solution</strong>: The estimates of <span
+class="math inline">\(\beta_0\)</span> and <span
+class="math inline">\(\beta_1\)</span> are very similar across the four
+method, but there are some differences in the standard errors. This is
+also true when estimating the expected response for each method and the
+difference in the expected response between these two methods. The
+standard errors from the first approach which ignores the effect of
+child, which tend to be smaller for the expected response but larger for
+the difference, should not be trusted. The standard errors for the
+difference in the expected response between the two methods are more
+similar across the other approaches. The standard errors for the
+expected response are relatively similar between the marginal and mixed
+effects approaches. The standard error for the expected response for the
+fixed effects approach depend heavily on if we are making inferences for
+a given child or the average response across all children in the
+study.</p></li>
+<li><p>Estimate a linear mixed effects model that specifies an
+<em>interaction</em> between the child and the method of measurement as
+a second random effect. Report the parameter estimates and standard
+errors, and estimate the quantities that you estimated in the second
+problem now using this model.</p>
+<p><strong>Solution</strong>: Here is the estimated mixed effects model
+with the interaction.</p>
+<pre class="r"><code>m5 &lt;- lmer(y ~ meth + (meth | item), data = ox)
+trtools::lincon(m5)</code></pre>
+<pre><code>            estimate     se  lower  upper tvalue  df    pvalue
+(Intercept)   75.649 1.5285 72.653 78.645 49.493 Inf 0.0000000
+methpulse     -2.476 0.6382 -3.727 -1.225 -3.879 Inf 0.0001047</code></pre>
+<p>Note that <code>(meth | item)</code> is the same thing as
+<code>(meth | item)</code>. The random “main effect” is implied. Here
+are the estimated quantities.</p>
+<pre class="r"><code>emmeans(m5, pairwise ~ meth, infer = TRUE)</code></pre>
+<pre><code>$emmeans
+ meth  emmean   SE df lower.CL upper.CL t.ratio p.value
+ CO      75.7 1.53 60     72.6     78.7  49.490  &lt;.0001
+ pulse   73.2 1.40 60     70.4     76.0  52.300  &lt;.0001
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast   estimate    SE   df lower.CL upper.CL t.ratio p.value
+ CO - pulse     2.48 0.638 59.5      1.2     3.75   3.878  0.0003
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre></li>
+</ol>
+</div>
+<div id="weight-gain-in-rats-exposed-to-thiouracil-and-thyroxin"
+class="section level2">
+<h2>Weight Gain in Rats Exposed to Thiouracil and Thyroxin</h2>
+<p>In the <a href="hw1-solutions.html">first homework assignment</a> you
+encountered data from a study on the effects of thiouracil and thyroxin
+on growth of rats. Here are the first few rows of the data frame.</p>
+<pre class="r"><code>library(ALA)
+head(rat,10)</code></pre>
+<pre><code>    id treatment week weight
+1    1   control    0     57
+28   1   control    1     86
+55   1   control    2    114
+82   1   control    3    139
+109  1   control    4    172
+2    2   control    0     60
+29   2   control    1     93
+56   2   control    2    123
+83   2   control    3    146
+110  2   control    4    177</code></pre>
+<p>Note that the variable <code>id</code> identifies the rat and that
+there are multiple observations for each rat. The plot below shows the
+raw data with line segments joining observations from the same rat.</p>
+<pre class="r"><code>library(ALA)
+library(ggplot2)
+p &lt;- ggplot(rat, aes(x = week, y = weight)) + theme_minimal() +
+  geom_line(aes(group = id), alpha = 0.25) + geom_point(alpha = 0.5) +
+  labs(x = &quot;Week&quot;, y = &quot;Weight (g)&quot;) + facet_wrap(~treatment)
+plot(p)</code></pre>
+<p><img src="hw5-solutions_files/figure-html/unnamed-chunk-22-1.png" width="100%" style="display: block; margin: auto;" />
+In the first homework assignment we ignored the fact that there are
+multiple observations from each rat, but this may be important to take
+into account. We can think of the rat as being a factor with as many
+levels as there are rats (27), and that this categorical variable may
+have an “effect” in the sense that rats can vary in terms of their size,
+but also may grow at different rates (similar to what we observed for
+the Sitka spruce tree experiment from lecture). Here you will model the
+data using a random effects approach to account for the effect of
+rat.</p>
+<ol style="list-style-type: decimal">
+<li><p>In the seventh part of the <em>Weight Gain in Rats Exposed to
+Thiouracil and Thyroxin</em> problem on the first homework assignment
+you were asked to estimate a model with the model formula
+<code>weight ~ treatment:week</code>. This model can be written as <span
+class="math display">\[
+  E(Y_i) =
+  \begin{cases}
+\beta_0 + \beta_1 w_i, &amp; \text{if the treatment for the $i$-th
+observation is control}, \\
+\beta_0 + \beta_2 w_i, &amp; \text{if the treatment for the $i$-th
+observation is thiouracil}, \\
+\beta_0 + \beta_3 w_i, &amp; \text{if the treatment for the $i$-th
+observation is thyroxin},
+  \end{cases}
+\]</span> where <span class="math inline">\(Y_i\)</span> and <span
+class="math inline">\(w_i\)</span> are the <span
+class="math inline">\(i\)</span>-th observations of weight and week,
+respectively. Note that this model allows for differences in the growth
+rate depending on the treatment, but assumes that the expected weight at
+zero weeks is the same across treatments since at that point no drug had
+been administered. Now consider a mixed effects model with a random
+“main effect” for rat which can be written as <span
+class="math display">\[
+  E(Y_{ij}) =
+  \begin{cases}
+\beta_0 + \beta_1 w_{ij} + \delta_i, &amp; \text{if the treatment for
+the $i$-th rat is control}, \\
+\beta_0 + \beta_2 w_{ij} + \delta_i, &amp; \text{if the treatment for
+the $i$-th rat is thiouracil}, \\
+\beta_0 + \beta_3 w_{ij} + \delta_i, &amp; \text{if the treatment for
+the $i$-th rat is thyroxin},
+  \end{cases}
+\]</span> where now <span class="math inline">\(Y_{ij}\)</span> and
+<span class="math inline">\(w_{ij}\)</span> are the weight and week for
+the <span class="math inline">\(j\)</span>-th observation of the <span
+class="math inline">\(i\)</span>-th rat. Here <span
+class="math inline">\(\delta_i\)</span> is a random parameter that
+represents the random effect of rat. Another model that allows for
+differences in the growth rate of rats by including an “interaction”
+between rat and week could be written as <span class="math display">\[
+  E(Y_{ij}) =
+  \begin{cases}
+\beta_0 + \beta_1 w_{ij} + \delta_i + \gamma_i w_{ij}, &amp; \text{if
+the treatment for the $i$-th rat is control}, \\
+\beta_0 + \beta_2 w_{ij} + \delta_i + \gamma_i w_{ij}, &amp; \text{if
+the treatment for the $i$-th rat is thiouracil}, \\
+\beta_0 + \beta_3 w_{ij} + \delta_i + \gamma_i w_{ij}, &amp; \text{if
+the treatment for the $i$-th rat is thyroxin},
+  \end{cases}
+\]</span> where <span class="math inline">\(\gamma_i\)</span> is a
+second random parameter for the interaction between rat and week.
+Estimate these two mixed effects models, and show the results using
+either <code>summary</code> or <code>lincon</code> so that I can verify
+that you estimated the model correctly. Note that you will still want to
+include the same fixed effects structure as the original model with the
+term <code>treatment:week</code>, but extend the model to include one or
+two random effects.</p>
+<p><strong>Solution</strong>: The first model can be estimated as
+follows.</p>
+<pre class="r"><code>m1 &lt;- lmer(weight ~ treatment:week + (1 | id), data = rat)
+trtools::lincon(m1)</code></pre>
+<pre><code>                         estimate     se lower upper tvalue  df     pvalue
+(Intercept)                 54.46 1.9310 50.67 58.24  28.20 Inf 5.521e-175
+treatmentcontrol:week       26.32 0.6653 25.02 27.62  39.56 Inf  0.000e+00
+treatmentthiouracil:week    17.38 0.6653 16.07 18.68  26.12 Inf 2.276e-150
+treatmentthyroxin:week      26.90 0.7849 25.37 28.44  34.28 Inf 1.823e-257</code></pre>
+<p>The second model can be estimated as follows.</p>
+<pre class="r"><code>m2 &lt;- lmer(weight ~ treatment:week + (week | id), data = rat)
+trtools::lincon(m2)</code></pre>
+<pre><code>                         estimate    se lower upper tvalue  df     pvalue
+(Intercept)                 54.46 1.317 51.88 57.04  41.35 Inf  0.000e+00
+treatmentcontrol:week       26.25 1.236 23.82 28.67  21.24 Inf 4.005e-100
+treatmentthiouracil:week    17.53 1.236 15.11 19.95  14.19 Inf  1.128e-45
+treatmentthyroxin:week      26.79 1.471 23.91 29.68  18.21 Inf  4.413e-74</code></pre></li>
+<li><p>Using the model you estimated with two random effects (i.e., the
+model with a random effect for the interaction between rat and week),
+estimate the expected weight of a rat at the fourth week for each
+treatment condition. Also estimate the three pairwise differences among
+these three expected weights. You can use <code>lincon</code>,
+<code>contrast</code>, or the <strong>emmeans</strong> package for this.
+Be sure to include standard errors and confidence intervals.</p>
+<p><strong>Solution</strong>: Here is how we can do this with one
+statement using the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>emmeans(m2, pairwise ~ treatment, at = list(week = 4), infer = TRUE, adjust = &quot;none&quot;)</code></pre>
+<pre><code>$emmeans
+ treatment  emmean   SE   df lower.CL upper.CL t.ratio p.value
+ control       159 5.04 24.4      149      170  31.660  &lt;.0001
+ thiouracil    125 5.04 24.4      114      135  24.730  &lt;.0001
+ thyroxin      162 6.04 24.3      149      174  26.780  &lt;.0001
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 
+
+$contrasts
+ contrast              estimate   SE df lower.CL upper.CL t.ratio p.value
+ control - thiouracil     34.87 7.18 24     20.0     49.7   4.854  0.0001
+ control - thyroxin       -2.18 7.92 24    -18.5     14.2  -0.276  0.7852
+ thiouracil - thyroxin   -37.06 7.92 24    -53.4    -20.7  -4.680  0.0001
+
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre>
+<p>An interesting thing about this model is that the tests of these
+pairwise differences are equivalent to testing the differences in the
+rates of change in weight between the treatment conditions. This is
+because the model is constrained so that the expected weight is the same
+for each treatment at week zero. For example, the difference in the
+expected weights between the control condition and the thiouracil
+treatment condition is <span class="math display">\[
+\beta_0 + \beta_1 4 - (\beta_0 + \beta_24) = (\beta_1 - \beta_2)4.
+\]</span> Note that we omit the terms <span
+class="math inline">\(\delta_i\)</span> and <span
+class="math inline">\(\gamma_i w_{ij}\)</span> because <span
+class="math inline">\(\delta_i\)</span> and <span
+class="math inline">\(\gamma_i\)</span> both are modeled as having mean
+values of zero and so do not affect the expected weight for a given
+treatment condition and week if we are not conditioning on a particular
+rat. We can see the equivalence of these tests by testing the
+differences between the rates of change.</p>
+<pre class="r"><code>pairs(pairs(emmeans(m2, ~week|treatment, at = list(week = c(4,3)))), 
+  by = NULL, adjust = &quot;none&quot;)</code></pre>
+<pre><code> contrast                                              estimate   SE df t.ratio p.value
+ (week4 - week3 control) - (week4 - week3 thiouracil)     8.718 1.80 24   4.854  0.0001
+ (week4 - week3 control) - (week4 - week3 thyroxin)      -0.546 1.98 24  -0.276  0.7852
+ (week4 - week3 thiouracil) - (week4 - week3 thyroxin)   -9.264 1.98 24  -4.680  0.0001
+
+Degrees-of-freedom method: kenward-roger </code></pre></li>
+</ol>
+</div>
+<div id="seatbelt-use-and-degree-of-injury-in-auto-accidents"
+class="section level2">
+<h2>Seatbelt Use and Degree of Injury in Auto Accidents</h2>
+<p>The following data shows the number of auto accidents resulting in
+various levels of injury by victim gender, accident location, and
+whether not the victim was wearing a seat belt.<a href="#fn4"
+class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+<pre class="r"><code>seatbelt &lt;- data.frame(gender = rep(c(&quot;female&quot;,&quot;male&quot;), each = 4), 
+  location = rep(rep(c(&quot;urban&quot;,&quot;rural&quot;), each = 2), 2), seatbelt = rep(c(&quot;no&quot;,&quot;yes&quot;), 4),
+  I1 = c(7287, 11587, 3246, 6134, 10381, 10969, 6123, 6693), 
+  I2 = c(175, 126, 73, 94, 136, 83, 141, 74), 
+  I3 = c(720, 577, 710, 564, 566, 259, 710, 353), 
+  I4 = c(91, 48, 159, 92, 96, 37, 188, 74), 
+  I5 = c(10, 8, 31, 17, 14, 1, 45, 12))
+seatbelt</code></pre>
+<pre><code>  gender location seatbelt    I1  I2  I3  I4 I5
+1 female    urban       no  7287 175 720  91 10
+2 female    urban      yes 11587 126 577  48  8
+3 female    rural       no  3246  73 710 159 31
+4 female    rural      yes  6134  94 564  92 17
+5   male    urban       no 10381 136 566  96 14
+6   male    urban      yes 10969  83 259  37  1
+7   male    rural       no  6123 141 710 188 45
+8   male    rural      yes  6693  74 353  74 12</code></pre>
+<p>The variables <code>I1</code> through <code>I5</code> denote the
+level of injury: <em>non injured</em> (<code>I1</code>), <em>injured but
+not transported by emergency medical services</em> (<code>I2</code>),
+<em>injured and transported by emergency medical services but not
+hospitalized</em> (<code>I3</code>), <em>injured and hospitalized but
+did not die</em> (<code>I4</code>), and <em>injured and died</em>
+(<code>I5</code>). The injury levels are ordered by severity. Note that
+the data are in aggregated form showing the number of accidents at each
+injury level for each combination of gender, location, and seat belt
+use. Use these data in the following.</p>
+<ol style="list-style-type: decimal">
+<li><p>Use the <code>vglm</code> function from the <strong>VGAM</strong>
+package to estimate a <em>sequential</em> regression model similar to a
+model we considered for the <code>pneumo</code> data in lecture on <a
+href="lecture-04-14-2023.html">April 14</a>. Use the injury level as the
+response variable, and use location and seat belt use as the explanatory
+variables, but not gender.<a href="#fn5" class="footnote-ref"
+id="fnref5"><sup>5</sup></a> For this model do not specify any
+interactions. Note that the model should be specified with the injury
+levels ordered as listed above from I1 to I5. Use a logit link function.
+Do not use the <code>parallel</code> option for this model. Report the
+parameter estimates using <code>summary</code> so that I can verify that
+you specified the model correctly.</p>
+<p><strong>Solution</strong>: Here is the estimated model.</p>
+<pre class="r"><code>library(VGAM)
+m &lt;- vglm(cbind(I1,I2,I3,I4,I5) ~ seatbelt + location,
+  family = cratio(link = &quot;logitlink&quot;), data = seatbelt)
+summary(m)</code></pre>
+<pre><code>
+Call:
+vglm(formula = cbind(I1, I2, I3, I4, I5) ~ seatbelt + location, 
+    family = cratio(link = &quot;logitlink&quot;), data = seatbelt)
+
+Coefficients: 
+                Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept):1    -1.5326     0.0219  -70.02  &lt; 2e-16 ***
+(Intercept):2     2.1098     0.0626   33.72  &lt; 2e-16 ***
+(Intercept):3    -1.2063     0.0525  -22.99  &lt; 2e-16 ***
+(Intercept):4    -1.5210     0.1230  -12.36  &lt; 2e-16 ***
+seatbeltyes:1    -0.7487     0.0273  -27.41  &lt; 2e-16 ***
+seatbeltyes:2    -0.1606     0.0735   -2.19    0.029 *  
+seatbeltyes:3    -0.3514     0.0776   -4.53  6.0e-06 ***
+seatbeltyes:4    -0.2177     0.2054   -1.06    0.289    
+locationurban:1  -0.7303     0.0268  -27.25  &lt; 2e-16 ***
+locationurban:2  -0.5052     0.0728   -6.94  3.9e-12 ***
+locationurban:3  -0.6096     0.0762   -8.00  1.3e-15 ***
+locationurban:4  -0.5251     0.2131   -2.46    0.014 *  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Names of linear predictors: logitlink(P[Y&gt;1|Y&gt;=1]), logitlink(P[Y&gt;2|Y&gt;=2]), 
+logitlink(P[Y&gt;3|Y&gt;=3]), logitlink(P[Y&gt;4|Y&gt;=4])
+
+Residual deviance: 458.2 on 20 degrees of freedom
+
+Log-likelihood: -329.6 on 20 degrees of freedom
+
+Number of Fisher scoring iterations: 4 
+
+No Hauck-Donner effect found in any of the estimates</code></pre></li>
+<li><p>The sequential model you specified in the previous problem is
+effectively equivalent to four logistic regression models: one for
+whether an individual was injured (I2, I3, I4, or I5) or not injured
+(I1), another for whether an injured person was not transported (I2) or
+was transported (I3, I4, or I5), another for whether a transported
+person was hospitalized (I4 or I5) or was not hospitalized (I3), and
+finally a model for whether those that required hospitalization died
+(I5) or did not die (I4). The model you estimated in the previous
+problem can be used to compute odds ratios for the effect of using a
+seat belt (or not) with respect to each of these four situations. Report
+those four odds ratios and write a sentence for each odds ratio that
+explains how it is interpreted in terms of the statistical effect of
+wearing a seat belt (or not).</p>
+<p><strong>Solution</strong>: We can estimate the same as four logistic
+regression model as follows.</p>
+<pre class="r"><code>m1 &lt;- glm(cbind(I2+I3+I4+I5,I1) ~ seatbelt + location,
+  family = binomial, data = seatbelt)
+summary(m1)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value   Pr(&gt;|z|)
+(Intercept)    -1.5326    0.02189  -70.02  0.000e+00
+seatbeltyes    -0.7487    0.02731  -27.41 2.005e-165
+locationurban  -0.7303    0.02680  -27.25 1.591e-163</code></pre>
+<pre class="r"><code>m2 &lt;- glm(cbind(I3+I4+I5,I2) ~ seatbelt + location,
+  family = binomial, data = seatbelt)
+summary(m2)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value   Pr(&gt;|z|)
+(Intercept)     2.1098    0.06227  33.880 1.298e-251
+seatbeltyes    -0.1606    0.07341  -2.188  2.869e-02
+locationurban  -0.5052    0.07277  -6.942  3.865e-12</code></pre>
+<pre class="r"><code>m3 &lt;- glm(cbind(I4+I5,I3) ~ seatbelt + location,
+  family = binomial, data = seatbelt)
+summary(m3)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value   Pr(&gt;|z|)
+(Intercept)    -1.2063    0.05203 -23.184 6.648e-119
+seatbeltyes    -0.3514    0.07776  -4.519  6.221e-06
+locationurban  -0.6096    0.07627  -7.993  1.317e-15</code></pre>
+<pre class="r"><code>m4 &lt;- glm(cbind(I5,I4) ~ seatbelt + location,
+  family = binomial, data = seatbelt)
+summary(m4)$coefficients</code></pre>
+<pre><code>              Estimate Std. Error z value  Pr(&gt;|z|)
+(Intercept)    -1.5210     0.1222 -12.447 1.452e-35
+seatbeltyes    -0.2177     0.2060  -1.057 2.906e-01
+locationurban  -0.5251     0.2133  -2.462 1.383e-02</code></pre>
+<p>Notice that the parameter estimates and the standard errors from
+these four models are the same as those obtained above when using the
+<code>vglm</code> function. Here are the estimated odds ratios for
+seatbelt wearing. Note that since there is no interaction specified we
+do not need to condition on location.</p>
+<pre class="r"><code>pairs(emmeans(m1, ~seatbelt, type = &quot;response&quot;), infer = TRUE)</code></pre>
+<pre><code> contrast odds.ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ no / yes       2.11 0.0578 Inf         2      2.23    1  27.411  &lt;.0001
+
+Results are averaged over the levels of: location 
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m2, ~seatbelt, type = &quot;response&quot;), infer = TRUE)</code></pre>
+<pre><code> contrast odds.ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ no / yes       1.17 0.0862 Inf      1.02      1.36    1   2.188  0.0287
+
+Results are averaged over the levels of: location 
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m3, ~seatbelt, type = &quot;response&quot;), infer = TRUE)</code></pre>
+<pre><code> contrast odds.ratio   SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ no / yes       1.42 0.11 Inf      1.22      1.65    1   4.519  &lt;.0001
+
+Results are averaged over the levels of: location 
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m4, ~seatbelt, type = &quot;response&quot;), infer = TRUE)    </code></pre>
+<pre><code> contrast odds.ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ no / yes       1.24 0.256 Inf      0.83      1.86    1   1.057  0.2906
+
+Results are averaged over the levels of: location 
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<p>We can interpret these odds ratios as follows.</p>
+<p><em>The odds of an injury are about 2.11 times higher (110% higher)
+when not wearing a seatbelt.</em></p>
+<p><em>The odds that an injured person would need to be transported is
+about 1.17 times higher (17% higher) when not wearing a
+seatbelt.</em></p>
+<p>*The odds that a transported person would require hospitalization is
+about 1.42 times higher (42% higher) when not wearing a seatbelt.</p>
+<p><em>The odds that a hospitalized person would die is about 1.24 times
+higher (24% higher) when not wearing a seatbelt.</em></p>
+<p>Note that all but the last odds ratios are statistically significant
+at convention significance levels. We can also flip the odds ratios.</p>
+<pre class="r"><code>pairs(emmeans(m1, ~seatbelt, type = &quot;response&quot;), infer = TRUE, reverse = TRUE)</code></pre>
+<pre><code> contrast odds.ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ yes / no      0.473 0.0129 Inf     0.448     0.499    1 -27.411  &lt;.0001
+
+Results are averaged over the levels of: location 
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m2, ~seatbelt, type = &quot;response&quot;), infer = TRUE, reverse = TRUE)</code></pre>
+<pre><code> contrast odds.ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ yes / no      0.852 0.0625 Inf     0.738     0.983    1  -2.188  0.0287
+
+Results are averaged over the levels of: location 
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m3, ~seatbelt, type = &quot;response&quot;), infer = TRUE, reverse = TRUE)</code></pre>
+<pre><code> contrast odds.ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ yes / no      0.704 0.0547 Inf     0.604      0.82    1  -4.519  &lt;.0001
+
+Results are averaged over the levels of: location 
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m4, ~seatbelt, type = &quot;response&quot;), infer = TRUE, reverse = TRUE)  </code></pre>
+<pre><code> contrast odds.ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ yes / no      0.804 0.166 Inf     0.537       1.2    1  -1.057  0.2906
+
+Results are averaged over the levels of: location 
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<p>We can interpret these odds ratios as follows.</p>
+<p><em>The odds of an injury is reduced by a factor of about 0.47 (53%
+less) when wearing a seat belt.</em></p>
+<p><em>The odds that an injured person would need to be transported is
+reduced by a factor of about 0.85 (15% less) when wearing a seat
+belt.</em></p>
+<p><em>The odds that a transported person would need to be hospitalized
+decreases by a factor of about 0.7 (30% less) when wearing a seat
+belt.</em></p>
+<p><em>The odds that a hospitalized person would die decreases by a
+factor of about 0.8 (20% less) when wearing a seat belt.</em></p></li>
+</ol>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p>In most cases when random effects are specified there
+are two or more observations per level of the factor(s) that define the
+random effect(s). Specifying the random effects can then help account
+for a lack of independence of observations from the same
+experimental/observational unit. But in some cases like this one a
+random effect can induce over-dispersion without dependencies among the
+observations because there is only one observation per unit.<a
+href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Source: Carstensen, B. (2010). <em>Comparing clinical
+measurement methods: A practical guide</em>. Wiley.<a href="#fnref2"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Using <code>coord_fixed()</code> forces a one-to-one
+aspect ratio of the axes, which is appropriate here since they are on
+the same scale.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>Source: Agresti, A. (2013). <em>Categorical data
+analysis</em> (3rd ed). Hoboken, NJ: Wiley.<a href="#fnref4"
+class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>Including location may be important as the severity of
+accidents may vary between urban and rural locations. Gender could be
+included as a (poor) proxy for weight, which could be related to
+severity of accidents — particular for those not wearing seat belts. In
+that case it would be important to include an interaction between gender
+(or, ideally, weight) and seat belt use. But for the purpose of this
+exercise we are going to keep the model very simple.<a href="#fnref5"
+class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
