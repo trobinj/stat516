@@ -1,0 +1,46 @@
+---
+title: "Applied Regression Modeling (Stat 436/516)"
+subtitle: "Spring Semester, 2024"
+output: 
+  pdf_document: default
+  html_document: 
+    theme: readable
+fontsize: 11pt
+header-includes:
+- \pagenumbering{gobble}
+---
+
+`r ifelse(knitr::is_html_output(), "You can [download a PDF version](syllabus.pdf) of this syllabus.", "")`
+
+\raggedright
+
+**Instructor**: Dr.\ Timothy R. Johnson, Professor of Statistics, Department of Mathematics and Statistical Science. Email: <trjohns@uidaho.edu>. Office phone: 208-885-2928. Department phone: 208-885-6742. My office is [Brink 417](https://goo.gl/maps/zcpTXzbPCGWGj7tM9) and my office hours are 1:30 to 2:30 on Monday, Wednesday, and Friday, but I am available to meet other times. You are welcome to make an appointment or drop-in without an appointment. I can meet in person or over Zoom.
+
+**Prerequisites**: Statistics 431 (Statistical Analysis) or a similar course. This course assumes familiarity with the fundamentals of statistical inference (e.g., parameter estimation, confidence intervals, and significance tests), and some basic statistical models (e.g., inference for one- and two-sample designs, analysis of variance, and simple and multiple linear regression).
+
+**Course Topics**: Linear regression, linear model specification (including indicator variables, interactions, transformations, polynomials, and splines), linear combinations of parameters and contrasts, nonlinear regression, point estimation using least squares and maximum likelihood, interval estimation and significance tests, methods for assessing and addressing violations of assumptions, weighted least squares, generalized linear models including logistic and Poisson regression, over-dispersion, truncation and censoring, survival analysis, models for categorical response variables, the delta method, marginal effects, linear and generalized linear mixed models, nonlinear mixed models, model fit and selection, and other topics depending on time and interest. 
+
+**Learning Outcomes**: Given data and research questions, students should be able to correctly specify and interpret inferences for an appropriate regression model. Students should be to specify and interpret these inferences mathematically, with code, and in writing. 
+
+**Course Website**: Most course materials including lecture notes, homework assignments, study guides, this syllabus, and other materials can be found on the course website [trobinj.github.io/stat516](https://trobinj.github.io/stat251). Note that this is separate from [Canvas](http://canvas.uidaho.edu). Canvas does have a link to the course website. 
+
+**Software**: This course uses the statistical package R with the RStudio integrated development environment. Previous experience with R and RStudio is not assumed, but students are expected to make the effort to learn how to use these software packages. Both R and RStudio are free and available for Windows, macOS, and Linux operating systems. For information about installing R and RStudio see the section titled "Getting Started with R and RStudio" on the [resources](resources.html) page.  
+
+**Homework**: There will be five take-home homework assignments distributed throughout the semester. Notice of an assignment will be given about a week in advance of when it is assigned, and will typically be due 7-10 days after it is assigned. Late homework will not be accepted without penalty except under extraordinary circumstances. The penalty for turning in a late homework assignment is one point if the assignment is turned in within 12 hours of the deadline, two points if the assignment is turned in within 24 hours of the deadline, and so on for every additional 12 hours. Each homework assignment is worth a total of 10 points. Homework assignments will include some problems that are required for students enrolled in Stat 516, but extra credit for students enrolled in Stat 436. 
+
+**Attendance**: Regular attendance is expected. You should contact me if reasonable circumstances prohibit you from attending a lecture. More than three unexcused absences may result in a reduction of your course grade by one letter grade, and more than six unexcused absences may result in a reduction of your course grade by two letter grades.
+
+**Grading**: Letter grades will be assigned according to the following rubric based on the average homework score: A (87.5%-100%), B (75%-87.5%), C (62.5%-75%), D (50%-62.5%), F (less than 50%). 
+
+**Academic Honesty**: You are responsible for being aware of the policies of the University of Idaho on academic honesty. See Section A-1 of Article II of the [Student Code of Conduct](http://www.uidaho.edu/student-affairs/dean-of-students/student-conduct/student-code-of-conduct). This includes but is not limited to cheating, facilitation of cheating, and furnishing false information or false representation. Breaches of academic honesty will not be tolerated, and will result in a F for the course and referral to the Dean of Students for further disciplinary action.
+
+**Disability Access**: The University of Idaho is committed to ensuring an accessible learning environment where course or instructional content are usable by all students and faculty. If you believe that you require disability-related academic adjustments for this class (including pregnancy-related disabilities), please contact the Center for Disability Access and Resources (CDAR) to discuss eligibility. A current accommodation letter from CDAR is required before any modifications, above and beyond what is otherwise available for all other students in this class, will be provided. Please be advised that disability-related academic adjustments are not retroactive. CDAR is located at the Bruce Pitman Building, Suite 127. Phone is 208-885-6307 and e-mail is <cdar@uidaho.edu>. For a listing of services and current business hours visit [www.uidaho.edu/cdar](https://www.uidaho.edu/cdar)
+
+**Title IX**: University of Idaho is committed to creating a safe learning environment for all students. Consistent with this, UI policy and Title IX prohibit sexual misconduct, which includes sex or gender based harassment, sexual assault, intimate partner violence, stalking, and retaliation. If you have experienced any form of sexual misconduct, know that help and support are available. Please be aware that all University of Idaho employees are mandatory reporters and are required to report any information they receive about sexual misconduct to the university’s Title IX Coordinator within 24 hours (Idaho State Board Policy, Section I, I.T.). Visit [www.uidaho.edu/ocri/title-nine/resources](http://www.uidaho.edu/ocri/title-nine/resources) to learn more about which resources on campus and within our community are confidential. If you would like to report an incident, you may do so anonymously by visiting [www.uidaho.edu/vandalcare](https://www.uidaho.edu/vandalcare) or you can directly contact the Office of Civil Rights and Investigations at 208-885-4285 or <ocri@uidaho.edu>. 
+
+
+
+
+
+
+
