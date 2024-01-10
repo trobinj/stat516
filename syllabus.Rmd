@@ -28,7 +28,7 @@ header-includes:
 
 **Homework**: There will be five take-home homework assignments distributed throughout the semester. Notice of an assignment will be given about a week in advance of when it is assigned, and will typically be due 7-10 days after it is assigned. Late homework will not be accepted without penalty except under extraordinary circumstances. The penalty for turning in a late homework assignment is one point if the assignment is turned in within 12 hours of the deadline, two points if the assignment is turned in within 24 hours of the deadline, and so on for every additional 12 hours. Each homework assignment is worth a total of 10 points. Homework assignments will include some problems that are required for students enrolled in Stat 516, but extra credit for students enrolled in Stat 436. 
 
-**Attendance**: Regular attendance is expected. You should contact me if reasonable circumstances prohibit you from attending a lecture. More than three unexcused absences may result in a reduction of your course grade by one letter grade, and more than six unexcused absences may result in a reduction of your course grade by two letter grades.
+**Attendance**: Regular attendance is expected. You should contact me before your absence if reasonable circumstances prohibit you from attending a lecture. More than three unexcused absences may result in a reduction of your course grade by one letter grade, and more than six unexcused absences may result in a reduction of your course grade by two letter grades.
 
 **Grading**: Letter grades will be assigned according to the following rubric based on the average homework score: A (87.5%-100%), B (75%-87.5%), C (62.5%-75%), D (50%-62.5%), F (less than 50%). 
 
