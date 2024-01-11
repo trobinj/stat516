@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Wednesday, Jan 10</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Wednesday, Jan 10</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-01-10-2024.pdf">PDF</a> copy
+of this lecture.</p>
+<div id="linear-models" class="section level2">
+<h2>Linear Models</h2>
+<p>The regression model <span class="math display">\[
+  E(Y) = \beta_0 + \beta_1 x_{1} + \beta_2 x_{2} + \dots + \beta_k
+x_{k},
+\]</span> is a <em>linear model</em> because it is a <em>linear
+function</em>. But a linear model is <em>linear in the parameters</em>
+(i.e., <span class="math inline">\(\beta_0, \beta_1, \dots,
+\beta_k\)</span>) but not necessarily <em>linear in the explanatory
+variables</em> (i.e., <span class="math inline">\(x_{1}, x_{2}, \dots,
+x_{k}\)</span>). For example, the following are all <em>linear
+models</em> even though <span class="math inline">\(E(Y)\)</span> is not
+a linear function of the explanatory variable(s): <span
+class="math display">\[
+E(Y) = \beta_0 + \beta_1\log(x), \ \ E(Y) = \beta_0 + \beta_1 x +
+\beta_2 x^2, \ \ E(Y) = \beta_1 x_1x_2.
+\]</span> Note that in some cases <span
+class="math inline">\(\beta_0\)</span> can be omitted (or, equivalently,
+fixed as <span class="math inline">\(\beta_0\)</span> = 0).</p>
+<p>Why is there so much focus on <em>linear</em> models in
+statistics?</p>
+<ol style="list-style-type: decimal">
+<li><p>Easier to interpret.</p></li>
+<li><p>Can sometimes approximate more complex functions.</p></li>
+<li><p>Sufficient for categorical explanatory variables.</p></li>
+<li><p>Inferential theory is simpler.</p></li>
+<li><p>Computational tractability.</p></li>
+<li><p>Didactic value.</p></li>
+</ol>
+<p>So, we will start with linear models, but will certainly cover a
+variety of non-linear models.</p>
+</div>
+<div id="parameter-interpretation-quantitative-explanatory-variables"
+class="section level2">
+<h2>Parameter Interpretation (Quantitative Explanatory Variables)</h2>
+<p>In the linear model <span class="math display">\[
+  E(Y) = \beta_0 + \beta_1 x_{1} + \beta_2 x_{2} + \dots + \beta_k
+x_{k},
+\]</span></p>
+<p>the parameter <span class="math inline">\(\beta_j\)</span> (for <span
+class="math inline">\(j\)</span> &gt; 0) represents the <em>rate of
+change</em> in <span class="math inline">\(E(Y)\)</span> with respect to
+<span class="math inline">\(x_{j}\)</span> <em>assuming all other <span
+class="math inline">\(x_{j}\)</span> are held constant</em>.</p>
+<p><strong>Example</strong>: Assume that <span class="math display">\[
+    E(Y) = \beta_0 + \beta_{1} x_{1} + \beta_{2} x_{2}.
+\]</span> If <span class="math inline">\(x_{1}\)</span> is increased to
+<span class="math inline">\(x_{1} + 1\)</span>, then <span
+class="math display">\[
+\beta_0 + \beta_{1} (x_{1} + 1) + \beta_{2} x_{2} = \underbrace{\beta_0
++ \beta_{1} x_{1} + \beta_{2} x_{2}}_{E(Y)} + \beta_1 = E(Y) + \beta_1,
+\]</span> meaning that <span class="math inline">\(E(Y)\)</span> changes
+by <span class="math inline">\(\beta_1\)</span> if <span
+class="math inline">\(x_{1}\)</span> increases one unit. Note that in
+this interpretation it is assumed that <span
+class="math inline">\(x_{2}\)</span> <em>does not change</em> when <span
+class="math inline">\(x_{1}\)</span> changes, so <span
+class="math inline">\(\beta_1\)</span> does not have the same
+interpretation in <span class="math inline">\(E(Y) = \beta_0 +
+\beta_1x_1\)</span> unless <span class="math inline">\(x_1\)</span> and
+<span class="math inline">\(x_2\)</span> are not correlated (e.g., if
+<span class="math inline">\(x_1\)</span> represents a randomized
+treatment). Also we are not necessarily assuming that this is a
+<em>causal</em> relationship in the sense that changing <span
+class="math inline">\(x_1\)</span> <em>causes</em> a change in <span
+class="math inline">\(E(Y)\)</span>.</p>
+<p>Note: From calculus we note that <span
+class="math inline">\(\beta_j\)</span> is the partial derivative of
+<span class="math inline">\(E(Y)\)</span> with respect to <span
+class="math inline">\(x_{j}\)</span>, <span class="math display">\[
+  \frac{\partial E(Y)}{\partial x_{j}} = \beta_j,
+\]</span> which shows that the rate of change of <span
+class="math inline">\(E(Y)\)</span> with respect to <span
+class="math inline">\(x_{j}\)</span> is <em>constant</em>.</p>
+<p><strong>Example</strong>: Suppose we have the model <span
+class="math display">\[
+  E(V) = -57.99 + 0.34 h + 4.71 g,
+\]</span> where <span class="math inline">\(V\)</span> represents tree
+volume (in cubic feet), and <span class="math inline">\(g\)</span> and
+<span class="math inline">\(h\)</span> denote tree girth (in) and height
+(ft), respectively. If we were to plot <span
+class="math inline">\(E(V)\)</span> as a function of both <span
+class="math inline">\(h\)</span> and <span
+class="math inline">\(g\)</span> then it would form a
+<em>plane</em>.</p>
+<p><img src="lecture-01-12-2024_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" />
+But three-dimensional plots can be difficult to read, and
+higher-dimensional plots are not practical. But consider that we can
+still make a two-dimensional plot of we express <span
+class="math inline">\(E(V)\)</span> as a function of one explanatory
+variable <em>while holding the other explanatory variable(s)
+constant</em>. For example, we can write <span
+class="math inline">\(E(V)\)</span> as a function of only <span
+class="math inline">\(h\)</span> <em>for some chosen value of <span
+class="math inline">\(g\)</span></em> as <span class="math display">\[
+  E(V) = \underbrace{(-57.99 + 4.71g)}_{\text{constant}} + 0.34h.
+\]</span> Here I have set <span class="math inline">\(g\)</span> equal
+to 9, 12, and 15 to plot <span class="math inline">\(E(V)\)</span> as a
+function of <span class="math inline">\(h\)</span>.
+<img src="lecture-01-12-2024_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
+Similarly we can write <span class="math inline">\(E(V)\)</span> as a
+function of only <span class="math inline">\(g\)</span> <em>for some
+chosen value of <span class="math inline">\(h\)</span></em> as <span
+class="math display">\[
+  E(V) = \underbrace{(-57.99 + 0.34h)}_{\text{constant}} + 4.71g.
+\]</span> Here I have set <span class="math inline">\(h\)</span> equal
+to 72, 76, and 80 to plot <span class="math inline">\(E(V)\)</span> as a
+function of <span class="math inline">\(g\)</span>.
+<img src="lecture-01-12-2024_files/figure-html/unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
+Note that in both cases the <em>rate of change</em> of <span
+class="math inline">\(E(V)\)</span> with respect to one explanatory
+variable <em>does not depend on the value of itself or another
+variable</em>.</p>
+<p><strong>Example</strong>: Suppose we have <span
+class="math display">\[
+  E(Y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2,
+\]</span> where <span class="math inline">\(x_1 = x\)</span> and <span
+class="math inline">\(x_2 = x^2\)</span> so that we can also write the
+model as <span class="math display">\[
+  E(Y) = \beta_0 + \beta_1x + \beta x^2.
+\]</span> Then if we increase <span class="math inline">\(x\)</span> by
+one unit to <span class="math inline">\(x+1\)</span> we have the change
+in the expected response of <span class="math display">\[
+  \beta_0 + \beta_1(x+1) + \beta_2(x+1)^2 - [\beta_0 + \beta_1x +
+\beta_2x^2] = \beta_1 + \beta_2(2x + 1),
+\]</span> so the change depends on <span
+class="math inline">\(x\)</span>. So the change in the expected response
+<em>depends on the value of</em> <span
+class="math inline">\(x\)</span>.</p>
+<p><strong>Example</strong>: Suppose we have <span
+class="math display">\[
+  E(Y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3,
+\]</span> where <span class="math inline">\(x_3 = x_1x_2\)</span>. Then
+if we increase <span class="math inline">\(x_1\)</span> by one unit we
+have a change in the expected response of <span class="math display">\[
+  \beta_0 + \beta_1(x_1 + 1) + \beta_2 x_2 + \beta_3(x_1+1)x_2 -
+[\beta_0 + \beta_1x_1 + \beta_2x_2 + \beta_3x_1x_2] = \beta_1 +
+\beta_3x_2.
+\]</span> So the change in the expected response if we increase <span
+class="math inline">\(x_1\)</span> <em>depends on the value of</em>
+<span class="math inline">\(x_2\)</span>.</p>
+<p><strong>Example</strong>: Suppose we have <span
+class="math display">\[
+  E(Y) = \beta_0 + \beta_1 \log_2(x),
+\]</span> where <span class="math inline">\(\log_2\)</span> is the
+base-2 logarithm. Here <span class="math inline">\(\beta_1\)</span> is
+the change in <span class="math inline">\(E(Y)\)</span> if we increase
+<span class="math inline">\(\log_2(x)\)</span> by one unit, not <span
+class="math inline">\(x\)</span>. If we increase <span
+class="math inline">\(x\)</span> by one unit we have a change in the
+expected response of <span class="math display">\[
+  \beta_0 + \beta_1\log_2(x+1) - [\beta_0 + \beta_1\log_2(x)] =
+\log_2(x+1) - \log_2(x),
+\]</span> or <span class="math inline">\(\log_2(1-1/x)\)</span> if <span
+class="math inline">\(x &gt; 0\)</span>. So the change in the expected
+response if we increase <span class="math inline">\(x\)</span> by one
+unit <em>depends on the value of</em> <span
+class="math inline">\(x\)</span>. But it can be shown that <span
+class="math inline">\(\beta_1\)</span> is the change in <span
+class="math inline">\(E(Y)\)</span> if we <em>double</em> <span
+class="math inline">\(x\)</span>. We’ll discuss log transformations
+later in the course.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="indicator-variables-and-parameter-interpretation"
+class="section level2">
+<h2>Indicator Variables and Parameter Interpretation</h2>
+<p>Indicator (or “dummy”) variables can be used when an explanatory
+variable is <em>categorical</em>.</p>
+<p><strong>Example</strong>: Consider the following data from an
+observational study comparing the dopamine b-hydroxylase activity of
+schizophrenic patients that had been classified as non-psychotic or
+psychotic after treatment.</p>
+<p><img src="lecture-01-12-2024_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Note: In an introductory statistics course, a so-called “population
+mean” (<span class="math inline">\(\mu\)</span>) is what we would call
+an expected value so that <span class="math inline">\(E(Y) =
+\mu\)</span>.</p>
+<p>Consider two hypothetical population means: <span
+class="math display">\[
+\begin{aligned}
+    \mu_p &amp; = \text{expected activity of psychotic patients} \\
+    \mu_n &amp; = \text{expected activity of non-psychotic patients}
+\end{aligned}
+\]</span> Inferences might consider three quantities:</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(\mu_p\)</span> (expected activity for
+a psychotic patient)</p></li>
+<li><p><span class="math inline">\(\mu_n\)</span> (expected activity for
+a non-psychotic patient)</p></li>
+<li><p><span class="math inline">\(\mu_p - \mu_n\)</span> (difference in
+expected activity between psychotic and non-psychotic patients)</p></li>
+</ol>
+<p>Let <span class="math inline">\(x_i\)</span> be an <em>indicator
+variable</em> for <em>psychotic</em> schizophrenics such that <span
+class="math display">\[
+x_i =
+\begin{cases}
+    1, &amp; \text{if the $i$-th subject is psychotic,} \\
+    0, &amp; \text{otherwise}.
+\end{cases}
+\]</span> Then if we specify the model <span
+class="math inline">\(E(Y_i) = \beta_0 + \beta_1 x_i\)</span>, where
+<span class="math inline">\(Y_i\)</span> is the dopamine activity of the
+<span class="math inline">\(i\)</span>-th subject, we can also write the
+model <em>case-wise</em> as<br />
+<span class="math display">\[
+E(Y_i) =
+\begin{cases}
+    \beta_0 + \beta_1, &amp; \text{if the $i$-th subject is psychotic,}
+\\
+    \beta_0,           &amp; \text{if the $i$-th subject is
+non-psychotic}.
+\end{cases}
+\]</span></p>
+<p>Thus the quantities of interest are <em>functions</em> of <span
+class="math inline">\(\beta_0\)</span> and <span
+class="math inline">\(\beta_1\)</span>:</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(\mu_p = \beta_0 +
+\beta_1\)</span></p></li>
+<li><p><span class="math inline">\(\mu_n = \beta_0\)</span></p></li>
+<li><p><span class="math inline">\(\mu_p-\mu_n =
+\beta_1\)</span></p></li>
+</ol>
+<p>The interpretion of the model parameters depends on how we define our
+indicator variable (i.e., the <em>parameterization</em> of the model).
+If instead we defined <span class="math inline">\(x_i\)</span> as <span
+class="math display">\[
+x_i =
+\begin{cases}
+    1, &amp; \text{if the $i$-th subject is non-psychotic,} \\
+    0, &amp; \text{otherwise},
+\end{cases}
+\]</span> then <span class="math display">\[
+E(Y_i) =
+\begin{cases}
+    \beta_0 + \beta_1, &amp; \text{if the $i$-th subject is
+non-psychotic,} \\
+    \beta_0,           &amp; \text{if the $i$-th subject is psychotic}.
+\end{cases}
+\]</span> and the quantities of interest become</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(\mu_p = \beta_0\)</span></p></li>
+<li><p><span class="math inline">\(\mu_n = \beta_0 +
+\beta_1\)</span></p></li>
+<li><p><span class="math inline">\(\mu_p-\mu_n =
+-\beta_1\)</span></p></li>
+</ol>
+<p>Note: Usually, if we have a categorical explanatory variable with
+<span class="math inline">\(k\)</span> levels, we need <span
+class="math inline">\(k-1\)</span> indicator variables. This is true if
+<span class="math inline">\(\beta_0\)</span> is in the model. But
+suppose we define <span class="math display">\[
+x_{i1} =
+\begin{cases}
+    1, &amp; \text{if the $i$-th subject is psychotic,} \\
+    0, &amp; \text{otherwise},
+\end{cases}
+\]</span> <span class="math display">\[
+x_{i2} =
+\begin{cases}
+    1, &amp; \text{if the $i$-th subject is non-psychotic,} \\
+    0, &amp; \text{otherwise},
+\end{cases}
+\]</span> and we use the model <span class="math inline">\(E(Y_i) =
+\beta_1x_{i1} + \beta_2x_{i2}\)</span>. How are <span
+class="math inline">\(\beta_1\)</span> and <span
+class="math inline">\(\beta_2\)</span> related to <span
+class="math inline">\(\mu_p\)</span>, <span
+class="math inline">\(\mu_n\)</span>, and <span
+class="math inline">\(\mu_p - \mu_n\)</span>?</p>
+<p><strong>Example</strong>: Consider the following data from a
+randomized experiment that examined the weight change between before and
+after therapy for subjects with anorexia.</p>
+<p><img src="lecture-01-12-2024_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>Let <span class="math inline">\(Y_i\)</span> denote weight change in
+the <span class="math inline">\(i\)</span>-th subject. Each subject was
+assigned at random to one of three therapies for anorexia:
+<em>control</em>, <em>cognitive-behavioral</em>, or <em>family
+therapy</em>. Suppose we define <span
+class="math inline">\(x_{i1}\)</span> and <span
+class="math inline">\(x_{i2}\)</span> as <span class="math display">\[
+x_{i1} =
+\begin{cases}
+    1, &amp; \text{if $i$-th subject received cognitive-behavioral
+therapy,} \\
+    0, &amp; \text{otherwise},
+\end{cases}
+\]</span> and <span class="math display">\[
+x_{i2} =
+\begin{cases}
+    1, &amp; \text{if $i$-th subject received family therapy,} \\
+    0, &amp; \text{otherwise}.
+\end{cases}
+\]</span> Then if we specify the model <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2},
+\]</span> we we can also write the model <em>case-wise</em> as <span
+class="math display">\[
+E(Y_i) =
+    \begin{cases}
+        \beta_0, &amp; \text{if the $i$-th subject is in the control
+group}, \\
+        \beta_0 + \beta_1, &amp; \text{if the $i$-th subject received
+CBT}, \\
+        \beta_0 + \beta_2, &amp; \text{if the $i$-th subject received
+FT}.
+    \end{cases}
+\]</span> What then might be some quantities of interest (in terms of
+<span class="math inline">\(\beta_0, \beta_1, \beta_2\)</span>)?</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
