@@ -29,7 +29,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Introduction to R and the `lm` function for specifying a linear model](lecture-01-17-2024.html). 
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Specifying linear models --- continued, linear combinations of parameters](lecture-01-19-2024.html).
  
 ***
 
