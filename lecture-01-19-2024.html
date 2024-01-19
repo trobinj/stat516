@@ -518,9 +518,9 @@ is <span class="math inline">\(\beta_2 + \beta_3\)</span>. </p>
 <li><p>The <em>difference</em> in the two rates of change described
 above (after minus before) is <span
 class="math inline">\(\beta_3\)</span>. </p>
-<pre class="r"><code>lincon(m, a = c(0,0,1,0), b = 0)</code></pre>
-<pre><code>            estimate      se   lower   upper tvalue df    pvalue
-(0,0,1,0),0  -0.3932 0.02249 -0.4384 -0.3481 -17.49 52 1.976e-23</code></pre></li>
+<pre class="r"><code>lincon(m, a = c(0,0,0,1), b = 0)</code></pre>
+<pre><code>            estimate      se   lower  upper tvalue df    pvalue
+(0,0,0,1),0   0.1153 0.03211 0.05087 0.1797  3.591 52 0.0007307</code></pre></li>
 <li><p>The expected gas consumption before and after insulation at 5C
 are <span class="math inline">\(\beta_0 + \beta_25\)</span> and <span
 class="math inline">\(\beta_0 + \beta_1 + (\beta_2 + \beta_3)5\)</span>,

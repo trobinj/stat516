@@ -256,7 +256,7 @@ How do we write the following as linear combinations and then make inferences ab
 3. The *difference* in the two rates of change described above (after minus before) is $\beta_3$. 
 \vspace{2cm}
       ```{r}
-      lincon(m, a = c(0,0,1,0), b = 0)
+      lincon(m, a = c(0,0,0,1), b = 0)
       ```
 
 4. The expected gas consumption before and after insulation at 5C are $\beta_0 + \beta_25$ and $\beta_0 + \beta_1 + (\beta_2 + \beta_3)5$, respectively. 
