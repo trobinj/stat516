@@ -33,7 +33,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Using the `contrast` function, plotting data and models](lecture-01-22-2024.html). 
 
 `r i <- i + 1; d[i]` 
 

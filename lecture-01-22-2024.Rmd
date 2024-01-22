@@ -1,0 +1,257 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "01-22-2024"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(comment = "", echo = TRUE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+suppressWarnings(library(kableExtra))
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+
+## Using the `contrast` Function
+
+```{r, echo = FALSE}
+options(digits = 4)
+```
+
+Frequently a quantity of interest has the form
+$$
+  E(Y_a) - E(Y_b),
+$$
+where $E(Y_a)$ and $E(Y_b)$ represent the expected value of the response variable under circumstances $a$ and $b$, respectively. By "circumstances" we mean when explanatory variable(s) assume(s) specific values. This is sometimes called a "contrast" and inferences concerning a contrast can be made using the `contrast` function from the **trtools** package.[^contrast] For linear models, any contrast can be expressed as a linear function of the model parameters, and so `contrast` can be used instead of `lincon` if desired.
+
+[^contrast]: The `contrast` function in the **trtools** package is modeled after functions of the same name in the **contrast** and **rms** packages. Mine has some features not found in those functions, but I did not incorporate all of the features in those functions either. You will also learn how to use functions from the **emmeans** package which have some functionality like that of `contrast` from the **trtools** package. 
+
+**Example**: Consider a linear model for the `anorexia` data.
+```{r}
+library(MASS) # for anorexia data frame
+anorexia$change <- anorexia$Postwt - anorexia$Prewt # compute weight change
+head(anorexia) # inspect "head" of anorexia data frame
+summary(anorexia) # summary of variables in anorexia data frame
+str(anorexia) # structure of anorexia data frame
+m <- lm(change ~ Treat, data = anorexia)
+summary(m)$coefficients
+```
+We can see that the model is
+$$
+  E(Y_i) = 
+  \begin{cases}
+  \beta_0, & \text{if the treatment for the $i$-th observation is cognitive-behavioral therapy}, \\
+  \beta_0 + \beta_1, & \text{if the treatment for the $i$-th observation is control}, \\
+  \beta_0 + \beta_2, & \text{if the treatment for the $i$-th observation is family therapy}.
+  \end{cases}
+$$
+Suppose we want to make inferences about the difference in the expected weight change between the cognitive-behavioral and control conditions. We have that
+\begin{align*}
+  E(Y_a) & = \beta_0, \\
+  E(Y_b) & = \beta_0 + \beta_1,
+\end{align*}
+and so this difference is
+$$
+  E(Y_a) - E(Y_b) = \beta_0 - (\beta_0 + \beta_1) = -\beta_1.
+$$
+Inferences concerning $-\beta_1$ can be made using `lincon` since this is a linear function of the model parameters:
+$$
+  \ell = 0 \times \beta_0 + (-1) \times \beta_1 + 0 \times \beta_2 = -\beta_1.
+$$
+```{r}
+library(trtools) # loading for the lincon and contrast functions
+lincon(m, a = c(0,-1,0))
+```
+Alternatively we can use the `contrast` function in which we specify values of the explanatory variables rather than having work out the coefficients of the linear function.
+```{r}
+contrast(m, a = list(Treat = "CBT"), b = list(Treat = "Cont"))
+```
+**Note**: The meaning of the `a` and `b` arguments are different for the `lincon` and `contrast` functions.
+
+The `contrast` function can compute multiple contrasts at a time. Suppose we want to estimate the difference in the expected weight change between each of the two therapy conditions and the control condition:
+```{r}
+contrast(m, a = list(Treat = c("CBT","FT")), b = list(Treat = "Cont"))
+```
+Note that `contrast` includes an optional `cnames` (contrast names) argument to label the output for clarity.
+```{r}
+contrast(m, 
+  a = list(Treat = c("CBT","FT")), 
+  b = list(Treat = "Cont"),
+  cnames = c("CBT vs Control","FT vs Control"))
+```
+**Warning**: To avoid confusion, do not list multiple values of more than one explanatory variable. It is possible to specify multiple values of two or more explanatory variables, but the output can be confusing. 
+
+If we do not specify the `b` argument then `contrast` will produce an estimate of just $E(Y_a)$. For example, we can estimate the expected weight change under each condition.
+```{r}
+contrast(m, a = list(Treat = c("CBT","FT","Cont")),
+  cnames = c("Cognitive-Behavioral","Family","Control"))
+```
+
+**Example**: Consider again a model for the `whiteside` data.
+```{r}
+m <- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+summary(m)$coefficients
+```
+Recall that the model can be written as
+$$
+  E(G_i) = 
+  \begin{cases}
+    \beta_0 + \beta_2t_i, & \text{if the $i$-th observation is before insulation}, \\
+    \beta_0 + \beta_1 + (\beta_2 + \beta_3)t_i, & \text{if the $i$-th observation is after insulation.}
+  \end{cases}
+$$
+So the rate of change in expected gas consumption per unit increase in temperature is $\beta_2$ before insulation and $\beta_2 + \beta_3$ after insulation. Inferences concerning both of these quantities can be obtained using `lincon`. 
+```{r}
+lincon(m, a = c(0,0,1,0)) # b2 (note: also shown by summary above)
+lincon(m, a = c(0,0,1,1)) # b2 + b3
+```
+To use `contrast` to produce these inferences we consider a one unit change temperature. 
+```{r}
+contrast(m,
+  a = list(Insul = "Before", Temp = 1),
+  b = list(Insul = "Before", Temp = 0))
+contrast(m,
+  a = list(Insul = "After", Temp = 1),
+  b = list(Insul = "After", Temp = 0))
+contrast(m,
+  a = list(Insul = c("Before","After"), Temp = 1),
+  b = list(Insul = c("Before","After"), Temp = 0),
+  cnames = c("before","after"))
+```
+Note that since the rate of change in expected gas consumption is *constant*, any two values of temperature one unit apart would produce the same result. For example:
+```{r}
+contrast(m,
+  a = list(Insul = c("Before","After"), Temp = 3),
+  b = list(Insul = c("Before","After"), Temp = 2),
+  cnames = c("before","after"))
+```
+What is the change in expected gas consumption if temperature goes up by 10C?
+```{r}
+contrast(m,
+  a = list(Insul = c("Before","After"), Temp = 12),
+  b = list(Insul = c("Before","After"), Temp = 2),
+  cnames = c("before","after"))
+```
+Expected gas consumption at 5C before and after insulation are $\beta_0 + \beta_25$ and $\beta_0 + \beta_1 + (\beta_2 + \beta_3)5$. Inferences concerning these quantities can be obtained as follows.
+```{r}
+lincon(m, a = c(1,0,5,0)) # b0 + b2 x 5
+lincon(m, a = c(1,1,5,5)) # b0 + b1 + (b2 + b3)5
+contrast(m,
+  a = list(Insul = c("Before","After"), Temp = 5),
+  cnames = c("before @ 5C","after @ 5C"))
+```
+The difference in expected gas consumption between before and after insulation at 5C is $\beta_1 + \beta_35$. Inferences concerning this quantity can be obtained as follows.
+```{r}
+lincon(m, a = c(0,1,0,5))
+contrast(m,
+  a = list(Insul = "After", Temp = 5),
+  b = list(Insul = "Before", Temp = 5))
+```
+In many cases we can use either `lincon` or `contrast`. The latter is often easier to use since it does not require the user to work out the coefficients for the linear function of model parameters. But there are cases where `lincon` can do something that `contrast` cannot. 
+
+## Computing and Plotting Estimated Expected Responses
+
+Recall that we can use `contrast` to compute estimated expected responses at specified values of the explanatory variables.
+```{r}
+contrast(m, a = list(Insul = c("Before","After"), Temp = -1),
+  cnames = c("before @ -1","after @ -1"))
+```
+But to create several estimates of the expected response it is more convenient to use the `predict` function (so-called because an estimate of $E(Y)$ can be also be viewed as a *prediction* of the value of $Y$). First let's create a data frame where we'd like to obtain estimates of the expected response. 
+```{r}
+d <- expand.grid(Insul = c("Before","After"), Temp = seq(-1, 11, by = 1))
+head(d)
+tail(d)
+```
+There are a couple of things to note here: the `expand.grid` function creates a data frame for *all combinations* of the values of the variables, and `seq` creates a *sequence* of values. For example,
+```{r}
+seq(-1, 11, by = 2)     # sequence from -1 to 11 by increments of two
+seq(-1, 11, length = 5) # sequence from -1 to 11 of five values
+```
+The `predict` function can be used to compute the estimated expected response for each pseudo-observation. 
+```{r}
+d$ey <- predict(m, newdata = d)
+head(d)
+```
+Now let's see if we can show expected gas consumption as a function of insulation and temperature. First we will plot the data. 
+```{r, fig.height = 4}
+library(ggplot2) 
+p <- ggplot(whiteside, aes(x = Temp, y = Gas, color = Insul)) + geom_point()
+plot(p)
+```
+Let's change the aesthetic labels and the theme.
+```{r, fig.height = 4}
+p <- ggplot(whiteside, aes(x = Temp, y = Gas, color = Insul)) + geom_point() +
+  labs(x = "Temperature (C)", y = "Gas Consumption", color = "Insulation") + 
+  theme_minimal()
+plot(p)
+```
+Now we can add lines to represent expected gas consumption as a function of temperature and insulation. Note that we need to change the `y` variable and the data frame for this part. 
+```{r, fig.height = 4}
+p <- ggplot(whiteside, aes(x = Temp, y = Gas, color = Insul)) + geom_point() +
+  labs(x = "Temperature (C)", y = "Gas Consumption", color = "Insulation") + 
+  theme_minimal() + geom_line(aes(y = ey), data = d)
+plot(p)
+```
+Note that you can do this in pieces, which might be easier to debug.
+```{r, fig.height = 4}
+p <- ggplot(whiteside, aes(x = Temp, y = Gas, color = Insul)) + geom_point() + 
+  labs(x = "Temperature (C)", y = "Gas Consumption", color = "Insulation") + 
+  theme_minimal()
+plot(p)
+p <- p + geom_line(aes(y = ey), data = d)
+plot(p)
+```
+Now consider the `anorexia` data and model from earlier.
+```{r}
+m <- lm(change ~ Treat, data = anorexia)
+contrast(m, a = list(Treat = c("CBT","FT","Cont")),
+  cnames = c("Cognitive-Behavioral","Family","Control"))
+d <- data.frame(Treat = c("CBT","FT","Cont"))
+d$yhat <- predict(m, newdata = d)
+d
+```
+**Note**: We can use `data.frame` to create a data frame for generating estimated expected responses when there is just one explanatory variable. But if we want to create a data frame with various combinations of values of two or more explanatory variables it is easier to use `expand.grid`.
+
+Here is a plot of the raw data.
+```{r, fig.height = 4}
+p <- ggplot(anorexia, aes(x = Treat, y = change)) + theme_minimal() +
+  geom_point(alpha = 0.5) + labs(x = "Treatment", y = "Weight Change (lbs)")
+plot(p)
+```
+Note the use of `alpha = 0.5` to control the transparency of the points. Now we can add the estimated expected responses.
+```{r, fig.height = 4}
+p <- p + geom_point(aes(y = yhat), data = d, shape = 21, size = 3, fill = "white")
+plot(p)
+```
+Hint: Try a Google image search for "R point shapes" to know what number to use. Shape numbers 21-25 let you separately specify the colors of the point fill and outline. For other aesthetics (e.g., size) you sometimes just have to experiment.
+
+Maybe that would look better sideways?
+```{r, fig.height = 2}
+p <- p + coord_flip()
+plot(p)
+```
+
