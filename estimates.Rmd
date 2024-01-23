@@ -1,0 +1,36 @@
+---
+title: "Estimates and Standard Errors of Linear Models"
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(comment = "", echo = TRUE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+## Case 1: No Explanatory Variables
+
+Suppose we have the model 
+$$
+E(Y_i) = \beta_0
+$$ 
+so that there are *no* explanatory variables. Then it can be shown that the least squares estimator of $\beta_0$ is 
+$$
+\hat\beta_0 = \bar{y}$$
+where 
+$$
+\bar{y} = \frac{1}{n}\sum_{i=1}^n y_i
+$$  
+is the sample mean. The estimator of $\sigma^2$ is 
+$$
+  \hat\sigma^2 = \frac{1}{n-1}\sum_{i=1}^n (y_i - \bar{y})^2.
+$$
+
+## Case 2: One Explanatory Variable
+
+## Case 3: Arbitrary Number of Explanatory Variables
