@@ -1,0 +1,278 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "01-26-2024"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(comment = "", echo = TRUE, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+suppressWarnings(library(kableExtra))
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+```{r options, echo = FALSE}
+options(digits = 4)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+
+## Confidence Intervals and Significance Tests
+
+A significance test can be used to derive a confidence interval, and a confidence interval can be used to conduct a significance test. If we have hypotheses for a two-sided test like
+$$
+  H_0\!: \beta_j = c \ \ \text{and} \ \ H_a\!: \beta_j \neq c, 
+$$
+then we reject $H_0$ if and only if the confidence interval for $\beta_j$ does not contain $c$, with a couple of caveats. 
+
+1. The confidence level must be $(1-\alpha)100$% ($\alpha$ is the *significance level*).
+
+2. The test is two-sided (but one-sided tests match one-sided confidence intervals).
+
+A confidence interval with confidence level $(1-\alpha)100$% effectively defines all values of the parameter that *would not be rejected* in a two-sided test with significance level $\alpha$.
+
+Note that this also applies to a linear function of model parameters ($\ell$). So if we have the hypotheses
+$$
+  H_0\!: \ell = c \ \ \text{and} \ \ H_a\!: \ell \neq c, 
+$$
+then we reject $H_0$ if and only if the confidence interval for $\ell$ does not contain $c$. 
+
+**Example**: Consider again the model for the `anorexia` data, but parameterized to compare the two treatment conditions against the control so that the model is
+$$
+  E(Y_i) = 
+  \begin{cases}
+    \beta_0, & \text{if the $i$-th observation is under the control condition}, \\
+    \beta_0 + \beta_1, & \text{if $i$-th observation under cognitive behavioral therapy}, \\
+    \beta_0 + \beta_2, & \text{if the $i$-th observations is under family therapy}. \\
+  \end{cases}
+$$
+```{r}
+library(MASS) # for anorexia data
+anorexia$change <- anorexia$Postwt - anorexia$Prewt
+anorexia$Treat <- relevel(anorexia$Treat, ref = "Cont")
+m <- lm(change ~ Treat, data = anorexia)
+cbind(summary(m)$coefficients, confint(m))
+```
+We can produce the same inferences using `contrast`.
+```{r}
+library(trtools)
+contrast(m, 
+  a = list(Treat = c("CBT","FT")),
+  b = list(Treat = "Cont"),
+  cnames = c("Cognitive vs Control", "Family vs Control"))
+```
+
+```{r, echo = FALSE}
+rm(anorexia)
+```
+
+# Joint Hypotheses
+
+**Example**: Consider the following model and hypotheses for the `anorexia` data.
+```{r, message = FALSE}
+library(MASS) # for anorexia data
+anorexia$change <- anorexia$Postwt - anorexia$Prewt
+m.anorexia <- lm(change ~ Treat, data = anorexia)
+summary(m.anorexia)$coefficients
+```
+The model is therefore
+$$
+  E(Y_i) = 
+  \begin{cases}
+    \beta_0, & \text{if the $i$-th observation is under cognitive behavioral therapy}, \\
+    \beta_0 + \beta_1, & \text{if $i$-th observation is under the control condition}, \\
+    \beta_0 + \beta_2, & \text{if the $i$-th observations is under family therapy}. \\
+  \end{cases}
+$$
+In some cases we might be testing hypothesis like $H_0: \beta_2 = 0$ or $H_0: \beta_1 - \beta_2 = 0$. But in other cases we might be testing what is sometimes called a *joint* hypothesis such as
+$$
+  H_0\!: \beta_1 = 0 \text{ and } \beta_2 = 0 \ \ \text{versus} \ \ 
+  H_a\!: \text{not both $\beta_1 = 0$ and $\beta_2 = 0$}.
+$$
+What does it imply if both $\beta_1 = 0$ and $\beta_2 = 0$?
+
+**Example**: Consider the following model for the `whiteside` data.
+```{r}
+m.insulation <- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+summary(m.insulation)$coefficients
+```
+The model is therefore
+$$
+E(Y_i) = 
+\begin{cases}
+		\beta_0 + \beta_2 t_i, & \text{if $i$-th observation is before insulation}, \\
+		\beta_0 + \beta_1 + (\beta_2 + \beta_3) t_i, & \text{if $i$-th observation is after insulation}.
+\end{cases}
+$$
+We might test a single null hypothesis that the rate of change in expected gas consumption with respect to temperature is the same before and after insulation --- i.e., $H_0: \beta_3 = 0$. But consider the joint hypothesis
+$$
+  H_0\!: \beta_1 = 0 \text{ and } \beta_3 = 0 \ \ \text{versus} \ \ 
+  H_a\!: \text{not both $\beta_1 = 0$ and $\beta_3 = 0$}.
+$$
+What does it imply if both $\beta_1 = 0$ and $\beta_3 = 0$? 
+
+## The "Analysis of Variance" Calculations
+
+Calculations for inference for linear models is often based on the sums of squares decomposition
+$$
+	\underbrace{\sum_{i=1}^n (y_i - \bar{y})^2}_{\text{total}} = \underbrace{\sum_{i=1}^n (\hat{y}_i - \bar{y})^2}_{\text{model/regression}} + \underbrace{\sum_{i=1}^n (y_i - \hat{y}_i)^2}_{\text{error/residual}},
+$$
+where $\hat{y}_i = \hat\beta_0 + \hat\beta_1x_{i1} + \cdots + \hat\beta_kx_{ik}$, and the degrees of freedom decomposition
+$$
+	\underbrace{n-1}_{\text{total}} = \underbrace{p - 1}_{\text{model/regression}} + \underbrace{n - p}_{\text{error/residual}},
+$$
+where $p$ is the number of $\beta_j$ parameters, and $p = k + 1$ if the model includes a $\beta_0$. (Note: If the $\beta_0$ parameter is omitted from the model, the total degrees of freedom becomes $n$ and the model/regression degrees of freedom becomes $p$.)
+
+A *mean square* is a variance-like quantity that is a sum of squares divided by its corresponding degrees of freedom. 
+
+Tests can be conducted using the $F$ test statistic which can be written as
+$$
+F = \frac{(\text{RSS}_{\text{null}} - \text{RSS}_{\text{full}})/(\text{RDF}_{\text{null}} - \text{RDF}_{\text{full}})}{\text{RSS}_{\text{full}}/\text{RDF}_{\text{full}}},
+$$
+where $\text{RSS}$ and $\text{RDF}$ refer to the *residual* sum of squares and degrees of freedom, respectively. The degrees of freedom for the $F$ distribution are $\text{RDF}_{\text{null}} - \text{RDF}_{\text{full}}$ (numerator) and $\text{RSS}_{\text{full}}$ (denominator). The *full* model is the model we are using, and the *null* (aka "reduced") model is what the full model reduces to *if the null hypothesis is true*. The $F$ test statistic can be used for tests of individual and joint hypotheses in linear models.
+
+## Using the `anova` Function
+
+The `anova` function is particularly useful for testing joint hypothesis, although it can also be used to test a hypothesis about a single parameter. 
+
+Applying `anova` to a single model will produce the RSS and RDF in the `Residuals` row.
+```{r}
+anova(m.anorexia)
+```
+To conduct a test, the recommended approach is to apply `anova` to a null model and the full model. 
+```{r}
+m.full <- lm(change ~ Treat, data = anorexia)
+m.null <- lm(change ~ 1, data = anorexia) # use ~ 1 if no explanatory variables
+anova(m.null, m.full)
+m.full <- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+m.null <- lm(Gas ~ Temp, data = whiteside)
+anova(m.null, m.full)
+```
+The `anova` function can also do a test concerning a single parameter. Here are two approaches to testing the null hypothesis that $\beta_3 = 0$ in the model
+$$
+E(Y_i) = 
+\begin{cases}
+		\beta_0 + \beta_2 t_i, & \text{if $i$-th observation is before insulation}, \\
+		\beta_0 + \beta_1 + (\beta_2 + \beta_3) t_i, & \text{if $i$-th observation is after insulation}.
+\end{cases}
+$$
+```{r}
+m.full <- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+m.null <- lm(Gas ~ Insul + Temp, data = whiteside)
+anova(m.null, m.full)
+summary(m.full)$coefficients
+```
+Comment: When conducting a test concerning one parameter (or a single linear function of the model parameters), the $F$ and $t$ test statistics have the relationship $t^2 = F$ and produce the same p-values.
+
+## Example: Three Approaches to One Test
+
+Consider again the model for the `anorexia` data, but suppose we parameterized the model differently.
+```{r}
+anorexia$Treat <- relevel(anorexia$Treat, ref = "Cont")
+m.anorexia <- lm(change ~ Treat, data = anorexia)
+summary(m.anorexia)$coefficients
+```
+The model is therefore
+$$
+  E(Y_i) = 
+  \begin{cases}
+    \beta_0, & \text{if the $i$-th observation is from the control group}, \\
+    \beta_0 + \beta_1, & \text{if the $i$-th observation is from the cognitive-behavioral therapy group}, \\
+    \beta_0 + \beta_2, & \text{if the $i$-th observations is from the family therapy group}. \\
+  \end{cases}
+$$
+Now consider a test of the null hypothesis that the expected weight change is the same regardless of which of the two therapies (i.e., cognitive-behavioral or family) is used. This is the null hypothesis that $\beta_1 = \beta_2$ or, equivalently, $\beta_1 - \beta_2 = 0$. 
+
+1. Using `lincon` we can test this null hypothesis as follows. 
+      ```{r}
+      m <- lm(change ~ Treat, data = anorexia)
+      trtools::lincon(m, a = c(0, 1, -1))
+      ```
+This is because the null hypothesis can be written as 
+$$
+  \ell = 0 \times \beta_0 + 1 \times \beta_1 + (-1) \times \beta_2 = \beta_1 - \beta_2.
+$$
+2. Using `contrast` we can test this null hypothesis as follows.
+      ```{r}
+      m <- lm(change ~ Treat, data = anorexia)
+      trtools::contrast(m, a = list(Treat = "CBT"), b = list(Treat = "FT"))
+      ```
+3. Using `anova` we can test this null hypothesis as follows.
+      ```{r}
+      anorexia$therapy <- ifelse(anorexia$Treat == "Cont", "control", "therapy")
+      head(anorexia)
+      tail(anorexia)
+      m.full <- lm(change ~ Treat, data = anorexia)
+      m.null <- lm(change ~ therapy, data = anorexia)
+      anova(m.null, m.full)
+      ```
+Note that the null model can be written as
+$$
+  E(Y_i) = 
+  \begin{cases}
+    \beta_0, & \text{if the $i$-th observation is from the control group}, \\
+    \beta_0 + \beta_1, & \text{if the $i$-th observation is from the therapy group},
+  \end{cases}
+$$
+or
+$$
+  E(Y_i) = 
+  \begin{cases}
+    \beta_0, & \text{if the $i$-th observation is from the control group}, \\
+    \beta_0 + \beta_1, & \text{if the $i$-th observation is from the cognitive-behavioral therapy group}, \\
+    \beta_0 + \beta_1, & \text{if the $i$-th observations is from the family therapy group}. \\
+  \end{cases}
+$$
+So this model is effectively equivalent to the full model with $\beta_1 = \beta_2$. 
+
+## The Trouble with ANOVA Tables
+
+I **do not** recommended trying to produce tests by applying `anova` to a *single* model object. While it can produce desired tests *in some cases* and *if used correctly*, it often produces confusing results. For example, the following produces a test of the null hypothesis $H_0: \beta_1 = 0, \beta_2 = 0$ for the `anorexia` model.
+```{r}
+m <- lm(change ~ Treat, data = anorexia)
+anova(m)
+```
+But the tests shown here are maybe not what you think they are. 
+```{r}
+m <- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+anova(m)
+```
+*If you know what you are doing*, there are alternatives to `anova` that are perhaps better (e.g., the `Anova` function from the **car** package), but there is often a more clear approach using two models in `anova`, using `contrast` or `lincon`, or using the **emmeans** package (which we will discuss later).
+
+**Note**: Another potentially confusing test is one that appears at the bottom of `summary`. It tests the null hypothesis that all $\beta_j$ (except $\beta_0$) equal zero. For the model for the `anorexia` data it is the same as the test conducted earlier.
+```{r}
+m <- lm(change ~ Treat, data = anorexia)
+summary(m)
+```
+But for the model for the `whiteside` data the utility of this test is questionable.
+```{r}
+m <- lm(Gas ~ Insul + Temp + Insul:Temp, data = whiteside)
+summary(m)
+```
+Just because R gives you output does not mean it is useful!
+
+**Note**: The `Residual standard error` showns by `summary` is the square root of the residual/error mean square (i.e., the square root of the ratio of the residual sum of squares to the residual degrees of freedom). The degrees of freedom shown after `Residual standard error` is the residual degrees of freedom. 
+
