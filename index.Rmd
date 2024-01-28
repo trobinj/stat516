@@ -11,7 +11,7 @@ This website is for Dr. Johnson's *Applied Regression Modeling* course (Stat 436
 
 <center>
 
-![https://xkcd.com/833](https://imgs.xkcd.com/comics/convincing.png)
+![https://xkcd.com/552](http://imgs.xkcd.com/comics/correlation.png)
 
 </center>
 
