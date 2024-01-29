@@ -87,11 +87,42 @@ $$
   \end{cases}
 $$
 
+    **Solution**: We can estimate the model as follows and confirm the parameterization using the output from `summary`.
+    ```{r}
+    m <- lm(ln.energy ~ caste, data = MoleRats)
+    summary(m)$coefficients
+    ```
+    The `casteworker` shows that an indicator variable was created that assumes a value of one for any observation where the caste is worker, and zero otherwise.
+
 0. Consider the following three quantities and how they can be expressed as functions of the model parameters: the expected log energy expenditure of mole-rats from the *lazy* caste ($\beta_0$), the expected log energy expenditure of mole-rats from the *worker* caste ($\beta_0 + \beta_1$), and the difference in expected log energy expenditure between the two castes ($\beta_1$ if we subtract lazy from worker). Note that using `summary` provides inferences for $\beta_0$ and $\beta_1$, but not $\beta_0 + \beta_1$. All three quantities can be written as a linear combination of the form
 $$
   \ell = a_0\beta_0 + a_1\beta_1 + b.
 $$
 How can we use the `lincon` and `contrast` functions to estimate these three quantities? Note that inferences for two of these quantities --- i.e., the expected log expenditure of mole-rats of the *lazy* caste and the *difference* in the expected log expenditures between the two castes --- should match those given by using `summary` and `confint` applied to the model object.
+
+    **Solution**: First we need to load the **trtools** package to use `lincon` and `contrast`. 
+    ```{r}
+    library(trtools)
+    ```
+    We can use `lincon` to produce inferences for $\beta_0$, $\beta_0 + \beta_1$, and $\beta_1$ as follows.
+    ```{r}
+    lincon(m, a = c(1,0)) # b0
+    lincon(m, a = c(1,1)) # b0 + b1
+    lincon(m, a = c(0,1)) # b1
+    ```
+    Note, however, that single parameter inferences (i.e., $\beta_0$ and $\beta_1$) are also produced by `summary`. We can produce inferences about the expected response for the two castes using `contrast` as follows.
+    ```{r}
+    contrast(m, 
+      a = list(caste = c("lazy","worker")),
+      cnames = c("lazy","worker"))
+    ```
+    And the following will produce inferences concerning the *difference* in the expected response between the worker and lazy castes.
+    ```{r}
+    contrast(m,
+      a = list(caste = "worker"),
+      b = list(caste = "lazy"))
+    ```
+    Note that `lincon` andd `contrast` produce the same results. Also note that the estimated expected response for the worker caste is slightly less than that for the lazy caste, although the difference is not statistically significant at conventional significance levels. 
 
 ```{r, echo = FALSE}
 m <- lm(ln.energy ~ caste + ln.mass, data = MoleRats)
@@ -111,14 +142,66 @@ $$
       & \text{if the $i$-th observation is from the worker caste}.
   \end{cases}
 $$
-    
+    **Solution**: The model can be estimated as follows.
+    ```{r}
+    m <- lm(ln.energy ~ caste + ln.mass, data = MoleRats)
+    summary(m)$coefficients
+    ```
+    The parameterization can be confirmed from the output from `summary`. 
+
 0. Using the code given above, add lines to the plot to show the estimated expected log energy expenditure as a function of log mass and caste.
+
+    **Solution**: First we create a data set to hold estimated expected responses at a variety of values of the explanatory variables.
+    ```{r}
+    d <- expand.grid(caste = c("lazy","worker"), ln.mass = seq(3.8, 5.3, length = 100))
+    d$yhat <- predict(m, newdata = d)
+    ```
+    Then we "add to" the plot we created above.
+    ```{r, fig.height = 4}
+    p2 <- p2 + geom_line(aes(y = yhat), data = d)
+    plot(p2)
+    ```
+    If we had not already created the plot object above then we could do as follows.
+    ```{r, fig.height = 4}
+    p <- ggplot(MoleRats, aes(x = ln.mass, y = ln.energy, color = caste)) +
+      geom_point() + theme_minimal() + theme(legend.position = c(0.9, 0.2)) +
+      labs(x = "Log Mass (log g)", y = "Log Energy Expenditure (log kJ/Day)", color = "Caste") + 
+      geom_line(aes(y = yhat), data = d)
+    plot(p)
+    ```
 
 0. With the model now including the log of mass as an explanatory variable, comparisons between the castes must also consider mass. How can we use `contrast` to estimate the expected log energy consumption for a mole-rat from each of the two castes with a log mass of 4.5? Also how can we estimate the *difference* in expected log energy expenditure between the two castes for a mole-rat with log mass 4.5? How can we do the same for log masses of 4.0 and 5.0? Our estimates should be consistent with the figure (i.e., they should look reasonable based on "eyeball" estimates from the figure). Also because the model specifies that the two lines are parallel, the estimated difference in expected log energy consumption between the castes will not depend on mass.
 
+    **Solution**: Here are the estimates of the expected response for a lazy mole-rat at three different masses, and also a worker mole-rat at the same masses.worker
+    ```{r}
+    contrast(m, a = list(caste = "lazy", ln.mass = c(4,4.5,5)), cnames = c(4,4.5,5))
+    contrast(m, a = list(caste = "worker", ln.mass = c(4,4.5,5)), cnames = c(4,4.5,5))
+    ```
+    And here we make inferences about the difference in the expected response at different values of log mass as follows.
+    ```{r}
+    contrast(m, 
+      a = list(caste = "worker", ln.mass = c(4,4.5,5)),
+      b = list(caste = "lazy", ln.mass = c(4,4.5,5)),
+      cnames = c(4,4.5,5))
+    ```
+
 0. The parameter $\beta_2$ is the rate of change of the expected log energy consumption per unit increase in the log of mass. Inferences concerning this quantity can be obtained simply using `summary` and `confint` applied to the model object, but as an exercise how can we estimate this rate of change for each caste using the `contrast` function? Naturally we should find that the estimated rate is the same for each caste.
 
+    **Solution**: Here is how to use `contrast` to estimate the rate of change in the expected response per unit increase in log mass for each caste.
+    ```{r}
+    contrast(m, 
+      a = list(caste = c("lazy","worker"), ln.mass = 3),
+      b = list(caste = c("lazy","worker"), ln.mass = 2),
+      cnames = c("lazy","worker"))
+    ```
+
 0. A test to determine if there is a statistically significant difference in expected log energy expenditure between the two castes uses the null hypothesis $H_0\!: \beta_1 = 0$ based on how the model was parameterized earlier. How can we test this null hypothesis using the full-null model approach (i.e., by specifying a null model based on the full model but with $\beta_1 = 0$) and using the `anova` function? We should find that the resulting $F$ test statistic is the square of the $t$ test statistic from `summary`, and that the p-values from `summary` and `anova` are the same.
+
+    **Solution**: Here is how to conduct the test using `anova`.
+    ```{r}
+    m.null <- lm(ln.energy ~ ln.mass, data = MoleRats)
+    anova(m.null,m)
+    ```
 
 0. Repeat 3-6 with both `caste` and `ln.mass` as explanatory variables, but now with an "interaction" between the them by including `caste:ln.energy` in your model formula. Note that this model can be written case-wise as
 $$
@@ -130,4 +213,56 @@ $$
       & \text{if the $i$-th observation is from the worker caste}.
   \end{cases}
 $$
+**Solution**: The model would be specified as `ln.energy ~ caste + ln.mass + caste:ln.mass`. Here are the parameter estimates and a plot of the estimated model.
+    ```{r, fig.height = 4}
+    m <- lm(ln.energy ~ caste + ln.mass + caste:ln.mass, data = MoleRats)
+    summary(m)$coefficients
+    d <- expand.grid(caste = c("lazy","worker"), ln.mass = seq(3.8, 5.3, length = 100))
+    d$yhat <- predict(m, newdata = d)
 
+    p <- ggplot(MoleRats, aes(x = ln.mass, y = ln.energy, color = caste)) +
+      geom_point() + theme_classic() + theme(legend.position = c(0.9, 0.2)) +
+      geom_line(aes(y = yhat), data = d) +
+      labs(x = "Log Mass (log g)", y = "Log Energy Expenditure (log kJ/Day)",
+        color = "Caste")
+    plot(p)
+    ```
+Notice how the "interaction" between log mass and caste now changes the results form `contrast` since the lines are no longer restricted to be parallel. 
+    ```{r}
+    contrast(m, a = list(caste = "lazy", ln.mass = c(4,4.5,5)), cnames = c(4,4.5,5))
+    contrast(m, a = list(caste = "worker", ln.mass = c(4,4.5,5)), cnames = c(4,4.5,5))
+    contrast(m, 
+      a = list(caste = "worker", ln.mass = c(4,4.5,5)),
+      b = list(caste = "lazy", ln.mass = c(4,4.5,5)),
+      cnames = c(4,4.5,5))
+    contrast(m, 
+      a = list(caste = c("lazy","worker"), ln.mass = 3),
+      b = list(caste = c("lazy","worker"), ln.mass = 2),
+      cnames = c("lazy","worker"))
+    ```
+
+***
+
+Note that for these both the response variable and one explanatory variable have been transformed using a log transformation. Suppose that the transformations had not been yet applied. To simulate this I will create two new variables which are the un-transformed variables.
+```{r}
+MoleRats$energy <- exp(MoleRats$ln.energy)
+MoleRats$mass <- exp(MoleRats$ln.mass)
+summary(MoleRats)
+```
+Note that $\exp(x)$ is the inverse transformation of the natural logarithm. If this was the case then we can specify the transformations within the model formula itself.
+```{r}
+m <- lm(log(energy) ~ caste + log(mass) + caste:log(mass), data = MoleRats)
+summary(m)$coefficients
+```
+Of course we obtain the same results. But when we make our plot we can put the explanatory variable on its original scale.
+```{r, fig.height = 4}
+d <- expand.grid(caste = c("lazy","worker"), mass = seq(47, 193, length = 100))
+d$yhat <- predict(m, newdata = d)
+
+p <- ggplot(MoleRats, aes(x = mass, y = log(energy), color = caste)) +
+  geom_point() + theme_classic() + theme(legend.position = c(0.9, 0.2)) +
+  geom_line(aes(y = yhat), data = d) +
+  labs(x = "Mass (g)", y = "Log Energy Expenditure (log kJ/Day)", color = "Caste")
+plot(p)
+```
+This shows that although this is a linear model, the expected response (the logarithm of the energy expenditure) is *not* a linear function of mass. And while we could use energy expenditure instead of its logarithm on the ordinate for plotting the data, this does not make sense for the data because we are modeling the expected value of the *logarithm* of energy expenditure. You cannot "undo" a nonlinear transformation of the response variable because it is not true that $E[f(x)] = f[E(x)]$ where $f(x)$ is some nonlinear function (like log).
