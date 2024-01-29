@@ -39,12 +39,11 @@ options(digits = 4)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
-
 The purpose of this exercise is to familiarize you with the specification of linear models and contrasts within R. You will need to have the following packages installed: **abd**, **cowplot**, **ggplot2**, and **trtools**. You should already have **ggplot2** and **trtools** installed. The other packages can be installed using `install.packages("abd")` and `install.packages("cowplot")`, or `install.packages(c("abd","cowplot"))`.
 
 This exercise features data from a study published in *Nature* in 2006.[^scantlebury] The data can be found in the data frame `MoleRats`, included in the package **abd**. You can inspect the data frame by typing `MoleRats` at the prompt after you load the package with `library(abd)`, and you can look at a summary of the data with `summary(MoleRats)` or the structure of the variables with `str(MoleRats)`. The study concerned two "castes" of Damaraland mole-rats (*Cryptomys damarensis*): frequent workers (denoted here as "worker") and infrequent workers (denoted here as "lazy"). The researchers observed the body mass (g) and daily energy expenditure (kJ/day) of samples mole-rats from both castes. Our objective is to model the difference between the two castes in terms of daily energy expenditure. However, mole-rats in the two castes differ by body mass, which may also be related to energy expenditure. 
 
-[^scantlebury]: Scantlebury, M., Speakman, J. R., Oosthuizen, M. K., Roper, T. J., & Bennett, N. C. (2006). Energetics reveals physiological distinct castes in a eurosical mammal. *Nature*, *440*, 795-797.
+[^scantlebury]: Scantlebury, M., Speakman, J. R., Oosthuizen, M. K., Roper, T. J., & Bennett, N. C. (2006). Energetics reveals physiological distinct castes in a eusocial mammal. *Nature*, *440*, 795-797.
 
 Here are plots of the raw data, showing the distribution of log energy expenditure for lazy and worker caste rats, and then again but also taking into account the (log) mass of the rats. 
 ```{r, message = FALSE, fig.height = 4}
