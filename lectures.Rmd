@@ -45,7 +45,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Estimated expected response, prediction intervals, and some visualization](lecture-01-31-2024.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Estimating marginal means](lecture-02-02-2024.html). 
  
 ***
 
