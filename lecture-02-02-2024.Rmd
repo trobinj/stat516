@@ -202,7 +202,7 @@ $$
 Note that there are 700kL in the lake, which is 700000L (which is the scale used for the observations). This can be estimated as follows.
 ```{r}
 emmeans::contrast(emmeans(m, ~layer), 
-  method = list(layer = 700000 *  c(1/7, 2/7, 4/7)), infer = TRUE)
+  method = list(layer = 700000 * c(1/7, 2/7, 4/7)), infer = TRUE)
 ```
 Another approach is to use `lincon` but your weights/coefficients will be different since they are applied to $\beta_0$, $\beta_1$, and $\beta_2$. 
 

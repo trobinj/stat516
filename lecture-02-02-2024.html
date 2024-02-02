@@ -534,7 +534,7 @@ that this is <span class="math display">\[
 is the scale used for the observations). This can be estimated as
 follows.</p>
 <pre class="r"><code>emmeans::contrast(emmeans(m, ~layer), 
-  method = list(layer = 700000 *  c(1/7, 2/7, 4/7)), infer = TRUE)</code></pre>
+  method = list(layer = 700000 * c(1/7, 2/7, 4/7)), infer = TRUE)</code></pre>
 <pre><code> contrast estimate    SE df lower.CL upper.CL t.ratio p.value
  layer     4903333 4e+05 42  4095230  5711437  12.245  &lt;.0001
 
