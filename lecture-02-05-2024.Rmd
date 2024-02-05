@@ -180,13 +180,13 @@ p <- ggplot(ToothGrowth, aes(x = dose, y = len, color = supp)) +
   theme(legend.position = c(0.8,0.2))
 plot(p)
 ```
-Note that `log` is the "natural" logarithm or base-$e$ logarithm sometimes written as $\ln(x)$ or $\log_e(x)$. 
+Note that `log` is the "natural" logarithm or base-$e$ logarithm sometimes written as $\ln(x)$ or $\log_e(x)$. Here are few things to remember about logarithms when using them for transformations of explanatory variables.
 
 1. Logarithms of different bases are *proportional*. In general 
 $$
   \log_b(x) = c\log_a(x),
 $$
-where $c = 1/\log_a(b)$. So usually when we are using things like `contrast` or the **emmeans** package to facilitate our inferences the base does not matter. You can use `log2` for $\log_2(x)$ and `log10` for $\log_{10}(x)$, and for an arbitrary base $b$ you can use `log(x,b)` for $\log_b(x)$. Here are few things to remember about logarithms when using them for transformations of explanatory variables.
+where $c = 1/\log_a(b)$. So usually when we are using things like `contrast` or the **emmeans** package to facilitate our inferences the base does not matter. You can use `log2` for $\log_2(x)$ and `log10` for $\log_{10}(x)$, and for an arbitrary base $b$ you can use `log(x,b)` for $\log_b(x)$. 
     ```{r}
     m <- lm(len ~ log2(dose) + supp + log2(dose):supp, data = ToothGrowth)
     summary(m)$coefficients

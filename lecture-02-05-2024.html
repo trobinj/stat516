@@ -304,7 +304,7 @@ ignoring supplement type for now. Note the use of the “inhibit” function
 summary(m)$coefficients</code></pre>
 <pre><code>            Estimate Std. Error t value  Pr(&gt;|t|)
 (Intercept)    -2.49      3.178 -0.7836 4.365e-01
-dose           30.16      6.147  4.9052 8.148e-06
+dose           30.15      6.147  4.9052 8.148e-06
 I(dose^2)      -7.93      2.366 -3.3514 1.432e-03</code></pre>
 <p>This model is <span class="math display">\[
   E(L_i) = \beta_0 + \beta_1 d_i + \beta_2 d_i^2,
@@ -440,7 +440,9 @@ plot(p)</code></pre>
 Note that <code>log</code> is the “natural” logarithm or base-<span
 class="math inline">\(e\)</span> logarithm sometimes written as <span
 class="math inline">\(\ln(x)\)</span> or <span
-class="math inline">\(\log_e(x)\)</span>.</p>
+class="math inline">\(\log_e(x)\)</span>. Here are few things to
+remember about logarithms when using them for transformations of
+explanatory variables.</p>
 <ol style="list-style-type: decimal">
 <li><p>Logarithms of different bases are <em>proportional</em>. In
 general <span class="math display">\[
@@ -453,9 +455,7 @@ class="math inline">\(\log_2(x)\)</span> and <code>log10</code> for
 <span class="math inline">\(\log_{10}(x)\)</span>, and for an arbitrary
 base <span class="math inline">\(b\)</span> you can use
 <code>log(x,b)</code> for <span
-class="math inline">\(\log_b(x)\)</span>. Here are few things to
-remember about logarithms when using them for transformations of
-explanatory variables.</p>
+class="math inline">\(\log_b(x)\)</span>.</p>
 <pre class="r"><code>m &lt;- lm(len ~ log2(dose) + supp + log2(dose):supp, data = ToothGrowth)
 summary(m)$coefficients</code></pre>
 <pre><code>                  Estimate Std. Error t value  Pr(&gt;|t|)
@@ -507,7 +507,6 @@ VC    9.080 0.8318 7.414 10.746 10.916 56 1.733e-15</code></pre></li>
 <li><p>Recall that <span class="math inline">\(\log(x)\)</span> is only
 defined for <span class="math inline">\(x &gt; 0\)</span>.</p></li>
 </ol>
-<p>What are the limitations of logarithmic transformations?</p>
 </div>
 <div id="exponential-transformations" class="section level2">
 <h2>Exponential Transformations</h2>
