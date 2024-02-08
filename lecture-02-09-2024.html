@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Friday, Feb 9</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Friday, Feb 9</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-02-09-2024.pdf">PDF</a> copy
+of this lecture.</p>
+<div id="the-von-bertalanffy-growth-model" class="section level2">
+<h2>The Von Bertalanffy Growth Model</h2>
+<p>Consider the data frame <code>walleye</code> from the package
+<strong>alr4</strong>.</p>
+<pre class="r"><code>library(alr4)
+head(walleye)</code></pre>
+<pre><code>  age length period
+1   1  215.3      1
+2   1  193.3      1
+3   1  202.6      1
+4   1  201.5      1
+5   1  232.0      1
+6   1  191.0      1</code></pre>
+<p>The <code>period</code> variable refers to three distinct management
+periods: pre 1990, 1991-1996, and 1997-2000. It will be useful to
+explicitly define that as a categorical variable (i.e., a
+<code>factor</code> in R) with descriptive category labels.</p>
+<pre class="r"><code>walleye$periodf &lt;- factor(walleye$period, levels = c(1,2,3),
+  labels = c(&quot;pre-1991&quot;,&quot;1991-1996&quot;,&quot;1997-2000&quot;))
+head(walleye)</code></pre>
+<pre><code>  age length period  periodf
+1   1  215.3      1 pre-1991
+2   1  193.3      1 pre-1991
+3   1  202.6      1 pre-1991
+4   1  201.5      1 pre-1991
+5   1  232.0      1 pre-1991
+6   1  191.0      1 pre-1991</code></pre>
+<p>Let’s visualize the data.</p>
+<pre class="r"><code>p &lt;- ggplot(walleye, aes(y = length, x = age)) + facet_wrap(~ periodf) + 
+  theme_minimal() + geom_point(alpha = 0.25, size = 0.5) +
+  labs(x = &quot;Age (years)&quot;, y = &quot;Length (mm)&quot;,
+   title = &quot;Length and Age of Walleye During Three Management Periods&quot;,
+   subtitle = &quot;Butternut Lake, Wisconsin&quot;,
+   caption = &quot;Source: Weisberg, S. (2014). Applied Linear Regression, 4th edition. Hoboken, NJ: Wiley.&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-09-2024_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
+A common nonlinear regression model for these kind of data is the Von
+Bertalanffy growth model. This model can be written many different ways.
+One that is similar to the exponential model we used earlier is <span
+class="math display">\[
+  E(L) = \alpha + (\delta - \alpha)2^{-a/\gamma},
+\]</span> where <span class="math inline">\(L\)</span> and <span
+class="math inline">\(a\)</span> are length and age, respectively. The
+parameters can be interpreted as follows.</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(\alpha\)</span> is the asymptote of
+<span class="math inline">\(E(L)\)</span> as <span
+class="math inline">\(a\)</span> increases.</li>
+<li><span class="math inline">\(\delta\)</span> is the value of <span
+class="math inline">\(E(L)\)</span> when <span
+class="math inline">\(a\)</span> = 0.</li>
+<li><span class="math inline">\(\gamma\)</span> is the value of <span
+class="math inline">\(a\)</span> at which <span
+class="math inline">\(E(L)\)</span> is half way between <span
+class="math inline">\(\delta\)</span> and <span
+class="math inline">\(\alpha\)</span>.</li>
+</ol>
+<p>Consider first a model in which there are no differences in the
+function between management periods. The starting values were obtained
+by “eyeballing” the plot.</p>
+<pre class="r"><code>m &lt;- nls(length ~ alpha + (delta - alpha) * 2^(-age / gamma), 
+   data = walleye, start = list(alpha = 500, delta = 200, gamma = 5))
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>      Estimate Std. Error t value  Pr(&gt;|t|)    2.5%   97.5%
+alpha  487.724     4.7688  102.27  0.00e+00 478.878 497.394
+delta  140.729     2.0780   67.72  0.00e+00 136.654 144.732
+gamma    3.424     0.1021   33.54 1.46e-211   3.236   3.632</code></pre>
+<p>Now suppose we want to allow the <span
+class="math inline">\(\alpha\)</span> and <span
+class="math inline">\(\gamma\)</span> parameters to vary over management
+periods, but not <span class="math inline">\(\delta\)</span>. The model
+we want could be written case-wise as <span class="math display">\[
+  E(L_i) =
+  \begin{cases}
+    \alpha_1 + (\delta - \alpha_1)2^{-a_i/\gamma_1}, &amp; \text{if the
+$i$-th observation is from the first period}, \\
+    \alpha_2 + (\delta - \alpha_2)2^{-a_i/\gamma_2}, &amp; \text{if the
+$i$-th observation is from the second period}, \\
+    \alpha_3 + (\delta - \alpha_3)2^{-a_i/\gamma_3}, &amp; \text{if the
+$i$-th observation is from the third period}.
+  \end{cases}
+\]</span> Perhaps the easiest way to specify this model is to use the
+<code>case_when</code> function from the <strong>dplyr</strong>
+package.</p>
+<pre class="r"><code>library(dplyr)
+m &lt;- nls(length ~ case_when(
+  periodf == &quot;pre-1991&quot;  ~ alpha1 + (delta - alpha1) * 2^(-age / gamma1),
+  periodf == &quot;1991-1996&quot; ~ alpha2 + (delta - alpha2) * 2^(-age / gamma2),
+  periodf == &quot;1997-2000&quot; ~ alpha3 + (delta - alpha3) * 2^(-age / gamma3)
+  ), start = list(alpha1 = 500, alpha2 = 500, alpha3 = 500,
+    delta = 200, gamma1 = 5, gamma2 = 5, gamma3 = 5), data = walleye)
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>       Estimate Std. Error t value   Pr(&gt;|t|)    2.5%   97.5%
+alpha1  461.912    4.82053   95.82  0.000e+00 453.119 471.429
+alpha2  475.839    6.30129   75.51  0.000e+00 464.110 489.135
+alpha3  516.907    7.76416   66.58  0.000e+00 502.581 532.897
+delta   132.667    2.22347   59.67  0.000e+00 128.307 136.939
+gamma1    2.574    0.08383   30.70 1.299e-181   2.423   2.740
+gamma2    3.194    0.12046   26.51 3.747e-140   2.971   3.448
+gamma3    4.095    0.15206   26.93 4.080e-144   3.817   4.410</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(age = seq(0, 11, length = 100), 
+   periodf = levels(walleye$periodf))
+d$yhat &lt;- predict(m, newdata = d)
+
+p &lt;- ggplot(walleye, aes(y = length, x = age)) + facet_wrap(~ periodf) + 
+  theme_minimal() + geom_point(alpha = 0.25, size = 0.5) + 
+  geom_line(aes(y = yhat), data = d) + 
+  labs(x = &quot;Age (years)&quot;, y = &quot;Length (mm)&quot;,
+   title = &quot;Length and Age of Walleye During Three Management Periods&quot;,
+   subtitle = &quot;Butternut Lake, Wisconsin&quot;,
+   caption = &quot;Source: Weisberg, S. (2014). Applied Linear Regression, 4th edition. Hoboken, NJ: Wiley.&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-09-2024_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" />
+Here <code>summary</code> and <code>confint</code> provide inferences
+for each parameter in each period, but do not provide inferences about
+the <em>differences</em> in the parameters <em>between</em> periods. But
+we can use <code>lincon</code> to do this. Suppose we wanted to compare
+the second and third periods with the first.</p>
+<pre class="r"><code>library(trtools) # for lincon
+lincon(m, a = c(-1,1,0,0,0,0,0)) # alpha2 - alpha1</code></pre>
+<pre><code>                   estimate    se lower upper tvalue   df  pvalue
+(-1,1,0,0,0,0,0),0    13.93 6.758 0.675 27.18  2.061 3191 0.03942</code></pre>
+<pre class="r"><code>lincon(m, a = c(-1,0,1,0,0,0,0)) # alpha3 - alpha1</code></pre>
+<pre><code>                   estimate    se lower upper tvalue   df   pvalue
+(-1,0,1,0,0,0,0),0    54.99 8.449 38.43 71.56  6.509 3191 8.75e-11</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,0,0,0,-1,1,0)) # gamma2 - gamma1</code></pre>
+<pre><code>                   estimate     se  lower  upper tvalue   df    pvalue
+(0,0,0,0,-1,1,0),0   0.6199 0.1061 0.4118 0.8281   5.84 3191 5.736e-09</code></pre>
+<pre class="r"><code>lincon(m, a = c(0,0,0,0,-1,0,1)) # gamma3 - gamma1</code></pre>
+<pre><code>                   estimate    se lower upper tvalue   df    pvalue
+(0,0,0,0,-1,0,1),0    1.521 0.145 1.237 1.805  10.49 3191 2.372e-25</code></pre>
+<p>Sometimes it is helpful to write the model as a <em>function</em> to
+keep the code tidy. We can program the function <span
+class="math display">\[
+  f(a) = \alpha + (\delta - \alpha)2^{-a/\gamma}
+\]</span> as follows.</p>
+<pre class="r"><code>vbf &lt;- function(age, alpha, delta, gamma) {
+  alpha + (delta - alpha) * 2^(-age / gamma)
+}</code></pre>
+<p>Now we can use <code>vbf</code> in <code>nls</code>.</p>
+<pre class="r"><code>m &lt;- nls(length ~ case_when(
+  periodf == &quot;pre-1991&quot;  ~ vbf(age, alpha1, delta, gamma1),
+  periodf == &quot;1991-1996&quot; ~ vbf(age, alpha2, delta, gamma2),
+  periodf == &quot;1997-2000&quot; ~ vbf(age, alpha3, delta, gamma3)
+  ), start = list(alpha1 = 500, alpha2 = 500, alpha3 = 500,
+    delta = 200, gamma1 = 5, gamma2 = 5, gamma3 = 5), data = walleye)
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>       Estimate Std. Error t value   Pr(&gt;|t|)    2.5%   97.5%
+alpha1  461.912    4.82053   95.82  0.000e+00 453.119 471.429
+alpha2  475.839    6.30129   75.51  0.000e+00 464.110 489.135
+alpha3  516.907    7.76416   66.58  0.000e+00 502.581 532.897
+delta   132.667    2.22347   59.67  0.000e+00 128.307 136.939
+gamma1    2.574    0.08383   30.70 1.299e-181   2.423   2.740
+gamma2    3.194    0.12046   26.51 3.747e-140   2.971   3.448
+gamma3    4.095    0.15206   26.93 4.080e-144   3.817   4.410</code></pre>
+</div>
+<div id="segmented-regression-as-a-linear-model" class="section level2">
+<h2>Segmented Regression as a Linear Model</h2>
+<p>Consider data from a study of the effect of attractant age on
+attracting fire ants.</p>
+<pre class="r"><code>library(trtools) # for fireants data
+p &lt;- ggplot(fireants, aes(x = day, y = count, color = group)) + 
+  geom_point(alpha = 0.5) + theme_minimal() + 
+  theme(legend.position = c(0.8,0.8)) + 
+  labs(x = &quot;Age of Attractant (Days)&quot;, y = &quot;Number of Ants Trapped&quot;,
+   color = &quot;Group&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-09-2024_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" />
+Consider first this model for only the treatment group: <span
+class="math display">\[
+    E(Y_i) = \beta_0 + \beta_1 x_i + \beta_2 \mathbf{1}(x_i &lt;
+\delta)(x_i - \delta),
+\]</span> where <span class="math inline">\(Y_i\)</span> and <span
+class="math inline">\(x_i\)</span> are the fire ant count and age of
+attractant, respectively, and <span
+class="math inline">\(\mathbf{1}\)</span> is an <em>indicator
+function</em> defined as <span class="math display">\[
+    \mathbf{1}(x_i &lt; \delta) =
+    \begin{cases}
+        1, &amp; \text{if $x_i &lt; \delta$}, \\
+        0, &amp; \text{if $x_i \ge \delta$.}
+    \end{cases}
+\]</span> In general, an <a
+href="https://en.wikipedia.org/wiki/Indicator_function">indicator
+function</a> is a function such that <span class="math display">\[
+  \mathbf{1}(\text{statement}) =
+  \begin{cases}
+    1, &amp; \text{if the statement is true}, \\
+    0, &amp; \text{if the statement is false}.
+  \end{cases}
+\]</span> Writing the model case-wise for <span
+class="math inline">\(x_i &lt; \delta\)</span> versus <span
+class="math inline">\(x_i \ge \delta\)</span> we have <span
+class="math display">\[
+    E(Y_i) =
+    \begin{cases}
+        \beta_0 - \beta_2 \delta + (\beta_1 + \beta_2)x_i, &amp;
+\text{if $x_i &lt; \delta$,} \\
+        \beta_0 + \beta_1 x_i, &amp; \text{if $x_i \ge \delta$.}
+    \end{cases}
+\]</span> This is sometimes called <em>segmented</em>,
+<em>piece-wise</em>, or <em>broken-stick</em> regression. It is also a
+special case of a <em>spline</em>. The <span
+class="math inline">\(\delta\)</span> is called a “knot” of the spline.
+If the knot is known then this is a <em>linear</em> model.</p>
+<pre class="r"><code>treated &lt;- subset(fireants, group == &quot;Treatment&quot;)
+m &lt;- lm(count ~ day + I((day &lt; 40)*(day - 40)), data = treated)
+summary(m)$coefficients</code></pre>
+<pre><code>                           Estimate Std. Error t value  Pr(&gt;|t|)
+(Intercept)                11.62723    3.74415  3.1054 2.213e-03
+day                        -0.02574    0.07898 -0.3259 7.449e-01
+I((day &lt; 40) * (day - 40)) -1.00914    0.10389 -9.7138 3.798e-18</code></pre>
+<p>Note that we can write the indicator function <span
+class="math inline">\(\mathbf{1}(x_i &lt; 40)\)</span> as
+<code>(day &lt; 40)</code> in R.</p>
+<pre class="r"><code>d &lt;- expand.grid(day = seq(0, 60, length = 100), group = &quot;Treatment&quot;)
+d$yhat &lt;- predict(m, newdata = d)
+p &lt;- p + geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-02-09-2024_files/figure-html/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" />
+Now it would be useful to extend the model to include the control group,
+but subject to a couple of constraints:</p>
+<ol style="list-style-type: decimal">
+<li><p>The relationship between expected count and age for the
+<em>control</em> group should not have a break (because there is no
+attractant to wear off).</p></li>
+<li><p>After 40 days the relationship between expected count and age
+should be <em>identical</em> for the control and treatment groups
+(because the attractant has worn off).</p></li>
+</ol>
+<p>Here’s a model that will accomplish that: <span
+class="math display">\[
+    E(Y_i) = \beta_0 + \beta_1 x_i + \beta_2 \mathbf{1}(x_i &lt;
+\delta)(x_i - \delta)g_i,
+\]</span> where <span class="math display">\[
+  g_i =
+  \begin{cases}
+    1, &amp; \text{if the $i$-th observation is from the treatment
+group}, \\
+    0, &amp; \text{otherwise},
+  \end{cases}
+\]</span> so that the model can be written as <span
+class="math display">\[
+  E(Y_i) =
+    \begin{cases}
+        \beta_0 - \beta_2 \delta + (\beta_1 + \beta_2)x_i,
+          &amp; \text{if the $i$-th observation is from the treatmnt
+group and $x_i &lt; \delta$}, \\
+        \beta_0 + \beta_1 x_i, &amp; \text{otherwise}.
+    \end{cases}
+\]</span></p>
+<pre class="r"><code>m &lt;- lm(count ~ day + I((day &lt; 40)*(day - 40)*(group == &quot;Treatment&quot;)), 
+   data = fireants)
+
+d &lt;- expand.grid(day = seq(0, 60, length = 100),
+   group = c(&quot;Control&quot;,&quot;Treatment&quot;))
+d$yhat &lt;- predict(m, newdata = d)
+
+p &lt;- ggplot(fireants, aes(x = day, y = count, color = group)) + 
+  geom_point(alpha = 0.5) + theme_minimal() + 
+  theme(legend.position = c(0.8,0.8)) + 
+  labs(x = &quot;Age of Attractant (Days)&quot;,
+   y = &quot;Number of Ants Trapped&quot;, color = &quot;Group&quot;) + 
+  geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-02-09-2024_files/figure-html/unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" />
+Now we can make some inferences.</p>
+<pre class="r"><code># expected counts at day 0
+contrast(m, a = list(group = c(&quot;Control&quot;,&quot;Treatment&quot;), day = 0), 
+  cnames = c(&quot;Control&quot;,&quot;Treatment&quot;))</code></pre>
+<pre><code>          estimate     se  lower upper tvalue  df     pvalue
+Control      9.819 0.5982  8.642 11.00  16.41 357  1.665e-45
+Treatment   52.211 0.6770 50.880 53.54  77.12 357 1.145e-224</code></pre>
+<pre class="r"><code># expected counts at day 40
+contrast(m, a = list(group = c(&quot;Control&quot;,&quot;Treatment&quot;), day = 40), 
+  cnames = c(&quot;Control&quot;,&quot;Treatment&quot;))</code></pre>
+<pre><code>          estimate     se lower upper tvalue  df     pvalue
+Control      10.18 0.2573 9.671 10.68  39.56 357 1.523e-132
+Treatment    10.18 0.2573 9.671 10.68  39.56 357 1.523e-132</code></pre>
+<pre class="r"><code># slopes before day 40
+contrast(m,
+  a = list(group = c(&quot;Control&quot;,&quot;Treatment&quot;), day = 1),
+  b = list(group = c(&quot;Control&quot;,&quot;Treatment&quot;), day = 0),
+  cnames = c(&quot;Control&quot;,&quot;Treatment&quot;))</code></pre>
+<pre><code>           estimate      se    lower    upper   tvalue  df     pvalue
+Control    0.008954 0.01509 -0.02072  0.03863   0.5935 357  5.532e-01
+Treatment -1.050865 0.01926 -1.08873 -1.01299 -54.5726 357 2.658e-175</code></pre>
+<pre class="r"><code># slopes after day 40
+contrast(m,
+  a = list(group = c(&quot;Control&quot;,&quot;Treatment&quot;), day = 41),
+  b = list(group = c(&quot;Control&quot;,&quot;Treatment&quot;), day = 40),
+  cnames = c(&quot;Control&quot;,&quot;Treatment&quot;))</code></pre>
+<pre><code>          estimate      se    lower   upper tvalue  df pvalue
+Control   0.008954 0.01509 -0.02072 0.03863 0.5935 357 0.5532
+Treatment 0.008954 0.01509 -0.02072 0.03863 0.5935 357 0.5532</code></pre>
+<pre class="r"><code># difference in expected counts at day 20
+contrast(m,
+  a = list(group = &quot;Treatment&quot;, day = 20),
+  b = list(group = &quot;Control&quot;, day = 20))</code></pre>
+<pre><code> estimate     se lower upper tvalue  df     pvalue
+     21.2 0.4602 20.29  22.1  46.05 357 2.908e-152</code></pre>
+<p>We could go one step further by assuming that for the control group
+and after the knot the expected count is constant. This would require us
+to drop the term <span class="math inline">\(\beta_1x_i\)</span>.</p>
+<pre class="r"><code>m &lt;- lm(count ~ I((day &lt; 40) * (day - 40) * 
+   (group == &quot;Treatment&quot;)), data = fireants)
+
+d &lt;- expand.grid(day = seq(0, 60, length = 100), 
+   group = c(&quot;Control&quot;,&quot;Treatment&quot;))
+d$yhat &lt;- predict(m, newdata = d)
+
+p &lt;- ggplot(fireants, aes(x = day, y = count, color = group)) +
+  geom_point(alpha = 0.5) + theme_minimal() + 
+  theme(legend.position = c(0.8,0.8)) + 
+  labs(x = &quot;Age of Attractant (Days)&quot;,
+    y = &quot;Number of Ants Trapped&quot;, color = &quot;Group&quot;) + 
+  geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-02-09-2024_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" />
+Now consider the following inferences.</p>
+<pre class="r"><code># slopes before day 40
+contrast(m,
+  a = list(group = c(&quot;Control&quot;,&quot;Treatment&quot;), day = 1),
+  b = list(group = c(&quot;Control&quot;,&quot;Treatment&quot;), day = 0),
+  cnames = c(&quot;Control&quot;,&quot;Treatment&quot;))</code></pre>
+<pre><code>          estimate     se lower  upper tvalue  df     pvalue
+Control      0.000 0.0000  0.00  0.000    NaN 358        NaN
+Treatment   -1.052 0.0191 -1.09 -1.015 -55.08 358 7.001e-177</code></pre>
+<pre class="r"><code># slopes after day 40
+contrast(m,
+  a = list(group = c(&quot;Control&quot;,&quot;Treatment&quot;), day = 41),
+  b = list(group = c(&quot;Control&quot;,&quot;Treatment&quot;), day = 40),
+  cnames = c(&quot;Control&quot;,&quot;Treatment&quot;)) # slopes after day 40</code></pre>
+<pre><code>          estimate se lower upper tvalue  df pvalue
+Control          0  0     0     0    NaN 358    NaN
+Treatment        0  0     0     0    NaN 358    NaN</code></pre>
+</div>
+<div id="segmented-regression-as-a-nonlinear-model"
+class="section level2">
+<h2>Segmented Regression as a Nonlinear Model</h2>
+<p>If the knot <span class="math inline">\(\delta\)</span> is
+<em>known</em> then the model is <em>linear</em>. We can write <span
+class="math display">\[
+    E(Y_i) = \beta_0 + \beta_1 x_i + \beta_2 \mathbf{1}(x_i &lt;
+\delta)(x_i - \delta)g_i
+\]</span> as <span class="math display">\[
+  E(Y_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2},
+\]</span> where <span class="math inline">\(x_{i1} = x_i\)</span> (day)
+and <span class="math inline">\(x_{i2} = \mathbf{1}(x_i &lt; \delta)(x_i
+- \delta)g_i\)</span>, provided we <em>know</em> <span
+class="math inline">\(\delta\)</span>. But what if <span
+class="math inline">\(\delta\)</span> is unknown and is to be estimated?
+Then we have a <em>nonlinear</em> model.</p>
+<p>Let’s start estimating a <em>linear</em> model with <code>nls</code>
+by guessing the value of <span class="math inline">\(\delta\)</span>.
+This will give us some good starting values.</p>
+<pre class="r"><code>m &lt;- nls(count ~ b0 + b1 * day + b2 * (day &lt; 40) * (day - 40) * 
+   (group == &quot;Treatment&quot;), data = fireants, 
+   start = list(b0 = 0, b1 = 1, b2 = 1))
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>    Estimate Std. Error  t value   Pr(&gt;|t|)     2.5%    97.5%
+b0  9.818633    0.59822  16.4131  1.665e-45  8.64216 10.99511
+b1  0.008954    0.01509   0.5935  5.532e-01 -0.02072  0.03863
+b2 -1.059819    0.02301 -46.0541 2.908e-152 -1.10508 -1.01456</code></pre>
+<p>Now consider a model where the knot (<span
+class="math inline">\(\delta\)</span>) is a <em>parameter</em>, using
+the estimate from the linear model as starting values.</p>
+<pre class="r"><code>m &lt;- nls(count ~ b0 + b1 * day + b2 * (day &lt; delta) * (day - delta) *
+   (group == &quot;Treatment&quot;), data = fireants, 
+   start = list(b0 = 10, b1 = 0, b2 = -1, delta = 40))
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>       Estimate Std. Error  t value   Pr(&gt;|t|)     2.5%    97.5%
+b0     9.807069    0.60056  16.3298  3.885e-45  8.62598 10.98816
+b1     0.008604    0.01516   0.5674  5.708e-01 -0.02122  0.03843
+b2    -1.052444    0.03597 -29.2590  9.772e-97 -1.12822 -0.98318
+delta 40.200079    0.75454  53.2776 1.061e-171 38.60885 41.69578</code></pre>
+<p>We can use <code>lincon</code> provided that the quantity of interest
+is a linear combination of parameters. For example, recall that the
+model can be written as <span class="math display">\[
+  E(Y_i) =
+    \begin{cases}
+        \beta_0 - \beta_2 \delta + (\beta_1 + \beta_2)x_i,
+          &amp; \text{if $x_i &lt; \delta$ and treatment}, \\
+        \beta_0 + \beta_1 x_i, &amp; \text{otherwise},
+    \end{cases}
+\]</span> so the slope before the knot for the treatment group is <span
+class="math inline">\(\beta_1 + \beta_2\)</span>. This can be written as
+<span class="math display">\[
+  \ell = a_0\beta_0 + a_1\beta_1 + a_2\beta_2 + a_3\delta + b
+\]</span> where <span class="math inline">\(a_0 = 0\)</span>, <span
+class="math inline">\(a_1 = 1\)</span>, <span class="math inline">\(a_2
+= 1\)</span>, <span class="math inline">\(a_3 = 0\)</span>, and <span
+class="math inline">\(b = 0\)</span>.</p>
+<pre class="r"><code># slope before knot for treatment group
+lincon(m, a = c(0, 1, 1, 0))</code></pre>
+<pre><code>            estimate      se  lower   upper tvalue  df     pvalue
+(0,1,1,0),0   -1.044 0.03262 -1.108 -0.9797    -32 356 8.718e-107</code></pre>
+</div>
+<div id="bent-cable-regression" class="section level2">
+<h2>Bent Cable Regression</h2>
+<p>The data frame <code>children</code> in the package
+<strong>npregfast</strong> contains 2500 observations of the age and
+height of children.</p>
+<pre class="r"><code>library(ggplot2)
+library(npregfast)
+p &lt;- ggplot(children, aes(x = age, y = height, color = sex)) + 
+  geom_point(alpha = 0.25) + theme_minimal() + 
+  labs(x = &quot;Age (years)&quot;, y = &quot;Height (cm)&quot;, color = &quot;Gender&quot;) + 
+  theme(legend.position = c(0.9,0.2))
+plot(p)</code></pre>
+<p><img src="lecture-02-09-2024_files/figure-html/unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;" />
+The “bent cable” regression model can be used as kind of crude growth
+model for these data. It can be viewed as a generalization of the
+segmented regression model where rather than having two lines meet at a
+sharp angle, one line gradually transitions into the other by attaching
+them by what looks like a bent cable. The figure below shows a bent
+cable model.
+<img src="lecture-02-09-2024_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" />
+The grey lines show a segmented regression model while the solid curve
+shows a bent cable model. Essentially there are two lines: one line to
+the left of <span class="math inline">\(\delta - \gamma\)</span> and one
+line to the right of <span class="math inline">\(\delta +
+\gamma\)</span>. And between the two lines (i.e., between <span
+class="math inline">\(\delta - \gamma\)</span> and <span
+class="math inline">\(\delta + \gamma\)</span>) is a quadratic
+polynomial that joins the two lines in such a way that the whole
+piece-wise function is smooth. The parameter <span
+class="math inline">\(\delta\)</span> represents the point at which the
+two lines would meet if there was no bend, and <span
+class="math inline">\(\gamma\)</span> is the half of the distance
+between the points <span class="math inline">\(\delta - \gamma\)</span>
+and <span class="math inline">\(\delta + \gamma\)</span>. As <span
+class="math inline">\(\gamma\)</span> gets closer to zero this function
+approaches a segmented regression model (as shown by the grey
+lines).</p>
+<p>The bent cable regression model can be written as <span
+class="math display">\[
+  E(Y) = \beta_0 + \beta_1 x + \beta_2 q(x, \delta, \gamma),
+\]</span> where <span class="math inline">\(q(x, \delta,
+\gamma)\)</span> is a function defined as <span class="math display">\[
+    q(x, \delta, \gamma) = \frac{(x - \delta + \gamma)^2}{4\gamma}
+    \mathbf{1}(\delta - \gamma \le x \le \delta + \gamma) + \mathbf{1}(x
+&gt; \delta + \gamma)(x - \delta).
+\]</span> This can be written case-wise as <span class="math display">\[
+E(Y) =
+\begin{cases}
+\beta_0 + \beta_1 x,             &amp; \text{if $x &lt; \delta -
+\gamma$}, \\
+\beta_0 + \beta_1 x + \beta_2\frac{(x_i - \delta + \gamma)^2}{4\gamma},
+&amp; \text{if $\delta - \gamma \le x \le \delta + \gamma$}, \\
+\beta_0 - \delta\beta_2 + (\beta_1 + \beta_2) x, &amp; \text{if $x &gt;
+\delta + \gamma$}.
+\end{cases}
+\]</span> So when <span class="math inline">\(x &lt; \delta -
+\gamma\)</span> we have a line with intercept <span
+class="math inline">\(\beta_0\)</span> and slope <span
+class="math inline">\(\beta_1\)</span>, and after <span
+class="math inline">\(x &gt; \delta + \gamma\)</span> we have another
+line with intercept <span class="math inline">\(\beta_0 -
+\delta\beta_2\)</span> and slope <span class="math inline">\(\beta_1 +
+\beta_2\)</span>. Between <span class="math inline">\(\delta -
+\gamma\)</span> and <span class="math inline">\(\delta + \gamma\)</span>
+is what is basically a quadratic regression model. And all three
+functions are constrained so that they form one smooth and continuous
+function.</p>
+<p>Given the complexity of the function <span
+class="math inline">\(q(x,\delta,\gamma)\)</span>, it is useful to
+program it.</p>
+<pre class="r"><code>q &lt;- function(x, delta, gamma) {
+  (x - delta + gamma)^2 / (4 * gamma) * 
+    (delta - gamma &lt;= x &amp; x &lt;= delta + gamma) + 
+    (x &gt; (delta + gamma)) * (x - delta)
+}</code></pre>
+<p>First I will estimate a <em>linear</em> model with crude guesses of
+<span class="math inline">\(\delta\)</span> and <span
+class="math inline">\(\gamma\)</span>.</p>
+<pre class="r"><code>m &lt;- nls(height ~ b0 + b1 * age + b2 * q(age, 15, 1), data = children,
+   start = list(b0 = 0, b1 = 0, b2 = 0))
+   summary(m)$coefficients</code></pre>
+<pre><code>   Estimate Std. Error t value Pr(&gt;|t|)
+b0   84.886    0.80646  105.26 0.00e+00
+b1    5.320    0.06612   80.46 0.00e+00
+b2   -4.172    0.21769  -19.16 1.78e-76</code></pre>
+<p>Next we can use the estimates of <span
+class="math inline">\(\beta_0\)</span>, <span
+class="math inline">\(\beta_1\)</span>, and <span
+class="math inline">\(\beta_2\)</span> as starting values in a nonlinear
+model.</p>
+<pre class="r"><code>m &lt;- nls(height ~ b0 + b1 * age + b2 * q(age, delta, gamma), data = children,
+   start = list(b0 = 85, b1 = 5.3, b2 = -5, delta = 15, gamma = 1))
+summary(m)$coefficients</code></pre>
+<pre><code>      Estimate Std. Error t value  Pr(&gt;|t|)
+b0      85.898    0.95916  89.555 0.000e+00
+b1       5.217    0.08468  61.613 0.000e+00
+b2      -5.239    0.68653  -7.631 3.297e-14
+delta   15.662    0.27560  56.828 0.000e+00
+gamma    1.483    0.51344   2.889 3.897e-03</code></pre>
+<p>The slope after the bend is <span class="math inline">\(\beta_1 +
+\beta_2\)</span>, but if <span class="math inline">\(\beta_2 =
+-\beta_1\)</span> then the slope after the bend would be zero. This
+model would then be <span class="math display">\[
+  E(Y) = \beta_0 + \beta_1 x - \beta_1 q(x, \delta, \gamma).
+\]</span> Let’s consider using this model but now with a separate growth
+curve for males and females.</p>
+<pre class="r"><code>m &lt;- nls(height ~ case_when(
+   sex == &quot;male&quot;   ~ b0m + b1m*age - b1m*q(age, deltam, gammam),
+   sex == &quot;female&quot; ~ b0f + b1f*age - b1f*q(age, deltaf, gammaf)), 
+   data = children, start = list(b0m = 86, b0f = 86, b1m = 5, b1f = 5, 
+   deltam = 15, deltaf = 15, gammam = 1.5, gammaf = 1.5))
+summary(m)$coefficients</code></pre>
+<pre><code>       Estimate Std. Error t value   Pr(&gt;|t|)
+b0m     79.5271    1.04815  75.874  0.000e+00
+b0f     86.2213    1.65345  52.146  0.000e+00
+b1m      5.6137    0.08511  65.959  0.000e+00
+b1f      5.4542    0.16443  33.171 3.665e-200
+deltam  16.3983    0.12218 134.209  0.000e+00
+deltaf  14.1533    0.14833  95.416  0.000e+00
+gammam   0.8673    0.49692   1.745  8.105e-02
+gammaf   1.9069    0.43727   4.361  1.348e-05</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(sex = c(&quot;male&quot;,&quot;female&quot;), age = seq(5, 20, length = 200))
+d$yhat &lt;- predict(m, newdata = d)
+  
+p &lt;- ggplot(children, aes(x = age, y = height, color = sex)) + 
+  geom_point(alpha = 0.125) + theme_minimal() + 
+  geom_line(aes(y = yhat), data = d) + 
+  labs(x = &quot;Age (years)&quot;, y = &quot;Height (cm)&quot;, color = &quot;Gender&quot;) +
+  theme(legend.position = c(0.9,0.2))
+plot(p)</code></pre>
+<p><img src="lecture-02-09-2024_files/figure-html/unnamed-chunk-25-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

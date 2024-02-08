@@ -53,7 +53,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Introduction to nonlinear regression](lecture-02-07-2024.html). 
 
-`r i <- i + 1; d[i]`  
+`r i <- i + 1; d[i]` [Nonlinear regression --- continued](lecture-02-09-2024.html).
  
 ***
 
