@@ -327,6 +327,11 @@ class="math inline">\(E(L)\)</span> is half way between <span
 class="math inline">\(\delta\)</span> and <span
 class="math inline">\(\alpha\)</span>.</li>
 </ol>
+<p>It is worth noting that this is <em>not</em> the parameterization of
+the model that is usually used in fisheries research. The
+parameterization I have used here is more closely related to the
+exponential model we considered for the <code>ToothGrowth</code>
+data.</p>
 <p>Consider first a model in which there are no differences in the
 function between management periods. The starting values were obtained
 by “eyeballing” the plot.</p>
@@ -368,7 +373,7 @@ alpha2  475.839    6.30129   75.51  0.000e+00 464.110 489.135
 alpha3  516.907    7.76416   66.58  0.000e+00 502.581 532.897
 delta   132.667    2.22347   59.67  0.000e+00 128.307 136.939
 gamma1    2.574    0.08383   30.70 1.299e-181   2.423   2.740
-gamma2    3.194    0.12046   26.51 3.747e-140   2.971   3.448
+gamma2    3.194    0.12046   26.51 3.746e-140   2.971   3.448
 gamma3    4.095    0.15206   26.93 4.080e-144   3.817   4.410</code></pre>
 <pre class="r"><code>d &lt;- expand.grid(age = seq(0, 11, length = 100), 
    periodf = levels(walleye$periodf))
@@ -423,7 +428,7 @@ alpha2  475.839    6.30129   75.51  0.000e+00 464.110 489.135
 alpha3  516.907    7.76416   66.58  0.000e+00 502.581 532.897
 delta   132.667    2.22347   59.67  0.000e+00 128.307 136.939
 gamma1    2.574    0.08383   30.70 1.299e-181   2.423   2.740
-gamma2    3.194    0.12046   26.51 3.747e-140   2.971   3.448
+gamma2    3.194    0.12046   26.51 3.746e-140   2.971   3.448
 gamma3    4.095    0.15206   26.93 4.080e-144   3.817   4.410</code></pre>
 </div>
 <div id="segmented-regression-as-a-linear-model" class="section level2">

@@ -72,6 +72,8 @@ where $L$ and $a$ are length and age, respectively. The parameters can be interp
 0. $\delta$ is the value of $E(L)$ when $a$ = 0.
 0. $\gamma$ is the value of $a$ at which $E(L)$ is half way between $\delta$ and $\alpha$.
 
+It is worth noting that this is *not* the parameterization of the model that is usually used in fisheries research. The parameterization I have used here is more closely related to the exponential model we considered for the `ToothGrowth` data. 
+
 Consider first a model in which there are no differences in the function between management periods. The starting values were obtained by "eyeballing" the plot. 
 ```{r}
 m <- nls(length ~ alpha + (delta - alpha) * 2^(-age / gamma), 
