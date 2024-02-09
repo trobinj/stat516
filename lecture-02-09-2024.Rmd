@@ -100,7 +100,7 @@ m <- nls(length ~ case_when(
     delta = 200, gamma1 = 5, gamma2 = 5, gamma3 = 5), data = walleye)
 cbind(summary(m)$coefficients, confint(m))
 d <- expand.grid(age = seq(0, 11, length = 100), 
-   periodf = levels(walleye$periodf))
+   periodf = unique(walleye$periodf))
 d$yhat <- predict(m, newdata = d)
 
 p <- ggplot(walleye, aes(y = length, x = age)) + facet_wrap(~ periodf) + 

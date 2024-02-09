@@ -376,7 +376,7 @@ gamma1    2.574    0.08383   30.70 1.299e-181   2.423   2.740
 gamma2    3.194    0.12046   26.51 3.746e-140   2.971   3.448
 gamma3    4.095    0.15206   26.93 4.080e-144   3.817   4.410</code></pre>
 <pre class="r"><code>d &lt;- expand.grid(age = seq(0, 11, length = 100), 
-   periodf = levels(walleye$periodf))
+   periodf = unique(walleye$periodf))
 d$yhat &lt;- predict(m, newdata = d)
 
 p &lt;- ggplot(walleye, aes(y = length, x = age)) + facet_wrap(~ periodf) + 
