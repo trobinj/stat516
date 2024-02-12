@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Monday, Feb 12</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Monday, Feb 12</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-02-12-2024.pdf">PDF</a> copy
+of this lecture.</p>
+<p>Mathematical (statistical) models make <em>assumptions</em>, and
+results (statistical inferences) based on the models are derived using
+those assumptions.</p>
+<p><strong>Example</strong>: Assume that an object is a <em>cone</em>.
+It can be shown (with a little calculus) that <span
+class="math display">\[
+\text{V} = \pi r^2 h/3 \ \ \ \text{and} \ \ \ \text{A} = \pi r \left(r
++  \sqrt{r^2 + h^2}\right),
+\]</span> based on the assumption that <em>the object is a
+cone</em>.</p>
+<p>“<em>All models are wrong but some are useful</em>.’’ — George E. P.
+Box</p>
+<div id="implicit-assumptions-of-linear-and-nonlinear-regression"
+class="section level2">
+<h2>Implicit Assumptions of Linear and Nonlinear Regression</h2>
+<p>Discussions of assumptions are based on an alternative representation
+of a regression model. A linear model can be written as <span
+class="math display">\[
+    Y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots +
+    \beta_k x_{ik} + \epsilon_i,
+\]</span> and a nonlinear model can be written as <span
+class="math display">\[
+    Y_i = f(x_{i1},x_{i2},\dots,x_{ik}) + \epsilon_i,
+\]</span> where the linear model with <span class="math display">\[
+  f(x_{i1}, x_{i2}, \dots, x_{ik}) = \beta_0 + \beta_1 x_{i1} + \beta_2
+x_{i2} + \cdots + \beta_k x_{ik}
+\]</span> is a special case.</p>
+<p>There are four implicit assumptions about <span
+class="math inline">\(\epsilon_i\)</span> that go into the derivation of
+routine/default methods for making inferences concerning the model.</p>
+<ol style="list-style-type: decimal">
+<li><p><span class="math inline">\(E(\epsilon_i) = 0\)</span> for all
+<span class="math inline">\(i\)</span>.</p></li>
+<li><p><span class="math inline">\(Var(\epsilon_i) = \sigma^2\)</span>
+for all <span class="math inline">\(i\)</span>.</p></li>
+<li><p><span class="math inline">\(Cov(\epsilon_i, \epsilon_{i&#39;}) =
+0\)</span> for all <span class="math inline">\(i \neq
+i&#39;\)</span>.</p></li>
+<li><p>Each <span class="math inline">\(\epsilon_i\)</span> has a normal
+distribution.</p></li>
+</ol>
+<p>How should we approach each assumption?</p>
+<ol style="list-style-type: decimal">
+<li><p>How do we <em>define</em> each assumption?</p></li>
+<li><p>What are the <em>consequences</em> if the assumption is (very)
+wrong?</p></li>
+<li><p>How do we <em>detect</em> if the assumption is (very)
+wrong?</p></li>
+<li><p>What is/are the <em>solution(s)</em> if the assumption is (very)
+wrong?</p></li>
+</ol>
+</div>
+<div id="assumption-1-zero-expectations-of-errors"
+class="section level2">
+<h2>Assumption 1: Zero Expectations of Errors</h2>
+<p><strong>Definition</strong>: The assumption <span
+class="math inline">\(E(\epsilon_i) = 0\)</span> implies that <span
+class="math inline">\(E(Y_i)\)</span> depends on the explanatory
+variables in the way assumed by the model. That is, if we have the
+<em>assumed</em> model <span class="math display">\[
+  E(Y_i) = f(x_{i1}, x_{i2}, \dots, x_{ik})
+\]</span> then <span class="math display">\[
+  E(\epsilon_i) = 0 \Rightarrow E(Y_i) = f(x_{i1}, x_{i2}, \dots,
+x_{ik}).
+\]</span> For the model to be a correct representation of the
+relationship between <span class="math inline">\(E(Y_i)\)</span> and
+<span class="math inline">\(x_{i1}, x_{i2}, \dots, x_{ik}\)</span> we
+require that <span class="math inline">\(E(\epsilon_i) = 0\)</span> for
+all <span class="math inline">\(i = 1, 2, \dots, n\)</span>.</p>
+<p><strong>Consequences</strong>: Estimates of parameters or some
+functions thereof (e.g., linear combinations) may be
+<em>biased</em>.</p>
+<p><strong>Detection</strong>: <em>Residuals</em> are statistics that
+are frequently used to <em>empirically</em> investigate assumption
+violations. There are several types of residuals.</p>
+<ol style="list-style-type: decimal">
+<li><p>Raw residuals. These are simply <em>estimates</em> of <span
+class="math inline">\(\epsilon_i\)</span>. In a linear model, for
+example, the error is <span class="math display">\[  
+  \epsilon_i = Y_i - (\beta_0 + \beta_1 x_{i1} + \cdots + \beta_k
+x_{ik}),
+\]</span> by definition, so a simple estimator of <span
+class="math inline">\(\epsilon_i\)</span> is the <em>residual</em> <span
+class="math display">\[
+  e_i = Y_i - \hat{Y_i},
+\]</span> where <span class="math display">\[
+  \hat{Y}_i = \hat\beta_0 + \hat\beta_1 x_{i1} + \cdots + \hat\beta_k
+x_{ik}.
+\]</span> We can define the raw residual in a similar way for a
+nonlinear model.</p></li>
+<li><p>Standardized residuals. Defined as <span class="math display">\[
+  z_i = \frac{e_i}{\text{SE}(e_i)}.
+\]</span> If the model assumptions are <em>correct</em> then <span
+class="math inline">\(z_i\)</span> is <em>approximately</em> standard
+normal in distribution so we expect that about 95% of such residuals to
+satisfy <span class="math inline">\(|z_i| &lt; 2\)</span>.</p></li>
+<li><p>Studentized residuals. Defined as <span class="math display">\[
+  t_i = \frac{e_i}{\text{SE}_{(i)}(e_i)},
+\]</span> where <span
+class="math inline">\(\text{SE}_{(i)}(e_i)\)</span> is the standard
+error of <span class="math inline">\(e_i\)</span> estimated by
+<em>leaving out</em> that observation. This avoids bias in the standard
+error in cases where <span class="math inline">\(E(\epsilon_i) \neq
+0\)</span>. If the model assumptions are met then each <span
+class="math inline">\(t_i\)</span> has a <span
+class="math inline">\(t\)</span> distribution with one less degree of
+freedom than the residual degrees of freedom (i.e., <span
+class="math inline">\(n - p - 1\)</span> where <span
+class="math inline">\(p\)</span> is the number of <em>parameters</em> in
+the model). Unless <span class="math inline">\(n-p-1\)</span> is very
+small, we expect that about 95% of studentized residuals satisfy <span
+class="math inline">\(|t_i| &lt; 2\)</span>.</p></li>
+</ol>
+<p>What to look for in residuals:</p>
+<ol style="list-style-type: decimal">
+<li><p>Individual observations with exceptional residuals.</p></li>
+<li><p>More residuals than expected overall that are
+exceptional.</p></li>
+<li><p>Changes in the distribution of residuals when plotting against
+<span class="math inline">\(\hat{y}_i\)</span>.</p></li>
+</ol>
+<p><strong>Example</strong>: Consider the following artificial data.
+<img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
+Suppose we tried a linear model.</p>
+<pre class="r"><code>mlinear &lt;- lm(y ~ x, data = fakedata)
+fakedata$yhat &lt;- predict(mlinear)   # y-hat values
+fakedata$rese &lt;- residuals(mlinear) # raw residuals
+fakedata$rest &lt;- rstudent(mlinear)  # studentized residuals
+head(fakedata)</code></pre>
+<pre><code>       x     y  yhat  rese  rest
+1  0.000 183.5 176.2 7.311 2.198
+2  5.102 181.3 174.7 6.525 1.936
+3 10.204 180.4 173.3 7.113 2.121
+4 15.306 176.6 171.8 4.813 1.396
+5 20.408 174.4 170.4 3.964 1.140
+6 25.510 173.5 168.9 4.547 1.311</code></pre>
+<pre class="r"><code>p &lt;- p + geom_line(aes(y = yhat), data = fakedata)
+plot(p)</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
+What are the observations with “exceptionally large” residuals?</p>
+<pre class="r"><code>subset(fakedata, abs(rest) &gt; 2)</code></pre>
+<pre><code>     x     y  yhat  rese  rest
+1  0.0 183.5 176.2 7.311 2.198
+3 10.2 180.4 173.3 7.113 2.121</code></pre>
+<pre class="r"><code>library(dplyr)
+fakedata %&gt;% filter(abs(rest) &gt; 2)</code></pre>
+<pre><code>     x     y  yhat  rese  rest
+1  0.0 183.5 176.2 7.311 2.198
+2 10.2 180.4 173.3 7.113 2.121</code></pre>
+<p>Are there any patterns?</p>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p &lt;- ggplot(fakedata, aes(x = yhat, y = rest))
+p &lt;- p + geom_segment(aes(x = yhat, xend = yhat, y = 0, yend = rest))
+p &lt;- p + geom_point() + theme_classic()
+p &lt;- p + labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;)
+p &lt;- p + geom_hline(yintercept = c(-2, 0, 2), linetype = 2)
+plot(p)</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" />
+Let’s try the polynomial model <span class="math inline">\(E(Y_i) =
+\beta_0 + \beta_1 x_i + \beta_2 x_i^2\)</span>.</p>
+<pre class="r"><code>mpoly &lt;- lm(y ~ poly(x, degree = 2), data = fakedata)
+fakedata$yhat &lt;- predict(mpoly)
+fakedata$rest &lt;- rstudent(mpoly)
+
+p &lt;- ggplot(fakedata, aes(x = x, y = y)) + theme_minimal()
+p &lt;- p + geom_point() + geom_line(aes(y = yhat))
+plot(p)</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p &lt;- ggplot(fakedata, aes(x = yhat, y = rest)) + 
+  geom_segment(aes(x = yhat, xend = yhat, y = 0, yend = rest)) +
+  geom_point() + theme_classic() + 
+  labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;) +
+  geom_hline(yintercept = c(-2, 0, 2), linetype = 2)
+plot(p)</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-8-2.png" width="100%" style="display: block; margin: auto;" />
+The “correct” model is the nonlinear model <span class="math display">\[
+  E(Y_i) = \alpha + (\delta - \alpha)2^{-x_i/\gamma}.
+\]</span></p>
+<pre class="r"><code>mnlin &lt;- nls(y ~ alpha + (delta - alpha) * 2^(-x / gamma),
+  data = fakedata, start = list(alpha = 80, delta = 180, gamma = 140))
+library(trtools) # for the nlsint function
+d &lt;- nlsint(mnlin, residuals = TRUE) 
+head(d)</code></pre>
+<pre><code>    fit     se   lwr   upr     hat      res
+1 184.3 0.3894 183.5 185.1 0.21231 -1.08147
+2 181.7 0.3481 181.0 182.4 0.16966 -0.61684
+3 179.2 0.3112 178.6 179.9 0.13564  1.49073
+4 176.8 0.2788 176.2 177.3 0.10888 -0.16877
+5 174.4 0.2510 173.9 174.9 0.08820 -0.06274
+6 172.1 0.2276 171.6 172.5 0.07256  1.72687</code></pre>
+<pre class="r"><code>p &lt;- ggplot(d, aes(x = fit, y = res)) + 
+  geom_segment(aes(x = fit, xend = fit, y = 0, yend = res)) + 
+  geom_point() + theme_classic() + 
+  labs(x = &quot;Predicted Value&quot;, y = &quot;Standardized Residual&quot;) + 
+  geom_hline(yintercept = c(-2, 0, 2), linetype = 2)
+plot(p)</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" />
+Note that since we are usually not interested in created publication
+quality residual plots, we can do some quick-and-dirty plots with
+simpler (but uglier) graphics.</p>
+<pre class="r"><code># when using lm
+m &lt;- lm(y ~ x, data = fakedata)
+plot(predict(m), rstudent(m))</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># when using nls
+mnlin &lt;- nls(y ~ alpha + (delta - alpha) * 2^(-x / gamma),
+  data = fakedata, start = list(alpha = 80, delta = 180, gamma = 140))
+d &lt;- nlsint(mnlin, residuals = TRUE) # nlsint is from trtools package
+plot(d$fit, d$res)</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-10-2.png" width="100%" style="display: block; margin: auto;" />
+<strong>Example</strong>: Consider a model where the expected MPG of
+cars is assumed to be a linear function of weight and rear axle
+ratio.</p>
+<pre class="r"><code>cars &lt;- read.csv(&quot;http://webpages.uidaho.edu/~trjohns/cars.csv&quot;)
+cars &lt;- cars[,c(2,3,4,5)] # select columns 2, 3, 4, and 5
+head(cars)</code></pre>
+<pre><code>                        car  mpg weight ratio
+1        Buick Estate Wagon 16.9  4.360  2.73
+2 Ford Country Squire Wagon 15.5  4.054  2.26
+3        Chevy Malibu Wagon 19.2  3.605  2.56
+4    Chrysler LeBaron Wagon 18.5  3.940  2.45
+5                  Chevette 30.0  2.155  3.70
+6             Toyota Corona 27.5  2.560  3.05</code></pre>
+<pre class="r"><code>m &lt;- lm(mpg ~ weight + ratio, data = cars)
+cars$yhat &lt;- predict(m)
+cars$rest &lt;- rstudent(m)
+subset(cars, abs(rest) &gt; 2)</code></pre>
+<pre><code>                  car  mpg weight ratio  yhat  rest
+1  Buick Estate Wagon 16.9   4.36  2.73 10.32 3.944
+34        Fiat Strada 37.3   2.13  3.10 32.67 2.348</code></pre>
+<pre class="r"><code>p &lt;- ggplot(cars, aes(x = rest, y = car)) + geom_point() +
+  theme_classic() + 
+  geom_segment(aes(x = 0, xend = rest, y = car, yend = car)) +
+  labs(x = &quot;Studentized Residual&quot;, y = NULL)
+plot(p)</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" />
+What is up with the <a
+href="https://en.wikipedia.org/wiki/Buick_Estate">Buick Estate
+Wagon</a>?</p>
+<p><strong>Solutions</strong>: Modify the model. Drop offending
+obsrevations(s) if and only if you can justify restricting the scope of
+the model.</p>
+</div>
+<div id="assumption-2-equality-of-error-variances"
+class="section level2">
+<h2>Assumption 2: Equality of Error Variances</h2>
+<p><strong>Definition</strong>: In the regression model <span
+class="math display">\[
+    Y_i = f(x_{i1}, x_{i2}, \dots, x_{ik}) + \epsilon_i,
+\]</span> we assume <span class="math inline">\(\mbox{Var}(\epsilon_i) =
+\sigma^2\)</span> which implies <span
+class="math inline">\(\mbox{Var}(Y_i) = \sigma^2\)</span>. This is
+called “homoscedasticty” or sometimes “homogeneity of variance” in the
+context of linear models for designed experiments. A more complete
+description of the assumed model is <span
+class="math display">\[\begin{align}
+  E(Y_i) &amp; = f(x_{i1}, x_{i2}, \dots, x_{ik}), \\
+  \text{Var}(Y_i) &amp; = \sigma^2.
+\end{align}\]</span> Note that the estimator <span
+class="math inline">\(\hat\sigma^2\)</span>, the square of the “residual
+standard error” reported by <code>summary</code>, is computed as <span
+class="math display">\[
+  \hat\sigma^2 = \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n-p},
+\]</span> where <span class="math inline">\(p\)</span> is the number of
+parameters in the part of the model for <span
+class="math inline">\(E(Y_i)\)</span> (which is <span
+class="math inline">\(p = k + 1\)</span> in a linear model with a <span
+class="math inline">\(\beta_0\)</span> term and <span
+class="math inline">\(k\)</span> explanatory variables).</p>
+<p><strong>Consequences</strong>: Severe violations of homoscedaticity
+can result in two problems.</p>
+<ol style="list-style-type: decimal">
+<li><p>Biased standard errors, incorrect p-values, and incorrect
+confidence/prediction intervals.</p></li>
+<li><p>Inefficient estimation of model parameters (and functions
+thereof).</p></li>
+</ol>
+<p><strong>Detection</strong>: Many common patterns of
+heteroscedasticity can be found by plotting standardized or studentized
+residuals against <span class="math inline">\(\hat{y}_i\)</span>.</p>
+<p><strong>Example</strong>: Consider the following data on survival
+time of terminal cancer patients given a supplement of ascorbate (i.e.,
+vitamin C).</p>
+<pre class="r"><code>library(Stat2Data)
+data(CancerSurvival) # this package requires that we &quot;load&quot; the data
+head(CancerSurvival)</code></pre>
+<pre><code>  Survival   Organ
+1      124 Stomach
+2       42 Stomach
+3       25 Stomach
+4       45 Stomach
+5      412 Stomach
+6       51 Stomach</code></pre>
+<p>For plotting purposes we can order the levels of Organ according to
+mean survival using <code>reorder</code>.</p>
+<pre class="r"><code>CancerSurvival$Organ &lt;- with(CancerSurvival, reorder(Organ, Survival, mean))</code></pre>
+<p>The <code>with</code> function implies that each variable is “with”
+the data frame <code>CancerSurvival</code>. This is sometimes nicer than
+having to identify the data frame explicitly as in the following.</p>
+<pre class="r"><code>CancerSurvival$Organ &lt;- reorder(CancerSurvival$Organ, CancerSurvival$Survival, mean)</code></pre>
+<p>Here is a plot of the data using <code>geom_jitter</code> to space
+out the points.</p>
+<pre class="r"><code>p &lt;- ggplot(CancerSurvival, aes(x = Organ, y = Survival)) + 
+  geom_jitter(height = 0, width = 0.25) + 
+  labs(y = &quot;Survival Time (Days)&quot;) + theme_classic()
+plot(p)</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" />
+Here we can see some descriptive statistics.</p>
+<pre class="r"><code>library(dplyr)
+CancerSurvival %&gt;% group_by(Organ) %&gt;% 
+  summarize(mean = mean(Survival), stdev = sd(Survival), obs = n())</code></pre>
+<pre><code># A tibble: 5 × 4
+  Organ     mean stdev   obs
+  &lt;fct&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+1 Bronchus  212.  210.    17
+2 Stomach   286   346.    13
+3 Colon     457.  427.    17
+4 Ovary     884. 1099.     6
+5 Breast   1396. 1239.    11</code></pre>
+<p>Now consider a linear model that assumes homoscedasticity.</p>
+<pre class="r"><code>m &lt;- lm(Survival ~ Organ, data = CancerSurvival)
+CancerSurvival$yhat &lt;- predict(m)
+CancerSurvival$rest &lt;- rstudent(m)
+head(CancerSurvival)</code></pre>
+<pre><code>  Survival   Organ yhat    rest
+1      124 Stomach  286 -0.2498
+2       42 Stomach  286 -0.3765
+3       25 Stomach  286 -0.4029
+4       45 Stomach  286 -0.3719
+5      412 Stomach  286  0.1943
+6       51 Stomach  286 -0.3626</code></pre>
+<pre class="r"><code>p &lt;- ggplot(CancerSurvival, aes(x = yhat, y = rest, color = Organ)) + 
+  geom_point(alpha = 0.5) + theme_classic() + 
+  labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>Example</strong>: Consider the following data from a study on
+the effects of fuel reduction on biomass.</p>
+<pre class="r"><code>library(trtools) # for biomass data
+
+m &lt;- lm(suitable ~ -1 + treatment:total, data = biomass)
+summary(m)$coefficients</code></pre>
+<pre><code>                 Estimate Std. Error t value Pr(&gt;|t|)
+treatmentn:total   0.1056    0.04183   2.524 1.31e-02
+treatmenty:total   0.1319    0.01121  11.773 7.61e-21</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(treatment = c(&quot;n&quot;,&quot;y&quot;), total = seq(0, 2767, length = 10))
+d$yhat &lt;- predict(m, newdata = d)
+
+p &lt;- ggplot(biomass, aes(x = total, y = suitable, color = treatment)) + 
+  geom_point() + geom_line(aes(y = yhat), data = d) + theme_minimal() + 
+  labs(x = &quot;Total Biomass (kg/ha)&quot;, y = &quot;Suitable Biomass (kg/ha)&quot;,
+    color = &quot;Treatment&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>biomass$yhat &lt;- predict(m)
+biomass$rest &lt;- rstudent(m)
+
+p &lt;- ggplot(biomass, aes(x = yhat, y = rest, color = treatment)) + 
+  geom_point() + theme_minimal() + 
+  labs(x = &quot;Predicted Value&quot;, y = &quot;Studentized Residual&quot;, 
+    color = &quot;Treatment&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-02-12-2024_files/figure-html/unnamed-chunk-18-2.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>Solutions</strong>: There are several possible solutions.</p>
+<ol style="list-style-type: decimal">
+<li><p>Response variable transformation.</p></li>
+<li><p>Weighted least squares.</p></li>
+<li><p>Robust standard error estimators.</p></li>
+<li><p>Models that do not assume constant variance.</p></li>
+</ol>
+<p>We will discuss each of these in turn soon.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
