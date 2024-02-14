@@ -82,20 +82,22 @@ plot(p)
 source("http://webpages.uidaho.edu/~trjohns/grooming.txt")
 head(grooming)
 tail(grooming)
-p <- ggplot(grooming, aes(x = day, y = frequency, color = id))
-p <- p + geom_point() + facet_grid(~ collar, scales = "free_x")
-p <- p + theme_minimal()
-p <- p + labs(x = "Relative Day", y = "Grooming Frequency", color = "Rabbit")
+p <- ggplot(grooming, aes(x = day, y = frequency, color = id)) +
+  geom_point() + facet_grid(~ collar, scales = "free_x") +
+  theme_minimal() + 
+  labs(x = "Relative Day", y = "Grooming Frequency", 
+    color = "Rabbit")
 plot(p)
 ```
 ```{r, fig.height = 6}
 m <- lm(log(frequency) ~ day + collar + day:collar, data = grooming)
 grooming$yhat <- predict(m)
 grooming$rest <- rstudent(m)
-p <- ggplot(grooming, aes(x = yhat, y = rest))
-p <- p + geom_point() + geom_segment(aes(x = yhat, xend = yhat, y = rest, yend = 0))
-p <- p + facet_wrap(~ id) + theme_minimal()
-p <- p + labs(x = "Predicted Value", y = "Studentized Residual")
+p <- ggplot(grooming, aes(x = yhat, y = rest)) + 
+  geom_point() + 
+  geom_segment(aes(x = yhat, xend = yhat, y = rest, yend = 0)) +
+  facet_wrap(~ id) + theme_minimal() + 
+  labs(x = "Predicted Value", y = "Studentized Residual")
 plot(p)
 ```
 
@@ -259,7 +261,7 @@ A variety of statistical tests have been proposed for various assumptions, where
 
 1. Such tests have their own assumptions, which may not be well met.
 
-0. Such tests do not clearly reveal the *severity* of the violation. While it is true that tests tend to have more power when the violation is severe, they can also have high power when the violation is negligible (as may also be the consequences) but $n$ is large.
+0. Such tests do not clearly reveal the *severity* of the violation. While it is true that tests tend to have more power when the violation is severe, they can also have high power when the violation is negligible (as may also be the consequences) if $n$ is large.
 
 0. Perhaps the question to ask is not if the assumption is wrong, but rather if it is "reasonable" --- i.e., is it "close enough" or are inferences likely to be very adversely affected?
 
