@@ -61,7 +61,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Assumptions --- continued](lecture-02-14-2024.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Solutions for heteroscedasticity --- variance stabilizing transformations, weighted least squares](lecture-02-16-2024.html),
  
 ***
 
