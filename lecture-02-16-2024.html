@@ -428,7 +428,7 @@ class="math display">\[
   \end{cases}
 \]</span> Note that this is like the Von Bertalanffy growth model. Here
 <span class="math inline">\(\alpha\)</span> is an asymptote for expected
-weight we are approach as dose increases, <span
+weight that we approach as dose increases, <span
 class="math inline">\(\gamma\)</span> is the expected response for a
 zero dose , and <span class="math inline">\(\lambda_a\)</span> and <span
 class="math inline">\(\lambda_b\)</span> are “half-life” parameters. We
@@ -605,7 +605,7 @@ Breast vs Ovary       511.6 583.7 -656.4  1680 0.8765 59 0.384340</code></pre>
 using the <code>contrast</code> function from the
 <strong>emmeans</strong> package.</p>
 <pre class="r"><code>library(emmeans)
-contrast(emmeans(m.wls, ~ Organ), &quot;trt.vs.ctrl&quot;, ref = &quot;Breast&quot;, 
+emmeans::contrast(emmeans(m.wls, ~ Organ), method = &quot;trt.vs.ctrl&quot;, ref = &quot;Breast&quot;, 
    reverse = TRUE, adjust = &quot;none&quot;, infer = TRUE)</code></pre>
 <pre><code> contrast          estimate  SE df lower.CL upper.CL t.ratio p.value
  Breast - Bronchus     1184 377 59      430     1939   3.141  0.0026

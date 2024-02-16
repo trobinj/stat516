@@ -145,7 +145,7 @@ $$
       \text{if methionine was given from source $b$}.
   \end{cases}
 $$
-Note that this is like the Von Bertalanffy growth model. Here $\alpha$ is an asymptote for expected weight we are approach as dose increases, $\gamma$ is the expected response for a zero dose , and $\lambda_a$ and $\lambda_b$ are "half-life" parameters. We can estimate this model as follows using *ordinary* (i.e., unweighted) least squares as follows.
+Note that this is like the Von Bertalanffy growth model. Here $\alpha$ is an asymptote for expected weight that we approach as dose increases, $\gamma$ is the expected response for a zero dose , and $\lambda_a$ and $\lambda_b$ are "half-life" parameters. We can estimate this model as follows using *ordinary* (i.e., unweighted) least squares as follows.
 ```{r}
 m.ols <- nls(weight ~ case_when(
   source == "none" ~ gamma,
@@ -249,7 +249,7 @@ trtools::contrast(m.wls,
 Here's how you can do the comparison of one level with all others using the `contrast` function from the **emmeans** package.
 ```{r}
 library(emmeans)
-contrast(emmeans(m.wls, ~ Organ), "trt.vs.ctrl", ref = "Breast", 
+emmeans::contrast(emmeans(m.wls, ~ Organ), method = "trt.vs.ctrl", ref = "Breast", 
    reverse = TRUE, adjust = "none", infer = TRUE)
 ```
 Another approach is to assume that the variance of the response variable is some function of its expected response, and thus the weights are a function of the expected response. With right-skewed response variables one common functional relationship is that
