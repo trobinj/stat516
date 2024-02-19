@@ -11,7 +11,7 @@ This website is for Dr. Johnson's *Applied Regression Modeling* course (Stat 436
 
 <center>
 
-![](heteroscedasticity.jpg)
+![https://xkcd.com/2311](http://imgs.xkcd.com/comics/confidence_interval.png)
 
 </center>
 
