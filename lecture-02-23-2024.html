@@ -333,7 +333,7 @@ d$yhat &lt;- predict(m, newdata = d)
 p &lt;- ggplot(Puromycin, aes(x = conc, y = rate)) + 
   geom_point(aes(color = state)) + geom_line(aes(y = yhat), data = d) + 
   labs(x = &quot;Substrate Concentration (ppm)&quot;, 
-    y = &quot;Reaction Rate (counts/min)&quot;, color = &quot;Cell State&quot;) + 
+    y = &quot;Reaction Rate (counts/min/min)&quot;, color = &quot;Cell State&quot;) + 
   theme_minimal() + theme(legend.position = c(0.8,0.2))
 plot(p)</code></pre>
 <p><img src="lecture-02-23-2024_files/figure-html/unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" />

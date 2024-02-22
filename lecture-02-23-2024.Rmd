@@ -82,7 +82,7 @@ To estimate $\alpha$ and $\lambda$ the typical method is to conduct a series of 
     p <- ggplot(Puromycin, aes(x = conc, y = rate)) + 
       geom_point(aes(color = state)) + geom_line(aes(y = yhat), data = d) + 
       labs(x = "Substrate Concentration (ppm)", 
-        y = "Reaction Rate (counts/min)", color = "Cell State") + 
+        y = "Reaction Rate (counts/min/min)", color = "Cell State") + 
       theme_minimal() + theme(legend.position = c(0.8,0.2))
     plot(p)
     ```
