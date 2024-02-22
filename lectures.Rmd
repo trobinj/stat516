@@ -61,7 +61,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Assumptions --- continued](lecture-02-14-2024.html).
 
-`r i <- i + 1; d[i]` [Solutions for heteroscedasticity --- variance stabilizing transformations, weighted least squares](lecture-02-16-2024.html),
+`r i <- i + 1; d[i]` [Solutions for heteroscedasticity --- variance stabilizing transformations, weighted least squares](lecture-02-16-2024.html).
  
 ***
 
@@ -69,7 +69,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Iteratively weighted least squares, parametric models for heteroscedasticity, heteroscedastic consistent standard errors](lecture-02-21-2024.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [R workflow demonstration for nonlinear regression and heteroscedasticity](lecture-02-23-2024.html).
  
 ***
 
