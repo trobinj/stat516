@@ -73,7 +73,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Introduction to Poisson regression and generalized linear models](lecture-02-26-2024.html).
 
 `r i <- i + 1; d[i]` 
 
