@@ -89,6 +89,20 @@ To estimate $\alpha$ and $\lambda$ the typical method is to conduct a series of 
     ```
 Clearly the linear model is not a good model for the data. Cut-and-paste the R code above and modify it to replace the linear model with the Michaelis-Menten model (ignoring the experimental manipulation for now). To specify starting values for $\alpha$ and $\lambda$, look at the plot of the data and try to guess their approximate values. Remember that $\alpha$ is the asymptote and $\lambda$ is the concentration at which the (expected) reaction rate is half way between zero and the asymptote. 
 
+    **Solution**: We might estimate the nonlinear model as follows, using the figure to guess starting values for $\alpha$ and $\lambda$.
+    ```{r}
+    m <- nls(rate ~ alpha * conc / (lambda + conc), data = Puromycin,
+      start = list(alpha = 200, lambda = 0.1))
+    cbind(summary(m)$coefficients, confint(m))
+    ```
+    We can plot the model as follows by "adding" to the code above.
+    ```{r}
+    d <- data.frame(conc = seq(0, 1.2, length = 100))
+    d$yhat <- predict(m, newdata = d)
+    p <- p + geom_line(aes(y = yhat), data = d, linetype = 2)
+    plot(p)
+    ```
+
 2. Now consider a linear model that will assume a linear relationship between reaction rate and concentration that is different for treated versus untreated cells (i.e., an "interaction" between substrate concentration and cell state). 
     ```{r, message = FALSE}
     m <- lm(rate ~ state + conc + conc:state, data = Puromycin)
@@ -148,7 +162,75 @@ We can also use the `case_when` function from the **dplyr** package.
     ```
 Obviously this is a poor model for the `Puromycin` data since expected reaction rate does not appear to be a linear function of substrate concentration. Instead we would like to have a model where there the Michaelis-Menten model describes the relationship between the expected reaction rate and substrate concentration, but *differently for each state* so that the $\alpha$ and $\lambda$ parameters can depend on the state. Estimate this model using the `nls` function, noting that there are many different ways that this model could be parameterized. Plot the model as well with the raw data. 
 
+    **Solution**: Here is one way we might specify such a model.
+    ```{r}
+    m1 <- nls(rate ~ ifelse(state == "treated", alphat * conc / (lambdat + conc),
+      alphau * conc / (lambdau + conc)), data = Puromycin,
+      start = list(alphat = 200, lambdat = 0.1, alphau = 200, lambdau = 0.1))
+    cbind(summary(m1)$coefficients, confint(m1))
+    ```
+    This model can be written as
+    $$
+    E(Y_i) =
+      \begin{cases}
+      \alpha_t s_i/(\lambda_t + s_i), & \text{if the $i$-th observation is of treated cells}, \\
+      \alpha_u s_i/(\lambda_u + s_i), & \text{if the $i$-th observation is of untreated cells}.
+      \end{cases}
+    $$
+    An alternative paramterization that includes a parameter for the "effect" of treating the cells is
+    $$
+    E(Y_i) =
+      \begin{cases}
+      (\alpha + \delta_{\alpha})s_i/(\lambda + \delta_{\lambda} + s_i), & \text{if the $i$-th observation is of treated cells}, \\
+      \alpha s_i/(\lambda + s_i), & \text{if the $i$-th observation is of untreated cells}.
+      \end{cases}
+    $$
+    Note that we can establish a relationship between the parameters in the two models: $\alpha = \alpha_u$, $\lambda = \lambda_u$, $\delta_{\alpha} = \alpha_t - \alpha_u$ and $\delta_{\lambda} = \lambda_t - \lambda_u$. This latter model can be estimated as follows.
+    ```{r}
+    m2 <- nls(rate ~ ifelse(state == "treated",
+      (alpha + deltaa) * conc / (lambda + deltal + conc),
+      alpha * conc / (lambda + conc)), data = Puromycin,
+      start = list(alpha = 200, lambda = 0.1, deltaa = 0, deltal = 0))
+    cbind(summary(m2)$coefficients, confint(m2))
+    ```
+    There are several other ways we might parameterize the model and specify it in `nls`. But for plotting purposes the parameterization does not matter.
+    ```{r}
+    d <- expand.grid(conc = seq(0, 1.2, length = 100), state = c("treated","untreated"))
+    d$yhat <- predict(m1, newdata = d)
+
+    p <- ggplot(Puromycin, aes(x = conc, y = rate, color = state)) +
+      geom_point() + geom_line(aes(y = yhat), data = d) +
+      labs(x = "Substrate Concentration (ppm)",
+        y = "Reaction Rate (counts/min/min)") +
+      labs(color = "Cell State") +
+      theme_minimal() + 
+      theme(legend.position = "inside", legend.position.inside = c(0.8,0.3))
+    plot(p)
+    ```
+
 0. There are several potentially useful inferences we might make here. One is the values of the two parameters for the Michaelis-Menten model *for each state*. Another is the difference in the parameters *between states*. Depending on how the model was parameterized in the previous question, some of these could be found simply by using `summary` and `confint`, while others might require using `lincon` unless the model is reparameterized. Produce estimates, standard errors, and confidence intervals for the six quantities described above.
+
+    **Solution**: First consider inferences for the two parameters of the Michaelis-Menten model for each treatment condition. These are the parameters of the first parameterization used above.
+    ```{r}
+    cbind(summary(m1)$coefficients, confint(m1))
+    ```
+    If we were using the second parameterization, we could obtain estimates of the parameters from the untreated cells from `summary` and `confint`, but would have to use something like `lincon` to to estimate a function of the model parameters. Recall the relationships between the parameters in the two models: $\alpha = \alpha_u$, $\lambda = \lambda_u$, $\delta_{\alpha} = \alpha_t - \alpha_u$ and $\delta_{\lambda} = \lambda_t - \lambda_u$. Thus $\alpha_t = \alpha + \delta_{\alpha}$ and $\lambda_t = \lambda + \delta_{\lambda}$.
+    ```{r}
+    library(trtools)
+    cbind(summary(m2)$coefficients, confint(m2))
+    lincon(m2, a = c(1, 0, 1, 0)) # lambdat  
+    lincon(m2, a = c(0, 1, 0, 1)) # lambdat 
+    ```
+    Now if we want to estimate the difference in the parameters of the Michaelis-Menten model between the treated and untreated states, we could get that from the second parameterization because those differences are $\delta_{\alpha}$ and $\delta_{\lambda}$.
+    ```{r}
+    cbind(summary(m2)$coefficients, confint(m2))
+    ```
+    But if we were using the first parameterization we would again need to use something like `lincon` since $\delta_{\alpha} = \alpha_t - \alpha_u$ and $\delta_{\lambda} = \lambda_t - \lambda_u$.
+    ```{r}
+    lincon(m1, a = c(1,0,-1,0)) # delta_alpha
+    lincon(m1, a = c(0,1,0,-1)) # delta_lambda
+    ```
+    Note that when estimating the same quantity we obtain the same estimates and standard errors from either parameterization from `summary` and `lincon`. The confidence intervals, however, are slightly different because `confint` and `lincon` use different methods of obtaining approximate confidence intervals.
 
 ## Heteroscedasticity in the Daphnia Data
 
@@ -199,6 +281,17 @@ $$
 $$
 We do not know $\sigma_e^2$, $\sigma_t^2$, and $\sigma_h^2$, but they could be *estimated* using the sample variances $s_e^2$, $s_t^2$, and $s_h^2$, respectively, which we can easily compute since we have multiple observations from each layer. Estimate the model using weighted least squares with weights computed as described above. The sample standard deviations can be computed and used to add weights to the data frame using functions from the **dplyr** package as demonstrated with the `CancerSurvival` data in lecture on [February 16th](lecture-02-16-2024.html).
 
+    **Solution**: First we compute the weights using functions from the **dplyr** package.
+    ```{r}
+    library(dplyr)
+    daphniastrat <- daphniastrat %>% group_by(layer) %>% mutate(w = 1 / var(count))
+    ```
+    Then we estimate the model using weighted least squares.
+    ```{r}
+    m <- lm(count ~ layer, data = daphniastrat, weights = w)
+    summary(m)$coefficients
+    ```
+
 2. Assuming again that the variance of the counts vary by layer so that
 $$
   \text{Var}(Y_i) = 
@@ -210,7 +303,34 @@ $$
 $$
 another approach would be to use a *parametric model* that estimates the usual parameters of the regression model (i.e., $\beta_0$, $\beta_1$, and $\beta_3$) and the three variances above *simultaneously*. Do this using the `gls` function from the **nlme** package as demonstrated in lecture on [February 21st](lecture-02-21-2024.html).
 
+    **Solution**: Here is how we would estimate this model.
+    ```{r}
+    library(nlme) # for gls function
+    m <- gls(count ~ layer, data = daphniastrat,
+      weights = varIdent(form = ~ 1 | layer), method = "ML")
+    summary(m)
+    ```
+    The model above was estimated using *maximum likelihood* (ML). But another method is to use what is called *restricted maximum likelihood* (REML) which is the default method. It is interesting to note that for this model, this REML effectively equivalent to the approach used in the previous problem.
+    ```{r}
+    library(nlme) # for gls function
+    m <- gls(count ~ layer, data = daphniastrat,
+      weights = varIdent(form = ~ 1 | layer), method = "ML")
+    summary(m)
+    ```
+    We will discuss maximum likelihood and perhaps restricted maximum likelihood later in the course.
+
 3. With counts it is often assumed that the variance is proportional to the expected response --- i.e., $\text{Var}(Y_i) \propto E(Y_i)$. Assuming that is true here, estimate the model using *iteratively weighted least squares* as was demonstrated in lecture on [February 21st](lecture-02-21-2024.html). 
+
+    **Solution**: We can program the iteratively weighted least squares algorithm as follows.
+    ```{r}
+    daphniastrat$w <- 1
+    for (i in 1:5) {
+      m <- lm(count ~ layer, data = daphniastrat, weights = w)
+      daphniastrat$w <- 1 / predict(m)
+    }
+    summary(m)
+    ```
+    Note how the estimates do not change. For this particular model the algorithm only needs to go through one iteration to compute the weights. This is because the predicted values do not depend on the weights in this particular model.
 
 
 
