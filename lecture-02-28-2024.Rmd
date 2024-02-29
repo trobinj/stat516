@@ -39,7 +39,6 @@ options(digits = 4, width = 100)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
-
 ## Parameter Interpretation With Log Link Functions
 
 A GLM with a log link function, like a Poisson regression model, has the form
@@ -141,7 +140,7 @@ $$
 $$  
 we can say that it *increases* by 25%. 
 
-**Example**: Consider again the model for the elephant matings data.
+**Example**: Consider again the model for the elephant mating data.
 ```{r}
 m <- glm(Matings ~ Age, family = poisson, data = case2201)
 exp(cbind(m$coefficients, confint(m))) 

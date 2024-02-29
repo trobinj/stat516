@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Friday, Mar 1</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Statistics 436/516</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="lectures.html">Lectures</a>
+</li>
+<li>
+  <a href="resources.html">Resources</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Friday, Mar 1</h1>
+
+</div>
+
+
+<p>You can also download a <a href="lecture-03-01-2024.pdf">PDF</a> copy
+of this lecture.</p>
+<div id="poisson-regression-for-rates" class="section level2">
+<h2>Poisson Regression for Rates</h2>
+<p>The <span class="math inline">\(i\)</span>-th observed <em>rate</em>
+<span class="math inline">\(R_i\)</span> can be written as <span
+class="math display">\[
+    R_i = C_i/S_i,
+\]</span> where <span class="math inline">\(C_i\)</span> is a
+<em>count</em> and <span class="math inline">\(S_i\)</span> is the
+“size” of the interval in which the counts are observed. Examples
+include fish per minute, epileptic episodes per day, or defects per
+(square) meter. In some cases <span class="math inline">\(S_i\)</span>
+is referred to as the “exposure” of the <span
+class="math inline">\(i\)</span>-th observation.</p>
+<p>Assume that the count <span class="math inline">\(C_i\)</span> has a
+Poisson distribution and that <span class="math display">\[
+  E(C_i) = S_i \underbrace{\exp(\beta_0 + \beta_1 x_{i1} + \cdots +
+\beta_k x_{ik})}_{\lambda_i},
+\]</span> where <span class="math inline">\(\lambda_i\)</span> is the
+expected count <em>per unit</em> (e.g., per minute) so that <span
+class="math inline">\(S_i\lambda_i\)</span> is then the expected count
+per <span class="math inline">\(S_i\)</span> (e.g., per hour if <span
+class="math inline">\(S_i\)</span> = 60, per day if <span
+class="math inline">\(S_i\)</span> = 1440, or per second if <span
+class="math inline">\(S_i\)</span> = 1/60). The expected <em>rate</em>
+is then <span class="math display">\[
+  E(R_i) = E(C_i/S_i) = E(C_i)/S_i = \exp(\beta_0 + \beta_1 x_{i1} +
+\cdots + \beta_k x_{ik}),
+\]</span> if we treat exposure as <em>fixed</em> (like we do <span
+class="math inline">\(x_{i1}, x_{i2}, \dots, x_{ik}\)</span>). But
+rather than using <span class="math inline">\(R_i\)</span> as the
+response variable we can use <span class="math inline">\(C_i\)</span> as
+the response variable in a Poisson regression model where <span
+class="math display">\[
+  E(C_i) = S_i \exp(\beta_0 + \beta_1 x_{i1} + \cdots + \beta_k x_{ik})
+         =  \exp(\beta_0 + \beta_1 x_{i1} + \cdots + \beta_k x_{ik} +
+\log S_i),
+\]</span> and where <span class="math inline">\(\log S_i\)</span> is an
+“offset” variable (i.e., basically an explanatory variable where it’s
+<span class="math inline">\(\beta_j\)</span> is “fixed” at one).</p>
+<p>Note: If <span class="math inline">\(S_i\)</span> is a
+<em>constant</em> for all observations so that <span
+class="math inline">\(S_i = S\)</span> then we can write the model as
+<span class="math display">\[
+  E(C_i) = \exp(\beta_0 + \beta_1 x_{i1} + \cdots + \beta_k x_{ik} +
+\log S_i) =
+  \exp(\beta_0^* + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k
+x_{ik}),
+\]</span> where <span class="math inline">\(\beta_0^* = \log(S) +
+\beta_0\)</span> so that the offset is “absorbed” into <span
+class="math inline">\(\beta_0\)</span>, and we do not need to be
+concerned about it. Including an offset is only necessary if <span
+class="math inline">\(S_i\)</span> is not the same for all
+observations.</p>
+</div>
+<div id="variance-of-rates" class="section level2">
+<h2>Variance of Rates</h2>
+<p>Using rates as response variables in a linear or nonlinear model
+without accounting for <span class="math inline">\(S_i\)</span> is not
+advisable because of heteroscedasticity due to unequal <span
+class="math inline">\(S_i\)</span>.</p>
+<p>Note that <span class="math inline">\(E(C_i) = S_iE(R_i)\)</span> and
+that <span class="math inline">\(\text{Var}(C_i) = S_iE(R_i)\)</span> if
+<span class="math inline">\(C_i\)</span> has a Poisson distribution. The
+variance of <span class="math inline">\(R_i\)</span> is then <span
+class="math display">\[
+  \text{Var}(R_i) = \text{Var}(C_i/S_i) = \text{Var}(C_i)/S_i^2 =
+E(S_iR_i)/S_i^2 = S_iE(R_i)/S_i^2 = E(R_i)/S_i,
+\]</span> if we treat <span class="math inline">\(S_i\)</span> as fixed.
+So the variance of a rate is <em>inversely proportional</em> to <span
+class="math inline">\(S_i\)</span>.</p>
+<p>For example, suppose <span class="math inline">\(E(R_i) =
+E(R_{i&#39;}) = 0.5\)</span>, but <span class="math inline">\(S_i =
+2\)</span> and <span class="math inline">\(S_{i&#39;} = 100\)</span> so
+that <span class="math inline">\(R_i = C_i/2\)</span> and <span
+class="math inline">\(R_{i&#39;} = C_{i&#39;}/100\)</span>. Then <span
+class="math display">\[
+  \text{Var}(R_i) = 0.5/2 = 0.25 &gt; \text{Var}(R_{i&#39;}) = 0.5/100 =
+0.005.
+\]</span> For this reason it is usually not advised to use rates as
+response variables without either (a) using an appropriate offset
+variable in Poisson regression or a related model or (b) using weights
+of <span class="math inline">\(w_i = S_i/E(R_i)\)</span> (via
+iteratively weighted least squares with weights of <span
+class="math inline">\(w_i = S_i/\hat{y}_i\)</span>).</p>
+</div>
+<div id="modeling-rates-with-poisson-regression" class="section level2">
+<h2>Modeling Rates with Poisson Regression</h2>
+<p>Software for GLMs (and sometimes linear models) will often permit
+specification of an offset variable. In R this is done using
+<code>offset</code> in the model formula.</p>
+<p><strong>Example</strong>: Consider the following data from an
+observational study of auto accidents.</p>
+<pre class="r"><code>library(trtools)
+head(accidents)</code></pre>
+<pre><code>  accidents years location treatment
+1        13     9        a    before
+2         6     9        b    before
+3        30     8        c    before
+4        20     8        d    before
+5        10     9        e    before
+6        15     8        f    before</code></pre>
+<pre class="r"><code>p &lt;- ggplot(accidents, aes(x = location, y = accidents/years)) +
+  geom_point(aes(size = years, color = treatment)) + 
+  labs(x = &quot;Location&quot;, y = &quot;Accidents per Year&quot;, 
+    size = &quot;Years&quot;, color = &quot;Treatment&quot;) + theme_minimal()
+plot(p)</code></pre>
+<p><img src="lecture-03-01-2024_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>m &lt;- glm(accidents ~ location + treatment + offset(log(years)), 
+  data = accidents, family = poisson)
+cbind(summary(m)$coefficients, confint(m))</code></pre>
+<pre><code>                Estimate Std. Error z value Pr(&gt;|z|)    2.5 % 97.5 %
+(Intercept)      -0.5099     0.3734 -1.3656 0.172075 -1.29243 0.1770
+locationb        -0.4855     0.4494 -1.0804 0.279943 -1.41219 0.3784
+locationc         1.0176     0.3264  3.1174 0.001825  0.40267 1.6939
+locationd         0.5371     0.3563  1.5075 0.131683 -0.15098 1.2601
+locatione        -0.2624     0.4206 -0.6238 0.532790 -1.11363 0.5588
+locationf         0.5859     0.3529  1.6601 0.096897 -0.09389 1.3036
+locationg        -0.4855     0.4494 -1.0804 0.279943 -1.41219 0.3784
+locationh         0.1993     0.3792  0.5255 0.599208 -0.54592 0.9578
+treatmentbefore   0.7807     0.2754  2.8343 0.004593  0.27407 1.3616</code></pre>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                        2.5 % 97.5 %
+(Intercept)     0.6006 0.2746  1.194
+locationb       0.6154 0.2436  1.460
+locationc       2.7666 1.4958  5.441
+locationd       1.7110 0.8599  3.526
+locatione       0.7692 0.3284  1.749
+locationf       1.7966 0.9104  3.683
+locationg       0.6154 0.2436  1.460
+locationh       1.2205 0.5793  2.606
+treatmentbefore 2.1829 1.3153  3.902</code></pre>
+<p>When using other tools like <code>contrast</code> or functions from
+the <strong>emmeans</strong> package, be sure to specify the offset (if
+necessary). Here are the rate ratios for the treatment.</p>
+<pre class="r"><code>trtools::contrast(m,
+  a = list(treatment = &quot;before&quot;, location = letters[1:8], years = 1),
+  b = list(treatment = &quot;after&quot;, location = letters[1:8], years = 1),
+  cnames = letters[1:8], tf = exp)</code></pre>
+<pre><code>  estimate lower upper
+a    2.183 1.272 3.745
+b    2.183 1.272 3.745
+c    2.183 1.272 3.745
+d    2.183 1.272 3.745
+e    2.183 1.272 3.745
+f    2.183 1.272 3.745
+g    2.183 1.272 3.745
+h    2.183 1.272 3.745</code></pre>
+<pre class="r"><code>trtools::contrast(m,
+  a = list(treatment = &quot;after&quot;, location = letters[1:8], years = 1),
+  b = list(treatment = &quot;before&quot;, location = letters[1:8], years = 1),
+  cnames = letters[1:8], tf = exp)</code></pre>
+<pre><code>  estimate lower upper
+a   0.4581 0.267 0.786
+b   0.4581 0.267 0.786
+c   0.4581 0.267 0.786
+d   0.4581 0.267 0.786
+e   0.4581 0.267 0.786
+f   0.4581 0.267 0.786
+g   0.4581 0.267 0.786
+h   0.4581 0.267 0.786</code></pre>
+<p>Here are the estimated expected number of accidents per year at
+location <code>a</code>.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(treatment = c(&quot;before&quot;,&quot;after&quot;), location = &quot;a&quot;, years = 1),
+  cnames = c(&quot;before&quot;,&quot;after&quot;), tf = exp)</code></pre>
+<pre><code>       estimate  lower upper
+before   1.3110 0.7595 2.263
+after    0.6006 0.2889 1.248</code></pre>
+<p>Here are the estimated expected number of accidents <em>per
+decade</em> at location <code>a</code>.</p>
+<pre class="r"><code>trtools::contrast(m, a = list(treatment = c(&quot;before&quot;,&quot;after&quot;), location = &quot;a&quot;, years = 10),
+  cnames = c(&quot;before&quot;,&quot;after&quot;), tf = exp)</code></pre>
+<pre><code>       estimate lower upper
+before   13.110 7.595 22.63
+after     6.006 2.889 12.48</code></pre>
+<p>When using functions from the <strong>emmeans</strong> package we use
+the <code>offset</code> argument with the value specified on the log
+scale. Here are the estimated number of accidents per decade.</p>
+<pre class="r"><code>library(emmeans)
+emmeans(m, ~treatment|location, type = &quot;response&quot;, offset = log(10))</code></pre>
+<pre><code>location = a:
+ treatment  rate   SE  df asymp.LCL asymp.UCL
+ after      6.01 2.24 Inf      2.89     12.48
+ before    13.11 3.65 Inf      7.59     22.63
+
+location = b:
+ treatment  rate   SE  df asymp.LCL asymp.UCL
+ after      3.70 1.60 Inf      1.58      8.64
+ before     8.07 2.86 Inf      4.03     16.16
+
+location = c:
+ treatment  rate   SE  df asymp.LCL asymp.UCL
+ after     16.62 4.83 Inf      9.39     29.39
+ before    36.27 6.39 Inf     25.68     51.23
+
+location = d:
+ treatment  rate   SE  df asymp.LCL asymp.UCL
+ after     10.28 3.42 Inf      5.35     19.75
+ before    22.43 5.06 Inf     14.42     34.89
+
+location = e:
+ treatment  rate   SE  df asymp.LCL asymp.UCL
+ after      4.62 1.86 Inf      2.10     10.18
+ before    10.08 3.20 Inf      5.42     18.78
+
+location = f:
+ treatment  rate   SE  df asymp.LCL asymp.UCL
+ after     10.79 3.56 Inf      5.65     20.59
+ before    23.55 5.18 Inf     15.30     36.25
+
+location = g:
+ treatment  rate   SE  df asymp.LCL asymp.UCL
+ after      3.70 1.60 Inf      1.58      8.64
+ before     8.07 2.86 Inf      4.03     16.16
+
+location = h:
+ treatment  rate   SE  df asymp.LCL asymp.UCL
+ after      7.33 2.56 Inf      3.70     14.53
+ before    16.00 4.18 Inf      9.59     26.71
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre>
+<p>Here is the rate ratio for the effect of treatment.</p>
+<pre class="r"><code>pairs(emmeans(m, ~treatment|location, type = &quot;response&quot;, offset = log(10)), infer = TRUE)</code></pre>
+<pre><code>location = a:
+ contrast       ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ after / before 0.458 0.126 Inf     0.267     0.786    1  -2.834  0.0046
+
+location = b:
+ contrast       ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ after / before 0.458 0.126 Inf     0.267     0.786    1  -2.834  0.0046
+
+location = c:
+ contrast       ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ after / before 0.458 0.126 Inf     0.267     0.786    1  -2.834  0.0046
+
+location = d:
+ contrast       ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ after / before 0.458 0.126 Inf     0.267     0.786    1  -2.834  0.0046
+
+location = e:
+ contrast       ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ after / before 0.458 0.126 Inf     0.267     0.786    1  -2.834  0.0046
+
+location = f:
+ contrast       ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ after / before 0.458 0.126 Inf     0.267     0.786    1  -2.834  0.0046
+
+location = g:
+ contrast       ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ after / before 0.458 0.126 Inf     0.267     0.786    1  -2.834  0.0046
+
+location = h:
+ contrast       ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ after / before 0.458 0.126 Inf     0.267     0.786    1  -2.834  0.0046
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>Use <code>reverse = TRUE</code> to “flip” the rate ratio. Also for
+rate ratios the size of the offset does not matter since it
+“cancels-out” in the ratio. Also since there is no interaction in this
+model which means the rate ratio does not depend on location, we can
+omit it when using <code>emmeans</code> (but not
+<code>contrast</code>).</p>
+<pre class="r"><code>pairs(emmeans(m, ~treatment, type = &quot;response&quot;), infer = TRUE)</code></pre>
+<pre><code> contrast       ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ after / before 0.458 0.126 Inf     0.267     0.786    1  -2.834  0.0046
+
+Results are averaged over the levels of: location 
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>When using <code>predict</code> we need to be sure to also include
+the offset amount.</p>
+<pre class="r"><code>d &lt;- expand.grid(treatment = c(&quot;before&quot;,&quot;after&quot;), location = letters[1:8], years = 1)
+d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
+head(d)</code></pre>
+<pre><code>  treatment location years   yhat
+1    before        a     1 1.3110
+2     after        a     1 0.6006
+3    before        b     1 0.8068
+4     after        b     1 0.3696
+5    before        c     1 3.6269
+6     after        c     1 1.6615</code></pre>
+<pre class="r"><code>p &lt;- ggplot(accidents, aes(x = location, y = accidents/years)) +
+  geom_point(aes(size = years, color = treatment)) + 
+  labs(x = &quot;Location&quot;, y = &quot;Accidents per Year&quot;, 
+    size = &quot;Years&quot;, color = &quot;Treatment&quot;) + theme_minimal() + 
+  geom_point(aes(y = yhat, color = treatment), data = d) + 
+  geom_line(aes(y = yhat, group = treatment, color = treatment), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-03-01-2024_files/figure-html/unnamed-chunk-9-1.png" width="100%" style="display: block; margin: auto;" />
+We can use the <code>glmint</code> function from the
+<strong>trtools</strong> package if we want to produce confidence
+intervals for plots.</p>
+<pre class="r"><code>d &lt;- expand.grid(treatment = c(&quot;before&quot;,&quot;after&quot;), location = letters[1:8], years = 1)
+d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
+glmint(m, newdata = d)</code></pre>
+<pre><code>      fit    low    upp
+1  1.3110 0.7595 2.2629
+2  0.6006 0.2889 1.2485
+3  0.8068 0.4027 1.6161
+4  0.3696 0.1582 0.8635
+5  3.6269 2.5678 5.1228
+6  1.6615 0.9393 2.9388
+7  2.2431 1.4421 3.4890
+8  1.0276 0.5347 1.9747
+9  1.0085 0.5415 1.8780
+10 0.4620 0.2096 1.0180
+11 2.3553 1.5302 3.6253
+12 1.0789 0.5654 2.0589
+13 0.8068 0.4027 1.6161
+14 0.3696 0.1582 0.8635
+15 1.6001 0.9587 2.6706
+16 0.7330 0.3697 1.4532</code></pre>
+<pre class="r"><code>cbind(d, glmint(m, newdata = d))</code></pre>
+<pre><code>   treatment location years   yhat    fit    low    upp
+1     before        a     1 1.3110 1.3110 0.7595 2.2629
+2      after        a     1 0.6006 0.6006 0.2889 1.2485
+3     before        b     1 0.8068 0.8068 0.4027 1.6161
+4      after        b     1 0.3696 0.3696 0.1582 0.8635
+5     before        c     1 3.6269 3.6269 2.5678 5.1228
+6      after        c     1 1.6615 1.6615 0.9393 2.9388
+7     before        d     1 2.2431 2.2431 1.4421 3.4890
+8      after        d     1 1.0276 1.0276 0.5347 1.9747
+9     before        e     1 1.0085 1.0085 0.5415 1.8780
+10     after        e     1 0.4620 0.4620 0.2096 1.0180
+11    before        f     1 2.3553 2.3553 1.5302 3.6253
+12     after        f     1 1.0789 1.0789 0.5654 2.0589
+13    before        g     1 0.8068 0.8068 0.4027 1.6161
+14     after        g     1 0.3696 0.3696 0.1582 0.8635
+15    before        h     1 1.6001 1.6001 0.9587 2.6706
+16     after        h     1 0.7330 0.7330 0.3697 1.4532</code></pre>
+<pre class="r"><code>d &lt;- cbind(d, glmint(m, newdata = d))
+p &lt;- ggplot(accidents, aes(x = location)) + 
+  geom_point(aes(y = accidents/years, size = years), shape = 21, fill = &quot;white&quot;) + 
+  facet_wrap(~ treatment) + theme_minimal() + 
+  labs(x = &quot;Location&quot;, y = &quot;Accidents per Year&quot;, size = &quot;Years&quot;) + 
+  geom_errorbar(aes(ymin = low, ymax = upp), data = d, width = 0.5) + 
+  geom_point(aes(y = fit), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-03-01-2024_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p &lt;- ggplot(accidents, aes(x = location, color = treatment)) + 
+  geom_point(aes(y = accidents/years, size = years), 
+    position = position_dodge(width = 0.6), shape = 21, fill = &quot;white&quot;) + 
+  labs(x = &quot;Location&quot;, y = &quot;Accidents per Year&quot;, 
+    size = &quot;Years&quot;, color = &quot;Treatment&quot;) + theme_minimal() + 
+  geom_errorbar(aes(ymin = low, ymax = upp), data = d, 
+    position = position_dodge(width = 0.6), width = 0.5) + 
+  geom_point(aes(y = fit), data = d, position = position_dodge(width = 0.6))
+plot(p)</code></pre>
+<p><img src="lecture-03-01-2024_files/figure-html/unnamed-chunk-10-2.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><strong>Example</strong>: Consider the following data from an
+observational study that investigated the possible effect of the
+development of a commercial fishery on deep sea fish abundance. The
+figure below shows the number of fish per square meter of swept area
+from 147 trawls by mean depth in meters, and by whether the trawl was
+during one of two periods. The 1977-1989 period was from before the
+development of a commercial fishery, and the period 2000-2002 was when
+the fishery was active.</p>
+<pre class="r"><code>library(COUNT)
+data(fishing)
+head(fishing)</code></pre>
+<pre><code>  site totabund   density meandepth year    period sweptarea
+1    1       76 0.0020703       804 1978 1977-1989     36710
+2    2      161 0.0035198       808 2001 2000-2002     45741
+3    3       39 0.0009805       809 2001 2000-2002     39775
+4    4      410 0.0080392       848 1979 1977-1989     51000
+5    5      177 0.0059334       853 2002 2000-2002     29831
+6    6      695 0.0218005       960 1980 1977-1989     31880</code></pre>
+<pre class="r"><code>p &lt;- ggplot(fishing, aes(x = meandepth, y = totabund/sweptarea)) +
+  geom_point(alpha = 0.5) + facet_wrap(~ period) + theme_minimal() +
+  labs(x = &quot;Mean Trawl Depth (meters)&quot;,
+    y = &quot;Fish Caught Per Square Meter Trawled&quot;)
+plot(p)</code></pre>
+<p><img src="lecture-03-01-2024_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" />
+An appropriate model for these data might be as follows.</p>
+<pre class="r"><code>m &lt;- glm(totabund ~ period * meandepth + offset(log(sweptarea)),
+  family = poisson, data = fishing)
+summary(m)$coefficients</code></pre>
+<pre><code>                            Estimate Std. Error  z value   Pr(&gt;|z|)
+(Intercept)               -3.4228194  1.490e-02 -229.672  0.000e+00
+period2000-2002           -0.7711169  2.973e-02  -25.937 2.547e-148
+meandepth                 -0.0009713  7.965e-06 -121.945  0.000e+00
+period2000-2002:meandepth  0.0001318  1.524e-05    8.651  5.090e-18</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(sweptarea = 1, period = c(&quot;1977-1989&quot;,&quot;2000-2002&quot;), 
+  meandepth = seq(800, 5000, length = 100))
+d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
+
+p &lt;- p + geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
+<p><img src="lecture-03-01-2024_files/figure-html/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" />
+What is the expected number of fish per square meter in 1977-1989 at
+depths of 1000, 2000, 3000, 4000, and 5000 meters? What is it in
+2000-2002?</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(sweptarea = 1, 
+    meandepth = c(1000,2000,3000,4000,5000), period = &quot;1977-1989&quot;),
+  cnames = c(&quot;1000m&quot;,&quot;2000m&quot;,&quot;3000m&quot;,&quot;4000m&quot;,&quot;5000m&quot;), tf = exp)</code></pre>
+<pre><code>       estimate     lower     upper
+1000m 0.0123500 0.0121470 0.0125564
+2000m 0.0046757 0.0046128 0.0047395
+3000m 0.0017702 0.0017281 0.0018134
+4000m 0.0006702 0.0006450 0.0006963
+5000m 0.0002537 0.0002406 0.0002676</code></pre>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(sweptarea = 1,
+    meandepth = c(1000,2000,3000,4000,5000), period = &quot;2000-2002&quot;),
+  cnames = c(&quot;1000m&quot;,&quot;2000m&quot;,&quot;3000m&quot;,&quot;4000m&quot;,&quot;5000m&quot;), tf = exp)</code></pre>
+<pre><code>       estimate     lower     upper
+1000m 0.0065168 0.0063254 0.0067139
+2000m 0.0028149 0.0027508 0.0028806
+3000m 0.0012159 0.0011702 0.0012635
+4000m 0.0005252 0.0004942 0.0005582
+5000m 0.0002269 0.0002084 0.0002470</code></pre>
+<p>Here is how we can do that with <strong>emmeans</strong>.</p>
+<pre class="r"><code>library(emmeans)
+emmeans(m, ~meandepth|period, at = list(meandepth = seq(1000, 5000, by = 1000)),
+  type = &quot;response&quot;, offset = log(1))</code></pre>
+<pre><code>period = 1977-1989:
+ meandepth     rate       SE  df asymp.LCL asymp.UCL
+      1000 0.012350 1.04e-04 Inf  0.012147  0.012556
+      2000 0.004676 3.23e-05 Inf  0.004613  0.004739
+      3000 0.001770 2.18e-05 Inf  0.001728  0.001813
+      4000 0.000670 1.31e-05 Inf  0.000645  0.000696
+      5000 0.000254 6.89e-06 Inf  0.000241  0.000268
+
+period = 2000-2002:
+ meandepth     rate       SE  df asymp.LCL asymp.UCL
+      1000 0.006517 9.91e-05 Inf  0.006325  0.006714
+      2000 0.002815 3.31e-05 Inf  0.002751  0.002881
+      3000 0.001216 2.38e-05 Inf  0.001170  0.001263
+      4000 0.000525 1.63e-05 Inf  0.000494  0.000558
+      5000 0.000227 9.85e-06 Inf  0.000208  0.000247
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre>
+<p>Note that we can change the units of swept area very easily here.
+There are 10,000 square meters in a hectare. Here are the expected
+number of fish per hectare.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(sweptarea = 10000,
+    meandepth = c(1000,2000,3000,4000,5000), period = &quot;1977-1989&quot;),
+  cnames = c(&quot;1000m&quot;,&quot;2000m&quot;,&quot;3000m&quot;,&quot;4000m&quot;,&quot;5000m&quot;), tf = exp)</code></pre>
+<pre><code>      estimate   lower   upper
+1000m  123.500 121.470 125.564
+2000m   46.757  46.128  47.395
+3000m   17.702  17.281  18.134
+4000m    6.702   6.450   6.963
+5000m    2.537   2.406   2.676</code></pre>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(sweptarea = 10000,
+    meandepth = c(1000,2000,3000,4000,5000), period = &quot;2000-2002&quot;),
+  cnames = c(&quot;1000m&quot;,&quot;2000m&quot;,&quot;3000m&quot;,&quot;4000m&quot;,&quot;5000m&quot;), tf = exp)</code></pre>
+<pre><code>      estimate  lower  upper
+1000m   65.168 63.254 67.139
+2000m   28.149 27.508 28.806
+3000m   12.159 11.702 12.635
+4000m    5.252  4.942  5.582
+5000m    2.269  2.084  2.470</code></pre>
+<pre class="r"><code>emmeans(m, ~meandepth|period, at = list(meandepth = seq(1000, 5000, by = 1000)),
+  type = &quot;response&quot;, offset = log(10000))</code></pre>
+<pre><code>period = 1977-1989:
+ meandepth   rate     SE  df asymp.LCL asymp.UCL
+      1000 123.50 1.0443 Inf    121.47    125.56
+      2000  46.76 0.3232 Inf     46.13     47.39
+      3000  17.70 0.2175 Inf     17.28     18.13
+      4000   6.70 0.1308 Inf      6.45      6.96
+      5000   2.54 0.0689 Inf      2.41      2.68
+
+period = 2000-2002:
+ meandepth   rate     SE  df asymp.LCL asymp.UCL
+      1000  65.17 0.9910 Inf     63.25     67.14
+      2000  28.15 0.3310 Inf     27.51     28.81
+      3000  12.16 0.2379 Inf     11.70     12.63
+      4000   5.25 0.1632 Inf      4.94      5.58
+      5000   2.27 0.0985 Inf      2.08      2.47
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale </code></pre>
+<p>What is the rate ratio of fish per square meter in 2000-2002 versus
+1977-1989 at 1000, 2000, 3000, 4000, and 5000 meters?</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(sweptarea = 1, meandepth = c(1000,2000,3000,4000,5000), period = &quot;2000-2002&quot;),
+  b = list(sweptarea = 1, meandepth = c(1000,2000,3000,4000,5000), period = &quot;1977-1989&quot;),
+  cnames = c(&quot;1000m&quot;,&quot;2000m&quot;,&quot;3000m&quot;,&quot;4000m&quot;,&quot;5000m&quot;), tf = exp)</code></pre>
+<pre><code>      estimate  lower  upper
+1000m   0.5277 0.5100 0.5460
+2000m   0.6020 0.5861 0.6183
+3000m   0.6869 0.6565 0.7187
+4000m   0.7837 0.7293 0.8421
+5000m   0.8941 0.8087 0.9885</code></pre>
+<p>Here it is for 1977-1989 versus 2000-2002.</p>
+<pre class="r"><code>trtools::contrast(m, 
+  a = list(sweptarea = 1, meandepth = c(1000,2000,3000,4000,5000), period = &quot;1977-1989&quot;),
+  b = list(sweptarea = 1, meandepth = c(1000,2000,3000,4000,5000), period = &quot;2000-2002&quot;),
+  cnames = c(&quot;1000m&quot;,&quot;2000m&quot;,&quot;3000m&quot;,&quot;4000m&quot;,&quot;5000m&quot;), tf = exp)</code></pre>
+<pre><code>      estimate lower upper
+1000m    1.895 1.832 1.961
+2000m    1.661 1.617 1.706
+3000m    1.456 1.391 1.523
+4000m    1.276 1.188 1.371
+5000m    1.118 1.012 1.237</code></pre>
+<p>Now using <strong>emmeans</strong>.</p>
+<pre class="r"><code>pairs(emmeans(m, ~meandepth*period, at = list(meandepth = seq(1000, 5000, by = 1000)),
+  type = &quot;response&quot;, offset = log(1)), by = &quot;meandepth&quot;, infer = TRUE)</code></pre>
+<pre><code>meandepth = 1000:
+ contrast                  ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ (1977-1989) / (2000-2002)  1.90 0.0330 Inf      1.83      1.96    1  36.740  &lt;.0001
+
+meandepth = 2000:
+ contrast                  ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ (1977-1989) / (2000-2002)  1.66 0.0227 Inf      1.62      1.71    1  37.200  &lt;.0001
+
+meandepth = 3000:
+ contrast                  ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ (1977-1989) / (2000-2002)  1.46 0.0336 Inf      1.39      1.52    1  16.260  &lt;.0001
+
+meandepth = 4000:
+ contrast                  ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ (1977-1989) / (2000-2002)  1.28 0.0468 Inf      1.19      1.37    1   6.640  &lt;.0001
+
+meandepth = 5000:
+ contrast                  ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ (1977-1989) / (2000-2002)  1.12 0.0573 Inf      1.01      1.24    1   2.190  0.0288
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>How does the expected number of fish per square meter change per
+1000m of depth?</p>
+<pre class="r"><code># increasing depth by 1000m
+trtools::contrast(m,
+  a = list(sweptarea = 1, meandepth = 2000, period = c(&quot;1977-1989&quot;,&quot;2000-2002&quot;)),
+  b = list(sweptarea = 1, meandepth = 1000, period = c(&quot;1977-1989&quot;,&quot;2000-2002&quot;)),
+  cnames = c(&quot;1977-1989&quot;,&quot;2000-2002&quot;), tf = exp)</code></pre>
+<pre><code>          estimate  lower  upper
+1977-1989   0.3786 0.3727 0.3846
+2000-2002   0.4320 0.4211 0.4431</code></pre>
+<pre class="r"><code># decreasing depth by 1000m
+trtools::contrast(m,
+  a = list(sweptarea = 1, meandepth = 1000, period = c(&quot;1977-1989&quot;,&quot;2000-2002&quot;)),
+  b = list(sweptarea = 1, meandepth = 2000, period = c(&quot;1977-1989&quot;,&quot;2000-2002&quot;)),
+  cnames = c(&quot;1977-1989&quot;,&quot;2000-2002&quot;), tf = exp)</code></pre>
+<pre><code>          estimate lower upper
+1977-1989    2.641 2.600 2.683
+2000-2002    2.315 2.257 2.375</code></pre>
+<p>Here is how to do the latter with <strong>emmeans</strong>.</p>
+<pre class="r"><code>pairs(emmeans(m, ~meandepth*period, at = list(meandepth = c(1000,2000)),
+  offset = log(1), type = &quot;response&quot;), by = &quot;period&quot;, infer = TRUE)</code></pre>
+<pre><code>period = 1977-1989:
+ contrast                      ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ meandepth1000 / meandepth2000  2.64 0.0210 Inf      2.60      2.68    1 121.940  &lt;.0001
+
+period = 2000-2002:
+ contrast                      ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ meandepth1000 / meandepth2000  2.32 0.0301 Inf      2.26      2.37    1  64.610  &lt;.0001
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+</div>
+<div id="standardized-mortality-ratios" class="section level2">
+<h2>Standardized Mortality Ratios</h2>
+<p>In epidemiology, the <em>standardized mortality ratio</em> (SMR) is
+the ratio of the <em>observed</em> number of deaths and the (estimated)
+<em>expected</em> number of deaths. Poisson regression with an offset
+can be used to model the SMR to determine if the number of deaths tends
+to be higher or lower than we would expect.</p>
+<p><strong>Example</strong>: Here is an example of an observational
+study using a Poisson regression model to investigate the relationship
+between lung cancer and radon exposure in counties in Minnesota.</p>
+<p>Note: The data manipulation and plotting is quite a bit more
+complicated than what you will normally see in this class, but I have
+included it in case you might be interested to see the code.</p>
+<p>First we will process the data containing the observed and expected
+number of deaths due to lung cancer, where the latter are based on the
+known distribution of age and gender in the county.</p>
+<pre class="r"><code>lung &lt;- read.table(&quot;http://faculty.washington.edu/jonno/book/MNlung.txt&quot;, 
+  header = TRUE, sep = &quot;\t&quot;) %&gt;% 
+  mutate(obs = obs.M + obs.F, exp = exp.M + exp.F) %&gt;% 
+  dplyr::select(X, County, obs, exp) %&gt;%
+  rename(county = County) %&gt;% 
+  mutate(county = tolower(county)) %&gt;% 
+  mutate(county = ifelse(county == &quot;red&quot;, &quot;red lake&quot;, county))
+head(lung)</code></pre>
+<pre><code>  X    county obs   exp
+1 1    aitkin  92  76.9
+2 2     anoka 677 600.5
+3 3    becker 105 107.9
+4 4  beltrami 101 105.7
+5 5    benton  61  81.4
+6 6 big stone  32  27.4</code></pre>
+<p>Now we will read in data to estimate the average radon exposure of
+residents of each county.</p>
+<pre class="r"><code>radon &lt;- read.table(&quot;http://faculty.washington.edu/jonno/book/MNradon.txt&quot;,
+  header = TRUE) %&gt;% group_by(county) %&gt;% 
+  summarize(radon = mean(radon)) %&gt;% rename(X = county)
+head(radon)</code></pre>
+<pre><code># A tibble: 6 × 2
+      X radon
+  &lt;int&gt; &lt;dbl&gt;
+1     1  2.08
+2     2  3.21
+3     3  3.18
+4     4  3.66
+5     5  3.78
+6     6  4.93</code></pre>
+<p>Next we merge the two data frames.</p>
+<pre class="r"><code>radon &lt;- left_join(lung, radon) %&gt;% dplyr::select(-X)
+head(radon)</code></pre>
+<pre><code>     county obs   exp radon
+1    aitkin  92  76.9 2.075
+2     anoka 677 600.5 3.212
+3    becker 105 107.9 3.175
+4  beltrami 101 105.7 3.657
+5    benton  61  81.4 3.775
+6 big stone  32  27.4 4.933</code></pre>
+<p>For fun we can make some plots of the data by county.</p>
+<pre class="r"><code>library(maps)
+dstate &lt;- map_data(&quot;state&quot;) %&gt;% 
+  filter(region == &quot;minnesota&quot;)
+dcounty &lt;- map_data(&quot;county&quot;) %&gt;% 
+  filter(region == &quot;minnesota&quot;) %&gt;% 
+  rename(county = subregion)
+dcounty &lt;- left_join(dcounty, radon) %&gt;% 
+  mutate(smr = obs/exp)</code></pre>
+<pre class="r"><code>no_axes &lt;- theme_minimal() + theme(
+  axis.text = element_blank(),
+  axis.line = element_blank(),
+  axis.ticks = element_blank(),
+  panel.border = element_blank(),
+  panel.grid = element_blank(),
+  axis.title = element_blank()
+)
+
+p &lt;- ggplot(dcounty, aes(x = long, y = lat, group = group)) + coord_fixed(1.3) +
+  geom_polygon(aes(fill = exp), color = &quot;black&quot;, linewidth = 0.25) + 
+  scale_fill_gradient(low = grey(0.95), high = grey(0.25), 
+    trans = &quot;log10&quot;, na.value = &quot;pink&quot;) + 
+  theme(legend.position = &quot;inside&quot;, legend.position.inside = c(0.8,0.4)) + 
+  no_axes + ggtitle(&quot;Expected Number of Cases&quot;) + labs(fill = &quot;Cases&quot;)
+
+plot(p)</code></pre>
+<p><img src="lecture-03-01-2024_files/figure-html/unnamed-chunk-25-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p &lt;- ggplot(dcounty, aes(x = long, y = lat, group = group)) + coord_fixed(1.3) +
+  geom_polygon(aes(fill = smr), color = &quot;black&quot;, linewidth = 0.25) + 
+  scale_fill_gradient(low = grey(0.95), high = grey(0.25), na.value = &quot;pink&quot;) +
+  theme(legend.position = &quot;inside&quot;, legend.position.inside = c(0.8,0.4)) + 
+  no_axes + ggtitle(&quot;Standardized Mortality Ratio&quot;) + labs(fill = &quot;SMR&quot;)
+
+plot(p)</code></pre>
+<p><img src="lecture-03-01-2024_files/figure-html/unnamed-chunk-25-2.png" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>p &lt;- ggplot(dcounty, aes(x = long, y = lat, group = group)) + coord_fixed(1.3) + 
+  geom_polygon(aes(fill = radon), color = &quot;black&quot;, linewidth = 0.25) + 
+  scale_fill_gradient(low = grey(0.95), high = grey(0.25), na.value = &quot;pink&quot;) + 
+  theme(legend.position = &quot;inside&quot;, legend.position.inside = c(0.8,0.4)) + 
+  no_axes + ggtitle(&quot;Average Radon (pCi/liter)&quot;) + labs(fill = &quot;Radon&quot;)
+
+plot(p)</code></pre>
+<p><img src="lecture-03-01-2024_files/figure-html/unnamed-chunk-25-3.png" width="100%" style="display: block; margin: auto;" />
+How does the expected SMR relate to radon? Consider the Poisson
+regression model <span class="math display">\[
+  \log E(Y_i/E_i) = \beta_0 + \beta_1r_i,
+\]</span> where <span class="math inline">\(Y_i\)</span> and <span
+class="math inline">\(E_i\)</span> are the observed and expected number
+of lung cancer deaths (or cases), respectively, in the <span
+class="math inline">\(i\)</span>-th county, and <span
+class="math inline">\(r_i\)</span> is the average radon exposure in the
+<span class="math inline">\(i\)</span>-th county. Here <span
+class="math inline">\(Y_i/E_i\)</span> is the SMR for the <span
+class="math inline">\(i\)</span>-th county. We can also write this model
+as <span class="math display">\[
+  \log E(Y_i) = \log E_i  + \beta_0 + \beta_1r_i,
+\]</span> so <span class="math inline">\(\log E_i\)</span> is an
+<em>offset</em>.</p>
+<pre class="r"><code>m &lt;- glm(obs ~ offset(log(exp)) + radon, family = poisson, data = dcounty)
+summary(m)$coefficients</code></pre>
+<pre><code>            Estimate Std. Error z value   Pr(&gt;|z|)
+(Intercept)   0.2107   0.005619   37.51 6.954e-308
+radon        -0.0421   0.001195  -35.24 4.366e-272</code></pre>
+<pre class="r"><code>exp(cbind(coef(m), confint(m)))</code></pre>
+<pre><code>                    2.5 % 97.5 %
+(Intercept) 1.2346 1.2211  1.248
+radon       0.9588 0.9565  0.961</code></pre>
+<p>We should be careful and remember the <a
+href="https://en.wikipedia.org/wiki/Ecological_fallacy">ecological
+fallacy</a> which states that relationships at the group level (e.g.,
+county) do not necessarily hold at the individual level. Radon may be
+related to other variables (e.g., smoking) that affect the risk of lung
+cancer.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

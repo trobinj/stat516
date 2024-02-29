@@ -77,7 +77,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Interpretation of GLMs with log link functions, rate ratios](lecture-02-28-2024.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Using an offset variable with Poisson regression](lecture-03-01-2024.html).
  
 ***
 
