@@ -81,7 +81,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Introduction to logistic regression](lecture-03-04-2024.html). 
 
 `r i <- i + 1; d[i]` 
 
