@@ -279,7 +279,7 @@ $$
     1/\sigma_h^2, & \text{if the $i$-th observation is from the hypolimnion layer}.
   \end{cases}
 $$
-We do not know $\sigma_e^2$, $\sigma_t^2$, and $\sigma_h^2$, but they could be *estimated* using the sample variances $s_e^2$, $s_t^2$, and $s_h^2$, respectively, which we can easily compute since we have multiple observations from each layer. Estimate the model using weighted least squares with weights computed as described above. The sample standard deviations can be computed and used to add weights to the data frame using functions from the **dplyr** package as demonstrated with the `CancerSurvival` data in lecture on [February 16th](lecture-02-16-2024.html).
+We do not know $\sigma_e^2$, $\sigma_t^2$, and $\sigma_h^2$, but they could be *estimated* using the sample variances $s_e^2$, $s_t^2$, and $s_h^2$, respectively, which we can easily compute since we have multiple observations from each layer. Estimate the model using weighted least squares with weights computed as described above. The sample variances can be computed and used to add weights to the data frame using functions from the **dplyr** package as demonstrated with the `CancerSurvival` data in lecture on [February 16th](lecture-02-16-2024.html).
 
     **Solution**: First we compute the weights using functions from the **dplyr** package.
     ```{r}

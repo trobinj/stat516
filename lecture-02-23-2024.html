@@ -463,7 +463,7 @@ cbind(summary(m1)$coefficients, confint(m1))</code></pre>
 <pre><code>         Estimate Std. Error t value  Pr(&gt;|t|)      2.5%     97.5%
 alphat  212.68373   6.608094  32.185 4.876e-18 198.88883 227.45563
 lambdat   0.06412   0.007877   8.141 1.293e-07   0.04856   0.08354
-alphau  160.28001   6.896011  23.242 2.041e-15 145.85285 176.28021
+alphau  160.28001   6.896012  23.242 2.041e-15 145.85285 176.28021
 lambdau   0.04771   0.008281   5.761 1.496e-05   0.03159   0.06966</code></pre>
 <p>This model can be written as <span class="math display">\[
 E(Y_i) =
@@ -530,7 +530,7 @@ These are the parameters of the first parameterization used above.</p>
 <pre><code>         Estimate Std. Error t value  Pr(&gt;|t|)      2.5%     97.5%
 alphat  212.68373   6.608094  32.185 4.876e-18 198.88883 227.45563
 lambdat   0.06412   0.007877   8.141 1.293e-07   0.04856   0.08354
-alphau  160.28001   6.896011  23.242 2.041e-15 145.85285 176.28021
+alphau  160.28001   6.896012  23.242 2.041e-15 145.85285 176.28021
 lambdau   0.04771   0.008281   5.761 1.496e-05   0.03159   0.06966</code></pre>
 <p>If we were using the second parameterization, we could obtain
 estimates of the parameters from the untreated cells from
@@ -656,8 +656,8 @@ class="math inline">\(s_t^2\)</span>, and <span
 class="math inline">\(s_h^2\)</span>, respectively, which we can easily
 compute since we have multiple observations from each layer. Estimate
 the model using weighted least squares with weights computed as
-described above. The sample standard deviations can be computed and used
-to add weights to the data frame using functions from the
+described above. The sample variances can be computed and used to add
+weights to the data frame using functions from the
 <strong>dplyr</strong> package as demonstrated with the
 <code>CancerSurvival</code> data in lecture on <a
 href="lecture-02-16-2024.html">February 16th</a>.</p>
