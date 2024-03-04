@@ -278,7 +278,7 @@ of this lecture.</p>
 of beetles to carbon disulphide.</p>
 <pre class="r"><code>library(trtools) 
 library(ggplot2)
-library(ggrepel)
+library(ggrepel) # used for geom_label_repel (see below)
 
 bliss$proportion &lt;- paste(bliss$dead, &quot;/&quot;, bliss$exposed, sep = &quot;&quot;)
 bliss</code></pre>
@@ -871,13 +871,9 @@ class="math inline">\(O_a\)</span> is a percent larger or smaller than
 that investigated the effect of non-indigenous brook trout on the
 survival of salmon.</p>
 <pre class="r"><code>library(abd) # for BrookTrout data
-BrookTrout$proportion &lt;- paste(BrookTrout$salmon.survived, &quot;/&quot;,
-    BrookTrout$salmon.released, sep = &quot;&quot;)
 p &lt;- ggplot(BrookTrout, aes(x = trout, y = salmon.survived/salmon.released)) + 
   geom_point() + ylim(0, 0.5) + coord_flip() + theme_minimal() +
-  geom_label_repel(aes(label = proportion), 
-    box.padding = 0.75, max.overlaps = 20) + 
-  labs(x = &quot;Presence/Absence of Brook Trout&quot;,
+  labs(x = &quot;Presence/Absence of\n Brook Trout&quot;,
     y = &quot;Proportion of Released Salmon Surviving&quot;)
 plot(p)</code></pre>
 <p><img src="lecture-03-04-2024_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" /></p>
@@ -916,14 +912,18 @@ odds @ absent    0.2726 0.2537 0.2929</code></pre>
 germination of five varieties of soybean seeds. Note that each
 observation was the number of seeds that <em>failed</em> to germinate
 out of 100 seeds.</p>
-<pre class="r"><code>head(faraway::soybean)</code></pre>
-<pre><code>  variety replicate failure
-1   check         1       8
-2   check         2      10
-3   check         3      12
-4   check         4      13
-5   check         5      11
-6  arasan         1       2</code></pre>
+<pre class="r"><code>head(faraway::soybean, 10)</code></pre>
+<pre><code>   variety replicate failure
+1    check         1       8
+2    check         2      10
+3    check         3      12
+4    check         4      13
+5    check         5      11
+6   arasan         1       2
+7   arasan         2       6
+8   arasan         3       7
+9   arasan         4      11
+10  arasan         5       5</code></pre>
 <pre class="r"><code>p &lt;- ggplot(faraway::soybean, aes(x = variety, y = (100-failure)/100)) +
   geom_jitter(height = 0, width = 0.1) + theme_minimal() + 
   labs(x = &quot;Soybean Variety&quot;, y = &quot;Proportion Germinated&quot;)

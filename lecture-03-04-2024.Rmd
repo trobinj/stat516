@@ -39,15 +39,13 @@ options(digits = 4, width = 100)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
-
-
 ## Proportions as Response Variables
 
 Consider the following data from an experiment that exposed batches of beetles to carbon disulphide.
 ```{r, message = FALSE}
 library(trtools) 
 library(ggplot2)
-library(ggrepel)
+library(ggrepel) # used for geom_label_repel (see below)
 
 bliss$proportion <- paste(bliss$dead, "/", bliss$exposed, sep = "")
 bliss
@@ -377,15 +375,11 @@ $$
 where $O_a/O_b = e^{\beta_1}$ is the odds ratio. The sign tells us if $O_a$ is a percent larger or smaller than $O_b$. 
 
 **Example**: Consider the following data from a study that investigated the effect of non-indigenous brook trout on the survival of salmon.
-```{r, message = FALSE}
+```{r, message = FALSE, fig.height = 2}
 library(abd) # for BrookTrout data
-BrookTrout$proportion <- paste(BrookTrout$salmon.survived, "/",
-    BrookTrout$salmon.released, sep = "")
 p <- ggplot(BrookTrout, aes(x = trout, y = salmon.survived/salmon.released)) + 
   geom_point() + ylim(0, 0.5) + coord_flip() + theme_minimal() +
-  geom_label_repel(aes(label = proportion), 
-    box.padding = 0.75, max.overlaps = 20) + 
-  labs(x = "Presence/Absence of Brook Trout",
+  labs(x = "Presence/Absence of\n Brook Trout",
     y = "Proportion of Released Salmon Surviving")
 plot(p)
 m <- glm(cbind(salmon.survived, salmon.released - salmon.survived) ~ trout,
@@ -409,7 +403,7 @@ The odds ratios are then simply a ratio of these odds.
 
 **Example**: Consider the following study of the germination of five varieties of soybean seeds. Note that each observation was the number of seeds that *failed* to germinate out of 100 seeds.
 ```{r, message = FALSE}
-head(faraway::soybean)
+head(faraway::soybean, 10)
 p <- ggplot(faraway::soybean, aes(x = variety, y = (100-failure)/100)) +
   geom_jitter(height = 0, width = 0.1) + theme_minimal() + 
   labs(x = "Soybean Variety", y = "Proportion Germinated")
