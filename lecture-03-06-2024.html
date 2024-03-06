@@ -13,7 +13,7 @@
 
 <title>Wednesday, Mar 6</title>
 
-<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
@@ -547,9 +547,9 @@ drate       1.303e+00 1.125e+00 1.63151</code></pre>
   drate = seq(0, 40, length = 100))
 d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
 
-library(metR) # for geom_text_contour</code></pre>
-<pre><code>Warning: package &#39;metR&#39; was built under R version 4.3.3</code></pre>
-<pre class="r"><code>p &lt;- ggplot(vaso, aes(x = dvolume, y = drate)) + 
+library(metR) # for geom_text_contour
+
+p &lt;- ggplot(vaso, aes(x = dvolume, y = drate)) + 
   geom_point(aes(fill = vasoconstriction), shape = 21) +
   scale_fill_manual(values = c(&quot;white&quot;,&quot;black&quot;)) + 
   geom_contour(aes(z = yhat), data = d, color = &quot;black&quot;,
