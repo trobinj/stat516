@@ -85,7 +85,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Logistic regression --- continued, odds ratios](lecture-03-06-2024.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Using the **emmeans** package with Poisson and logistic regression models, the relationship between Poisson and logistic regression, separation](lecture-03-08-2024.html).
  
 ***
 

@@ -1,0 +1,344 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "03-06-2024"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(comment = "", echo = TRUE, fig.height = 4, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+suppressWarnings(library(kableExtra))
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+```{r options, echo = FALSE}
+options(digits = 4, width = 100)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+<!-- Introduce using emtrends to estimate rate and odds ratios, along with the pairs function to compare them. Note that you need to have type = "response" and tran = "log" (for odds ratios at least) to do this. If/how did we do this before? -->
+
+## Using the **emmeans** Package for Poisson and Logistic Regression
+
+The **emmeans** package can be used to produce many of the same inferences that are obtained using `contrast` with respect to estimated expected rates/probabilities as well as rate/odds ratios.
+
+**Example**: Consider the following Poisson regression model for the `ceriodaphniastrain` data.
+```{r}
+fleas <- trtools::ceriodaphniastrain
+fleas$strain <- factor(fleas$strain, levels = c(1,2), labels = c("a","b"))
+m <- glm(count ~ concentration * strain, family = poisson, data = fleas) 
+summary(m)$coefficients
+```
+We can compute the expected count for a concentration of two for each strain using `contrast`.
+```{r}
+trtools::contrast(m, tf = exp,
+  a = list(strain = c("a","b"), concentration = 2))
+```
+And we can do it using `emmeans` if we specify `type = "response"` and use the `at` argument to specify the value of any quantitative explanatory variables. 
+```{r}
+library(emmeans)
+emmeans(m, ~ strain, type = "response", at = list(concentration = 2))
+emmeans(m, ~ strain|concentration, type = "response", at = list(concentration = c(1,2,3)))
+emmeans(m, ~ concentration|strain, type = "response", at = list(concentration = c(1,2,3)))
+emmeans(m, ~ concentration*strain, type = "response", at = list(concentration = c(1,2,3)))
+```
+Note that `emmeans` does produce a valid standard error on the scale of the expected count/rate which `trtools::contrast` does not (by default), and that `trtools::contrast` will show the test statistic and p-value on the log scale if we omit the `tf = exp` argument. 
+
+We can compute the rate ratio to compare the two strains at a given concentration.
+```{r}
+trtools::contrast(m, tf = exp,
+  a = list(strain = "a", concentration = 2),
+  b = list(strain = "b", concentration = 2))
+pairs(emmeans(m, ~ strain, type = "response", 
+  at = list(concentration = 2)), infer = TRUE)
+pairs(emmeans(m, ~ strain*concentration, type = "response", 
+  at = list(concentration = c(1,2,3))), by = "concentration", infer = TRUE)
+pairs(emmeans(m, ~ strain|concentration, type = "response", 
+  at = list(concentration = c(1,2,3))), infer = TRUE)
+```
+What about the rate ratio for the effect of concentration?
+```{r}
+trtools::contrast(m, tf = exp,
+  a = list(strain = c("a","b"), concentration = 2),
+  b = list(strain = c("a","b"), concentration = 1))
+emmeans(m, ~concentration|strain, 
+  at = list(concentration = c(2,1)), type = "response")
+pairs(emmeans(m, ~concentration|strain, 
+  at = list(concentration = c(2,1)), type = "response"))
+pairs(emmeans(m, ~concentration*strain,
+  at = list(concentration = c(2,1)), type = "response"), by = "strain")
+```
+What if we want to know if the rate ratios are significantly different?
+```{r}
+emtrends(m, ~strain, var = "concentration")
+pairs(emtrends(m, ~strain, var = "concentration"))
+```
+Note that these are essentially slopes but for the log of the expected response But the tests are still useful. 
+
+**Example**: Consider the following logistic regression model for the `insecticide data`.
+```{r}
+m <- glm(cbind(deaths, total-deaths) ~ insecticide * deposit, 
+  family = binomial, data = trtools::insecticide)
+summary(m)$coefficients
+```
+We can use `trtools::contrast` or `emmeans` to produce estimates of the probability of death for a given insecticide at a given deposit value.
+```{r}
+trtools::contrast(m, tf = plogis,
+  a = list(insecticide = c("g-BHC","both","DDT"), deposit = 5),
+  cnames = c("g-BHC","both","DDT"))
+emmeans(m, ~ insecticide, type = "response", at = list(deposit = 5))
+```
+Again, `emmeans` produces a valid standard error on the probability scale while `trtools::contrast` does not, and `trtools::contrast` will produce test statistics and p-values on the logit scale when the `tf = plogis` argument is omitted. 
+
+We can compute odds ratios to compare the insecticides at a given deposit.
+```{r}
+pairs(emmeans(m, ~ insecticide, type = "response", 
+  at = list(deposit = 5)), adjust = "none", infer = TRUE)
+trtools::contrast(m, tf = exp,
+  a = list(insecticide = c("g-BHC","g-BHC","both"), deposit = 5),
+  b = list(insecticide = c("both","DDT","DDT"), deposit = 5),
+  cnames = c("g-BHC / both", "g-BHC / DDT", "both / DDT"))
+```
+We can flip/reverse the odds ratios if desired (which can also be done with rate ratios).
+```{r}
+pairs(emmeans(m, ~ insecticide, type = "response", 
+  at = list(deposit = 5)), adjust = "none", reverse = TRUE, infer = TRUE)
+trtools::contrast(m, tf = exp,
+  a = list(insecticide = c("both","DDT","DDT"), deposit = 5),
+  b = list(insecticide = c("g-BHC","g-BHC","both"), deposit = 5),
+  cnames = c("both / g-BHC", "DDT / g-BHC", "DDT / both"))
+```
+We can estimate the odds ratios at several values of deposit.
+```{r}
+pairs(emmeans(m, ~ insecticide|deposit, type = "response", 
+  at = list(deposit = c(4,5,6))), adjust = "none", infer = TRUE)
+pairs(emmeans(m, ~ insecticide*deposit, type = "response", 
+  at = list(deposit = c(4,5,6))), by = "deposit", adjust = "none", infer = TRUE)
+```
+
+Here is how we can estimate the odds ratios for the effect of deposit.
+```{r}
+emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)), type = "response") # probability
+pairs(emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)),
+  type = "response"), infer = TRUE) # odds ratios
+```
+We can also compare the odds ratios. 
+```{r}
+pairs(pairs(emmeans(m, ~deposit|insecticide, at = list(deposit = c(2,1)))), by = NULL)
+```
+For odds ratios for a quantitative variable you can also compare using `emtrends`.
+```{r}
+pairs(emtrends(m, ~insecticide, var = "deposit"))
+```
+Here I have left off `type = "response"`. Including it will give ratios of odds ratios, which is a bit confusing, but if all we care about is whether the odds ratios are significantly different this is sufficient. Note that to avoid controlling for family-wise Type I error rate include the option `adjust = "none"` as an argument to `pairs`.
+
+## Relationship Between Poisson and Logistic Regression
+
+Suppose $C_i$ has a binomial distribution with parameters $p_i$ and $m_i$ so that
+$$
+  P(C_i = c) = \binom{m_i}{c}p_i^y(1-p_i)^{m_i-c}.
+$$
+Define the expected count as $E(C_i) = m_ip_i = \lambda_i$. Then $p_i = \lambda_i/m_i$ so we can write
+$$
+  P(C_i = c) = \binom{m_i}{c}\left(\frac{\lambda_i}{m_i}\right)^y\left(1-\frac{\lambda_i}{m_i}\right)^{c-y}.
+$$
+Then it can be shown that
+$$
+  \lim_{m_i \rightarrow \infty} \binom{m_i}{c}\left(\frac{\lambda_i}{m_i}\right)^y\left(1-\frac{\lambda_i}{m_i}\right)^{m_i-y} = 
+  \frac{e^{\lambda_i}\lambda_i^y}{y!},
+$$
+which is the Poisson distribution. 
+
+Thus *in practice* if $p_i$ is small relative to $m_i$ we can *approximate a binomial distribution with a Poisson distribution*. Furthermore there is a close relationship between the model parameters. In logistic regression we have
+$$
+  O_i = \exp(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}),
+$$
+where $O_i = p_i/(1-p_i)$ is the odds of the event. But when $p_i$ is very small then $O_i \approx p_i$. 
+```{r, echo = FALSE, fig.height = 5}
+par(mai = c(1, 1, 0.25, 0.25))
+x <- seq(0, 0.05, length = 100)
+y <- x/(1-x)
+prob <- c(0, 0.01, 0.03, 0.05)
+odds <- prob/(1-prob)
+plot(x, y, type = "l", bty = "L", xaxt = "n", yaxt = "n", xlab = "Probability", ylab = "Odds")
+axis(1, prob)
+axis(2, odds, MASS::fractions(odds))
+for (i in 1:length(prob)) {
+  lines(c(prob[i], prob[i]), c(0, odds[i]), lty = 3)
+  lines(c(0, prob[i]), c(odds[i], odds[i]), lty = 3)
+}
+lines(c(0, 1), c(0, 1), col = grey(0.5), lty = 2)
+```
+So then 
+$$
+  p_i \approx \exp(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}),
+$$
+and because $E(C_i) = m_ip_i$,
+$$
+  E(C_i) \approx \exp(\log m_i + \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_k x_{ik}),
+$$
+where $\log m_i$ is used as an offset in a Poisson regression model. That is, we can model a proportion (approximately) as a rate in a Poisson regression model for events that are rare and when $m_i$ (i.e., the denominator of the proportion) is relatively large. This is relatively common in large-scale observational studies.
+
+**Example**: Consider the following data on the incidence of lung cancer in four Danish cities.
+```{r}
+library(ISwR) # for eba1977 data
+head(eba1977)
+p <- ggplot(eba1977, aes(x = age, y = cases/pop)) + 
+  geom_point() + facet_grid(city ~ .) + coord_flip() + 
+  labs(x = "Age Range", y = "Cases of Lung Cancer Per Capita") +
+  theme_minimal()
+plot(p)
+```
+Consider both a logistic and Poisson regression models to compare the cities while controlling for age.
+```{r, message = FALSE}
+m.b <- glm(cbind(cases, pop-cases) ~ city + age, family = binomial, data = eba1977)
+cbind(summary(m.b)$coefficients, confint(m.b))
+m.p <- glm(cases ~ offset(log(pop)) + city + age, family = poisson, data = eba1977)
+cbind(summary(m.p)$coefficients, confint(m.p))
+```
+The expected proportion/rate of cases in Fredericia appears to be the highest. Let's compare that city with the others while controlling for age.
+```{r}
+trtools::contrast(m.b, 
+  a = list(city = "Fredericia", age = "40-54"),
+  b = list(city = c("Horsens","Kolding","Vejle"), age = "40-54"),
+  cnames = c("vs Horsens","vs Kolding","vs Vejle"), tf = exp)
+trtools::contrast(m.p, 
+  a = list(city = "Fredericia", age = "40-54", pop = 1),
+  b = list(city = c("Horsens","Kolding","Vejle"), age = "40-54", pop = 1),
+  cnames = c("vs Horsens","vs Kolding","vs Vejle"), tf = exp)
+```
+Note that since there is no interaction in the model, contrasts for city will not depend on the age group. We can also compute the estimated expected proportion (i.e., probability) or expected rate for each model.
+```{r}
+trtools::contrast(m.b, a = list(city = levels(eba1977$city), age = "40-54"), tf = plogis)
+trtools::contrast(m.p, a = list(city = levels(eba1977$city), age = "40-54", pop = 1), tf = exp)
+d <- expand.grid(city = levels(eba1977$city), age = levels(eba1977$age))
+cbind(d, trtools::glmint(m.b, newdata = d))
+d <- expand.grid(city = levels(eba1977$city), age = levels(eba1977$age), pop = 1)
+cbind(d, trtools::glmint(m.p, newdata = d))
+```
+We can use this to make some helpful plots of the estimated rates (or probabilities) of lung cancer. 
+```{r}
+d <- expand.grid(age = levels(eba1977$age), city = levels(eba1977$city), pop = 1)
+d <- cbind(d, trtools::glmint(m.p, newdata = d))
+p <- ggplot(eba1977, aes(x = age, y = cases/pop)) +
+  geom_pointrange(aes(y = fit, ymin = low, ymax = upp), 
+    shape = 21, fill = "white", data = d, color = grey(0.5)) +
+  geom_point() + facet_grid(city ~ .) + coord_flip() + 
+  labs(x = "Age Range", y = "Cases of Lung Cancer Per Captia") +
+  theme_minimal()
+plot(p)
+p <- ggplot(eba1977, aes(x = city, y = cases/pop)) +
+  geom_pointrange(aes(y = fit, ymin = low, ymax = upp), 
+    shape = 21, fill = "white", data = d, color = grey(0.5)) +
+  geom_point() + facet_grid(age ~ .) + coord_flip() +
+  labs(x = "City", y = "Cases of Lung Cancer Per Capita") +
+  theme_minimal()
+plot(p)
+p <- ggplot(eba1977, aes(x = age, y = cases/pop, color = city)) +
+  geom_pointrange(aes(y = fit, ymin = low, ymax = upp), 
+    shape = 21, fill = "white", data = d, 
+      position = position_dodge(width = 0.5)) + 
+  geom_point(position = position_dodge(width = 0.5)) + 
+  coord_flip() + 
+  labs(x = "Age Range", y = "Cases of Lung Cancer Per Capita", 
+       color = "City") + 
+  theme_minimal() + theme(legend.position = c(0.9,0.3))
+plot(p)
+```
+
+## Separation and Infinite Parameter Estimates
+
+Some GLMs are prone to numerical problems due to (nearly) infinite parameter estimates.
+
+**Example**: Consider the following data.
+```{r}
+mydata <- data.frame(m = rep(20, 10), c = rep(c(0,20), c(4,6)), x = 1:10)
+mydata
+p <- ggplot(mydata, aes(x = x, y = c/m)) + theme_minimal() +
+  geom_point() + scale_x_continuous(breaks = 1:10)
+plot(p)
+```
+If we try to estimate a logistic regression model we get errors and some extreme estimates, standard errors, and confidence intervals.
+```{r}
+m <- glm(cbind(c,m-c) ~ x, family = binomial, data = mydata)
+summary(m)$coefficients
+confint(m)
+```
+But we can still plot the model.
+```{r}
+d <- data.frame(x = seq(1, 10, length = 1000))
+d$yhat <- predict(m, newdata = d, type = "response")
+p <- p + geom_line(aes(y = yhat), data = d)
+plot(p)
+```
+The problem is that the estimation procedure "wants" the curve to be a step function, but that only occurs as $\beta_1 \rightarrow \infty$, and the value of $x$ where the estimated expected response is 0.5 equals $-\beta_0/\beta_1$, and for the step function that would be 4.5, so the estimation procedure "wants" the estimate of $\beta_0$ to be $-\beta_15.5 = -\infty$. This is called *separation*. It is fairly obvious with a single explanatory variable, but much less so with multiple explanatory variables. The example above shows *complete separation* because we can separate the values of $y$ based on the values of $x$. *Quasi-separation* occurs when this is almost true as in the following example.
+```{r}
+mydata <- data.frame(m = rep(20, 50), x = seq(1, 10, length = 50), 
+  c = rep(c(0,20,0,20), c(24,1,1,24)))
+
+m <- glm(cbind(c,m-c) ~ x, family = binomial, data = mydata)
+summary(m)$coefficients
+confint(m)
+
+d <- data.frame(x = seq(1, 10, length = 10000))
+d$yhat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(mydata, aes(x = x, y = c/m)) + theme_minimal()
+p <- p + geom_point() + geom_line(aes(y = yhat), data = d)
+plot(p)
+```
+
+**Example**: Consider the following data.
+```{r}
+mydata <- data.frame(m = c(100,100), c = c(25,100), group = c("control","treatment"))
+mydata
+m <- glm(cbind(c,m-c) ~ group, family = binomial, data = mydata)
+summary(m)$coefficients
+confint(m)
+```
+A similar problem can happen in Poisson regression where the observed count or rate in a category is zero.
+
+**Example**: Consider the following data and model.
+```{r, error = TRUE}
+mydata <- data.frame(y = c(20, 10, 50, 15, 0), x = letters[1:5])
+mydata
+
+m <- glm(y ~ x, family = poisson, data = mydata)
+summary(m)$coefficients
+confint(m)
+```
+
+There are some solutions to this problem, depending on the circumstances.
+
+1. In simple cases such as the logistic regression example with a control and treatment group, a nonparametric approach could be used for a significance test (e.g., Fisher's exact test).
+
+0. In some cases with a categorical explanatory variable, we can omit the level(s) where the observed count is zero (in Poisson regression), or the observed proportion is 0 or 1 (in logistic regression). Clearly this precludes inferences concerning that level or its relationship with other levels.
+
+0. For logistic regression (or similar models) a "penalized" or "bias-reduced" estimation method can be used for quasi-separation (see the **logistf** and **brglm** packages). 
+
+
+
+
