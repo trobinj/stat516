@@ -244,14 +244,14 @@ Note that since there is no interaction in the model, contrasts for city will no
 ```{r}
 trtools::contrast(m.b, a = list(city = levels(eba1977$city), age = "40-54"), tf = plogis)
 trtools::contrast(m.p, a = list(city = levels(eba1977$city), age = "40-54", pop = 1), tf = exp)
-d <- expand.grid(city = levels(eba1977$city), age = levels(eba1977$age))
+d <- expand.grid(city = unique(eba1977$city), age = unique(eba1977$age))
 cbind(d, trtools::glmint(m.b, newdata = d))
-d <- expand.grid(city = levels(eba1977$city), age = levels(eba1977$age), pop = 1)
+d <- expand.grid(city = unique(eba1977$city), age = unique(eba1977$age), pop = 1)
 cbind(d, trtools::glmint(m.p, newdata = d))
 ```
 We can use this to make some helpful plots of the estimated rates (or probabilities) of lung cancer. 
 ```{r}
-d <- expand.grid(age = levels(eba1977$age), city = levels(eba1977$city), pop = 1)
+d <- expand.grid(age = unique(eba1977$age), city = unique(eba1977$city), pop = 1)
 d <- cbind(d, trtools::glmint(m.p, newdata = d))
 p <- ggplot(eba1977, aes(x = age, y = cases/pop)) +
   geom_pointrange(aes(y = fit, ymin = low, ymax = upp), 

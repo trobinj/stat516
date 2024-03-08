@@ -800,7 +800,7 @@ model.</p>
  0.002574 0.001704 0.003890
  0.002470 0.001628 0.003747
  0.002727 0.001789 0.004158</code></pre>
-<pre class="r"><code>d &lt;- expand.grid(city = levels(eba1977$city), age = levels(eba1977$age))
+<pre class="r"><code>d &lt;- expand.grid(city = unique(eba1977$city), age = unique(eba1977$age))
 cbind(d, trtools::glmint(m.b, newdata = d))</code></pre>
 <pre><code>         city   age      fit      low      upp
 1  Fredericia 40-54 0.003589 0.002424 0.005311
@@ -827,7 +827,7 @@ cbind(d, trtools::glmint(m.b, newdata = d))</code></pre>
 22    Horsens   75+ 0.010646 0.007042 0.016065
 23    Kolding   75+ 0.010214 0.006661 0.015633
 24      Vejle   75+ 0.011280 0.007368 0.017232</code></pre>
-<pre class="r"><code>d &lt;- expand.grid(city = levels(eba1977$city), age = levels(eba1977$age), pop = 1)
+<pre class="r"><code>d &lt;- expand.grid(city = unique(eba1977$city), age = unique(eba1977$age), pop = 1)
 cbind(d, trtools::glmint(m.p, newdata = d))</code></pre>
 <pre><code>         city   age pop      fit      low      upp
 1  Fredericia 40-54   1 0.003581 0.002419 0.005303
@@ -856,7 +856,7 @@ cbind(d, trtools::glmint(m.p, newdata = d))</code></pre>
 24      Vejle   75+   1 0.011280 0.007358 0.017292</code></pre>
 <p>We can use this to make some helpful plots of the estimated rates (or
 probabilities) of lung cancer.</p>
-<pre class="r"><code>d &lt;- expand.grid(age = levels(eba1977$age), city = levels(eba1977$city), pop = 1)
+<pre class="r"><code>d &lt;- expand.grid(age = unique(eba1977$age), city = unique(eba1977$city), pop = 1)
 d &lt;- cbind(d, trtools::glmint(m.p, newdata = d))
 p &lt;- ggplot(eba1977, aes(x = age, y = cases/pop)) +
   geom_pointrange(aes(y = fit, ymin = low, ymax = upp), 
