@@ -882,12 +882,9 @@ plot(p)</code></pre>
   coord_flip() + 
   labs(x = &quot;Age Range&quot;, y = &quot;Cases of Lung Cancer Per Capita&quot;, 
        color = &quot;City&quot;) + 
-  theme_minimal() + theme(legend.position = c(0.9,0.3))</code></pre>
-<pre><code>Warning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2 3.5.0.
-ℹ Please use the `legend.position.inside` argument of `theme()` instead.
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<pre class="r"><code>plot(p)</code></pre>
+  theme_minimal() + 
+  theme(legend.position = &quot;inside&quot;, legend.position.inside = c(0.9,0.3))
+plot(p)</code></pre>
 <p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-23-3.png" width="100%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="separation-and-infinite-parameter-estimates"
@@ -951,7 +948,7 @@ response is 0.5 equals <span
 class="math inline">\(-\beta_0/\beta_1\)</span>, and for the step
 function that would be 4.5, so the estimation procedure “wants” the
 estimate of <span class="math inline">\(\beta_0\)</span> to be <span
-class="math inline">\(-\beta_15.5 = -\infty\)</span>. This is called
+class="math inline">\(-\beta_14.5 = -\infty\)</span>. This is called
 <em>separation</em>. It is fairly obvious with a single explanatory
 variable, but much less so with multiple explanatory variables. The
 example above shows <em>complete separation</em> because we can separate

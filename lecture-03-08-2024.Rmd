@@ -275,7 +275,8 @@ p <- ggplot(eba1977, aes(x = age, y = cases/pop, color = city)) +
   coord_flip() + 
   labs(x = "Age Range", y = "Cases of Lung Cancer Per Capita", 
        color = "City") + 
-  theme_minimal() + theme(legend.position = c(0.9,0.3))
+  theme_minimal() + 
+  theme(legend.position = "inside", legend.position.inside = c(0.9,0.3))
 plot(p)
 ```
 
@@ -304,7 +305,7 @@ d$yhat <- predict(m, newdata = d, type = "response")
 p <- p + geom_line(aes(y = yhat), data = d)
 plot(p)
 ```
-The problem is that the estimation procedure "wants" the curve to be a step function, but that only occurs as $\beta_1 \rightarrow \infty$, and the value of $x$ where the estimated expected response is 0.5 equals $-\beta_0/\beta_1$, and for the step function that would be 4.5, so the estimation procedure "wants" the estimate of $\beta_0$ to be $-\beta_15.5 = -\infty$. This is called *separation*. It is fairly obvious with a single explanatory variable, but much less so with multiple explanatory variables. The example above shows *complete separation* because we can separate the values of $y$ based on the values of $x$. *Quasi-separation* occurs when this is almost true as in the following example.
+The problem is that the estimation procedure "wants" the curve to be a step function, but that only occurs as $\beta_1 \rightarrow \infty$, and the value of $x$ where the estimated expected response is 0.5 equals $-\beta_0/\beta_1$, and for the step function that would be 4.5, so the estimation procedure "wants" the estimate of $\beta_0$ to be $-\beta_14.5 = -\infty$. This is called *separation*. It is fairly obvious with a single explanatory variable, but much less so with multiple explanatory variables. The example above shows *complete separation* because we can separate the values of $y$ based on the values of $x$. *Quasi-separation* occurs when this is almost true as in the following example.
 ```{r}
 mydata <- data.frame(m = rep(20, 50), x = seq(1, 10, length = 50), 
   c = rep(c(0,20,0,20), c(24,1,1,24)))
