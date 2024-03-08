@@ -13,7 +13,7 @@
 
 <title>Wednesday, Mar 6</title>
 
-<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.26/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
@@ -372,23 +372,6 @@ concentration.</p>
 Confidence level used: 0.95 
 Intervals are back-transformed from the log scale 
 Tests are performed on the log scale </code></pre>
-<pre class="r"><code>pairs(emmeans(m, ~ strain*concentration, type = &quot;response&quot;, 
-  at = list(concentration = c(1,2,3))), by = &quot;concentration&quot;, infer = TRUE)</code></pre>
-<pre><code>concentration = 1:
- contrast ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
- a / b    1.235 0.0837 Inf     1.082      1.41    1   3.118  0.0018
-
-concentration = 2:
- contrast ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
- a / b    1.090 0.1628 Inf     0.813      1.46    1   0.576  0.5648
-
-concentration = 3:
- contrast ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
- a / b    0.961 0.2308 Inf     0.601      1.54    1  -0.164  0.8698
-
-Confidence level used: 0.95 
-Intervals are back-transformed from the log scale 
-Tests are performed on the log scale </code></pre>
 <pre class="r"><code>pairs(emmeans(m, ~ strain|concentration, type = &quot;response&quot;, 
   at = list(concentration = c(1,2,3))), infer = TRUE)</code></pre>
 <pre><code>concentration = 1:
@@ -406,6 +389,53 @@ concentration = 3:
 Confidence level used: 0.95 
 Intervals are back-transformed from the log scale 
 Tests are performed on the log scale </code></pre>
+<p>If we apply <code>pairs</code> when using <code>*</code> we will get
+all possible pairwise comparisons.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ strain*concentration, type = &quot;response&quot;, 
+  at = list(concentration = c(1,2,3))), infer = TRUE)</code></pre>
+<pre><code> contrast                             ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ a concentration1 / b concentration1  1.235 0.084 Inf     1.018      1.50    1   3.118  0.0225
+ a concentration1 / a concentration2  4.942 0.309 Inf     4.137      5.90    1  25.592  &lt;.0001
+ a concentration1 / b concentration2  5.386 0.645 Inf     3.830      7.58    1  14.068  &lt;.0001
+ a concentration1 / a concentration3 24.428 3.050 Inf    17.114     34.87    1  25.592  &lt;.0001
+ a concentration1 / b concentration3 23.486 4.323 Inf    13.900     39.68    1  17.149  &lt;.0001
+ b concentration1 / a concentration2  4.001 0.449 Inf     2.906      5.51    1  12.362  &lt;.0001
+ b concentration1 / b concentration2  4.360 0.306 Inf     3.571      5.32    1  21.015  &lt;.0001
+ b concentration1 / a concentration3 19.775 3.330 Inf    12.237     31.96    1  17.721  &lt;.0001
+ b concentration1 / b concentration3 19.012 2.664 Inf    12.752     28.34    1  21.015  &lt;.0001
+ a concentration2 / b concentration2  1.090 0.163 Inf     0.712      1.67    1   0.576  0.9926
+ a concentration2 / a concentration3  4.942 0.309 Inf     4.137      5.90    1  25.592  &lt;.0001
+ a concentration2 / b concentration3  4.752 0.972 Inf     2.652      8.51    1   7.617  &lt;.0001
+ b concentration2 / a concentration3  4.535 0.885 Inf     2.600      7.91    1   7.746  &lt;.0001
+ b concentration2 / b concentration3  4.360 0.306 Inf     3.571      5.32    1  21.015  &lt;.0001
+ a concentration3 / b concentration3  0.961 0.231 Inf     0.485      1.91    1  -0.164  1.0000
+
+Confidence level used: 0.95 
+Conf-level adjustment: tukey method for comparing a family of 6 estimates 
+Intervals are back-transformed from the log scale 
+P value adjustment: tukey method for comparing a family of 6 estimates 
+Tests are performed on the log scale </code></pre>
+<p>To force <code>pairs</code> to only do pairwise comparisons within
+each value of concentration use <code>by = "concentration"</code>.</p>
+<pre class="r"><code>pairs(emmeans(m, ~ strain*concentration, type = &quot;response&quot;, 
+  at = list(concentration = c(1,2,3))), by = &quot;concentration&quot;, infer = TRUE)</code></pre>
+<pre><code>concentration = 1:
+ contrast ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ a / b    1.235 0.0837 Inf     1.082      1.41    1   3.118  0.0018
+
+concentration = 2:
+ contrast ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ a / b    1.090 0.1628 Inf     0.813      1.46    1   0.576  0.5648
+
+concentration = 3:
+ contrast ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ a / b    0.961 0.2308 Inf     0.601      1.54    1  -0.164  0.8698
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log scale 
+Tests are performed on the log scale </code></pre>
+<p>Or alternatively use <code>~ strain|concentration</code> in the
+<code>emmeans</code> function.</p>
 <p>What about the rate ratio for the effect of concentration?</p>
 <pre class="r"><code>trtools::contrast(m, tf = exp,
   a = list(strain = c(&quot;a&quot;,&quot;b&quot;), concentration = 2),
@@ -461,7 +491,7 @@ Confidence level used: 0.95 </code></pre>
 <pre><code> contrast estimate     SE  df z.ratio p.value
  a - b      -0.125 0.0939 Inf  -1.335  0.1817</code></pre>
 <p>Note that these are essentially slopes but for the log of the
-expected response But the tests are still useful.</p>
+expected response. But the tests are still useful.</p>
 <p><strong>Example</strong>: Consider the following logistic regression
 model for the <code>insecticide data</code>.</p>
 <pre class="r"><code>m &lt;- glm(cbind(deaths, total-deaths) ~ insecticide * deposit, 
@@ -678,7 +708,7 @@ class="math display">\[
 is the odds of the event. But when <span
 class="math inline">\(p_i\)</span> is very small then <span
 class="math inline">\(O_i \approx p_i\)</span>.
-<img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-16-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" />
 So then <span class="math display">\[
   p_i \approx \exp(\beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots +
 \beta_k x_{ik}),
@@ -708,7 +738,7 @@ head(eba1977)</code></pre>
   labs(x = &quot;Age Range&quot;, y = &quot;Cases of Lung Cancer Per Capita&quot;) +
   theme_minimal()
 plot(p)</code></pre>
-<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-19-1.png" width="100%" style="display: block; margin: auto;" />
 Consider both a logistic and Poisson regression models to compare the
 cities while controlling for age.</p>
 <pre class="r"><code>m.b &lt;- glm(cbind(cases, pop-cases) ~ city + age, family = binomial, data = eba1977)
@@ -835,7 +865,7 @@ p &lt;- ggplot(eba1977, aes(x = age, y = cases/pop)) +
   labs(x = &quot;Age Range&quot;, y = &quot;Cases of Lung Cancer Per Captia&quot;) +
   theme_minimal()
 plot(p)</code></pre>
-<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-23-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>p &lt;- ggplot(eba1977, aes(x = city, y = cases/pop)) +
   geom_pointrange(aes(y = fit, ymin = low, ymax = upp), 
     shape = 21, fill = &quot;white&quot;, data = d, color = grey(0.5)) +
@@ -843,7 +873,7 @@ plot(p)</code></pre>
   labs(x = &quot;City&quot;, y = &quot;Cases of Lung Cancer Per Capita&quot;) +
   theme_minimal()
 plot(p)</code></pre>
-<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-21-2.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-23-2.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>p &lt;- ggplot(eba1977, aes(x = age, y = cases/pop, color = city)) +
   geom_pointrange(aes(y = fit, ymin = low, ymax = upp), 
     shape = 21, fill = &quot;white&quot;, data = d, 
@@ -858,7 +888,7 @@ plot(p)</code></pre>
 This warning is displayed once every 8 hours.
 Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
 <pre class="r"><code>plot(p)</code></pre>
-<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-21-3.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-23-3.png" width="100%" style="display: block; margin: auto;" /></p>
 </div>
 <div id="separation-and-infinite-parameter-estimates"
 class="section level2">
@@ -882,7 +912,7 @@ mydata</code></pre>
 <pre class="r"><code>p &lt;- ggplot(mydata, aes(x = x, y = c/m)) + theme_minimal() +
   geom_point() + scale_x_continuous(breaks = 1:10)
 plot(p)</code></pre>
-<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-22-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-24-1.png" width="100%" style="display: block; margin: auto;" />
 If we try to estimate a logistic regression model we get errors and some
 extreme estimates, standard errors, and confidence intervals.</p>
 <pre class="r"><code>m &lt;- glm(cbind(c,m-c) ~ x, family = binomial, data = mydata)</code></pre>
@@ -912,7 +942,7 @@ x             7969   1966</code></pre>
 d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
 p &lt;- p + geom_line(aes(y = yhat), data = d)
 plot(p)</code></pre>
-<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-24-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-26-1.png" width="100%" style="display: block; margin: auto;" />
 The problem is that the estimation procedure “wants” the curve to be a
 step function, but that only occurs as <span
 class="math inline">\(\beta_1 \rightarrow \infty\)</span>, and the value
@@ -967,10 +997,10 @@ x             5.414   9.397</code></pre>
 <pre class="r"><code>d &lt;- data.frame(x = seq(1, 10, length = 10000))
 d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
 
-p &lt;- ggplot(mydata, aes(x = x, y = c/m)) + theme_minimal()
-p &lt;- p + geom_point() + geom_line(aes(y = yhat), data = d)
+p &lt;- ggplot(mydata, aes(x = x, y = c/m)) + theme_minimal() + 
+  geom_point() + geom_line(aes(y = yhat), data = d)
 plot(p)</code></pre>
-<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-25-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-03-08-2024_files/figure-html/unnamed-chunk-27-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><strong>Example</strong>: Consider the following data.</p>
 <pre class="r"><code>mydata &lt;- data.frame(m = c(100,100), c = c(25,100), group = c(&quot;control&quot;,&quot;treatment&quot;))
 mydata</code></pre>

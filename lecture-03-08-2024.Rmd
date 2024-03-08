@@ -74,11 +74,21 @@ trtools::contrast(m, tf = exp,
   b = list(strain = "b", concentration = 2))
 pairs(emmeans(m, ~ strain, type = "response", 
   at = list(concentration = 2)), infer = TRUE)
-pairs(emmeans(m, ~ strain*concentration, type = "response", 
-  at = list(concentration = c(1,2,3))), by = "concentration", infer = TRUE)
 pairs(emmeans(m, ~ strain|concentration, type = "response", 
   at = list(concentration = c(1,2,3))), infer = TRUE)
 ```
+If we apply `pairs` when using `*` we will get all possible pairwise comparisons.
+```{r}
+pairs(emmeans(m, ~ strain*concentration, type = "response", 
+  at = list(concentration = c(1,2,3))), infer = TRUE)
+```
+To force `pairs` to only do pairwise comparisons within each value of concentration use `by = "concentration"`.
+```{r}
+pairs(emmeans(m, ~ strain*concentration, type = "response", 
+  at = list(concentration = c(1,2,3))), by = "concentration", infer = TRUE)
+```
+Or alternatively use `~ strain|concentration` in the `emmeans` function.
+
 What about the rate ratio for the effect of concentration?
 ```{r}
 trtools::contrast(m, tf = exp,
@@ -96,7 +106,7 @@ What if we want to know if the rate ratios are significantly different?
 emtrends(m, ~strain, var = "concentration")
 pairs(emtrends(m, ~strain, var = "concentration"))
 ```
-Note that these are essentially slopes but for the log of the expected response But the tests are still useful. 
+Note that these are essentially slopes but for the log of the expected response. But the tests are still useful. 
 
 **Example**: Consider the following logistic regression model for the `insecticide data`.
 ```{r}
@@ -306,8 +316,8 @@ confint(m)
 d <- data.frame(x = seq(1, 10, length = 10000))
 d$yhat <- predict(m, newdata = d, type = "response")
 
-p <- ggplot(mydata, aes(x = x, y = c/m)) + theme_minimal()
-p <- p + geom_point() + geom_line(aes(y = yhat), data = d)
+p <- ggplot(mydata, aes(x = x, y = c/m)) + theme_minimal() + 
+  geom_point() + geom_line(aes(y = yhat), data = d)
 plot(p)
 ```
 
