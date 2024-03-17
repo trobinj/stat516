@@ -39,7 +39,6 @@ options(digits = 4)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
-
 ## Confidence Intervals and Significance Tests
 
 A significance test can be used to derive a confidence interval, and a confidence interval can be used to conduct a significance test. If we have hypotheses for a two-sided test like

@@ -11,10 +11,11 @@ This website is for Dr. Johnson's *Applied Regression Modeling* course (Stat 436
 
 <center>
 
-![https://xkcd.com/2599](https://imgs.xkcd.com/comics/spacecraft_debris_odds_ratio.png)
+![https://xkcd.com/2576](https://imgs.xkcd.com/comics/control_group.png)
 
 </center>
 
 ***
 
 The rmarkdown source files for everything on this website can be viewed at [https://github.com/trobinj/stat516/tree/gh-pages](https://github.com/trobinj/stat516/tree/gh-pages). These are the files with the .Rmd extension. 
+
