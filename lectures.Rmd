@@ -99,7 +99,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Demonstration of Poisson and logistic regression](lecture-03-18-2024.html). 
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Inference based on maximum likelihood](lecture-03-20-2024.html). 
 
 `r i <- i + 1; d[i]` 
  
