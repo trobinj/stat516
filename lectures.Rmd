@@ -105,7 +105,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Distributions for over-dispersion, gamma and inverse-gaussian generalized linear models](lecture-03-25-2024.html).
 
 `r i <- i + 1; d[i]` 
 
