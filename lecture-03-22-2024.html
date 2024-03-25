@@ -836,9 +836,10 @@ b2 -1.041e-03  5.866e-05 -17.7402 5.991e-38
 b3  7.273e-05  9.992e-05   0.7279 4.679e-01</code></pre>
 <p><strong>Example</strong>: Consider the model for the rotifer data.
 Here the variance is proportional to <span
-class="math inline">\(E(Y_i)[1 - E(Y_i)_i]\)</span>. To estimate this
-model using iteratively weighted least squares we use weights of <span
-class="math display">\[
+class="math inline">\(E(Y_i)[1 - E(Y_i)_i]/m_i\)</span> (recall that
+<span class="math inline">\(m_i\)</span> is the “total possible” for the
+counts). To estimate this model using iteratively weighted least squares
+we use weights of <span class="math display">\[
   w_i = \frac{m_i}{E(Y_i)[1-E(Y_i)]}.
 \]</span></p>
 <pre class="r"><code>m.binomial &lt;- glm(cbind(y, total - y) ~ species * density, 

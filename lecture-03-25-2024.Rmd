@@ -39,7 +39,6 @@ options(digits = 4, width = 100)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
-
 ## Distributions for Over-dispersion
 
 One way to model over-dispersion is to assume a model of the form

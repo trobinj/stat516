@@ -374,7 +374,7 @@ for (i in 1:10) {
 summary(m.iwls)$coefficients
 ```
 
-**Example**: Consider the model for the rotifer data. Here the variance is proportional to $E(Y_i)[1 - E(Y_i)_i]$. To estimate this model using iteratively weighted least squares we use weights of
+**Example**: Consider the model for the rotifer data. Here the variance is proportional to $E(Y_i)[1 - E(Y_i)_i]/m_i$ (recall that $m_i$ is the "total possible" for the counts). To estimate this model using iteratively weighted least squares we use weights of
 $$
   w_i = \frac{m_i}{E(Y_i)[1-E(Y_i)]}.
 $$
