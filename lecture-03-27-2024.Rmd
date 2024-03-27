@@ -462,7 +462,7 @@ $$
 $$
 This implies the *logistic-exposure* link function
 $$
-  \log\left[\frac{E(Y)^{1/t}}{1 + E(Y)^{1/t}}\right] = \eta.
+  \log\left[\frac{E(Y)^{1/t}}{1 - E(Y)^{1/t}}\right] = \eta.
 $$
 I have added this link function to **trtools** as `logitexp`. 
 
