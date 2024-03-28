@@ -1,0 +1,584 @@
+---
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+date <- "03-29-2024"
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(comment = "", echo = TRUE, fig.height = 4, message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+suppressWarnings(library(kableExtra))
+```
+
+```{r utilities, echo = FALSE}
+source("../../utilities.R")
+```
+
+```{r options, echo = FALSE}
+options(digits = 4, width = 100)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+
+## Discrete Marginal Effects
+
+Consider a regression model with (without loss of generality) two explanatory variables, $X_1$ and $X_2$. A *discrete marginal effect* is the change in the expected response when we change an explanatory variable. 
+
+For example, if we have a regression model where $E(Y)$ is a function of $X_1$ and $X_2$, the discrete marginal effect of changing $X_1$ from $x_b$ to $x_a$ is 
+$$
+E(Y|X_1 = x_a, X_2 = x_2) - E(Y|X_1 = x_b, X_2 = x_2).
+$$
+That is, the change in the expected response when $X_1$ is changed from $x_b$ to $x_a$. (Note: When we talk about a change in the expected response or the "effect" of a change in an explanatory variable, we do not necessarily mean that this is a *causal* relationship.)
+
+In a linear model a discrete marginal effect is basically what is done by `contrast`.
+
+**Example**: Recall our model for the `whiteside` data. The function `margeff` in the **trtools** package will estimate a discrete marginal effect.
+```{r}
+m <- lm(Gas ~ Insul + Temp + Insul:Temp, data = MASS::whiteside)
+summary(m)$coefficients
+```
+The model is
+$$
+  E(Y_i) = \beta_0 + \beta_1 a_i + \beta_2 t + \beta_3 a_it_i,
+$$
+where $Y_i$ is gass consumption,
+$$
+  a_i = 
+  \begin{cases}
+    1, & \text{if the $i$-th observation is after insulation}, \\
+    0, & \text{otherwise}.
+  \end{cases}
+$$
+So the marginal effect of increasing temperature from $t_b = 2$ to $t_a = 7$ after insulation is
+$$
+E(Y|a = 1, t = 7) - E(Y|a = 1, t = 2) = 5(\beta_2 + \beta_3).
+$$
+Before insulation it is 
+$$
+E(Y|a = 0, t = 7) - E(Y|a = 0, t = 2) = 5\beta_2.
+$$
+We can estimate this using the `lincon` or `contrast` functions.
+```{r}
+library(trtools)
+lincon(m, a = c(0,0,5,5)) # marginal effect after insulation
+lincon(m, a = c(0,0,5,0)) # marginal effect after insulation
+contrast(m, cnames = c("Before","After"),
+  a = list(Temp = 7, Insul = c("Before","After")),
+  b = list(Temp = 2, Insul = c("Before","After")))
+```
+The function `margeff` (also from the **trtools** package) is specifically designed to estimate marginal effects (and other things) and works similarly to `contrast`.
+```{r}
+margeff(m, cnames = c("Before","After"),
+  a = list(Temp = 7, Insul = c("Before","After")),
+  b = list(Temp = 2, Insul = c("Before","After")))
+```
+We can also estimate the discrete marginal effect of adding insulation at different temperatures.
+```{r}
+contrast(m, cnames = c("0C","5C","10C"),
+  a = list(Temp = c(0,5,10), Insul = "After"),
+  b = list(Temp = c(0,5,10), Insul = "Before"))
+margeff(m, cnames = c("0C","5C","10C"),
+  a = list(Temp = c(0,5,10), Insul = "After"),
+  b = list(Temp = c(0,5,10), Insul = "Before"))
+```
+So what's the use of `margeff`? The `contrast` and `lincon` functions can only handle *linear* functions of the model parameters. But in some cases the marginal effect is not a linear function of the model parameters. This is where the `margeff` function is useful.
+
+**Example**: Consider the following nonlinear model for the change in expected weight over time. 
+```{r}
+m <- nls(Weight ~ t1 + t2*2^(-Days/t3), data = MASS::wtloss,
+  start = list(t1 = 90, t2 = 95, t3 = 120))
+
+d <- data.frame(Days = seq(0, 250, by = 1))
+d$yhat <- predict(m, newdata = d)
+
+p <- ggplot(MASS::wtloss, aes(x = Days, y = Weight)) +
+  geom_point() + theme_classic() + 
+  labs(y = "Weight (kg)", x = "Time (Days)") + 
+  geom_line(aes(y = yhat), data = d)
+plot(p)
+```
+The model is 
+$$
+  E(Y) = \theta_1 + \theta_2 2^{-d/\theta_3},
+$$
+where $Y$ is weight and $d$ is days. The discrete marginal effect of going from 50 to 100 days is
+$$
+  \underbrace{\theta_1 + \theta_2 2^{-100/\theta_3}}_{E(Y|d = 100)} - (\underbrace{\theta_1 + \theta_2 2^{-50/\theta_3}}_{E(Y|d = 50)}) = 
+  \theta_2(2^{-100/\theta_3} - 2^{-50/\theta_3}).
+$$
+This is *not* a linear function of the model parameters, so we cannot use the usual methods like `contrast` or `lincon`. But we can make (approximate) inferences using the *delta method* (more on that later). The `margeff` function makes implementing this method relatively straight forward.
+```{r}
+margeff(m, a = list(Days = 100), b = list(Days = 50))
+margeff(m,
+  a = list(Days = c(50,100,150,200)), 
+  b = list(Days = c(0,50,100,150)),
+  cnames = c("0->50", "50->100", "100->150", "150->200"))
+```
+
+**Example**: Consider the following model for the `insecticide` data.
+```{r}
+m <- glm(cbind(deaths, total-deaths) ~ log2(deposit) + insecticide, 
+  family = binomial, data = insecticide)
+
+d <- expand.grid(deposit = seq(2, 8, length = 100), 
+  insecticide = unique(insecticide$insecticide))
+d$phat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(insecticide, aes(x = deposit, y = deaths/total)) +
+  geom_point() + facet_wrap(~ insecticide) + 
+  geom_line(aes(y = phat), data = d) + theme_minimal() + 
+  labs(x = "Deposit (mg per 10 square cm)", 
+    y = "Proportion of Deaths")
+plot(p)
+```
+We know how to interpret the effects using *odds ratios*. Here are the odds ratios for the effect of doubling the deposit from 2 to 4 units.
+```{r}
+contrast(m, tf = exp,
+  a = list(deposit = 4, insecticide = c("g-BHC","both","DDT")),
+  b = list(deposit = 2, insecticide = c("g-BHC","both","DDT")),
+  cnames = c("g-BHC","both","DDT"))
+```
+And here are the odds ratios for the effect of insecticide (g-BHC versus DDT).
+```{r}
+contrast(m, tf = exp,
+  a = list(deposit = c(2,4,6,8), insecticide = "g-BHC"),
+  b = list(deposit = c(2,4,6,8), insecticide = "DDT"),
+  cnames = c("2","4","6","8"))
+```
+But with odds ratios we have to interpret effects in terms of *odds*. What if we want to interpret the effect on the *probability*? The discrete marginal effect is in terms of the *expected response* (here the expected proportion or, equivalently, the probability of death).
+```{r}
+margeff(m,
+  a = list(deposit = 4, insecticide = c("g-BHC","both","DDT")),
+  b = list(deposit = 2, insecticide = c("g-BHC","both","DDT")),
+  cnames = c("g-BHC","both","DDT"))
+```
+Here are some discrete marginal effects of insecticide (g-BHC versus DDT).
+```{r}
+margeff(m,
+  a = list(deposit = c(2,4,6,8), insecticide = "g-BHC"),
+  b = list(deposit = c(2,4,6,8), insecticide = "DDT"),
+  cnames = c("2","4","6","8"))
+```
+The appeal of the marginal effect here is that for many people probabilities are more intuitive than odds. 
+
+**Example**: Consider the following model for data from a study of the effect of blood plasma concentration/dilution on clotting time. 
+```{r}
+clotting <- data.frame(
+  conc = rep(c(5,10,15,20,30,40,60,80,100), 2),
+  time = c(118,58,42,35,27,25,21,19,18,69,35,26,21,18,16,13,12,12),
+  lot = rep(c("L1","L2"), each = 9)
+)
+head(clotting)
+
+m <- glm(time ~ lot + log(conc) + lot:log(conc),
+  family = Gamma(link = inverse), data = clotting)
+
+d <- expand.grid(conc = seq(5, 100, length = 100), lot = c("L1","L2"))
+d$yhat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(clotting, aes(x = conc, y = time)) + theme_minimal() + 
+  geom_point() + facet_wrap(~ lot) + facet_wrap(~ lot) + 
+  labs(x = "Plasma Concentration (percent)", y = "Clotting Time (sec)") +
+  scale_x_continuous(breaks = c(5,10,50,100)) + 
+  geom_line(aes(y = yhat), data = d)
+plot(p)
+summary(m)$coefficients
+```
+
+This generalized linear model can be written as
+$$
+\frac{1}{E(T_i)} = \beta_0 + \beta_1 l_i + \beta_2\log_2c_i + \beta_3l_i\log_2c_i,
+$$
+or, equivalently,
+$$
+    E(T_i) = \frac{1}{\beta_0 + \beta_1 l_i + \beta_2\log_2c_i + \beta_3l_i\log_2c_i},
+$$
+where $T_i$ is clotting time, $c_i$ is plasma concentration, and $l_i$ is an indicator variable such that $l_i = 1$ if the $i$-th observation is from the second lot, and $l_i = 0$ otherwise.
+
+Marginal effects of increasing the plasma concentration from 5 to 10 in each lot.
+```{r}
+margeff(m, 
+  a = list(conc = 10, lot = c("L1","L2")),
+  b = list(conc =  5, lot = c("L1","L2")),
+  cnames = c("L1,5->10","L2,5->10"))
+```
+Marginal effects of increasing from 5 to 10, 10 to 50, and 50 to 100 in the first lot.
+```{r}
+margeff(m,
+  a = list(conc = c(10,50,100), lot = "L1"),
+  b = list(conc = c(5,10,50), lot = "L1"),
+  cnames = c("L1,5->10","L1,10->50","L1,50->100"))
+```
+Marginal effects for plasma concentration for the *second* lot.
+```{r}
+margeff(m,
+  a = list(conc = c(10,50,100), lot = "L2"),
+  b = list(conc = c(5,10,50), lot = "L2"),
+  cnames = c("L2,5->10","L2,10->50","L2,50->100"))
+```
+Marginal effects for lot at three plasma concentrations.
+```{r}
+margeff(m,
+  a = list(conc = c(25,50,75), lot = c("L1")),
+  b = list(conc = c(25,50,75), lot = c("L2")),
+  cnames = c("25","50","75"))
+```
+
+## "Instantaneous" Marginal Effects
+
+Consider a regression model with (without loss of generality) two explanatory variables, $X_1$ and $X_2$. Assuming that $X_1$ is *continuous*, the "instantaneous" marginal effect of $X_1$ at $x_1$ when $X_2 = x_2$ is 
+$$
+\lim_{\delta \rightarrow 0} \frac{E(Y|X_1 = x_1 + \delta, X_2 = x_2) - E(Y|X_1 = x_1, X_2 = x_2)}{\delta}.
+$$
+This can also be written as
+$$
+	\left. \frac{\partial E(Y|X_1 = z, X_2 = x_2)}{\partial z} \right|_{z = x_1}
+$$
+i.e., the partial derivative of $E(Y|X_1 = x_1,X_2 = x_2)$ with respect to and evaluated at $x_1$. 
+
+Intuitively, this is the rate of change in the expected response at a specific value of the explanatory variable --- i.e., the slope of the function at a specific point. 
+
+To compute this marginal effect we can either find the partial derivative analytically or approximate it numerically using
+$$
+\frac{E(Y|X_1 = x_1 + \delta, X_2 = x_2) - E(Y|X_1 = x_1, X_2 = x_2)}{\delta}
+$$
+where $\delta$ set to a small value relative to $x_1$ (this is called *numerical differentiation*). 
+
+Note that instantaneous marginal effects are only defined for *continuous quantitative variables*.
+
+**Example**: Consider again the nonlinear regression model for expected weight as a function of days.
+```{r}
+m <- nls(Weight ~ t1 + t2*2^(-Days/t3), data = MASS::wtloss,
+  start = list(t1 = 90, t2 = 95, t3 = 120))
+
+d <- data.frame(Days = seq(0, 250, by = 1))
+d$yhat <- predict(m, newdata = d)
+
+p <- ggplot(MASS::wtloss, aes(x = Days, y = Weight)) + 
+  geom_point() + theme_classic() + 
+  labs(y = "Weight (kg)", x = "Time (Days)") + 
+  geom_line(aes(y = yhat), data = d) + 
+  scale_x_continuous(breaks = c(50,100,150,200))
+plot(p)
+```
+We can estimate the instantaneous marginal effects at 50, 100, 150, and 200 days. 
+```{r}
+margeff(m, delta = 0.001,
+  a = list(Days = c(50,100,150,200) + 0.001), 
+  b = list(Days = c(50,100,150,200)),
+  cnames = c("@50", "@100", "@150", "@200"))
+```
+Note: To estimate an instantaneous marginal effect, add a relatively small value of $\delta$ to the `a` variable, and also specify this amount to the `delta` argument.
+
+**Example**: Consider again the model for the `insecticide` data.
+```{r}
+m <- glm(cbind(deaths, total-deaths) ~ log2(deposit) 
+ + insecticide, family = binomial, data = insecticide)
+
+d <- expand.grid(deposit = seq(2, 8, length = 100), 
+  insecticide = unique(insecticide$insecticide))
+d$phat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(insecticide, aes(x = deposit, y = deaths/total)) + 
+  geom_point() + facet_wrap(~ insecticide) + 
+  geom_line(aes(y = phat), data = d) + theme_minimal() + 
+  labs(x = "Deposit (mg per 10 square cm)", y = "Proportion of Deaths")
+plot(p)
+```
+We can estimate the instantaneous marginal effect of deposit at a given amount of deposit, say 5 mg per 10 square cm. 
+```{r}
+margeff(m, delta = 0.001,
+  a = list(deposit = 5 + 0.001, insecticide = c("g-BHC","both","DDT")),
+  b = list(deposit = 5, insecticide = c("g-BHC","both","DDT")),
+  cnames = c("g-BHC","both","DDT"))
+```
+```{r, echo = FALSE}
+b <- margeff(m, delta = 0.001,
+  a = list(deposit = 5 + 0.001, insecticide = c("g-BHC","both","DDT")),
+  b = list(deposit = 5, insecticide = c("g-BHC","both","DDT")),
+  cnames = c("g-BHC","both","DDT"))[,1]
+
+y <- contrast(m, a = list(deposit = 5, 
+  insecticide = c("g-BHC","both","DDT")),
+  tf = plogis)[,1]
+
+a <- y - b*5
+
+d <- data.frame(insecticide = levels(insecticide$insecticide), a = a, b = b) %>%
+   expand(nesting(insecticide, a, b), deposit = seq(2, 8, length = 2)) %>% 
+   mutate(y = a + b*deposit)
+d$insecticide <- factor(d$insecticide, levels = c("g-BHC","both","DDT"))
+
+p <- p + geom_line(aes(y = y), data = d, linetype = 3)
+plot(p)
+```
+Note that the instantaneous effect of deposit *depends on the deposit* because the probability is not a linear function of deposit. 
+```{r}
+margeff(m, delta = 0.001,
+  a = list(deposit = 2 + 0.001, insecticide = c("g-BHC","both","DDT")),
+  b = list(deposit = 2, insecticide = c("g-BHC","both","DDT")),
+  cnames = c("g-BHC","both","DDT"))
+```
+```{r, echo = FALSE}
+m <- glm(cbind(deaths, total-deaths) ~ log2(deposit) + insecticide, 
+  family = binomial, data = insecticide)
+
+d <- expand.grid(deposit = seq(2, 8, length = 100), 
+  insecticide = unique(insecticide$insecticide))
+d$phat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(insecticide, aes(x = deposit, y = deaths/total)) + 
+  geom_point() + facet_wrap(~ insecticide) + 
+  geom_line(aes(y = phat), data = d) + theme_minimal() + 
+  labs(x = "Deposit (mg per 10 square cm)", y = "Proportion of Deaths")
+
+b <- margeff(m, delta = 0.001,
+  a = list(deposit = 2 + 0.001, insecticide = c("g-BHC","both","DDT")),
+  b = list(deposit = 2, insecticide = c("g-BHC","both","DDT")),
+  cnames = c("g-BHC","both","DDT"))[,1]
+
+y <- contrast(m, a = list(deposit = 2, insecticide = c("g-BHC","both","DDT")),
+   tf = plogis)[,1]
+
+a <- y - b*2
+
+d <- data.frame(insecticide = levels(insecticide$insecticide), a = a, b = b) %>%
+  expand(nesting(insecticide, a, b), deposit = seq(2, 8, length = 2)) %>% 
+  mutate(y = a + b*deposit)
+d$insecticide <- factor(d$insecticide, levels = c("g-BHC","both","DDT"))
+
+p <- p + geom_line(aes(y = y), data = d, linetype = 3)
+p <- p + coord_cartesian(ylim = c(0,1), xlim = c(2,8))
+plot(p)
+```
+
+## Instantaneous Marginal Effects for Generalized Linear Models
+
+Recall that in a GLM that $E(Y) = g^{-1}(\eta)$ where $\eta = \beta_0 + \beta_1 x_1 + \cdots + \beta_k x_k$. Consider a GLM where $\eta_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2}$. The instantaneous marginal effect of $X_1$ at $x_1$ is
+$$
+	\frac{\partial E(Y|X_1 = x_1, X_2 = x_2)}{\partial x_1} =
+	\frac{\partial g^{-1}(\eta)}{\partial x_1} = 
+	\frac{\partial g^{-1}(\eta)}{\partial \eta}
+	\frac{\partial \eta}{\partial x_1} =
+	\frac{\partial g^{-1}(\eta)}{\partial \eta}\beta_1
+$$
+by the "chain rule" for (partial) derivatives. 
+
+Suppose that $E(Y) = e^{\eta}$ (i.e., log link function) where $\eta = \beta_0 + \beta_1 x_1 + \beta_2 x_2$. Then
+$$
+	\frac{\partial g^{-1}(\eta)}{\partial \eta}\beta_1 = 
+	\frac{\partial e^{\eta}}{\partial \eta}\beta_1 = e^{\eta}\beta_1 = E(Y)\beta_1.
+$$
+Suppose now that $E(Y) = e^{\eta}/(1 + e^{\eta})$ (i.e., logit link function). Then
+$$
+	\frac{\partial g^{-1}(\eta)}{\partial \eta}\beta_1 = 
+	\frac{\partial e^{\eta}/(1 + e^{\eta})}{\partial \eta}\beta_1 = 
+	\frac{e^{\eta}}{(1 + e^{\eta})^2}\beta_1 = 
+	E(Y)[1-E(Y)]\beta_1.
+$$
+Suppose now that $E(Y) = \eta$ (e.g., identity link function). Then
+$$
+	\frac{\partial g^{-1}(\eta)}{\partial \eta}\beta_1 = 
+    \frac{\partial \eta}{\partial \eta}\beta_1 = \beta_1.
+$$
+Things get a little more complicated if $X_1$ is a *transformed* explanatory variable or represents an interaction.
+
+Suppose $E(Y) = \beta_0 + \beta_1\log(x_1) + \beta_2x_2$. Then
+$$
+	\frac{\partial g^{-1}(\eta)}{\partial \eta}\frac{\partial \eta}{\partial x_1} = \frac{\partial \eta}{\partial x_1} = \beta_1/x_1.
+$$
+Suppose $E(Y) = \beta_0 + \beta_1x_1 + \beta_2x_1^2$. Then
+$$
+	\frac{\partial g^{-1}(\eta)}{\partial \eta}\frac{\partial \eta}{\partial x_1} = \frac{\partial \eta}{\partial x_1} = \beta_1 + 2\beta_2x_1.
+$$
+Suppose $E(Y) = \beta_0 + \beta_1x_1 + \beta_2x_2 + \beta_3x_1x_2$. Then
+$$
+	\frac{\partial g^{-1}(\eta)}{\partial \eta}\frac{\partial \eta}{\partial x_1} = \frac{\partial \eta}{\partial x_1} = \beta_1 + \beta_3x_2.
+$$
+
+Fortunately, `margeff` does the calculus!
+
+## Discrete Marginal Effects as Percent Change
+
+Consider a regression model with (without loss of generality) two explanatory variables, $X_1$ and $X_2$. The *percent change* in the expected response when changing $X_1$ from $x_b$ to $x_a$ when $X_2 = x_2$ is 
+$$
+\frac{E(Y|X_1 = x_a, X_2 = x_2) - E(Y|X_1 = x_b, X_2 = x_2)}{E(Y|X_1 = x_b, X_2 = x_2)} \times 100\%.
+$$
+or, equivalently, 
+$$
+\left[\frac{E(Y|X_1 = x_a, X_2 = x_2)}{E(Y|X_1 = x_b, X_2 = x_2)} - 1\right] \times 100\%.
+$$
+Note that the *sign* indicates if it is a percent increase or decrease. 
+
+**Example**: Consider again the weight loss model.
+```{r}
+m <- nls(Weight ~ t1 + t2*2^(-Days/t3), data = MASS::wtloss,
+  start = list(t1 = 90, t2 = 95, t3 = 120))
+
+d <- data.frame(Days = seq(0, 250, by = 1))
+d$yhat <- predict(m, newdata = d)
+
+p <- ggplot(MASS::wtloss, aes(x = Days, y = Weight)) + 
+  geom_point() + theme_classic() + 
+  labs(y = "Weight (kg)", x = "Time (Days)") + 
+  geom_line(aes(y = yhat), data = d) + 
+  scale_x_continuous(breaks = c(50,100,150,200))
+plot(p)
+```
+Consider the percent change in expected weight from 50 to 100 days. This is
+$$
+  \frac{\theta_1 + \theta_22^{-100/\theta_3} - \theta_1 - \theta_22^{-50/\theta_3}}{\theta_1 + \theta_22^{-50/\theta_3}} = \frac{\theta_22^{-100/\theta_3} - \theta_22^{-50/\theta_3}}{\theta_1 + \theta_22^{-50/\theta_3}}.
+$$
+We can estimate the percent change in expected weight from 50 to 100 days as follows.
+```{r}
+margeff(m, a = list(Days = 100), b = list(Days = 50), type = "percent")
+```
+We can do it for several 50 day increments as well.
+```{r}
+margeff(m, type = "percent",
+  a = list(Days = c(50,100,150,200)), 
+  b = list(Days = c(0,50,100,150)),
+  cnames = c("0->50", "50->100", "100->150", "150->200"))
+```
+
+**Example**: Consider again the model for the `insecticide` data.
+```{r}
+m <- glm(cbind(deaths, total-deaths) ~ log2(deposit) + insecticide, 
+  family = binomial, data = insecticide)
+
+d <- expand.grid(deposit = seq(2, 8, length = 100), 
+  insecticide = levels(insecticide$insecticide))
+d$phat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(insecticide, aes(x = deposit, y = deaths/total)) + 
+  geom_point() + facet_wrap(~ insecticide) + 
+  geom_line(aes(y = phat), data = d) + theme_minimal() + 
+  labs(x = "Deposit (mg per 10 square cm)", y = "Proportion of Deaths")
+plot(p)
+```
+We can estimate the percent change in the probability of death from 4 to 6 mg per 10 square cm.
+```{r}
+margeff(m, type = "percent",
+  a = list(deposit = 6, insecticide = c("g-BHC","both","DDT")),
+  b = list(deposit = 4, insecticide = c("g-BHC","both","DDT")),
+  cnames = c("g-BHC","both","DDT"))
+```
+Note that here the percent change depends on where we make the increment.
+```{r}
+margeff(m, type = "percent",
+  a = list(deposit = 8, insecticide = c("g-BHC","both","DDT")),
+  b = list(deposit = 6, insecticide = c("g-BHC","both","DDT")),
+  cnames = c("g-BHC","both","DDT"))
+```
+We can also estimate the percent change in the probability of death between two insecticides.
+```{r}
+margeff(m, type = "percent",
+  a = list(deposit = c(2,4,6,8), insecticide = "g-BHC"),
+  b = list(deposit = c(2,4,6,8), insecticide = "DDT"),
+  cnames = c("2","4","6","8"))
+```
+
+## Discrete Marginal Effects as Multiplicative Factors
+
+Consider a regression model with (without loss of generality) two explanatory variables, $X_1$ and $X_2$. A multiplicative factor to describe the effect of changing $X_1$ from $x_b$ to $x_a$ when $X_2 = x_2$ is 
+$$
+	f = \frac{E(Y|X_1 = x_a, X_2 = x_2)}{E(Y|X_1 = x_b, X_2 = x_2)},
+$$
+meaning that
+$$
+	E(Y|X_1 = x_a, X_2 = x_2) = f \times E(Y|X_1 = x_b, X_2 = x_2).
+$$
+**Example**: Consider again the model for the `insecticide` data.
+```{r}
+m <- glm(cbind(deaths, total-deaths) ~ log2(deposit) + insecticide, 
+  family = binomial, data = insecticide)
+
+d <- expand.grid(deposit = seq(2, 8, length = 100), 
+  insecticide = levels(insecticide$insecticide))
+d$phat <- predict(m, newdata = d, type = "response")
+
+p <- ggplot(insecticide, aes(x = deposit, y = deaths/total)) + 
+  geom_point() + facet_wrap(~ insecticide) + 
+  geom_line(aes(y = phat), data = d) + theme_minimal() + 
+  labs(x = "Deposit (mg per 10 square cm)", y = "Proportion of Deaths")
+plot(p)
+```
+We can estimate the factor by which we increase probability by increasing deposit from 4 to 6 mg per 10 square cm.
+```{r}
+margeff(m, type = "factor",
+  a = list(deposit = 6, insecticide = c("g-BHC","both","DDT")),
+  b = list(deposit = 4, insecticide = c("g-BHC","both","DDT")),
+  cnames = c("g-BHC","both","DDT"))
+```
+We can also estimate the factor for comparing both insecticides with g-BHC only.
+```{r}
+margeff(m, type = "factor",
+  a = list(deposit = c(2,4,6,8), insecticide = "both"),
+  b = list(deposit = c(2,4,6,8), insecticide = "g-BHC"),
+  cnames = c("2","4","6","8"))
+```
+
+## Using Different Kinds of Marginal Effects
+
+Marginal effects give us a variety of ways to summarize the statistical relationship between a response variable and an explanatory variable.
+
+**Example**: Consider the following model for the `ToothGrowth` data.
+```{r}
+m <- lm(len ~ log2(dose) + supp, data = ToothGrowth)
+
+d <- expand.grid(dose = seq(0.5, 2, length = 100), supp = c("OJ","VC"))
+d$yhat <- predict(m, d)
+
+p <- ggplot(ToothGrowth, aes(x = dose, y = len)) + 
+  geom_point() + facet_wrap(~ supp) + 
+  geom_line(aes(y = yhat), data = d) + 
+  labs(x = "Dose of Vitamin C (mg/day)", y = "Odontoblast Size") +
+  theme_minimal()
+plot(p)
+```
+We can use discrete marginal effects, such as when increasing dose from 0.5 to 1 mg/day.
+```{r}
+margeff(m, cnames = c("OJ","VC"),
+  a = list(dose = 1.0, supp = c("OJ","VC")),
+  b = list(dose = 0.5, supp = c("OJ","VC")))
+```
+We can use instantaneous effects, such as the instantaneous effect at 1 mg/day.
+```{r}
+margeff(m, cnames = c("OJ","VC"), delta = 0.001,
+  a = list(dose = 1 + 0.001, supp = c("OJ","VC")),
+  b = list(dose = 1, supp = c("OJ","VC")))
+```
+We can use the percent change, such as when increasing dose from 0.5 to 1 mg/day.
+```{r}
+margeff(m, cnames = c("OJ","VC"), type = "percent",
+  a = list(dose = 1.0, supp = c("OJ","VC")),
+  b = list(dose = 0.5, supp = c("OJ","VC")))
+```
+We can use a multiplicative factor, such as when increasing dose form 0.5 to 1 mg/day.
+```{r}
+margeff(m, cnames = c("OJ","VC"), type = "factor",
+  a = list(dose = 1.0, supp = c("OJ","VC")),
+  b = list(dose = 0.5, supp = c("OJ","VC")))
+```
+
+Note: There are functions in other packages for estimating some kinds of marginal effects (e.g., see the package **marginaleffects**).
