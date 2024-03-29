@@ -409,7 +409,7 @@ relatively straight forward.</p>
 150-&gt;200   -10.69 0.1606 -11.02 -10.37  -66.6 49 1.001e-49</code></pre>
 <p><strong>Example</strong>: Consider the following model for the
 <code>insecticide</code> data.</p>
-<pre class="r"><code>m &lt;- glm(cbind(deaths, total-deaths) ~ log2(deposit) + insecticide, 
+<pre class="r"><code>m &lt;- glm(cbind(deaths, total-deaths) ~ log(deposit) + insecticide, 
   family = binomial, data = insecticide)
 
 d &lt;- expand.grid(deposit = seq(2, 8, length = 100), 
@@ -621,7 +621,7 @@ small value of <span class="math inline">\(\delta\)</span> to the
 <code>delta</code> argument.</p>
 <p><strong>Example</strong>: Consider again the model for the
 <code>insecticide</code> data.</p>
-<pre class="r"><code>m &lt;- glm(cbind(deaths, total-deaths) ~ log2(deposit) 
+<pre class="r"><code>m &lt;- glm(cbind(deaths, total-deaths) ~ log(deposit) 
  + insecticide, family = binomial, data = insecticide)
 
 d &lt;- expand.grid(deposit = seq(2, 8, length = 100), 
@@ -769,7 +769,7 @@ to 100 days as follows.</p>
 150-&gt;200   -8.180 0.12091  -8.423  -7.937  -67.66 49 4.660e-50</code></pre>
 <p><strong>Example</strong>: Consider again the model for the
 <code>insecticide</code> data.</p>
-<pre class="r"><code>m &lt;- glm(cbind(deaths, total-deaths) ~ log2(deposit) + insecticide, 
+<pre class="r"><code>m &lt;- glm(cbind(deaths, total-deaths) ~ log(deposit) + insecticide, 
   family = binomial, data = insecticide)
 
 d &lt;- expand.grid(deposit = seq(2, 8, length = 100), 
@@ -829,7 +829,7 @@ class="math inline">\(x_a\)</span> when <span class="math inline">\(X_2
     E(Y|X_1 = x_a, X_2 = x_2) = f \times E(Y|X_1 = x_b, X_2 = x_2).
 \]</span> <strong>Example</strong>: Consider again the model for the
 <code>insecticide</code> data.</p>
-<pre class="r"><code>m &lt;- glm(cbind(deaths, total-deaths) ~ log2(deposit) + insecticide, 
+<pre class="r"><code>m &lt;- glm(cbind(deaths, total-deaths) ~ log(deposit) + insecticide, 
   family = binomial, data = insecticide)
 
 d &lt;- expand.grid(deposit = seq(2, 8, length = 100), 
@@ -872,7 +872,7 @@ statistical relationship between a response variable and an explanatory
 variable.</p>
 <p><strong>Example</strong>: Consider the following model for the
 <code>ToothGrowth</code> data.</p>
-<pre class="r"><code>m &lt;- lm(len ~ log2(dose) + supp, data = ToothGrowth)
+<pre class="r"><code>m &lt;- lm(len ~ log(dose) + supp, data = ToothGrowth)
 
 d &lt;- expand.grid(dose = seq(0.5, 2, length = 100), supp = c(&quot;OJ&quot;,&quot;VC&quot;))
 d$yhat &lt;- predict(m, d)

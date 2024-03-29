@@ -137,7 +137,7 @@ margeff(m,
 
 **Example**: Consider the following model for the `insecticide` data.
 ```{r}
-m <- glm(cbind(deaths, total-deaths) ~ log2(deposit) + insecticide, 
+m <- glm(cbind(deaths, total-deaths) ~ log(deposit) + insecticide, 
   family = binomial, data = insecticide)
 
 d <- expand.grid(deposit = seq(2, 8, length = 100), 
@@ -292,7 +292,7 @@ Note: To estimate an instantaneous marginal effect, add a relatively small value
 
 **Example**: Consider again the model for the `insecticide` data.
 ```{r}
-m <- glm(cbind(deaths, total-deaths) ~ log2(deposit) 
+m <- glm(cbind(deaths, total-deaths) ~ log(deposit) 
  + insecticide, family = binomial, data = insecticide)
 
 d <- expand.grid(deposit = seq(2, 8, length = 100), 
@@ -340,7 +340,7 @@ margeff(m, delta = 0.001,
   cnames = c("g-BHC","both","DDT"))
 ```
 ```{r, echo = FALSE}
-m <- glm(cbind(deaths, total-deaths) ~ log2(deposit) + insecticide, 
+m <- glm(cbind(deaths, total-deaths) ~ log(deposit) + insecticide, 
   family = binomial, data = insecticide)
 
 d <- expand.grid(deposit = seq(2, 8, length = 100), 
@@ -463,7 +463,7 @@ margeff(m, type = "percent",
 
 **Example**: Consider again the model for the `insecticide` data.
 ```{r}
-m <- glm(cbind(deaths, total-deaths) ~ log2(deposit) + insecticide, 
+m <- glm(cbind(deaths, total-deaths) ~ log(deposit) + insecticide, 
   family = binomial, data = insecticide)
 
 d <- expand.grid(deposit = seq(2, 8, length = 100), 
@@ -510,7 +510,7 @@ $$
 $$
 **Example**: Consider again the model for the `insecticide` data.
 ```{r}
-m <- glm(cbind(deaths, total-deaths) ~ log2(deposit) + insecticide, 
+m <- glm(cbind(deaths, total-deaths) ~ log(deposit) + insecticide, 
   family = binomial, data = insecticide)
 
 d <- expand.grid(deposit = seq(2, 8, length = 100), 
@@ -544,7 +544,7 @@ Marginal effects give us a variety of ways to summarize the statistical relation
 
 **Example**: Consider the following model for the `ToothGrowth` data.
 ```{r}
-m <- lm(len ~ log2(dose) + supp, data = ToothGrowth)
+m <- lm(len ~ log(dose) + supp, data = ToothGrowth)
 
 d <- expand.grid(dose = seq(0.5, 2, length = 100), supp = c("OJ","VC"))
 d$yhat <- predict(m, d)
