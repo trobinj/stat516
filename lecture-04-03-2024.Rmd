@@ -66,7 +66,8 @@ Censoring of a variable occurs when we only know that the response variable is w
 **Interval-Censoring**: We only know that $a < T < b$ for some constants $a < b$. Note that right-censoring can be viewed as a special case where $b = \infty$ and left-censoring can be viewed as a special case where $a = 0$. Interval censoring occurs in survival analysis when units are only periodically observed.
 
 Note that censoring can occur for variables other than time to event. 
-**Example**: Consider the following data from a study of the effect of normal versus extended chemotherapy on the survival of patients with acute myelogenous leukemia.
+
+**Example**: Consider the following data from a study of the effect of normal versus extended chemotherapy on the survival (length of remission) of patients with acute myelogenous leukemia.
 ```{r}
 library(survival)
 
