@@ -228,6 +228,7 @@ so $T_a/T_b = e^{\beta_1}$ and $T_a = e^{\beta_1}T_b$.
 1. If $\beta_1 < 0$ then $e^{\beta_1} < 1$ and increasing $x_1$ will "compress" time-till-event (i.e., "accelerate the passage through time") by a factor of $e^{\beta_1}$. We could also say that increasing $x_1$ by one unit reduces time-till-event by a factor of $e^{\beta_1}$, or by $(1 - e^{\beta_1}) \times 100\%$. 
 
 0. If $\beta_1 > 0$ then $e^{\beta_1} > 1$ and increasing $x_1$ will "stretch" time-till-event (i.e., "decelerate the passage through time") by a factor of $e^{\beta_1}$. We could also say that increasing $x_1$ by one unit increases time-till-event by a factor of $e^{\beta_1}$, or by $(e^{\beta_1} - 1) \times 100\%$. 
+
 Also note that 
 $$
     E(T_b) = e^{\beta_0} e^{\beta_1 x_{1}} e^{\beta_2 x_{2}} \cdots e^{\beta_k x_k} E(e^{\sigma \epsilon}),
