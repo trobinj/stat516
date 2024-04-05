@@ -328,7 +328,8 @@ tail(d)
 p <- ggplot(d, aes(x = time, y = est)) + 
   geom_line(aes(linetype = species)) + 
   labs(x = "Time (years)", y = "S(t)", linetype = "Species") + 
-  theme_minimal() + theme(legend.position = c(0.8,0.8))
+  theme_minimal() + 
+  theme(legend.position = "inside", legend.position.inside = c(0.8,0.8))
 plot(p)
 ```
 

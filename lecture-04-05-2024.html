@@ -685,27 +685,24 @@ head(d)</code></pre>
 <pre><code>  time    est    lcl    ucl species
 1  0.0 1.0000 1.0000 1.0000     dog
 2  0.5 1.0000 1.0000 1.0000     dog
-3  1.0 0.9999 0.9999 0.9999     dog
-4  1.5 0.9989 0.9985 0.9993     dog
-5  2.0 0.9953 0.9937 0.9965     dog
-6  2.5 0.9869 0.9834 0.9896     dog</code></pre>
+3  1.0 0.9999 0.9998 0.9999     dog
+4  1.5 0.9989 0.9984 0.9993     dog
+5  2.0 0.9953 0.9936 0.9966     dog
+6  2.5 0.9869 0.9833 0.9900     dog</code></pre>
 <pre class="r"><code>tail(d)</code></pre>
 <pre><code>     time    est    lcl    ucl species
-397  97.5 0.2611 0.2402 0.2819   human
-398  98.0 0.2583 0.2375 0.2791   human
-399  98.5 0.2556 0.2349 0.2763   human
-400  99.0 0.2529 0.2323 0.2735   human
-401  99.5 0.2502 0.2297 0.2707   human
-402 100.0 0.2475 0.2272 0.2680   human</code></pre>
+397  97.5 0.2611 0.2405 0.2822   human
+398  98.0 0.2583 0.2378 0.2794   human
+399  98.5 0.2556 0.2351 0.2766   human
+400  99.0 0.2529 0.2325 0.2738   human
+401  99.5 0.2502 0.2299 0.2711   human
+402 100.0 0.2475 0.2273 0.2684   human</code></pre>
 <pre class="r"><code>p &lt;- ggplot(d, aes(x = time, y = est)) + 
   geom_line(aes(linetype = species)) + 
   labs(x = &quot;Time (years)&quot;, y = &quot;S(t)&quot;, linetype = &quot;Species&quot;) + 
-  theme_minimal() + theme(legend.position = c(0.8,0.8))</code></pre>
-<pre><code>Warning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2 3.5.0.
-ℹ Please use the `legend.position.inside` argument of `theme()` instead.
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<pre class="r"><code>plot(p)</code></pre>
+  theme_minimal() + 
+  theme(legend.position = &quot;inside&quot;, legend.position.inside = c(0.8,0.8))
+plot(p)</code></pre>
 <p><img src="lecture-04-05-2024_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><strong>Example</strong>: Survival functions at different
 temperatures based on the AFT model for the <code>motors</code> data can
