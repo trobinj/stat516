@@ -11,9 +11,7 @@ This website is for Dr. Johnson's *Applied Regression Modeling* course (Stat 436
 
 <center>
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/BvWefB4NGGI?si=xZRgTCu2RBum-bO4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-Long before he played Paul Atreides in Dune, Timothée Chalamet was a high school student who enjoyed his statistics class.
+![https://xkcd.com/2110](http://imgs.xkcd.com/comics/error_bars.png)
 
 </center>
 
