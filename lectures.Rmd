@@ -123,7 +123,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Hazard functions, proportional hazards models](lecture-04-08-2024.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Proportional hazards models, discrete survival models](lecture-04-10-2024.html).
 
 `r i <- i + 1; d[i]` 
  
