@@ -231,7 +231,7 @@ Note that $1 - h(t) = 1 - P(T = t|T \ge t) = P(T > t|T \ge t)$.
 
 ### Discrete Survival Models as Binary Regression Models
 
-Discrete survival time models can be expressed as *binary* regression models. We can model the probability that a unit will not survive past time $t$ *given* that it survived to time $t$, or we can model the probability that it will survive past time *given* that it survived to time $t$. 
+Discrete survival time models can be expressed as *binary* regression models. We can model the probability that a unit will not survive past time $t$ *given* that it survived to time $t$, or we can model the probability that it will survive past time $t$ *given* that it survived to time $t$. 
 
 Suppose we code time-till-event with positive integers. For every $T$ we define a set of binary responses such that if $T=t$ then we have $t$ binary responses, $Y_1, Y_2, \dots, Y_t$, such that
 $$
