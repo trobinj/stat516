@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.15)  10 APR 2024 11:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.15)  11 APR 2024 08:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -715,7 +715,7 @@ ecture-04-10-2024.aux) )
 Here is how much of TeX's memory you used:
  15638 strings out of 478287
  249777 string characters out of 5849289
- 594767 words of memory out of 5000000
+ 594791 words of memory out of 5000000
  33350 multiletter control sequences out of 15000+600000
  537806 words of font info for 149 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -737,7 +737,7 @@ hare/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/share/texmf/fonts/type1/publi
 c/lm/lmsy7.pfb></usr/share/texmf/fonts/type1/public/lm/lmtk10.pfb></usr/share/t
 exmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/l
 mtti10.pfb>
-Output written on lecture-04-10-2024.pdf (15 pages, 452607 bytes).
+Output written on lecture-04-10-2024.pdf (15 pages, 453108 bytes).
 PDF statistics:
  278 PDF objects out of 1000 (max. 8388607)
  200 compressed objects within 2 object streams
