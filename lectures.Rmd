@@ -125,7 +125,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Proportional hazards models, discrete survival models](lecture-04-10-2024.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Discrete survival models and sequential categorical regression models](lecture-04-12-2024.html).
  
 ***
 
