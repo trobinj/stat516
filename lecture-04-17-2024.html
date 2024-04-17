@@ -431,13 +431,9 @@ head(d)</code></pre>
 <p>And then finally we plot.</p>
 <pre class="r"><code>p &lt;- ggplot(d, aes(x = exposure.time, y = probability)) + 
   geom_line(aes(linetype = condition)) + 
-  ylim(0, 1) + theme_minimal() + theme(legend.position = c(0.1, 0.6)) + 
-  labs(x = &quot;Exposure (years)&quot;, y = &quot;Probability&quot;, linetype = &quot;Condition&quot;)</code></pre>
-<pre><code>Warning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2 3.5.0.
-ℹ Please use the `legend.position.inside` argument of `theme()` instead.
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<pre class="r"><code>plot(p)</code></pre>
+  ylim(0, 1) + theme_minimal() +
+  labs(x = &quot;Exposure (years)&quot;, y = &quot;Probability&quot;, linetype = &quot;Condition&quot;)
+plot(p)</code></pre>
 <p><img src="lecture-04-17-2024_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <p><strong>Example</strong>: Consider the data frame
 <code>alligator</code> from the <strong>EffectStars</strong>

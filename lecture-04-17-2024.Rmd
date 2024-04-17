@@ -142,7 +142,7 @@ And then finally we plot.
 ```{r}
 p <- ggplot(d, aes(x = exposure.time, y = probability)) + 
   geom_line(aes(linetype = condition)) + 
-  ylim(0, 1) + theme_minimal() + theme(legend.position = c(0.1, 0.6)) + 
+  ylim(0, 1) + theme_minimal() +
   labs(x = "Exposure (years)", y = "Probability", linetype = "Condition")
 plot(p)
 ```
