@@ -116,7 +116,7 @@ summary(m.fix)$coefficients
 ```
 Note that there are no terms for gender.
 
-In general, the fixed effects approach does not permit proper inferences for explanatory variables that are *nested* within the fixed effect. We are limited to inferences that are *crossed* with the fixed effect.
+In general, the fixed effects approach does not permit proper inferences for explanatory variables that have a fixed effects variable nested within them. We are limited to inferences that are *crossed* with the fixed effect.
 
 ### Fixed Effects and Nonlinear Models
 
