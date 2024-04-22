@@ -137,7 +137,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [The fixed effects approach to the incidental variable problem](lecture-04-22-2024.html).
 
 `r i <- i + 1; d[i]` 
 
