@@ -133,13 +133,13 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Multinomial logit regression models for unordered categorical response variables](lecture-04-17-2024.html).
 
-`r i <- i + 1; d[i]` [Introduction to the incidental variable problem, marginal models and GEE](lecture-04-19-2024.html).
+`r i <- i + 1; d[i]` [Introduction to the incidental parameter problem, marginal models and GEE](lecture-04-19-2024.html).
  
 ***
 
-`r i <- i + 1; d[i]` [The fixed effects approach to the incidental variable problem](lecture-04-22-2024.html).
+`r i <- i + 1; d[i]` [The fixed effects approach to the incidental parameter problem](lecture-04-22-2024.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Introduction to the random effects approach to the incidental parameter problem](lecture-04-24-2024.html).
 
 `r i <- i + 1; d[i]` 
  
