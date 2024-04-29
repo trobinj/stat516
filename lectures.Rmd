@@ -145,7 +145,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` [Model selection via prediction error, cross-validation, and AIC](lecture-04-29-2024.Rmd).
+`r i <- i + 1; d[i]` [Model selection via prediction error, cross-validation, and AIC](lecture-04-29-2024.html).
 
 `r i <- i + 1; d[i]` 
 
