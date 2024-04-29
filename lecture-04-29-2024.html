@@ -391,13 +391,8 @@ library(Stat2Data)
 data(CrabShip)
 p &lt;- ggplot(CrabShip, aes(x = Mass, y = Oxygen, color = Noise)) +
   geom_point() + theme_minimal() + 
-  labs(y = &quot;Oxygen Consumption (micromoles/hour)&quot;, x = &quot;Mass (g)&quot;) + 
-  theme(legend.position = c(0.1, 0.8))</code></pre>
-<pre><code>Warning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2 3.5.0.
-ℹ Please use the `legend.position.inside` argument of `theme()` instead.
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<pre class="r"><code>plot(p)</code></pre>
+  labs(y = &quot;Oxygen Consumption (micromoles/hour)&quot;, x = &quot;Mass (g)&quot;)
+plot(p)</code></pre>
 <p><img src="lecture-04-29-2024_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>library(dplyr)
 m1 &lt;- nls(Oxygen ~ case_when(
@@ -546,7 +541,7 @@ glm(formula = cbind(dead, exposed - dead) ~ concentration, family = binomial,
 Coefficients:
               Estimate Std. Error z value Pr(&gt;|z|)    
 (Intercept)   -14.8084     1.2898   -11.5   &lt;2e-16 ***
-concentration   0.2492     0.0214    11.6   &lt;2e-16 ***
+concentration   0.2492     0.0214    11.7   &lt;2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
