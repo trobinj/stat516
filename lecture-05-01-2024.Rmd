@@ -343,7 +343,6 @@ d$yhat <- predict(m, newdata = d)
 p <- ggplot(bone, aes(x = age, y = spnbmd)) + 
   geom_point(aes(color = sex), alpha = 0.25) + theme_classic() + 
   geom_line(aes(color = sex, group = idnum), alpha = 0.25) +
-  theme(legend.position = c(0.8,0.8)) + 
   labs(x = "Age (years)", color = "Sex",
     y = "Relative Spinal Bone Mineral Density") + 
   geom_line(aes(y = yhat), data = d)
@@ -358,7 +357,6 @@ d$yhat <- predict(m, newdata = d)
 p <- ggplot(bone, aes(x = age, y = spnbmd)) + 
   geom_point(aes(color = sex), alpha = 0.25) + theme_classic() + 
   geom_line(aes(color = sex, group = idnum), alpha = 0.25) +
-  theme(legend.position = c(0.8,0.8)) + 
   labs(x = "Age (years)", color = "Sex",
     y = "Relative Spinal Bone Mineral Density") + 
   geom_line(aes(y = yhat, color = sex), data = d)
@@ -373,7 +371,6 @@ d$yhat <- predict(m, newdata = d)
 p <- ggplot(bone, aes(x = age, y = spnbmd)) + 
   geom_point(aes(color = sex), alpha = 0.25) + theme_classic() + 
   geom_line(aes(color = sex, group = idnum), size = 0.5, alpha = 0.25) +
-  theme(legend.position = c(0.8,0.8)) + 
   labs(x = "Age (years)", color = "Sex",
     y = "Relative Spinal Bone Mineral Density") + 
   geom_line(aes(y = yhat, color = sex), data = d)
@@ -397,7 +394,6 @@ p <- ggplot(children, aes(x = age, y = height)) + theme_classic() +
   geom_ribbon(aes(x = age, ymin = lower, ymax = upper, 
     fill = sex, y = NULL), data = d, color = NA, alpha = 0.25) + 
   labs(x = "Age (years)", y = "Height (cm)", color = "Sex") + 
-  theme(legend.position = c(0.9,0.2)) + 
   scale_x_continuous(breaks = seq(5, 19, by = 1)) + guides(fill = "none")
 plot(p)
 ```
@@ -457,8 +453,7 @@ d$yhat <- predict(m, newdata = d)
 p <- ggplot(CrabShip, aes(x = Mass, y = Oxygen, color = Noise)) +
   geom_line(aes(y = yhat), data = d) + 
   geom_point() + theme_minimal() + 
-  labs(y = "Oxygen Consumption (micromoles/hour)", x = "Mass (g)") + 
-  theme(legend.position = c(0.1, 0.8))
+  labs(y = "Oxygen Consumption (micromoles/hour)", x = "Mass (g)")
 plot(p)
 
 library(emmeans)

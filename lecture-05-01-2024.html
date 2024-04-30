@@ -464,15 +464,10 @@ d$yhat &lt;- predict(m, newdata = d)
 p &lt;- ggplot(bone, aes(x = age, y = spnbmd)) + 
   geom_point(aes(color = sex), alpha = 0.25) + theme_classic() + 
   geom_line(aes(color = sex, group = idnum), alpha = 0.25) +
-  theme(legend.position = c(0.8,0.8)) + 
   labs(x = &quot;Age (years)&quot;, color = &quot;Sex&quot;,
     y = &quot;Relative Spinal Bone Mineral Density&quot;) + 
-  geom_line(aes(y = yhat), data = d)</code></pre>
-<pre><code>Warning: A numeric `legend.position` argument in `theme()` was deprecated in ggplot2 3.5.0.
-ℹ Please use the `legend.position.inside` argument of `theme()` instead.
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<pre class="r"><code>plot(p)</code></pre>
+  geom_line(aes(y = yhat), data = d)
+plot(p)</code></pre>
 <p><img src="lecture-05-01-2024_files/figure-html/unnamed-chunk-10-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>m &lt;- gam(spnbmd ~ sex + s(age), data = bone)
 
@@ -482,7 +477,6 @@ d$yhat &lt;- predict(m, newdata = d)
 p &lt;- ggplot(bone, aes(x = age, y = spnbmd)) + 
   geom_point(aes(color = sex), alpha = 0.25) + theme_classic() + 
   geom_line(aes(color = sex, group = idnum), alpha = 0.25) +
-  theme(legend.position = c(0.8,0.8)) + 
   labs(x = &quot;Age (years)&quot;, color = &quot;Sex&quot;,
     y = &quot;Relative Spinal Bone Mineral Density&quot;) + 
   geom_line(aes(y = yhat, color = sex), data = d)
@@ -496,7 +490,6 @@ d$yhat &lt;- predict(m, newdata = d)
 p &lt;- ggplot(bone, aes(x = age, y = spnbmd)) + 
   geom_point(aes(color = sex), alpha = 0.25) + theme_classic() + 
   geom_line(aes(color = sex, group = idnum), size = 0.5, alpha = 0.25) +
-  theme(legend.position = c(0.8,0.8)) + 
   labs(x = &quot;Age (years)&quot;, color = &quot;Sex&quot;,
     y = &quot;Relative Spinal Bone Mineral Density&quot;) + 
   geom_line(aes(y = yhat, color = sex), data = d)</code></pre>
@@ -526,7 +519,6 @@ p &lt;- ggplot(children, aes(x = age, y = height)) + theme_classic() +
   geom_ribbon(aes(x = age, ymin = lower, ymax = upper, 
     fill = sex, y = NULL), data = d, color = NA, alpha = 0.25) + 
   labs(x = &quot;Age (years)&quot;, y = &quot;Height (cm)&quot;, color = &quot;Sex&quot;) + 
-  theme(legend.position = c(0.9,0.2)) + 
   scale_x_continuous(breaks = seq(5, 19, by = 1)) + guides(fill = &quot;none&quot;)
 plot(p)</code></pre>
 <p><img src="lecture-05-01-2024_files/figure-html/unnamed-chunk-13-1.png" width="100%" style="display: block; margin: auto;" /></p>
@@ -606,8 +598,7 @@ d$yhat &lt;- predict(m, newdata = d)
 p &lt;- ggplot(CrabShip, aes(x = Mass, y = Oxygen, color = Noise)) +
   geom_line(aes(y = yhat), data = d) + 
   geom_point() + theme_minimal() + 
-  labs(y = &quot;Oxygen Consumption (micromoles/hour)&quot;, x = &quot;Mass (g)&quot;) + 
-  theme(legend.position = c(0.1, 0.8))
+  labs(y = &quot;Oxygen Consumption (micromoles/hour)&quot;, x = &quot;Mass (g)&quot;)
 plot(p)</code></pre>
 <p><img src="lecture-05-01-2024_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>library(emmeans)
