@@ -489,15 +489,11 @@ d$yhat &lt;- predict(m, newdata = d)
 
 p &lt;- ggplot(bone, aes(x = age, y = spnbmd)) + 
   geom_point(aes(color = sex), alpha = 0.25) + theme_classic() + 
-  geom_line(aes(color = sex, group = idnum), size = 0.5, alpha = 0.25) +
+  geom_line(aes(color = sex, group = idnum), linewidth = 0.5, alpha = 0.25) +
   labs(x = &quot;Age (years)&quot;, color = &quot;Sex&quot;,
     y = &quot;Relative Spinal Bone Mineral Density&quot;) + 
-  geom_line(aes(y = yhat, color = sex), data = d)</code></pre>
-<pre><code>Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-ℹ Please use `linewidth` instead.
-This warning is displayed once every 8 hours.
-Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
-<pre class="r"><code>plot(p)</code></pre>
+  geom_line(aes(y = yhat, color = sex), data = d)
+plot(p)</code></pre>
 <p><img src="lecture-05-01-2024_files/figure-html/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" />
 <strong>Example</strong>: Consider the growth data of female and male
 children in the <code>children</code> data frame from the
