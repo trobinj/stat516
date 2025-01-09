@@ -21,7 +21,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Introduction](lecture-01-08-2025.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Linear models, indicator variables](lecture-01-10-2025.html).
 
 ***
 
