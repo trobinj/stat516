@@ -5,13 +5,13 @@ output:
     theme: readable
 ---
   
-This is a placeholder website is for Dr. Johnson's *Applied Regression Modeling* course (Stat 436/516) for the spring semester of 2025 at the University of Idaho.
+This is a website is for Dr. Johnson's *Applied Regression Modeling* course (Stat 436/516) for the spring semester of 2025 at the University of Idaho.
 
 ***
 
 <center>
 
-![https://xkcd.com/1725](https://imgs.xkcd.com/comics/linear_regression.png)
+![https://xkcd.com/2701](https://imgs.xkcd.com/comics/change_in_slope.png)
 
 </center>
 
