@@ -40,10 +40,10 @@ suppressWarnings(library(kableExtra))
 
 ```{r utilities, echo = FALSE}
 source("utilities.R")
+if (exists("anorexia")) rm(anorexia)
 ```
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
-
 
 **Example**: The "data frame" `trees` comes with R. We can see it if we just type `trees` at the prompt in the R console.
 ```{r}
