@@ -344,8 +344,8 @@ temperature <em>after</em> insulation.</p></li>
 above.</p></li>
 <li><p>The expected gas consumption before and after insulation at
 5C.</p></li>
-<li><p>The difference in expected gas consumption from before to after
-insulation at 5C.</p></li>
+<li><p>The difference in expected gas consumption between before and
+after insulation at 5C.</p></li>
 </ol>
 <div style="page-break-after: always;"></div>
 <p>Now consider the following model specified using the <code>lm</code>
@@ -413,8 +413,8 @@ increase in temperature <em>after</em> insulation.</p></li>
 above.</p></li>
 <li><p>The expected gas consumption before and after insulation at
 5C.</p></li>
-<li><p>The difference in expected gas consumption from before to after
-insulation at 5C.</p></li>
+<li><p>The difference in expected gas consumption between before and
+after insulation at 5C.</p></li>
 </ol>
 <div style="page-break-after: always;"></div>
 </div>
@@ -531,8 +531,8 @@ respectively. </p>
 <pre class="r"><code>lincon(m, a = c(1,1,5,5), b = 0) # after</code></pre>
 <pre><code>            estimate      se lower upper tvalue df    pvalue
 (1,1,5,5),0    3.334 0.06024 3.213 3.455  55.35 52 6.772e-48</code></pre></li>
-<li><p>The change in the expected gas consumption from before to after
-insulation at 5C is <span class="math inline">\(\beta_1 +
+<li><p>The difference in expected gas consumption between before and
+after insulation at 5C is <span class="math inline">\(\beta_1 +
 \beta_35\)</span>. </p>
 <pre class="r"><code>lincon(m, a = c(0,1,0,5), b = 0)</code></pre>
 <pre><code>            estimate      se lower  upper tvalue df    pvalue
