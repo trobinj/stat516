@@ -29,7 +29,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Linear functions of model parameters, using the `lincon` function](lecture-01-15-2025.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Using the `contrast` function for inferences concerning linear functions of model parameters, plotting estimated expected responses with `ggplot`](lecture-01-17-2025.html). 
  
 ***
 
