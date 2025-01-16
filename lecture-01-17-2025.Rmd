@@ -79,8 +79,8 @@ $$
 $$
 Suppose we want to make inferences about the difference in the expected weight change between the family therapy and the control conditions. We have that
 \begin{align*}
-  E(Y_a) & = \beta_0 + \beta_1, \\
-  E(Y_b) & = \beta_0 + \beta_2,
+  E(Y_a) & = \beta_0 + \beta_2, \\
+  E(Y_b) & = \beta_0 + \beta_1,
 \end{align*}
 and so this difference is
 $$
