@@ -37,7 +37,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Inference for linear models](lecture-01-22-2025.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Inference for linear models --- continued](lecture-01-24-2025.html).
  
 ***
 
