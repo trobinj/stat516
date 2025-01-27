@@ -315,7 +315,7 @@ p2 &lt;- ggplot(MoleRats, aes(x = ln.mass, y = ln.energy, color = caste)) +
 
 # plot both plots side-by-side
 plot_grid(p1, p2, align = &quot;h&quot;, rel_widths = c(1,3))</code></pre>
-<p><img src="lecture-01-27-2025_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-01-27-2025-solutions_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;" />
 Note that both energy expenditure and mass are recorded on the (natural)
 log scale. We will be modeling both of these variables on the log
 scale.</p>
@@ -462,7 +462,7 @@ d$yhat &lt;- predict(m, newdata = d)</code></pre>
 <p>Then we “add to” the plot we created above.</p>
 <pre class="r"><code>p2 &lt;- p2 + geom_line(aes(y = yhat), data = d)
 plot(p2)</code></pre>
-<p><img src="lecture-01-27-2025_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-01-27-2025-solutions_files/figure-html/unnamed-chunk-11-1.png" width="100%" style="display: block; margin: auto;" />
 If we had not already created the plot object above then we could do as
 follows.</p>
 <pre class="r"><code>p &lt;- ggplot(MoleRats, aes(x = ln.mass, y = ln.energy, color = caste)) +
@@ -471,7 +471,7 @@ follows.</p>
   labs(x = &quot;Log Mass (log g)&quot;, y = &quot;Log Energy Expenditure (log kJ/Day)&quot;, color = &quot;Caste&quot;) + 
   geom_line(aes(y = yhat), data = d)
 plot(p)</code></pre>
-<p><img src="lecture-01-27-2025_files/figure-html/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" /></p></li>
+<p><img src="lecture-01-27-2025-solutions_files/figure-html/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" /></p></li>
 <li><p>With the model now including the log of mass as an explanatory
 variable, comparisons between the castes must also consider mass. How
 can we use <code>contrast</code> to estimate the expected log energy
@@ -582,7 +582,7 @@ p &lt;- ggplot(MoleRats, aes(x = ln.mass, y = ln.energy, color = caste)) +
   labs(x = &quot;Log Mass (log g)&quot;, y = &quot;Log Energy Expenditure (log kJ/Day)&quot;,
     color = &quot;Caste&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-01-27-2025_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-01-27-2025-solutions_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" />
 Notice how the “interaction” between log mass and caste now changes the
 results form <code>contrast</code> since the lines are no longer
 restricted to be parallel.</p>
@@ -648,7 +648,7 @@ p &lt;- ggplot(MoleRats, aes(x = mass, y = log(energy), color = caste)) +
   geom_line(aes(y = yhat), data = d) +
   labs(x = &quot;Mass (g)&quot;, y = &quot;Log Energy Expenditure (log kJ/Day)&quot;, color = &quot;Caste&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-01-27-2025_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-01-27-2025-solutions_files/figure-html/unnamed-chunk-21-1.png" width="100%" style="display: block; margin: auto;" />
 This shows that although this is a linear model, the expected response
 (the logarithm of the energy expenditure) is <em>not</em> a linear
 function of mass. And while we could use energy expenditure instead of
