@@ -181,7 +181,8 @@ Here is a plot of the model with the data.
       geom_line(aes(y = yhat), data = d) + 
       labs(x = "Dose (mg/day)", y = "Odontoblast Length", 
         color = "Supplement Type") + 
-      theme_minimal() + theme(legend.position = c(0.8,0.2))
+      theme_minimal() + 
+      theme(legend.position = "inside", legend.position.inside = c(0.8,0.2))
     plot(p)
     ```
 
