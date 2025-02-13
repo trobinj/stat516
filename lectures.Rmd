@@ -61,7 +61,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Assumptions --- continued](lecture-02-12-2025.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Heteroscedasticity, weighted least squares, and iteratively weighted least squares](lecture-02-14-2025.html).
  
 ***
 
