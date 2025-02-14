@@ -94,11 +94,11 @@ plot(p)
 ```
 Comments on variance-stabilizing transformations.
 
-1. Depending on the situation, other transformations may exhibit variance-stabilizing properties. Some common transformations are $\sqrt{Y_i}$, $\log(Y_i)$, $1/\sqrt{Y_i}$ and $1/Y_i$ for right-skewed response variables, and $n_i \sin^{-1}\sqrt{Y_i}$ when $Y_i$ is a proportion with a denominator of $n_i$. 
+1. Depending on the situation, other transformations may exhibit variance-stabilizing properties. Some common transformations are $\sqrt{Y_i}$, $\log Y_i$, $1/\sqrt{Y_i}$ and $1/Y_i$ for right-skewed response variables, and $n_i \arcsin(\sqrt{Y_i})$ when $Y_i$ is a proportion with a denominator of $n_i$. 
 
 0. A limitation of variance stabilizing transformations is that it is often difficult (and undesirable) to to *interpret* the model in terms of the transformed response variable (although there are exceptions as we will later see with the log transformation in the context of accelerated failure time models for survival data). 
 
-0. It is important to note that for any *nonlinear* transformation that $E[g(Y)] \neq g[E(Y)]$ (i.e., the expected transformed response does not necessarily equal the transformed expected response). For example, the expected log of survival time does not equal the log of the expected survival time. So we cannot obtain inferences for the expected response by applying the inverse function. For example, while we have that $\exp[\log(Y)] = Y$, this **does not** imply that $\exp\left\{E[\log(Y)]\right\} = E(Y)$. 
+0. It is important to note that for any *nonlinear* transformation that $E[g(Y)] \neq g[E(Y)]$ (i.e., the expected transformed response does not necessarily equal the transformed expected response). For example, $E[\log Y] \neq \log E(Y)$. So we cannot obtain inferences for the expected response by applying the inverse of the transformation function. For example, $\exp[E(\log Y)] \neq E(Y)$. 
 
 ### Weighted Least Squares
 
@@ -182,7 +182,7 @@ where $Z_{ij}$ is the length of the $j$-th pen that goes into the $i$-th average
 $$
   w_i \propto \frac{1}{\sigma^2/n_i} = \frac{n_i}{\sigma^2}.
 $$
-Since $1/\sigma^2$ is a constant for all observations, we can define the weights as $w_i = n_i$. The weights can be specified in `lm` and `nls` (and other functions for regression) using the `weights` argument. 
+Assuming $1/\sigma^2$ is a constant for all observations, we can define the weights of the means as $w_i = n_i$. The weights can be specified in `lm` and `nls` (and other functions for regression) using the `weights` argument. 
 ```{r}
 m.wls <- nls(weight ~ case_when(
   source == "none" ~ gamma,
@@ -349,6 +349,8 @@ for (i in 1:5) {
   print(coef(m.wls)) # optional
   biomass$w <- 1 / predict(m.wls)
 }
+summary(m)$coefficients
+summary(m.wls)$coefficients
 ```
 
 

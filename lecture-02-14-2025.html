@@ -324,11 +324,11 @@ Comments on variance-stabilizing transformations.</p>
 <li><p>Depending on the situation, other transformations may exhibit
 variance-stabilizing properties. Some common transformations are <span
 class="math inline">\(\sqrt{Y_i}\)</span>, <span
-class="math inline">\(\log(Y_i)\)</span>, <span
+class="math inline">\(\log Y_i\)</span>, <span
 class="math inline">\(1/\sqrt{Y_i}\)</span> and <span
 class="math inline">\(1/Y_i\)</span> for right-skewed response
 variables, and <span class="math inline">\(n_i
-\sin^{-1}\sqrt{Y_i}\)</span> when <span
+\arcsin(\sqrt{Y_i})\)</span> when <span
 class="math inline">\(Y_i\)</span> is a proportion with a denominator of
 <span class="math inline">\(n_i\)</span>.</p></li>
 <li><p>A limitation of variance stabilizing transformations is that it
@@ -339,14 +339,11 @@ context of accelerated failure time models for survival data).</p></li>
 <li><p>It is important to note that for any <em>nonlinear</em>
 transformation that <span class="math inline">\(E[g(Y)] \neq
 g[E(Y)]\)</span> (i.e., the expected transformed response does not
-necessarily equal the transformed expected response). For example, the
-expected log of survival time does not equal the log of the expected
-survival time. So we cannot obtain inferences for the expected response
-by applying the inverse function. For example, while we have that <span
-class="math inline">\(\exp[\log(Y)] = Y\)</span>, this <strong>does
-not</strong> imply that <span
-class="math inline">\(\exp\left\{E[\log(Y)]\right\} =
-E(Y)\)</span>.</p></li>
+necessarily equal the transformed expected response). For example, <span
+class="math inline">\(E[\log Y] \neq \log E(Y)\)</span>. So we cannot
+obtain inferences for the expected response by applying the inverse of
+the transformation function. For example, <span
+class="math inline">\(\exp[E(\log Y)] \neq E(Y)\)</span>.</p></li>
 </ol>
 </div>
 <div id="weighted-least-squares" class="section level3">
@@ -468,11 +465,11 @@ class="math inline">\(\text{Var}(Z_{ij}) = \sigma^2\)</span> then <span
 class="math inline">\(\text{Var}(Y_i) = \sigma^2/n_i\)</span>. Thus the
 weights should be <span class="math display">\[
   w_i \propto \frac{1}{\sigma^2/n_i} = \frac{n_i}{\sigma^2}.
-\]</span> Since <span class="math inline">\(1/\sigma^2\)</span> is a
-constant for all observations, we can define the weights as <span
-class="math inline">\(w_i = n_i\)</span>. The weights can be specified
-in <code>lm</code> and <code>nls</code> (and other functions for
-regression) using the <code>weights</code> argument.</p>
+\]</span> Assuming <span class="math inline">\(1/\sigma^2\)</span> is a
+constant for all observations, we can define the weights of the means as
+<span class="math inline">\(w_i = n_i\)</span>. The weights can be
+specified in <code>lm</code> and <code>nls</code> (and other functions
+for regression) using the <code>weights</code> argument.</p>
 <pre class="r"><code>m.wls &lt;- nls(weight ~ case_when(
   source == &quot;none&quot; ~ gamma,
   source == &quot;a&quot; ~ alpha + (gamma - alpha) * 2^(-dose/lambdaa),
@@ -737,6 +734,14 @@ treatmentn:total treatmenty:total
           0.1155           0.1578 
 treatmentn:total treatmenty:total 
           0.1155           0.1578 </code></pre>
+<pre class="r"><code>summary(m)$coefficients</code></pre>
+<pre><code>                 Estimate Std. Error t value Pr(&gt;|t|)
+treatmentn:total   0.1056    0.04183   2.524 1.31e-02
+treatmenty:total   0.1319    0.01121  11.773 7.61e-21</code></pre>
+<pre class="r"><code>summary(m.wls)$coefficients</code></pre>
+<pre><code>                 Estimate Std. Error t value  Pr(&gt;|t|)
+treatmentn:total   0.1155    0.02887    4.00 1.189e-04
+treatmenty:total   0.1578    0.01268   12.45 2.501e-22</code></pre>
 </div>
 </div>
 <div class="footnotes footnotes-end-of-document">
