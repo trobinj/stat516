@@ -386,13 +386,13 @@ turkeys</code></pre>
 <p>For plotting and modeling convenience we will rearrange the data a
 bit.</p>
 <pre class="r"><code>library(dplyr)
-turkeys &lt;- turkeys %&gt;% 
-  mutate(dose = dosea + doseb) %&gt;%
+turkeys &lt;- turkeys |&gt; 
+  mutate(dose = dosea + doseb) |&gt;
   mutate(source = case_when(
     dose == 0 ~ &quot;none&quot;,
     dosea &gt; 0 ~ &quot;a&quot;,
     doseb &gt; 0 ~ &quot;b&quot;)
-  ) %&gt;% 
+  ) |&gt; 
   select(-dosea, -doseb)
 turkeys</code></pre>
 <pre><code>  weight pens dose source
@@ -511,7 +511,7 @@ observations per category, we could <em>estimate</em> the variance of
 <span class="math inline">\(Y_i\)</span> of each organ, and then set the
 weights to the reciprocals of these estimated variances.</p>
 <pre class="r"><code>library(dplyr)
-CancerSurvival %&gt;% group_by(Organ) %&gt;% 
+CancerSurvival |&gt; group_by(Organ) |&gt; 
   summarize(variance = var(Survival), weight = 1/var(Survival))</code></pre>
 <pre><code># A tibble: 5 × 3
   Organ    variance      weight
@@ -523,8 +523,8 @@ CancerSurvival %&gt;% group_by(Organ) %&gt;%
 5 Breast   1535038. 0.000000651</code></pre>
 <p>We can use the following to compute weights and add them to the data
 frame.</p>
-<pre class="r"><code>CancerSurvival &lt;- CancerSurvival %&gt;% 
-   group_by(Organ) %&gt;% mutate(w = 1/var(Survival))
+<pre class="r"><code>CancerSurvival &lt;- CancerSurvival |&gt; 
+   group_by(Organ) |&gt; mutate(w = 1/var(Survival))
 head(CancerSurvival)</code></pre>
 <pre><code># A tibble: 6 × 3
 # Groups:   Organ [1]

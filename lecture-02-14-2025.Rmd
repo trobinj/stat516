@@ -127,13 +127,13 @@ turkeys
 For plotting and modeling convenience we will rearrange the data a bit.
 ```{r}
 library(dplyr)
-turkeys <- turkeys %>% 
-  mutate(dose = dosea + doseb) %>%
+turkeys <- turkeys |> 
+  mutate(dose = dosea + doseb) |>
   mutate(source = case_when(
     dose == 0 ~ "none",
     dosea > 0 ~ "a",
     doseb > 0 ~ "b")
-  ) %>% 
+  ) |> 
   select(-dosea, -doseb)
 turkeys
 library(ggplot2)
@@ -213,17 +213,17 @@ plot(p)
 ```
 There are a couple of ways we could go with these data. One is that since we have a categorical explanatory variable with multiple observations per category, we could *estimate* the variance of $Y_i$ of each organ, and then set the weights to the reciprocals of these estimated variances.
 ```{r, echo = FALSE}
-CancerSurvival <- CancerSurvival %>% select(-yhat, -rest)
+CancerSurvival <- CancerSurvival |> select(-yhat, -rest)
 ```
 ```{r}
 library(dplyr)
-CancerSurvival %>% group_by(Organ) %>% 
+CancerSurvival |> group_by(Organ) |> 
   summarize(variance = var(Survival), weight = 1/var(Survival))
 ```
 We can use the following to compute weights and add them to the data frame.
 ```{r}
-CancerSurvival <- CancerSurvival %>% 
-   group_by(Organ) %>% mutate(w = 1/var(Survival))
+CancerSurvival <- CancerSurvival |> 
+   group_by(Organ) |> mutate(w = 1/var(Survival))
 head(CancerSurvival)
 ```
 Now let's estimate the model using weighted least squares with these weights and inspect the residuals. 
