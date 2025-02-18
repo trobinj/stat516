@@ -67,7 +67,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` **Holiday**.
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Iteratrively weighted least squares --- continued, parametric models for heteroscedasticity, robust standard errors](lecture-02-19-2025.html).
 
 `r i <- i + 1; d[i]` 
  
