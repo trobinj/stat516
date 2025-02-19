@@ -293,20 +293,13 @@ The idea is to estimate the model parameters using ordinary least squares, but e
 ```{r}
 m <- lm(Survival ~ Organ, data = CancerSurvival)
 ```
-The **sandwich** package provides resources for using heteroscedastic-consistent standard errors. Technically, what is being estimated is the *covariance matrix* of the parameter estimators. 
+The **sandwich** package provides resources for using heteroscedastic-consistent standard errors. 
 ```{r}
-library(sandwich) # for vcovHC used below
-vcov(m)   # bad estimate if there is heteroscedasticity
-vcovHC(m) # better estimate if there is heteroscedasticity
+library(sandwich)
 ```
-The square root of the diagonal elements are the standard errors.
+Technically, what is being estimated is the *covariance matrix* of the parameter estimators.[^vcov] The usual way to interface with the functions in the **sandwich** package is through other functions. 
 ```{r}
-sqrt(diag(vcov(m)))   # bad estimates of the standard errors
-sqrt(diag(vcovHC(m))) # better estimates of the standard errors
-```
-But the usual way to interface with the functions in the **sandwich** package is through other functions. 
-```{r, echo = 2:5}
-cbind(summary(m)$coefficients, confint(m)) # bad standard error estimates
+summary(m)$coefficients # bad standard error estimates
 confint(m) # bad confidence intervals due to bad standard error estimates
 library(lmtest) # for coeftest and coefci used below
 coeftest(m, vcov = vcovHC) # better standard error estimates
@@ -339,6 +332,19 @@ Comments about heteroscedastic-consistent standard errors:
 **Disadvantages**: Highly dependent on the data to help produce better estimates of the standard errors, and tends to work well only if $n$ is relatively large. 
 
 Note: There are a variety of variations of the "sandwich" estimator. Different estimators can be specified through the `type` argument to `vcovHC` so instead of writing `vcov = vcovHC` or `fcov = vcovHC` we write `vcov = function(m) vcovHC(m, type = "HC0")` or `vcov = function(m) vcovHC(m, type = "HC0")` if we wanted to use that particular type of estimator (sometimes called "White's estimator").
+
+[^vcov]: What the **sandwich** package provides is ways to estimate the covariance matrix of the estimators of the model parameters, which can be used to obtain standard errors as shown below.
+    ```{r}
+    library(sandwich) # for vcovHC used below
+    vcov(m)   # bad estimate if there is heteroscedasticity
+    vcovHC(m) # better estimate if there is heteroscedasticity
+    ```
+    The square root of the diagonal elements are the standard errors.
+    ```{r}
+    sqrt(diag(vcov(m)))   # bad estimates of the standard errors
+    sqrt(diag(vcovHC(m))) # better estimates of the standard errors
+    ```
+    But we do not typically use these functions directly. Instead they are used by other functions that compute and use standard errors.
 
 
 
