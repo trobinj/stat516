@@ -321,7 +321,7 @@ pairs(emmeans(m, ~layer), type = "response", adjust = "none", infer = TRUE)
 Suppose we want the rate ratios comparing the epilimnion and thermocline with the hypolimnion layer.
 ```{r}
 contrast(emmeans(m, ~layer, type = "response"), 
-  method = "trt.vs.ctrl", ref = 3, type = "response", infer = TRUE)
+  method = "trt.vs.ctrl", ref = 3, type = "response", infer = TRUE, adjust = "none")
 ```
 Another tool that you can use if you want inferences about the expected response is the `glmint` function from the **trtools** package.
 ```{r}

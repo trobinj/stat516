@@ -695,15 +695,13 @@ Tests are performed on the log scale </code></pre>
 <p>Suppose we want the rate ratios comparing the epilimnion and
 thermocline with the hypolimnion layer.</p>
 <pre class="r"><code>contrast(emmeans(m, ~layer, type = &quot;response&quot;), 
-  method = &quot;trt.vs.ctrl&quot;, ref = 3, type = &quot;response&quot;, infer = TRUE)</code></pre>
+  method = &quot;trt.vs.ctrl&quot;, ref = 3, type = &quot;response&quot;, infer = TRUE, adjust = &quot;none&quot;)</code></pre>
 <pre><code> contrast                  ratio   SE  df asymp.LCL asymp.UCL null z.ratio p.value
- thermocline / hypolimnion  6.52 1.42 Inf      4.02      10.6    1   8.620  &lt;.0001
- epilimnion / hypolimnion  11.25 2.28 Inf      7.17      17.6    1  11.950  &lt;.0001
+ thermocline / hypolimnion  6.52 1.42 Inf      4.26      9.98    1   8.620  &lt;.0001
+ epilimnion / hypolimnion  11.25 2.28 Inf      7.56     16.73    1  11.950  &lt;.0001
 
 Confidence level used: 0.95 
-Conf-level adjustment: dunnettx method for 2 estimates 
 Intervals are back-transformed from the log scale 
-P value adjustment: dunnettx method for 2 tests 
 Tests are performed on the log scale </code></pre>
 <p>Another tool that you can use if you want inferences about the
 expected response is the <code>glmint</code> function from the
