@@ -954,7 +954,7 @@ spergon/check     1.36 0.885  2.08</code></pre>
 <p>Suppose the observations in the <code>bliss</code> data were for
 individual beetles.</p>
 <pre class="r"><code>blissbin &lt;- bliss |&gt; mutate(alive = exposed - dead) |&gt; 
-  select(concentration, dead, alive) |&gt; 
+  dplyr::select(concentration, dead, alive) |&gt; 
   pivot_longer(cols = c(dead,alive), names_to = &quot;state&quot;, values_to = &quot;count&quot;) |&gt;
   uncount(count)
 head(blissbin)</code></pre>
@@ -973,8 +973,9 @@ summary(m)$coefficients</code></pre>
 <pre><code>              Estimate Std. Error z value Pr(&gt;|z|)
 (Intercept)    -14.808     1.2897   -11.5 1.63e-30
 concentration    0.249     0.0214    11.7 2.24e-31</code></pre>
-<p>Of if the response variable is binary we can specify the model as
-follows.</p>
+<p>But do not use this the method above if using
+<strong>emmeans</strong>. Or if the response variable is binary we can
+specify the model as follows.</p>
 <pre class="r"><code>blissbin &lt;- blissbin |&gt; mutate(y = ifelse(state == &quot;dead&quot;, 1, 0))
 m &lt;- glm(y ~ concentration, family = binomial, data = blissbin)
 summary(m)$coefficients</code></pre>

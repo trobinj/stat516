@@ -432,7 +432,7 @@ trtools::contrast(m, tf = exp,
 Suppose the observations in the `bliss` data were for individual beetles.
 ```{r}
 blissbin <- bliss |> mutate(alive = exposed - dead) |> 
-  select(concentration, dead, alive) |> 
+  dplyr::select(concentration, dead, alive) |> 
   pivot_longer(cols = c(dead,alive), names_to = "state", values_to = "count") |>
   uncount(count)
 head(blissbin)
@@ -442,7 +442,7 @@ We can specify the response variable as follows.
 m <- glm(state == "dead" ~ concentration, family = binomial, data = blissbin)
 summary(m)$coefficients
 ```
-Of if the response variable is binary we can specify the model as follows.
+But do not use this the method above if using **emmeans**. Or if the response variable is binary we can specify the model as follows.
 ```{r}
 blissbin <- blissbin |> mutate(y = ifelse(state == "dead", 1, 0))
 m <- glm(y ~ concentration, family = binomial, data = blissbin)
