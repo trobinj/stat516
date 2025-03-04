@@ -83,7 +83,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Introduction to logistic regression and odds ratios](lecture-03-03-2025.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Logistic regression --- continued](lecture-03-05-2025.html).
 
 `r i <- i + 1; d[i]` 
  
