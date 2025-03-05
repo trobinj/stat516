@@ -83,12 +83,25 @@ $$
     e^{\beta_0}e^{\beta_2}e^{\beta_3d_i}, & \text{if the $i$-th observation of insecticide is DDT}, 
   \end{cases}    
 $$
-and where $d_i = x_{i3}$ is the deposit. We could plot the estimated *odds* of death as a function of deposit and insecticide type. 
+and where $d_i = x_{i3}$ is the deposit. Note that we could also write the model as
+$$
+  O_i = \exp(\beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \beta_3x_{i3}),
+$$
+or
+$$
+  O_i = 
+  \begin{cases}
+    \exp(\beta_0 + \beta_3d_i),           & \text{if the $i$-th observation of insecticide is g-BHC}, \\
+    \exp(\beta_0 + \beta_1 + \beta_3d_i), & \text{if the $i$-th observation of insecticide is both}, \\
+    \exp(\beta_0 + \beta_2 + \beta_3d_i), & \text{if the $i$-th observation of insecticide is DDT}. 
+  \end{cases}    
+$$
+We could plot the estimated *odds* of death as a function of deposit and insecticide type. 
 ```{r}
 d <- expand.grid(deposit = seq(2, 8, length = 100),
   insecticide = c("g-BHC","both","DDT"))
 d$yhat <- predict(m, newdata = d, type = "response")
-d$odds <- d$yhat / (1 - d$yhat)
+d$odds <- d$yhat / (1 - d$yhat) # computing the odds
 
 p <- ggplot(d, aes(x = deposit, y = odds)) + 
   geom_line() + facet_wrap(~ insecticide) + theme_minimal() + 

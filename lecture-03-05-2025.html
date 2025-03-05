@@ -334,12 +334,25 @@ observation of insecticide is both}, \\
 observation of insecticide is DDT},
   \end{cases}    
 \]</span> and where <span class="math inline">\(d_i = x_{i3}\)</span> is
-the deposit. We could plot the estimated <em>odds</em> of death as a
+the deposit. Note that we could also write the model as <span
+class="math display">\[
+  O_i = \exp(\beta_0 + \beta_1x_{i1} + \beta_2x_{i2} + \beta_3x_{i3}),
+\]</span> or <span class="math display">\[
+  O_i =
+  \begin{cases}
+    \exp(\beta_0 + \beta_3d_i),           &amp; \text{if the $i$-th
+observation of insecticide is g-BHC}, \\
+    \exp(\beta_0 + \beta_1 + \beta_3d_i), &amp; \text{if the $i$-th
+observation of insecticide is both}, \\
+    \exp(\beta_0 + \beta_2 + \beta_3d_i), &amp; \text{if the $i$-th
+observation of insecticide is DDT}.
+  \end{cases}    
+\]</span> We could plot the estimated <em>odds</em> of death as a
 function of deposit and insecticide type.</p>
 <pre class="r"><code>d &lt;- expand.grid(deposit = seq(2, 8, length = 100),
   insecticide = c(&quot;g-BHC&quot;,&quot;both&quot;,&quot;DDT&quot;))
 d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
-d$odds &lt;- d$yhat / (1 - d$yhat)
+d$odds &lt;- d$yhat / (1 - d$yhat) # computing the odds
 
 p &lt;- ggplot(d, aes(x = deposit, y = odds)) + 
   geom_line() + facet_wrap(~ insecticide) + theme_minimal() + 
