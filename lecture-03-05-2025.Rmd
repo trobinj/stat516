@@ -48,6 +48,8 @@ options(digits = 3, width = 100)
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
+<!-- This lecture does not take the entire 50 minutes, even when covering the last part of the last lecture if it was not finished previously. It might be useful to show *mathematically* how the odds ratios are or are not invariant to the other variable when an interaction is present/absent, or when log transformations are used. -->
+
 ## Odds Ratios Examples
 
 Consider the following data from an experiment that investigated the effects of three insecticides on four beetles. 
