@@ -1,9 +1,9 @@
 ---
 title: "Homework Requirements"
 output:
+  pdf_document: default
   html_document:
     theme: readable
-  pdf_document: default
 urlcolor: blue
 header-includes:
   - \usepackage{booktabs}
@@ -22,6 +22,8 @@ Failure to meet the formatting requirements described below may result in point 
 0. You must include with your solutions the relevant R output to answer the question and the code that produced it. Include the code within the solution, not in an appendix. You should provide enough code so that I can replicate your results. 
 
 0. Use a [monospaced font](https://en.wikipedia.org/wiki/Monospaced_font) for all R code and output. Do not submit screen shots of code or output. Cut-and-paste as needed.
+
+0. Do not put written responses as comments in R Markdown. 
 
 0. Format your code so that it does not run off the page or wrap around the page awkwardly. You might find it useful to use something like `options(digits = 4)` to reduce the number of reported digits.
 
