@@ -101,7 +101,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Maximum likelihood](lecture-03-19-2025.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Over-dispersion](lecture-03-21-2025.html).
  
 ***
 
