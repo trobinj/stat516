@@ -107,7 +107,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Negative binomial regression, robust standard errors, gamma regression](lecture-03-24-2025.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Alternative link functions](lecture-03-26-2025.html).
 
 `r i <- i + 1; d[i]` 
  
