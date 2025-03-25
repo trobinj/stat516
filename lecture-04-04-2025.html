@@ -482,8 +482,9 @@ treatment.</p>
 treatRCT     0.656  0.441  0.978</code></pre>
 <p>Using <code>flexsurvreg</code> produces the same information but in
 one output.</p>
-<pre class="r"><code>library(flexsurv)
-m &lt;- flexsurvreg(Surv(left, right, type = &quot;interval2&quot;) ~ treat, 
+<pre class="r"><code>library(flexsurv)</code></pre>
+<pre><code>Warning: package &#39;flexsurv&#39; was built under R version 4.4.3</code></pre>
+<pre class="r"><code>m &lt;- flexsurvreg(Surv(left, right, type = &quot;interval2&quot;) ~ treat, 
   dist = &quot;lognormal&quot;, data = cosmesis)
 print(m)</code></pre>
 <pre><code>Call:
@@ -687,16 +688,16 @@ head(d)</code></pre>
 2  0.5 1.000 1.000 1.000     dog
 3  1.0 1.000 1.000 1.000     dog
 4  1.5 0.999 0.999 0.999     dog
-5  2.0 0.995 0.994 0.997     dog
+5  2.0 0.995 0.994 0.996     dog
 6  2.5 0.987 0.984 0.990     dog</code></pre>
 <pre class="r"><code>tail(d)</code></pre>
 <pre><code>     time   est   lcl   ucl species
-397  97.5 0.261 0.241 0.282   human
-398  98.0 0.258 0.238 0.279   human
-399  98.5 0.256 0.236 0.276   human
-400  99.0 0.253 0.233 0.274   human
+397  97.5 0.261 0.240 0.282   human
+398  98.0 0.258 0.238 0.280   human
+399  98.5 0.256 0.235 0.277   human
+400  99.0 0.253 0.232 0.274   human
 401  99.5 0.250 0.230 0.271   human
-402 100.0 0.248 0.228 0.268   human</code></pre>
+402 100.0 0.248 0.227 0.268   human</code></pre>
 <pre class="r"><code>p &lt;- ggplot(d, aes(x = time, y = est)) + 
   geom_line(aes(linetype = species)) + 
   labs(x = &quot;Time (years)&quot;, y = &quot;S(t)&quot;, linetype = &quot;Species&quot;) + 

@@ -349,8 +349,9 @@ leukemia</code></pre>
 <img src="lecture-04-02-2025_files/figure-html/unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
 <strong>Example</strong>: Consider the following data from a study on
 the effect of temperature on the operational time of motors.</p>
-<pre class="r"><code>library(MASS)
-head(motors) # note: cens = 0 if observation IS censored</code></pre>
+<pre class="r"><code>library(MASS)</code></pre>
+<pre><code>Warning: package &#39;MASS&#39; was built under R version 4.4.3</code></pre>
+<pre class="r"><code>head(motors) # note: cens = 0 if observation IS censored</code></pre>
 <pre><code>  temp time cens
 1  150 8064    0
 2  150 8064    0
@@ -466,8 +467,8 @@ class="math display">\[
 \hat\beta_1x_{i1} + \cdots + \hat\beta_kx_{ik}\)</span>.</p>
 <p>Other functions for estimating an AFT model are <code>survreg</code>
 from the <strong>survival</strong> package and <code>flexsurvreg</code>
-from the <strong>flexsurv</strong> package. In both cases the
-distribution of <span class="math inline">\(T_i\)</span> is specified as
+from the <strong>flexsurv</strong> package. In both cases we can specify
+the distribution of <span class="math inline">\(T_i\)</span> as
 <em>log-normal</em> (a random variable <span
 class="math inline">\(Y_i\)</span> has a log-normal distribution if its
 logarithm has a normal distribution).</p>
@@ -510,8 +511,9 @@ likelihood estimate computed as <span class="math display">\[
   \hat\sigma = \sqrt{\frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{n}}.
 \]</span> Using <code>flexsurvreg</code> produces comparable
 results.</p>
-<pre class="r"><code>library(flexsurv)
-m &lt;- flexsurvreg(Surv(Survival) ~ Organ, dist = &quot;lognormal&quot;, data = CancerSurvival)
+<pre class="r"><code>library(flexsurv)</code></pre>
+<pre><code>Warning: package &#39;flexsurv&#39; was built under R version 4.4.3</code></pre>
+<pre class="r"><code>m &lt;- flexsurvreg(Surv(Survival) ~ Organ, dist = &quot;lognormal&quot;, data = CancerSurvival)
 print(m) # summary behaves differently for flexsurvreg objects --- use print instead</code></pre>
 <pre><code>Call:
 flexsurvreg(formula = Surv(Survival) ~ Organ, data = CancerSurvival, 
@@ -768,9 +770,9 @@ head(lifespan)</code></pre>
 4  39.1   human
 5   6.7     dog
 6   1.8     dog</code></pre>
-<pre class="r"><code>p &lt;- ggplot(lifespan, aes(x = years)) + facet_wrap(~ species)
-p &lt;- p + geom_histogram(boundary = 0, binwidth = 5, color = &quot;black&quot;, fill = &quot;white&quot;)
-p &lt;- p + labs(x = &quot;Years&quot;, y = &quot;Frequency&quot;) + theme_minimal()
+<pre class="r"><code>p &lt;- ggplot(lifespan, aes(x = years)) + facet_wrap(~ species) + 
+  geom_histogram(boundary = 0, binwidth = 5, color = &quot;black&quot;, fill = &quot;white&quot;) + 
+  labs(x = &quot;Years&quot;, y = &quot;Frequency&quot;) + theme_minimal()
 plot(p)</code></pre>
 <p><img src="lecture-04-02-2025_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>m &lt;- survreg(Surv(years) ~ species, dist = &quot;lognormal&quot;, data = lifespan)
