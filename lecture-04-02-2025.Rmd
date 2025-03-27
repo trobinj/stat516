@@ -326,16 +326,16 @@ exp(cbind(coef(m), confint(m)))
 For *categorical* explanatory variables (i.e., factors) we can use the **emmeans** package to obtain inferences concerning effects on time (but only for models estimated using `survreg`). 
 ```{r}
 library(emmeans)
-pairs(emmeans(m, ~species), type = "response", infer = c(TRUE,TRUE))
-pairs(emmeans(m, ~species), type = "response", reverse = TRUE, infer = c(TRUE,TRUE))
+pairs(emmeans(m, ~species), type = "response", infer = TRUE)
+pairs(emmeans(m, ~species), type = "response", reverse = TRUE, infer = TRUE)
 ```
 Here we can compare the treatment conditions of the fruit fly experiment.
 ```{r}
 m <- survreg(Surv(longevity) ~ activity + thorax, dist = "lognormal", data = fruitfly)
 pairs(emmeans(m, ~activity, at = list(thorax = 0.8)), 
-  type = "response", adjust = "none", infer = c(TRUE,TRUE))
+  type = "response", adjust = "none", infer = TRUE)
 pairs(emmeans(m, ~activity, at = list(thorax = 0.8)),
-  type = "response", adjust = "none", reverse = TRUE, infer = c(TRUE,TRUE))
+  type = "response", adjust = "none", reverse = TRUE, infer = TRUE)
 ```
 Note that since there is no interaction between activity and thorax the value of thorax that we use does not matter. 
 

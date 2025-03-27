@@ -421,7 +421,7 @@ would be <span class="math display">\[
   \log E(T_i) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots +
 \beta_k x_{ik}.
 \]</span> However in practice the two kinds of models can produce
-similar results.</p>
+similar results, and can be interpreted similarly.</p>
 <p><strong>Example</strong>: Consider the following data on survival
 time after administration of ascorbate.</p>
 <pre class="r"><code>library(Stat2Data)
@@ -801,14 +801,14 @@ use the <strong>emmeans</strong> package to obtain inferences concerning
 effects on time (but only for models estimated using
 <code>survreg</code>).</p>
 <pre class="r"><code>library(emmeans)
-pairs(emmeans(m, ~species), type = &quot;response&quot;, infer = c(TRUE,TRUE))</code></pre>
+pairs(emmeans(m, ~species), type = &quot;response&quot;, infer = TRUE)</code></pre>
 <pre><code> contrast    ratio    SE   df lower.CL upper.CL null t.ratio p.value
  human / dog     7 0.188 1997     6.64     7.38    1  72.500  &lt;.0001
 
 Confidence level used: 0.95 
 Intervals are back-transformed from the log scale 
 Tests are performed on the log scale </code></pre>
-<pre class="r"><code>pairs(emmeans(m, ~species), type = &quot;response&quot;, reverse = TRUE, infer = c(TRUE,TRUE))</code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~species), type = &quot;response&quot;, reverse = TRUE, infer = TRUE)</code></pre>
 <pre><code> contrast    ratio      SE   df lower.CL upper.CL null t.ratio p.value
  dog / human 0.143 0.00383 1997    0.136    0.151    1 -72.500  &lt;.0001
 
@@ -819,7 +819,7 @@ Tests are performed on the log scale </code></pre>
 experiment.</p>
 <pre class="r"><code>m &lt;- survreg(Surv(longevity) ~ activity + thorax, dist = &quot;lognormal&quot;, data = fruitfly)
 pairs(emmeans(m, ~activity, at = list(thorax = 0.8)), 
-  type = &quot;response&quot;, adjust = &quot;none&quot;, infer = c(TRUE,TRUE))</code></pre>
+  type = &quot;response&quot;, adjust = &quot;none&quot;, infer = TRUE)</code></pre>
 <pre><code> contrast        ratio     SE  df lower.CL upper.CL null t.ratio p.value
  isolated / one  0.950 0.0506 117    0.854    1.055    1  -0.970  0.3340
  isolated / low  1.132 0.0603 117    1.019    1.258    1   2.320  0.0220
@@ -836,7 +836,7 @@ Confidence level used: 0.95
 Intervals are back-transformed from the log scale 
 Tests are performed on the log scale </code></pre>
 <pre class="r"><code>pairs(emmeans(m, ~activity, at = list(thorax = 0.8)),
-  type = &quot;response&quot;, adjust = &quot;none&quot;, reverse = TRUE, infer = c(TRUE,TRUE))</code></pre>
+  type = &quot;response&quot;, adjust = &quot;none&quot;, reverse = TRUE, infer = TRUE)</code></pre>
 <pre><code> contrast        ratio     SE  df lower.CL upper.CL null t.ratio p.value
  one / isolated  1.053 0.0562 117    0.948    1.170    1   0.970  0.3340
  low / isolated  0.883 0.0471 117    0.795    0.982    1  -2.320  0.0220
