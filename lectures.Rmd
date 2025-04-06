@@ -121,7 +121,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Hazard functions, proportional hazards models, plotting hazard and probability density functions](lecture-04-07-2025.html).
 
 `r i <- i + 1; d[i]` 
 

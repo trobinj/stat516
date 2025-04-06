@@ -11,7 +11,7 @@ This is a website is for Dr. Johnson's *Applied Regression Modeling* course (Sta
 
 <center>
 
-![https://xkcd.com/2080](http://imgs.xkcd.com/comics/cohort_and_age_effects.png)
+![https://xkcd.com/1260](http://imgs.xkcd.com/comics/ld50.png)
 
 </center>
 
