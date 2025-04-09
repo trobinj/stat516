@@ -225,7 +225,7 @@ plot(p)
 m <- flexsurvreg(Surv(longevity) ~ activity + thorax,
   data = fruitfly, dist = "gamma")
  
-d <- data.frame(activity = levels(fruitfly$activity), thorax = 0.8)
+d <- data.frame(activity = unique(fruitfly$activity), thorax = 0.8)
 d <- summary(m, newdata = d, t = seq(0, 100, length = 100), 
  type = "hazard", tidy = TRUE)
 head(d)
@@ -236,7 +236,7 @@ p <- ggplot(d, aes(x = time, y = est, color = activity)) +
 plot(p)
 ```
 ```{r}
-d <- expand.grid(activity = levels(fruitfly$activity), thorax = c(0.7,0.8,0.9))
+d <- expand.grid(activity = unique(fruitfly$activity), thorax = c(0.7,0.8,0.9))
 d <- summary(m, newdata = d, t = seq(0, 100, length = 100), 
   type = "hazard", tidy = TRUE)
 
@@ -248,7 +248,7 @@ plot(p)
 ```
 For comparison here are the *survival functions*.
 ```{r}
-d <- expand.grid(activity = levels(fruitfly$activity), thorax = c(0.7,0.8,0.9))
+d <- expand.grid(activity = unique(fruitfly$activity), thorax = c(0.7,0.8,0.9))
 d <- summary(m, newdata = d, t = seq(0, 100, length = 100), 
   type = "survival", tidy = TRUE)
 
@@ -260,7 +260,7 @@ plot(p)
 ```
 And here are the *probability density functions*.
 ```{r}
-d <- expand.grid(activity = levels(fruitfly$activity), thorax = c(0.7,0.8,0.9))
+d <- expand.grid(activity = unique(fruitfly$activity), thorax = c(0.7,0.8,0.9))
 d <- summary(m, newdata = d, t = seq(0, 100, length = 100), 
   fn = function(t, ...) dgamma(t, ...), tidy = TRUE)
 
@@ -274,7 +274,7 @@ Note that we can adapt this to other distributions by adding a `d` to the beginn
 
 Finally we can also plot the *expected* survival time. This is analogous to using `predict` with `type = response` in a GLM. 
 ```{r}
-d <- expand.grid(activity = levels(fruitfly$activity), 
+d <- expand.grid(activity = unique(fruitfly$activity), 
   thorax = seq(0.6, 1.0, length = 100))
 d <- summary(m, newdata = d, type = "mean", tidy = TRUE)
 head(d)
@@ -293,13 +293,12 @@ p <- ggplot(fruitfly, aes(x = thorax, y = longevity)) +
 plot(p)
 ```
 
-**Example**: Consider an AFT model for the `leukemia` data.
+**Example**: Consider an AFT model for the `leukemia` data. Note that patients are either of remission (not censored) or still in remission (right-censored). 
 ```{r, fig.width = 9}
 library(survival)
-leukemia$status <- factor(leukemia$status, labels = c("alive","dead"))
+leukemia$status <- factor(leukemia$status, labels = c("in","out"))
 
-m <- flexsurvreg(Surv(time, status == "dead") ~ x, 
-  dist = "weibull", data = leukemia)
+m <- flexsurvreg(Surv(time, status == "out") ~ x, dist = "weibull", data = leukemia)
 
 # create plot of hazard functions
 d <- data.frame(x = c("Maintained","Nonmaintained"))
@@ -407,7 +406,7 @@ ConvertWeibull(m)
 ```
 Another approach is to use `dist = "weibullPH"` with `flexsurvreg` which uses a different parameterization of the Weibull distribution so that applying the exponential function to the parameters gives hazard ratios. 
 ```{r}
-m <- flexsurvreg(Surv(time, status == "dead") ~ x, dist = "weibullPH", data = leukemia)
+m <- flexsurvreg(Surv(time, status == "out") ~ x, dist = "weibullPH", data = leukemia)
 print(m)
 ```
 The proportionality can be seen when plotting the hazard functions.
