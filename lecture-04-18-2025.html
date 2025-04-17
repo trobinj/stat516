@@ -570,7 +570,8 @@ head(Sitka, 10) # note that size is on log scale</code></pre>
 8  4.68  201    2 ozone
 9  4.92  227    2 ozone
 10 4.96  258    2 ozone</code></pre>
-<pre class="r"><code>p &lt;- ggplot(Sitka, aes(x = Time, y = exp(size))) + 
+<pre class="r"><code>Sitka$treesize &lt;- exp(Sitka$size)
+p &lt;- ggplot(Sitka, aes(x = Time, y = treesize)) + 
   geom_line(aes(group = tree), alpha = 0.75, linewidth = 0.1) + 
   facet_wrap(~ treat) + geom_point(size = 0.5) + 
   labs(y = &quot;Size (height times squared diameter)&quot;, 
@@ -582,7 +583,7 @@ trajectories.</p>
 <p>What <em>could</em> we do (but not necessarily what we
 <em>should</em> do) in modeling these data.</p>
 <p>We could ignore the effect of tree.</p>
-<pre class="r"><code>m &lt;- lm(exp(size) ~ Time * treat, data = Sitka)
+<pre class="r"><code>m &lt;- lm(treesize ~ Time * treat, data = Sitka)
 summary(m)$coefficients</code></pre>
 <pre><code>                Estimate Std. Error t value Pr(&gt;|t|)
 (Intercept)     -305.123     52.711   -5.79 1.46e-08
@@ -591,7 +592,7 @@ treatozone       110.675     63.755    1.74 8.34e-02
 Time:treatozone   -0.788      0.310   -2.54 1.13e-02</code></pre>
 <p>Or we could model the effect of tree.</p>
 <pre class="r"><code>Sitka$tree &lt;- factor(Sitka$tree)
-m &lt;- lm(exp(size) ~ Time * treat + Time * tree, data = Sitka)
+m &lt;- lm(treesize ~ Time * treat + Time * tree, data = Sitka)
 summary(m)$coefficients</code></pre>
 <pre><code>                 Estimate Std. Error  t value Pr(&gt;|t|)
 (Intercept)     -1.97e+02     48.007  -4.1123 5.41e-05
@@ -942,9 +943,9 @@ Intervals are back-transformed from the log odds ratio scale
 Tests are performed on the log odds ratio scale </code></pre>
 <p><strong>Example</strong>: Consider two approaches to the
 <code>Sitka</code> data.</p>
-<pre class="r"><code>m.glm &lt;- glm(exp(size) ~ Time * treat,
+<pre class="r"><code>m.glm &lt;- glm(treesize ~ Time * treat,
   family = gaussian(link = identity), data = Sitka)
-m.gee &lt;- geeglm(exp(size) ~ Time * treat, 
+m.gee &lt;- geeglm(treesize ~ Time * treat, 
   family = gaussian(link = identity), data = Sitka,
   id = tree, corstr = &quot;exchangeable&quot;)</code></pre>
 <p>Comparing inferences for the model parameters.</p>
@@ -957,7 +958,7 @@ Time:treatozone   -0.788      0.310   -2.54 1.13e-02</code></pre>
 <pre class="r"><code>summary(m.gee)</code></pre>
 <pre><code>
 Call:
-geeglm(formula = exp(size) ~ Time * treat, family = gaussian(link = identity), 
+geeglm(formula = treesize ~ Time * treat, family = gaussian(link = identity), 
     data = Sitka, id = tree, corstr = &quot;exchangeable&quot;)
 
  Coefficients:
@@ -988,10 +989,7 @@ Number of clusters:   79  Maximum cluster size: 5 </code></pre>
 
 treat = ozone:
  contrast          estimate   SE  df t.ratio p.value
- Time250 - Time150      172 17.4 391   9.880  &lt;.0001
-
-Note: contrasts are still on the exp scale. Consider using
-      regrid() if you want contrasts of back-transformed estimates. </code></pre>
+ Time250 - Time150      172 17.4 391   9.880  &lt;.0001</code></pre>
 <pre class="r"><code>pairs(emmeans(m.gee, ~Time|treat, at = list(Time = c(250,150))))</code></pre>
 <pre><code>treat = control:
  contrast          estimate   SE  df t.ratio p.value
@@ -999,10 +997,7 @@ Note: contrasts are still on the exp scale. Consider using
 
 treat = ozone:
  contrast          estimate   SE  df t.ratio p.value
- Time250 - Time150      172 15.6 391  11.030  &lt;.0001
-
-Note: contrasts are still on the exp scale. Consider using
-      regrid() if you want contrasts of back-transformed estimates. </code></pre>
+ Time250 - Time150      172 15.6 391  11.030  &lt;.0001</code></pre>
 <p>Comparing the growth rates between the treatment conditions.</p>
 <pre class="r"><code>pairs(pairs(emmeans(m.glm, ~Time|treat, at = list(Time = c(250,150)))), by = NULL)</code></pre>
 <pre><code> contrast                                                estimate SE  df t.ratio p.value
@@ -1010,6 +1005,71 @@ Note: contrasts are still on the exp scale. Consider using
 <pre class="r"><code>pairs(pairs(emmeans(m.gee, ~Time|treat, at = list(Time = c(250,150)))), by = NULL)</code></pre>
 <pre><code> contrast                                                estimate   SE  df t.ratio p.value
  (Time250 - Time150 control) - (Time250 - Time150 ozone)     78.8 30.6 391   2.573  0.0105</code></pre>
+<p>Estimating expected sizes at 150, 200, and 250 days, as well as the
+differences between the ozone conditions.</p>
+<pre class="r"><code>emmeans(m.glm, ~treat|Time, at = list(Time = c(150,200,250)))</code></pre>
+<pre><code>Time = 150:
+ treat   emmean    SE  df lower.CL upper.CL
+ control     71 16.50 391     38.8      104
+ ozone       64 11.20 391     41.7       86
+
+Time = 200:
+ treat   emmean    SE  df lower.CL upper.CL
+ control    197  9.63 391    177.8      216
+ ozone      150  6.55 391    136.9      163
+
+Time = 250:
+ treat   emmean    SE  df lower.CL upper.CL
+ control    322 15.50 391    291.7      353
+ ozone      236 10.60 391    215.1      257
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>emmeans(m.gee, ~treat|Time, at = list(Time = c(150,200,250)))</code></pre>
+<pre><code>Time = 150:
+ treat   emmean   SE  df lower.CL upper.CL
+ control     71 10.8 391     50.1       92
+ ozone       64  4.7 391     54.5       73
+
+Time = 200:
+ treat   emmean   SE  df lower.CL upper.CL
+ control    197 22.2 391    153.1      240
+ ozone      150 11.3 391    127.5      172
+
+Time = 250:
+ treat   emmean   SE  df lower.CL upper.CL
+ control    322 34.9 391    253.6      391
+ ozone      236 18.9 391    198.7      273
+
+Covariance estimate used: vbeta 
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>pairs(emmeans(m.glm, ~treat|Time, at = list(Time = c(150,200,250))), infer = TRUE)</code></pre>
+<pre><code>Time = 150:
+ contrast        estimate   SE  df lower.CL upper.CL t.ratio p.value
+ control - ozone      7.5 20.0 391    -31.7     46.8   0.380  0.7060
+
+Time = 200:
+ contrast        estimate   SE  df lower.CL upper.CL t.ratio p.value
+ control - ozone     46.9 11.6 391     24.0     69.8   4.030  &lt;.0001
+
+Time = 250:
+ contrast        estimate   SE  df lower.CL upper.CL t.ratio p.value
+ control - ozone     86.3 18.8 391     49.4    123.3   4.600  &lt;.0001
+
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>pairs(emmeans(m.gee, ~treat|Time, at = list(Time = c(150,200,250))), infer = TRUE)</code></pre>
+<pre><code>Time = 150:
+ contrast        estimate   SE  df lower.CL upper.CL t.ratio p.value
+ control - ozone      7.5 11.7 391   -15.54     30.6   0.642  0.5210
+
+Time = 200:
+ contrast        estimate   SE  df lower.CL upper.CL t.ratio p.value
+ control - ozone     46.9 24.9 391    -2.05     95.9   1.884  0.0600
+
+Time = 250:
+ contrast        estimate   SE  df lower.CL upper.CL t.ratio p.value
+ control - ozone     86.3 39.7 391     8.36    164.3   2.177  0.0300
+
+Confidence level used: 0.95 </code></pre>
 </div>
 <div id="limitations-of-marginal-models-and-gee" class="section level2">
 <h2>Limitations of Marginal Models and GEE</h2>
