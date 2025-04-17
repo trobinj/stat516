@@ -133,7 +133,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Multinomial logit and discrete choice models](lecture-04-16-2025.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Introduction to the incidental parameter problem, generalized estimating equations](lecture-04-18-2025.html).
  
 ***
 
