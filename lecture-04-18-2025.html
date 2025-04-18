@@ -318,7 +318,7 @@ with one observation of the response variable (running time) per
 row.</p>
 <pre class="r"><code>library(dplyr)
 library(tidyr)
-baselong &lt;- baserun %&gt;% mutate(player = factor(letters[1:n()])) %&gt;% 
+baselong &lt;- baserun |&gt; mutate(player = factor(letters[1:n()])) |&gt; 
   pivot_longer(cols = c(round, narrow, wide), 
     names_to = &quot;route&quot;, values_to = &quot;time&quot;)
 head(baselong)</code></pre>
@@ -406,8 +406,8 @@ name with another package I have loaded.)</p>
 library(tidyr) 
 quitsmoke &lt;- smoking
 quitsmoke$study &lt;- rownames(quitsmoke)
-quitsmoke.quits &lt;- quitsmoke %&gt;% dplyr::select(study, qt, qc) %&gt;% 
-  rename(gum = qt, control = qc) %&gt;%
+quitsmoke.quits &lt;- quitsmoke |&gt; dplyr::select(study, qt, qc) |&gt; 
+  rename(gum = qt, control = qc) |&gt;
   pivot_longer(cols = c(gum,control), 
     names_to = &quot;treatment&quot;, values_to = &quot;quit&quot;)
 head(quitsmoke.quits)</code></pre>
@@ -420,8 +420,8 @@ head(quitsmoke.quits)</code></pre>
 4 Campbell91   control      21
 5 Fagerstrom82 gum          30
 6 Fagerstrom82 control      23</code></pre>
-<pre class="r"><code>quitsmoke.total &lt;- quitsmoke %&gt;% dplyr::select(study, tt, tc) %&gt;% 
-  rename(gum = tt, control = tc) %&gt;%
+<pre class="r"><code>quitsmoke.total &lt;- quitsmoke |&gt; dplyr::select(study, tt, tc) |&gt; 
+  rename(gum = tt, control = tc) |&gt;
   pivot_longer(cols = c(gum,control), names_to = &quot;treatment&quot;, values_to = &quot;total&quot;)
 head(quitsmoke.total)</code></pre>
 <pre><code># A tibble: 6 × 3
@@ -433,7 +433,7 @@ head(quitsmoke.total)</code></pre>
 4 Campbell91   control     105
 5 Fagerstrom82 gum          50
 6 Fagerstrom82 control      50</code></pre>
-<pre class="r"><code>quitsmoke &lt;- full_join(quitsmoke.quits, quitsmoke.total) %&gt;% mutate(study = factor(study)) %&gt;% arrange(study)
+<pre class="r"><code>quitsmoke &lt;- full_join(quitsmoke.quits, quitsmoke.total) |&gt; mutate(study = factor(study)) |&gt; arrange(study)
 head(quitsmoke)</code></pre>
 <pre><code># A tibble: 6 × 4
   study        treatment  quit total
@@ -790,7 +790,7 @@ a <em>number</em> (not <em>character</em>). These data are already
 sorted, but if they were not we could use something like the
 following.</p>
 <pre class="r"><code>library(dplyr)
-baselong &lt;- baselong %&gt;% arrange(player)</code></pre>
+baselong &lt;- baselong |&gt; arrange(player)</code></pre>
 <p>Alternatively, without using the <strong>dplyr</strong> package, we
 could do this.</p>
 <pre class="r"><code>baselong &lt;- baselong[order(baselong$player),]</code></pre>

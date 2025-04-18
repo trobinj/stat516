@@ -126,7 +126,7 @@ These data are in what is sometimes called "wide form" where there are multiple 
 ```{r}
 library(dplyr)
 library(tidyr)
-baselong <- baserun %>% mutate(player = factor(letters[1:n()])) %>% 
+baselong <- baserun |> mutate(player = factor(letters[1:n()])) |> 
   pivot_longer(cols = c(round, narrow, wide), 
     names_to = "route", values_to = "time")
 head(baselong)
@@ -171,16 +171,16 @@ library(dplyr)
 library(tidyr) 
 quitsmoke <- smoking
 quitsmoke$study <- rownames(quitsmoke)
-quitsmoke.quits <- quitsmoke %>% dplyr::select(study, qt, qc) %>% 
-  rename(gum = qt, control = qc) %>%
+quitsmoke.quits <- quitsmoke |> dplyr::select(study, qt, qc) |> 
+  rename(gum = qt, control = qc) |>
   pivot_longer(cols = c(gum,control), 
     names_to = "treatment", values_to = "quit")
 head(quitsmoke.quits)
-quitsmoke.total <- quitsmoke %>% dplyr::select(study, tt, tc) %>% 
-  rename(gum = tt, control = tc) %>%
+quitsmoke.total <- quitsmoke |> dplyr::select(study, tt, tc) |> 
+  rename(gum = tt, control = tc) |>
   pivot_longer(cols = c(gum,control), names_to = "treatment", values_to = "total")
 head(quitsmoke.total)
-quitsmoke <- full_join(quitsmoke.quits, quitsmoke.total) %>% mutate(study = factor(study)) %>% arrange(study)
+quitsmoke <- full_join(quitsmoke.quits, quitsmoke.total) |> mutate(study = factor(study)) |> arrange(study)
 head(quitsmoke)
 p <- ggplot(quitsmoke, aes(x = study, y = quit/total, 
   size = total, fill = treatment)) + geom_point(pch = 21) + 
@@ -265,7 +265,7 @@ m.gee <- geeglm(time ~ route, family = gaussian(link = identity),
 Note: The data *must* be sorted by the `id` variable, and the `id` variable must be a *factor* or a *number* (not *character*). These data are already sorted, but if they were not we could use something like the following.
 ```{r, eval = FALSE}
 library(dplyr)
-baselong <- baselong %>% arrange(player)
+baselong <- baselong |> arrange(player)
 ```
 Alternatively, without using the **dplyr** package, we could do this.
 ```{r, eval = FALSE}
