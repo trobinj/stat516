@@ -180,7 +180,8 @@ quitsmoke.total <- quitsmoke |> dplyr::select(study, tt, tc) |>
   rename(gum = tt, control = tc) |>
   pivot_longer(cols = c(gum,control), names_to = "treatment", values_to = "total")
 head(quitsmoke.total)
-quitsmoke <- full_join(quitsmoke.quits, quitsmoke.total) |> mutate(study = factor(study)) |> arrange(study)
+quitsmoke <- full_join(quitsmoke.quits, quitsmoke.total) |> 
+  mutate(study = factor(study)) |> arrange(study)
 head(quitsmoke)
 p <- ggplot(quitsmoke, aes(x = study, y = quit/total, 
   size = total, fill = treatment)) + geom_point(pch = 21) + 

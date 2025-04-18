@@ -433,7 +433,8 @@ head(quitsmoke.total)</code></pre>
 4 Campbell91   control     105
 5 Fagerstrom82 gum          50
 6 Fagerstrom82 control      50</code></pre>
-<pre class="r"><code>quitsmoke &lt;- full_join(quitsmoke.quits, quitsmoke.total) |&gt; mutate(study = factor(study)) |&gt; arrange(study)
+<pre class="r"><code>quitsmoke &lt;- full_join(quitsmoke.quits, quitsmoke.total) |&gt; 
+  mutate(study = factor(study)) |&gt; arrange(study)
 head(quitsmoke)</code></pre>
 <pre><code># A tibble: 6 × 4
   study        treatment  quit total
