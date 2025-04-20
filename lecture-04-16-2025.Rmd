@@ -199,9 +199,9 @@ library(tidyr)
 d <- d %>% pivot_longer(cols = c(bird, fish, invert, other, rep),
   names_to = "food", values_to = "probability")
 head(d)
-p <- ggplot(d, aes(x = food, y = probability)) + theme_minimal() + 
-  geom_point(aes(color = Gender)) + facet_wrap(~ Size) + 
-  labs(x = "Food", y = "Probability", color = "Gender")
+p <- ggplot(d, aes(x = food, y = probability, color = Gender)) + theme_minimal() + 
+  geom_point(position = position_dodge(width = 0.25)) + 
+  facet_wrap(~ Size) + labs(x = "Food", y = "Probability", color = "Gender")
 plot(p)
 ```
 

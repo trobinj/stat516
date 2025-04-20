@@ -570,9 +570,9 @@ head(d)</code></pre>
 4 female &lt;2.3  other       0.161 
 5 female &lt;2.3  rep         0.0471
 6 male   &lt;2.3  bird        0.0293</code></pre>
-<pre class="r"><code>p &lt;- ggplot(d, aes(x = food, y = probability)) + theme_minimal() + 
-  geom_point(aes(color = Gender)) + facet_wrap(~ Size) + 
-  labs(x = &quot;Food&quot;, y = &quot;Probability&quot;, color = &quot;Gender&quot;)
+<pre class="r"><code>p &lt;- ggplot(d, aes(x = food, y = probability, color = Gender)) + theme_minimal() + 
+  geom_point(position = position_dodge(width = 0.25)) + 
+  facet_wrap(~ Size) + labs(x = &quot;Food&quot;, y = &quot;Probability&quot;, color = &quot;Gender&quot;)
 plot(p)</code></pre>
 <p><img src="lecture-04-16-2025_files/figure-html/unnamed-chunk-15-1.png" width="100%" style="display: block; margin: auto;" /></p>
 </div>
