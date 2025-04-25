@@ -1,0 +1,512 @@
+geom_line() + theme_minimal() +
+labs(x = "Days", y = "h(t)", color = "Condition", title = "Hazard Functions") +
+facet_wrap(~ thorax)
+plot(p)
+d <- expand.grid(activity = levels(fruitfly$activity), thorax = c(0.7,0.8,0.9))
+d <- summary(m, newdata = d, t = seq(0, 100, length = 100),
+type = "survival", tidy = TRUE)
+p <- ggplot(d, aes(x = time, y = est, color = activity)) +
+geom_line() + theme_minimal() +
+labs(x = "Days", y = "S(t)", color = "Condition", title = "Survival Functions") +
+facet_wrap(~ thorax)
+plot(p)
+d <- expand.grid(activity = levels(fruitfly$activity), thorax = c(0.7,0.8,0.9))
+d <- summary(m, newdata = d, t = seq(0, 100, length = 100),
+fn = function(t, ...) dgamma(t, ...), tidy = TRUE)
+p <- ggplot(d, aes(x = time, y = est, color = activity)) +
+geom_line() + theme_minimal() +
+labs(x = "Days", y = "f(t)", color = "Condition", title = "Density Functions") +
+facet_wrap(~ thorax)
+plot(p)
+library(survival)
+leukemia$status <- factor(leukemia$status, labels = c("in","out"))
+m <- flexsurvreg(Surv(time, status == "out") ~ x, dist = "weibull", data = leukemia)
+# create plot of hazard functions
+d <- data.frame(x = c("Maintained","Nonmaintained"))
+d <- summary(m, newdata = d, t = seq(1, 200, length = 1000),
+type = "hazard", tidy = TRUE)
+p <- ggplot(d, aes(x = time, y = est)) +
+geom_line(aes(linetype = x)) + theme_minimal() +
+labs(x = "Time", y = "h(t)", linetype = "Extended",
+title = "Hazard Functions") +
+theme(legend.position = "inside", legend.position.inside = c(0.7, 0.5))
+p.h <- p
+# create plot of survival functions
+d <- data.frame(x = c("Maintained","Nonmaintained"))
+d <- summary(m, newdata = d, t = seq(1, 200, length = 1000),
+type = "survival", tidy = TRUE)
+p <- ggplot(d, aes(x = time, y = est)) +
+geom_line(aes(linetype = x)) + theme_minimal() +
+labs(x = "Time", y = "S(t)", linetype = "Extended",
+title = "Survival Functions") +
+theme(legend.position = "inside", legend.position.inside = c(0.7, 0.7))
+p.s <- p
+# create plot of probability density functions
+d <- data.frame(x = c("Maintained","Nonmaintained"))
+d <- summary(m, newdata = d, t = seq(1, 200, length = 1000),
+fn = function(t, ...) dweibull(t, ...), tidy = TRUE)
+p <- ggplot(d, aes(x = time, y = est)) +
+geom_line(aes(linetype = x)) + theme_minimal() +
+labs(x = "Time", y = "f(t)", linetype = "Extended",
+title = "Probability Density Functions") +
+theme(legend.position = "inside", legend.position.inside = c(0.7, 0.7))
+p.d <- p
+# put the plots together into one plot
+cowplot::plot_grid(p.h, p.s, p.d, ncol = 3)
+d <- summary(m, newdata = data.frame(x = c("Maintained","Nonmaintained")),
+type = "mean", tidy = TRUE)
+d
+p <- ggplot(leukemia, aes(x = x, y = time)) +
+geom_dotplot(aes(fill = status), stackdir = "center", binaxis = "y",
+binwidth = 1, dotsize = 2, alpha = 0.5) + coord_flip() +
+scale_fill_manual(name = "Status", values = c("white","black")) +
+geom_pointrange(aes(y = est, ymin = lcl, ymax = ucl),
+shape = 3, data = d) +
+labs(x = "Maintained", y = "Remission Time (weeks)") +
+theme_classic() +
+theme(legend.position = "inside", legend.position.inside = c(0.8, 0.8))
+plot(p)
+rmarkdown::render("lecture-04-07-2025.Rmd", output_format = "pdf_document")
+1/1.15
+1/3.84
+1/1.5
+source("~/Dropbox/Teaching/s516/examples/grazing.R", echo=TRUE)
+grazing
+source("~/Dropbox/Teaching/s516/examples/grazing.R", echo=TRUE)
+source("~/Dropbox/Teaching/s516/examples/grazing.R", echo=TRUE)
+source("~/Dropbox/Teaching/s516/examples/grazing.R", echo=TRUE)
+source("~/Dropbox/Teaching/s516/examples/grazing.R", echo=TRUE)
+?grazing
+m
+summary(m)
+source("~/Dropbox/Teaching/s516/examples/grazing.R", echo=TRUE)
+grazing
+library(dplyr)
+library(tidyr)
+?pivot_wider
+head(grazing)
+source("~/Dropbox/Teaching/s516/examples/grazing.R", echo=TRUE)
+t,[]
+tmp
+head(grazing)
+source("~/Dropbox/Teaching/s516/examples/grazing.R", echo=TRUE)
+tmp
+source("~/Dropbox/Teaching/s516/examples/grazing.R", echo=TRUE)
+?grazing
+install.packages("BradleyTerry2")
+source("~/.active-rstudio-document", echo=TRUE)
+GaltonFamilies
+tail(GaltonFamilies)
+library(lme4)
+m <- lmer(childHeight ~ father + mother + gender + (1|family), data = GaltonFamilies)
+m
+m
+m <- lmer(childHeight ~ -1 + father + mother + gender + (1|family), data = GaltonFamilies)
+m
+rmarkdown::render("lecture-04-11-2025.Rmd", output_format = "pdf_document")
+install.packages(c("rlang", "sass"))
+# CRAN
+install.packages("GGally")
+install.packages("devtools")
+install.packages("remotes")
+remotes::install_github("trobinj/trtools")
+install.packages("tidyverse")
+install.packages("VGAM")
+install.packages("emmeans")
+install.packages("flexsurvreg")
+install.packages("flexsurv")
+install.packages("lme4")
+install.packages("Sleuth3")
+install.packages("MASS")
+install.packages("geeglm")
+install.packages("gee")
+install.packages(c("fs", "lattice", "mgcv", "ps", "ragg", "rlang", "sass", "this.path", "zoo"))
+rmarkdown::render("hw4-2025.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw4-2025.Rmd", output_format = "pdf_document")
+library(GLMsData)
+?grazing
+length(letters)
+install.packages(c("fs", "lattice", "mgcv", "ps", "ragg", "rlang", "sass", "this.path", "zoo"))
+rmarkdown::render("lecture-04-14-2025.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-04-14-2025.Rmd", output_format = "pdf_document")
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(ggplot2)
+library(dplyr)
+library(FSAdata)
+snapper <- subset(SnapperHG1, !is.na(age))
+snapper$w <- 1
+for (i in 1:10) {
+m <- nls(len ~ case_when(
+survey == "KAH0012" ~ alpha1 + (delta - alpha1) * 2^(-age/gamma1),
+survey == "KAH8810" ~ alpha2 + (delta - alpha2) * 2^(-age/gamma2)),
+start = list(alpha1 = 60, alpha2 = 60, delta = 10, gamma1 = 10, gamma2 = 10),
+data = snapper, weights = w)
+snapper$w <- 1/predict(m)^2
+}
+summary(m)$coefficients
+d <- expand.grid(survey = c("KAH0012","KAH8810"), age = seq(0, 20, length = 100))
+d$yhat <- predict(m, newdata = d)
+p <- ggplot(snapper, aes(x = age, y = len)) + theme_minimal() + facet_wrap(~survey) +
+geom_line(aes(y = yhat), data = d) +
+geom_count(shape = 21, fill = "white", show.legend = FALSE) +
+labs(x = "Age (years)", y = "Length (cm)")
+plot(p)
+d <- expand.grid(age = c(5,10), survey = c("KAH0012","KAH8810"))
+cbind(d, trtools::nlsint(m, newdata = d))
+library(tidyr)
+cbind(d, trtools::nlsint(m, newdata = d)) |> dplyr::select(age, survey, fit) |>
+pivot_wider(id_cols = survey, names_from = age, values_from = fit) |>
+mutate(change = `10` - `5`,
+pchange = paste(round(100*(`10` - `5`)/`5`, 2), "%", sep = ""))
+library(trtools)
+margeff(m, a = list(age = 10, survey = c("KAH0012","KAH8810")), b = list(age = 5, survey = c("KAH0012","KAH8810")))
+kmeans
+?kmeans
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+tmp$withinss
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+margeff(m, a = list(age = 10, survey = c("KAH0012","KAH8810")), b = list(age = 5, survey = c("KAH0012","KAH8810")))
+?margeff
+margeff(m, a = list(age = 10, survey = c("KAH0012","KAH8810")), b = list(age = 5, survey = c("KAH0012","KAH8810")), type = "percent")
+source("~/.active-rstudio-document", echo=TRUE)
+tmp
+tmp$cluster
+source("~/.active-rstudio-document", echo=TRUE)
+?kmeans
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+y
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+tmp$centers
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+y
+rm(y)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+nrow(y)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+install.packages(c("remotes","tidyverse","rmarkdown"))
+remotes
+remotes::install_github("trobinj/trtools")
+install.packages("emmeans")
+?kmeans
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+j
+k
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+y
+k
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+kmeans(y, 10)
+y
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+tmp
+tmp$withinss
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+source("~/.active-rstudio-document", echo=TRUE)
+rmarkdown::render("hw4-2025.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw4-2025.Rmd", output_format = "pdf_document")
+install.packages("RcppArmadillo")
+install.packages(c("fs", "lattice", "mgcv", "ps", "ragg", "rlang", "sass", "this.path", "zoo"))
+rmarkdown::render("lecture-04-18-2025.Rmd", output_format = "pdf_document")
+?MASS::Sikta
+?MASS::Sitka
+?MASS::Sitka89
+?MASS::Sitka
+rmarkdown::render("lecture-04-18-2025.Rmd", output_format = "pdf_document")
+library(ggplot2)
+source("~/.active-rstudio-document", echo=TRUE)
+install.packages("flexsurv")
+source("~/.active-rstudio-document", echo=TRUE)
+m <- flexsurvreg(Surv(minutes, censored) ~ motion, dist = "weibull", data = emesis)
+d <- data.frame(motion = c("a","b"))
+d <- data.frame(motion = c("a","b"))
+d <- summary(m, newdata = d, t <- seq(1, 200, length = 1000),
+type = "survival", tidy = TRUE, B = 0)
+p <- ggplot(d, aes(x = time, y = est, linetype = factor(motion))) +
+geom_line() + theme_minimal() +
+labs(x = "Time (minutes)", y = "Survival probability")
+plot(p)
+d
+d <- data.frame(motion = c("a","b"))
+d <- summary(m, newdata = d, t <- seq(1, 200, length = 1000), type = "survival", tidy = TRUE, B = 0)
+d
+source("~/.active-rstudio-document", echo=TRUE)
+rmarkdown::render("lecture-04-18-2025.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-04-18-2025.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-04-18-2025.Rmd", output_format = "pdf_document")
+?trtools::margeff
+knit_with_parameters("C:/Users/trobi/Dropbox/Teaching/s516/s516_25s/lecture-04-18-2025.Rmd")
+?trtools::margeff
+install.packages("httpuv")
+?trtools::dmethod
+rmarkdown::render("hw4-2025-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw4-2025-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw4-2025-solutions.Rmd", output_format = "pdf_document")
+remotes::install_github("https://github.com/ccolonescu/PoEdata")
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(EffectStars)
+data(alligator)
+head(alligator)
+summary(alligator)
+?alligator
+rmarkdown::render("lecture-04-18-2025.Rmd", output_format = "pdf_document")
+library(GLMsData)
+data(grazing0)
+data(grazing)
+grazing
+?grazing
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(dplyr)
+library(GLMsData)
+data(grazing)
+grazing <- grazing |> mutate(area = rep(1:31, 2)) |> arrange(area)
+p <- ggplot(grazing, aes(x = factor(area), y = Birds, color = When)) + theme_minimal() +
+geom_point(position = position_dodge(width = 0.5)) +
+facet_grid(. ~ Grazed, scales = "free_x", space = "free_x") +
+labs(x = "Area", y = "Number of Birds") +
+ggtitle("Bird Abundance in Grazing Areas")
+plot(p)
+library(emmeans)
+library(lme4)
+glmer(Bird ~ When*Grazed + (1|area), family = poisson, data = grazing)
+glmer(Birds ~ When*Grazed + (1|area), family = poisson, data = grazing)
+glmer(Birds ~ When*Grazed + (1|area), family = poisson, data = grazing) -> m
+m
+m
+summary(m)$coefficients
+m
+pairs(emmeans(m, ~When|Grazed, type = "response"))
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(ggplot2)
+library(GLMsData)
+data(grazing)
+p <- ggplot(grazing, aes(x = Grazed, y = Birds, fill = When)) + theme_minimal() +
+geom_dotplot(binaxis = "y", binwidth = 1, stackgroups = TRUE, stackdir = "center") +
+labs(x = NULL, y = "Number of Birds") + coord_flip() +
+scale_fill_manual(values = c("black","white"))
+plot(p)
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(ggplot2)
+library(GLMsData)
+data(grazing)
+p <- ggplot(grazing, aes(x = Grazed, y = Birds, fill = When)) + theme_minimal() +
+geom_dotplot(binaxis = "y", binwidth = 1, stackgroups = TRUE, stackdir = "center") +
+labs(x = NULL, y = "Number of Birds") + coord_flip() +
+scale_fill_manual(values = c("black","white"))
+plot(p)
+m <- glm(Birds ~ Grazed*When, family = poisson, data = grazing)
+summary(m)$coefficients
+trtools::contrast(m, tf = exp,
+a = list(When = "After", Grazed = c("Feral","Reference")),
+b = list(When = "Before", Grazed = c("Feral","Reference")),
+cnames = c("Feral","Reference"))
+pairs(emmeans(m, ~When|Grazed, type = "response"), infer = TRUE)
+glmer(Birds ~ When*Grazed + (1|area), family = poisson, data = grazing) -> m
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/grazing.R", echo=TRUE)
+m
+summary(m)
+m <- glm(Birds ~ When*Grazed, family = poisson, data = grazing)
+m1 <- m
+m <- glmer(Birds ~ When*Grazed + (1|area), family = poisson, data = grazing)
+m2 <- m
+emmeans(m1, ~When|Grazed, type = "response")
+emmeans(m2, ~When|Grazed, type = "response")
+emmeans(m2, ~When|Grazed, type = "response")
+pairs(emmeans(m1, ~When|Grazed, type = "response"))
+pairs(emmeans(m2, ~When|Grazed, type = "response"))
+pairs(emmeans(m1, ~Grazed|When, type = "response"))
+pairs(emmeans(m2, ~Grazed|When, type = "response"))
+grazing
+m <- glm(Birds ~ When+Grazed, family = poisson, data = grazing)
+m1 = m
+m <- glmer(Birds ~ When+Grazed + (1|area), family = poisson, data = grazing)
+m2 = m
+pairs(emmeans(m2, ~Grazed|When, type = "response"))
+pairs(emmeans(m1, ~Grazed|When, type = "response"))
+pairs(emmeans(m1, ~When|Grazed, type = "response"))
+pairs(emmeans(m2, ~When|Grazed, type = "response"))
+summary(m1)$coefficients
+summary(m2)$coefficients
+m1 = lm(Bird ~ Grazed+When, data = grazing)
+m1 = lm(Birds ~ Grazed+When, data = grazing)
+m2 = lmer(Birds ~ Grazed+When + (1|area), data = grazing)
+summary(m1)$coefficients
+summary(m2)$coefficients
+args(lmer)
+m2 = lmer(Birds ~ Grazed+When + (1|area), data = grazing, REML = FALSE)
+summary(m1)$coefficients
+summary(m2)$coefficients
+install.packages("ALA", repos = "http://R-Forge.R-project.org")
+rmarkdown::render("lecture-04-21-2025.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw4-2025-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw4-2025-solutions.Rmd", output_format = "pdf_document")
+source("~/Dropbox/Teaching/s516/examples/ccs.R", echo=TRUE)
+source("~/Dropbox/Teaching/s516/examples/yarrow.R", echo=TRUE)
+yarrow
+summary(yarrow)
+install.packages("ordDisp")
+library(ordDisp)
+reti
+data(reti)
+reti
+?reti
+library(pglm)
+install.packages("pglm")
+install.packages("ALA", repos="http://R-Forge.R-project.org")
+rmarkdown::render("lecture-04-23-2025.Rmd", output_format = "pdf_document")

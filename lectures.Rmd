@@ -141,7 +141,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Random-effects approach to the incidental parameter problem](lecture-04-23-2025.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Nonlinear regression models with random effects, crossed and nested random effects](lecture-04-25-2025.html).
  
 ***
 
