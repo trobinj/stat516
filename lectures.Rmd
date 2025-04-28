@@ -145,7 +145,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Prediction error, cross-validation, AIC](lecture-04-28-2025.html).
 
 `r i <- i + 1; d[i]` 
 
