@@ -416,7 +416,7 @@ library(scam)
 library(blmeco)
 data(anoctua)
 
-m <- scam(PA ~ s(elevation, k = 12, bs = "cv", m = 2), family = binomial, data = anoctua)
+m <- scam(PA ~ s(elevation, bs = "cv", m = 2), family = binomial, data = anoctua)
 
 d <- data.frame(elevation = seq(50, 650, length = 100))
 d$yhat <- predict(m, newdata = d, type = "response")

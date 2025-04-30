@@ -525,7 +525,7 @@ concave or convex).</p>
 library(blmeco)
 data(anoctua)
 
-m &lt;- scam(PA ~ s(elevation, k = 12, bs = &quot;cv&quot;, m = 2), family = binomial, data = anoctua)
+m &lt;- scam(PA ~ s(elevation, bs = &quot;cv&quot;, m = 2), family = binomial, data = anoctua)
 
 d &lt;- data.frame(elevation = seq(50, 650, length = 100))
 d$yhat &lt;- predict(m, newdata = d, type = &quot;response&quot;)
