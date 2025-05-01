@@ -149,7 +149,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Generalized additive models](lecture-04-30-2025.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Generalized additive models --- continued](lecture-05-02-2025.html).
 
 
 

@@ -1,0 +1,300 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document:
+    theme: readable
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+x <- strsplit(this.path::this.path(), split = "/")[[1]]
+x <- strsplit(x[length(x)], split = "-")[[1]]
+date <- paste(x[2], x[3], year(Sys.Date()), sep = "-")
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE, abbr = FALSE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+urlcolor: blue
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+  - \usepackage{array}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+suppressWarnings(library(kableExtra))
+```
+
+```{r utilities, echo = FALSE}
+source("utilities.R")
+```
+
+```{r options, echo = FALSE}
+options(digits = 3, width = 100)
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+## Moose and Winter Tick Data
+
+This is part of an [ongoing research project](https://www.uidaho.edu/news/feature-stories/winter-ticks) in collaboration with researchers in the College of Natural Resources.
+
+### Setup
+
+The following packages are being used.
+```{r, message = FALSE}
+library(dplyr)      # data manipulation
+library(tidyr)      # data manipulation
+library(lubridate)  # working with dates
+library(forcats)    # working with factors
+library(whereami)   # find current directory
+library(ggplot2)    # graphics
+library(mgcv)       # GAMs
+library(trtools)    # inference tools
+library(emmeans)    # inference tools
+options(digits = 4) # control number of digits displayed
+```
+
+### Import and Process Tick Count Data
+
+Here I can use `dirname(thisfile())` to find the directory containing this Rmarkdown file, so I do not have to specify the full path to the data file. Note that `thisfile()` is from the **whereami** package. I have the data stored in a sub-directory ("tickdata") of the directory containing this Rmarkdown file. 
+```{r}
+ticks <- read.csv(paste(dirname(thisfile()), 
+  "/tickdata/tick_data_Robenstein.csv", sep = ""))
+names(ticks) <- c("moose","mortality","ticks","size","date","gmu","sex","note")
+head(ticks)
+```
+Here I am going to process the data to get it ready for plotting and modeling.
+```{r}
+ticks <- ticks |> 
+  mutate(note = factor(note, levels = 0:3,
+    labels = c("exclude", "include", "deterioration", "nodate"))) |>
+  mutate(date = mdy(date)) |>
+  mutate(month = month(date, label = TRUE), year = year(date), day = yday(date)) |>
+  filter(!is.na(date), month %in% c("Aug","Sep","Oct","Nov")) |>
+  mutate(year = factor(year)) |> mutate(sex = tolower(sex)) |>
+  mutate(day = ifelse(year == "2020", day - 1, day))
+head(ticks)
+```
+
+### Import and Process Game Management Unit Data
+
+Here I am going to use `rename` to rename the imported variables.
+```{r}
+gmu <- read.csv(paste(dirname(thisfile()), "/tickdata/tick_study_areas.csv", sep = "")) |>
+  rename(gmu = GMU, area = study.Area, samples = hh_samples)
+head(gmu, 10)
+```
+
+### Merging Data Frames and Filtering
+
+```{r}
+ticks <- left_join(ticks, gmu) |>
+  mutate(area = factor(area)) |>
+  mutate(area = fct_relevel(area, c("North", "North Central",
+    "Central", "Southeast", "Island Park")))
+head(ticks)
+```
+Some variables we do not need. Also we are going to discard some questionable observations and focus only on the males.
+```{r}
+ticks <- ticks |> select(-mortality, -samples) |> 
+  filter(note == "include") |> filter(sex == "male")
+head(ticks)
+```
+
+### Raw Data Visualization
+
+```{r, fig.height = 9, warning = FALSE}
+d09 <- yday(mdy("09/1/2021"))
+d10 <- yday(mdy("10/1/2021"))
+d11 <- yday(mdy("11/1/2021"))
+d12 <- yday(mdy("12/1/2021"))
+  
+pv <- ggplot(ticks, aes(x = day, y = ticks/size*100, color = year)) + 
+  geom_count(alpha = 0.5) + scale_size_area(max_size = 2) +
+  theme_minimal() + facet_grid(area ~ .) +
+  labs(x = "Day", y = "Tick Density (ticks per 100 square cm)", color = "Year") + 
+  guides(size = "none") + 
+  scale_x_continuous(breaks = c(d09, d10, d11, d12),
+    labels = c("9/1", "10/1", "11/1", "12/1")) + ylim(c(0,250)) + 
+  theme(legend.position = "bottom")
+  
+plot(pv)
+```
+```{r, warning = FALSE}
+ph <- ggplot(ticks, aes(x = day, y = ticks/size*100, color = year)) + 
+  geom_count(alpha = 0.5) + scale_size_area(max_size = 2) + theme_minimal() + 
+  facet_wrap(~ area, ncol = 5) +
+  labs(x = "Day", y = "Tick Density (ticks per 100 square cm)", color = "Year") + 
+  guides(size = "none") + 
+  scale_x_continuous(breaks = c(d09, d10, d11, d12),
+    labels = c("9/1", "10/1", "11/1", "12/1")) + ylim(c(0,250)) + 
+  theme(legend.position = "bottom", 
+    axis.text.x = element_text(angle = 45, size = 7, hjust = 1))
+  
+plot(ph)
+```
+
+### Modeling
+
+I used a generalized additive model with a log link function estimated using (penalized) quasi-likelihood to deal with considerable over-dispersion. 
+```{r}
+m <- gam(ticks ~ offset(log(size)) + s(day) + year + area,
+  family = quasipoisson(link = log), data = ticks)
+summary(m)
+```
+Here we can visualize this model.
+```{r, warning = FALSE, fig.height = 9}
+d <- expand.grid(year = c("2020","2021"), day = 242:334,
+  area = unique(ticks$area), size = 100)
+d$yhat <- predict(m, newdata = d, type = "response")
+
+pv <- pv + geom_line(aes(y = yhat), data = d)
+plot(pv)
+```
+```{r, warning = FALSE}
+ph <- ph + geom_line(aes(y = yhat), data = d)
+plot(ph)
+```
+
+### Model-Based Inferences
+
+How much higher is the expected tick density in 2021 than in 2020?
+```{r}
+emmeans(m, ~year | area, at = list(day = d10), 
+  type = "response", offset = log(100), data = ticks)
+pairs(emmeans(m, ~year | area, at = list(day = d10), 
+  type = "response", offset = log(100), data = ticks), reverse = TRUE, infer = TRUE)
+```
+**Note**: Here `emmeans` needs a bit more information that is not contained in the model object, so we pass it the data with `data = ticks`.
+
+How about the *difference* in the expected density for each area and the first of October? This is a *discrete marginal effect*, and both area and day matter.
+```{r}
+margeff(m, 
+  a = list(year = "2021", area = unique(ticks$area), day = d10, size = 100),
+  b = list(year = "2020", area = unique(ticks$area), day = d10, size = 100),
+  cnames = unique(ticks$area), df = m$df.residual)
+```
+This can also be done using the **emmeans** package through use of the `regrid` function. 
+```{r}
+tmp <- emmeans(m, ~year | area, at = list(day = d10), 
+  type = "response", offset = log(100), data = ticks)
+pairs(regrid(tmp, type = "response"), reverse = TRUE, infer = TRUE)
+```
+How about inferences for the *average* difference across areas?
+```{r}
+emmeans(regrid(pairs(regrid(tmp, type = "response"), reverse = TRUE)), ~1)
+```
+Tricky!
+
+How much does the expected tick density increase between, say, the first day of October and November?
+```{r}
+emmeans(m, ~ day | year * area, at = list(day = c(d11,d10)),
+  data = ticks, type = "response")
+pairs(emmeans(m, ~ day | year * area, at = list(day = c(d11,d10)),
+  data = ticks, type = "response"), infer = TRUE)
+```
+What about the *difference* in the expected densities (i.e., marginal effects)?
+```{r}
+tmp <- emmeans(m, ~ day | year * area, at = list(day = c(d11,d10)),
+  data = ticks, type = "response")
+pairs(regrid(tmp, type = "response"), infer = TRUE)
+```
+Here is the average marginal effect for each year (i.e., averaging across areas). 
+```{r}
+emmeans(regrid(pairs(regrid(tmp, type = "response"))), ~year)
+```
+
+Finally consider a comparison of areas. 
+```{r}
+pairs(emmeans(m, ~area | year, at = list(day = d10), type = "response", 
+  data = ticks), adjust = "none")
+```
+Due to an absence of interactions involving area, neither year or day matter.
+```{r}
+pairs(emmeans(m, ~area, type = "response", data = ticks), adjust = "none")
+```
+
+### A Mixed Effects Generalized Additive Model
+
+More recently we have been incorporating a random effect for GMU. A Poisson GLMM still shows over-dispersion, but unfortunately the **mgcv** package cannot handle a mixed effects negative binomial model. So instead we have been accounting for the over-dispersion by including a per-observation random effect which is effectively what the negative binomial distribution does.
+```{r, warning = FALSE}
+ticks <- ticks |> mutate(obs = 1:n())
+m <- gamm(ticks ~ offset(log(size)) + s(day) + year + area, 
+  family = poisson, random = list(gmu = ~1, obs = ~1), data = ticks)
+```
+Note the use of `m[["gam"]]` in `predict` below. This is a bit of a hack to get it to work with `predict`. 
+```{r}
+d$yhat <- predict(m[["gam"]], newdata = d, type = "response")
+p <- ggplot(ticks, aes(x = day, y = ticks/size*100, color = year)) + 
+  geom_count(alpha = 0.5) + scale_size_area(max_size = 2) + theme_minimal() + 
+  facet_wrap(~ area, ncol = 5) +
+  labs(x = "Day", y = "Tick Density (ticks per 100 square cm)", color = "Year") + 
+  guides(size = "none") + 
+  scale_x_continuous(breaks = c(d09, d10, d11, d12),
+    labels = c("9/1", "10/1", "11/1", "12/1")) + ylim(c(0,250)) + 
+  theme(legend.position = "bottom", 
+    axis.text.x = element_text(angle = 45, size = 7, hjust = 1)) + 
+  geom_line(aes(y = yhat), data = d)
+plot(p)
+```
+Inferences using this model can be done the same way. For example, we can look at the rate ratios for the effect of year.
+```{r}
+emmeans(m, ~year | area, at = list(day = d10), 
+  type = "response", offset = log(100), data = ticks)
+pairs(emmeans(m, ~year | area, at = list(day = d10), 
+  type = "response", offset = log(100), data = ticks), reverse = TRUE, infer = TRUE)
+```
+
+## Demand for Learning HIV Status -- A Field Experiment in Malawi
+
+```{r}
+library(dplyr)
+library(causaldata)
+library(ggplot2)
+library(mgcv)
+library(scam)
+
+hiv <- thornton_hiv[complete.cases(thornton_hiv),] |>
+  mutate(z = ifelse(tinc == 0, 1, 0))
+
+m <- scam(got ~ s(tinc, bs = "mpi"), family = binomial, data = hiv)
+summary(m)
+
+d <- expand.grid(tinc = c(0, seq(0.01, 3, length = 100)))
+d$yhat <- predict(m, d, type = "response")
+
+p <- ggplot(hiv, aes(x = tinc, y = got)) + theme_minimal() + 
+  geom_count(shape = 21) + guides(size = "none") + 
+  stat_summary(fun = "mean", size = 2, geom = "point") + 
+  geom_line(aes(y = yhat), data = d) +
+  labs(y = "Probability of Seeking HIV Results", x = "Incentive Amount")
+plot(p)
+
+m <- scam(got ~ I(tinc == 0) + s(tinc, bs = "mpi"), family = binomial, data = hiv)
+summary(m)
+
+d <- expand.grid(tinc = c(0, seq(0.01, 3, length = 100)))
+d$yhat <- predict(m, d, type = "response")
+
+p <- ggplot(hiv, aes(x = tinc, y = got)) + theme_minimal() + 
+  geom_count(shape = 21) + guides(size = "none") + 
+  stat_summary(fun = "mean", size = 2, geom = "point") + 
+  geom_line(aes(y = yhat), data = subset(d, tinc > 0)) +
+  geom_point(aes(y = yhat), data = subset(d, tinc == 0)) + 
+  labs(y = "Probability of Seeking HIV Results", x = "Incentive Amount")
+plot(p)
+```
