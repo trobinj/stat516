@@ -1,7 +1,7 @@
-name: Stat 436/516
+name: Stat 4360/5160
 output_dir: '.'
 navbar:
-  title: Statistics 436/516
+  title: Statistics 4360/5160
   right:
   - text: Lectures
     href: lectures.html
