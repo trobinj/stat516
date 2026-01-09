@@ -1,2 +1,2 @@
 # stat516
-Course materials for Stat 436/516 (Spring 2022).
+Course materials for Stat 4360/5160 (Spring 2025).
