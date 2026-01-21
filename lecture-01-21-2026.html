@@ -273,6 +273,7 @@ of this lecture.</p>
 <p><strong>Example</strong>: The “data frame” <code>trees</code> comes
 with R. We can see it if we just type <code>trees</code> at the prompt
 in the R console.</p>
+<pre class="r"><code>trees</code></pre>
 <pre><code>   Girth Height Volume
 1    8.3     70   10.3
 2    8.6     65   10.3
@@ -313,12 +314,14 @@ is frequently used to store data.</p>
 class="math inline">\(g_i\)</span>, and <span
 class="math inline">\(h_i\)</span> are the volume, girth, and height
 from the <span class="math inline">\(i\)</span>-th observation.</p>
+<pre class="r"><code>m &lt;- lm(formula = Volume ~ Girth + Height, data = trees)</code></pre>
 <p>There’s a lot to say here.</p>
 <ol style="list-style-type: decimal">
 <li><p><code>lm</code> (<strong>l</strong>inear <strong>m</strong>odel)
 is a <em>function</em> to which we have provided two <em>arguments</em>:
 <code>formula</code> and <code>data</code>. Other arguments can be found
 using <code>args(lm)</code>, some of which we will use later.</p>
+<pre class="r"><code>args(lm)</code></pre>
 <pre><code>function (formula, data, subset, weights, na.action, method = &quot;qr&quot;, 
     model = TRUE, x = FALSE, y = FALSE, qr = TRUE, singular.ok = TRUE, 
     contrasts = NULL, offset, ...) 
@@ -326,9 +329,11 @@ NULL</code></pre>
 <p>We do not need to name the arguments <em>if we provide them in the
 same order as they are expected</em>. For example, this would also
 work:</p>
+<pre class="r"><code>m &lt;- lm(Volume ~ Girth + Height, trees)</code></pre>
 <p>Just about all functions that estimate a regression model expect
 <code>formula</code> to be the first argument. A common convention (and
-one that I use) is to name all arguments except the first:</p></li>
+one that I use) is to name all arguments except the first:</p>
+<pre class="r"><code>m &lt;- lm(Volume ~ Girth + Height, data = trees)</code></pre></li>
 <li><p>The <code>formula</code> argument is <em>symbolic</em>, not
 literal. It is a system for communicating with R the regression model
 you want to specify. The model formula
@@ -340,6 +345,7 @@ h_i\)</span>.</p></li>
 programming language). Note that you can also use <code>=</code> instead
 of <code>&lt;-</code>. We can apply other functions to this object. For
 example, <code>print(m)</code>.</p>
+<pre class="r"><code>print(m)</code></pre>
 <pre><code>
 Call:
 lm(formula = Volume ~ Girth + Height, data = trees)
@@ -349,6 +355,7 @@ Coefficients:
    -57.9877       4.7082       0.3393  </code></pre>
 <p>But if you just have <code>m</code> it will interpret that as
 <code>print(m)</code>.</p>
+<pre class="r"><code>m</code></pre>
 <pre><code>
 Call:
 lm(formula = Volume ~ Girth + Height, data = trees)
@@ -358,6 +365,7 @@ Coefficients:
    -57.9877       4.7082       0.3393  </code></pre>
 <p>A bit more information can be extracted by using the
 <code>summary</code> function.</p>
+<pre class="r"><code>summary(m)</code></pre>
 <pre><code>
 Call:
 lm(formula = Volume ~ Girth + Height, data = trees)
@@ -379,6 +387,7 @@ Multiple R-squared:  0.948,   Adjusted R-squared:  0.9442
 F-statistic:   255 on 2 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>In lecture I will often trim the output from <code>summary</code>
 using something like the following.</p>
+<pre class="r"><code>summary(m)$coefficients</code></pre>
 <pre><code>               Estimate Std. Error   t value     Pr(&gt;|t|)
 (Intercept) -57.9876589  8.6382259 -6.712913 2.749507e-07
 Girth         4.7081605  0.2642646 17.816084 8.223304e-17
@@ -435,6 +444,8 @@ for functions like <code>lm</code>). A <code>tibble</code> is another
 way that data are stored in R that is mostly interchangeable with data
 frames (they are effectively “enhanced” data frames).</p>
 <p>Let’s specify a linear model using the <code>lm</code> function.</p>
+<pre class="r"><code>m &lt;- lm(dbh ~ group, data = Dopamine)
+summary(m)$coefficients</code></pre>
 <pre><code>                Estimate Std. Error   t value     Pr(&gt;|t|)
 (Intercept)    164.26667   12.58563 13.051923 4.058662e-12
 grouppsychotic  78.33333   19.89963  3.936422 6.586761e-04</code></pre>
@@ -444,6 +455,8 @@ the categorical variable <code>group</code>. How would we write this
 model <em>mathematically</em>?</p>
 <p><strong>Example</strong>: Here are the data from the anorexia
 study.</p>
+<pre class="r"><code>library(MASS) # install with install.packages(&quot;MASS&quot;)
+head(anorexia)</code></pre>
 <pre><code>  Treat Prewt Postwt
 1  Cont  80.7   80.2
 2  Cont  89.4   80.1
@@ -451,6 +464,7 @@ study.</p>
 4  Cont  74.0   86.3
 5  Cont  78.1   76.1
 6  Cont  88.3   78.1</code></pre>
+<pre class="r"><code>summary(anorexia)</code></pre>
 <pre><code>  Treat        Prewt           Postwt      
  CBT :29   Min.   :70.00   Min.   : 71.30  
  Cont:26   1st Qu.:79.60   1st Qu.: 79.33  
@@ -463,6 +477,8 @@ which is the change in weight. (Note: I redefined <code>change</code>
 from the original lecture as the post-weight minus the pre-weight so
 that a positive value indicates weight gain and a negative value
 indicates weight loss.)</p>
+<pre class="r"><code>anorexia$change &lt;- anorexia$Postwt - anorexia$Prewt
+head(anorexia)</code></pre>
 <pre><code>  Treat Prewt Postwt change
 1  Cont  80.7   80.2   -0.5
 2  Cont  89.4   80.1   -9.3
@@ -471,6 +487,8 @@ indicates weight loss.)</p>
 5  Cont  78.1   76.1   -2.0
 6  Cont  88.3   78.1  -10.2</code></pre>
 <p>Let’s specify a linear model.</p>
+<pre class="r"><code>m &lt;- lm(change ~ Treat, data = anorexia)
+summary(m)$coefficients</code></pre>
 <pre><code>             Estimate Std. Error   t value   Pr(&gt;|t|)
 (Intercept)  3.006897   1.397996  2.150861 0.03499197
 TreatCont   -3.456897   2.033297 -1.700144 0.09360765
@@ -506,6 +524,7 @@ the <code>is.factor</code> function.</p>
 <pre><code>[1] FALSE</code></pre>
 <p>Here’s what happens if you try to use <code>relevel</code> with the
 <code>group</code> variable.</p>
+<pre class="r"><code>Dopamine$group &lt;- relevel(Dopamine$group, ref = &quot;psychotic&quot;)</code></pre>
 <pre><code>Error in `relevel.default()`:
 ! &#39;relevel&#39; only for (unordered) factors</code></pre>
 <p>Let’s make <code>group</code> a factor and then change the
@@ -526,10 +545,14 @@ groupnonpsychotic -78.33333   19.89963 -3.936422 6.586761e-04</code></pre>
 of the <span class="math inline">\(\beta_0\)</span> parameter (again, it
 is symbolic, not literal).<a href="#fn1" class="footnote-ref"
 id="fnref1"><sup>1</sup></a></p>
+<pre class="r"><code>m &lt;- lm(dbh ~ 0 + group, data = Dopamine)
+summary(m)$coefficients</code></pre>
 <pre><code>                  Estimate Std. Error  t value     Pr(&gt;|t|)
 grouppsychotic    242.6000   15.41419 15.73875 8.320341e-14
 groupnonpsychotic 164.2667   12.58563 13.05192 4.058662e-12</code></pre>
 <p>Let’s try that with the <code>anorexia</code> data.</p>
+<pre class="r"><code>m &lt;- lm(change ~ 0 + Treat, data = anorexia)
+summary(m)$coefficients</code></pre>
 <pre><code>           Estimate Std. Error    t value     Pr(&gt;|t|)
 TreatCont -0.450000   1.476449 -0.3047854 0.7614470484
 TreatCBT   3.006897   1.397996  2.1508614 0.0349919664
@@ -555,6 +578,9 @@ Dopamine |&gt; group_by(group) |&gt; summarize(dbh = mean(dbh))</code></pre>
 3 FT        -7.26      7.16         17</code></pre>
 <p>We could have used <code>mutate</code> to create the variable
 <code>change</code> for our analysis above.</p>
+<pre class="r"><code>anorexia &lt;- anorexia |&gt; mutate(change = Prewt - Postwt)
+m &lt;- lm(change ~ Treat, data = anorexia)
+summary(m)$coefficients</code></pre>
 <pre><code>             Estimate Std. Error    t value    Pr(&gt;|t|)
 (Intercept)  0.450000   1.476449  0.3047854 0.761447048
 TreatCBT    -3.456897   2.033297 -1.7001438 0.093607652
