@@ -462,7 +462,7 @@ defined by <code>Temp</code>).</p></li>
 </ol>
 <p><strong>Example</strong>: Here’s an alternative parameterization of
 the model used above.</p>
-<pre class="r"><code>m &lt;- lm(Gas ~ -1 + Insul + Insul:Temp, data = whiteside)
+<pre class="r"><code>m &lt;- lm(Gas ~ 0 + Insul + Insul:Temp, data = whiteside)
 summary(m)$coefficients</code></pre>
 <pre><code>                   Estimate Std. Error   t value     Pr(&gt;|t|)
 InsulBefore       6.8538277 0.13596397  50.40915 7.997414e-46

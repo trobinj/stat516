@@ -229,7 +229,7 @@ let us identify each term in the model using the following rules.
 
 **Example**: Here's an alternative parameterization of the model used above.
 ```{r}
-m <- lm(Gas ~ -1 + Insul + Insul:Temp, data = whiteside)
+m <- lm(Gas ~ 0 + Insul + Insul:Temp, data = whiteside)
 summary(m)$coefficients
 ```
 How would we write this model?
