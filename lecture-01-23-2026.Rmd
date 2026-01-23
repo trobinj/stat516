@@ -250,7 +250,7 @@ a quantity of interest can often be written as a *linear function of the model p
 $$
   \ell = a_0\beta_0 + a_1\beta_1 + a_2\beta_2 + \cdots + a_k\beta_k + b,
 $$
-where $a_0, a_1, \dots, a_k$ and $b$ are specified coefficients. There are several ways to do this on R. One way is to use the `lincon` function (for **lin**ear **con**trast) from the **trtools** package. 
+where $a_0, a_1, \dots, a_k$ and $b$ are specified coefficients. There are several ways to do this in R. One way is to use the `lincon` function (for **lin**ear **con**trast) from the **trtools** package. 
 
 \pagebreak
 
