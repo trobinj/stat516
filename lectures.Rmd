@@ -33,7 +33,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Using the `contrast` function for inferences concerning linear functions of model parameters, plotting estimated expected responses with `ggplot`](lecture-01-26-2026.html).
 
 `r i <- i + 1; d[i]` 
 
