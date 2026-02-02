@@ -41,7 +41,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [In-class demonstration of R workflow with specification and inference for linear models](lecture-02-02-2026.html).
 
 `r i <- i + 1; d[i]` 
 
