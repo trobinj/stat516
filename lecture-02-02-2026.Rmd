@@ -38,6 +38,7 @@ library(tidyverse)
 suppressWarnings(library(kableExtra))
 ```
 
+
 ```{r myfunctions, echo = FALSE}
 ktbl <- function(d, caption = NULL, align = "c") {
   d %>% kable(format = ifelse(knitr::is_html_output(), "html", "latex"), 
