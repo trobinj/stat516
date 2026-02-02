@@ -13,7 +13,7 @@ header-includes:
 
 Read carefully. Failure to meet the formatting requirements described below may result in point deductions on the homework assignment.
 
-1. Assignments must be submitted through Canvas as a single PDF file. Late assignments will be penalized by 10% if submitted within 12 hours after the deadline, and 10% more for each additional 12 hour interval. For example, and assignment that is late by one minute will be penalized by 10% of the total points. An assignment that is turned in 13 hours after it is due will be penalized 20% of the total points. 
+1. Assignments must be submitted through Canvas as a single PDF file. Late assignments will be penalized by one point (out of 10 possible) if submitted within 12 hours after the deadline, and one point more for each additional 12 hour interval. For example, and assignment that is late by one minute will be penalized by one point. An assignment that is turned in 13 hours after it is due will be penalized by two points. 
 
 0. Your solutions must be typed and *very* neatly organized. 
 
