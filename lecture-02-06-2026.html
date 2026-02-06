@@ -380,9 +380,15 @@ class="math display">\[
 <pre><code>                            estimate    se lower upper tvalue df    pvalue
 (1,1/6,1/6,1/6,1/6,1/6),-50    12.38 1.722  8.95 15.81  7.189 78 3.439e-10</code></pre>
 <p>Here is how we do it with <code>emmeans</code>.</p>
-<pre class="r"><code>emmeans(m, ~ 1, offset = -50, infer = TRUE)</code></pre>
+<pre class="r"><code>emmeans(m, ~1, offset = -50, infer = TRUE)</code></pre>
 <pre><code> 1       emmean   SE df lower.CL upper.CL t.ratio p.value
  overall   12.4 1.72 78     8.95     15.8   7.189 &lt;0.0001
+
+Results are averaged over the levels of: Pair 
+Confidence level used: 0.95 </code></pre>
+<pre class="r"><code>emmeans(m, ~1, null = 50, infer = TRUE)</code></pre>
+<pre><code> 1       emmean   SE df lower.CL upper.CL null t.ratio p.value
+ overall   62.4 1.72 78       59     65.8   50   7.189 &lt;0.0001
 
 Results are averaged over the levels of: Pair 
 Confidence level used: 0.95 </code></pre>
@@ -540,7 +546,20 @@ Confidence level used: 0.95 </code></pre>
 weights/coefficients will be different since they are applied to <span
 class="math inline">\(\beta_0\)</span>, <span
 class="math inline">\(\beta_1\)</span>, and <span
-class="math inline">\(\beta_2\)</span>.</p>
+class="math inline">\(\beta_2\)</span>. We have that <span
+class="math display">\[
+  \tau = 100000\mu_e + 200000\mu_t + 400000\mu_h = 700000\beta_0 +
+200000\beta_1 + 400000\beta_2.
+\]</span> or <span class="math display">\[
+  \tau = 700000\left(\beta_0 + \tfrac{2}{7}\beta_1 +
+\tfrac{4}{7}\beta_2\right).  
+\]</span></p>
+<pre class="r"><code>lincon(m, a = c(700000,200000,400000))</code></pre>
+<pre><code>                      estimate     se   lower   upper tvalue df    pvalue
+(7e+05,2e+05,4e+05),0  4903333 400431 4095230 5711437  12.25 42 1.907e-15</code></pre>
+<pre class="r"><code>lincon(m, a = 700000 * c(1,2/7,4/7))</code></pre>
+<pre><code>                      estimate     se   lower   upper tvalue df    pvalue
+(7e+05,2e+05,4e+05),0  4903333 400431 4095230 5711437  12.25 42 1.907e-15</code></pre>
 </div>
 <div id="marginal-means-and-main-effects" class="section level2">
 <h2>Marginal Means and “Main Effects”</h2>
@@ -552,7 +571,7 @@ one of two supplement methods: orange juice (OJ) or ascorbic acid
   geom_point(alpha = 0.5) + facet_wrap(~supp) + 
   labs(x = &quot;Dose (mg/day)&quot;, y = &quot;Odontoblast Length&quot;) + theme_minimal()
 plot(p)</code></pre>
-<p><img src="lecture-02-06-2026_files/figure-html/unnamed-chunk-21-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-02-06-2026_files/figure-html/unnamed-chunk-22-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 Here we are going to model dose as a categorical variable so we need to
 coerce it to a factor. Perhaps the safest approach is to create a new
 variable.</p>
@@ -578,7 +597,7 @@ can be seen use <code>str</code> (for “structure”).</p>
   geom_point(alpha = 0.5) + facet_wrap(~supp) + 
   labs(x = &quot;Dose (mg/day)&quot;, y = &quot;Odontoblast Length&quot;) + theme_minimal()
 plot(p)</code></pre>
-<p><img src="lecture-02-06-2026_files/figure-html/unnamed-chunk-24-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-02-06-2026_files/figure-html/unnamed-chunk-25-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 Now consider the following linear model.</p>
 <pre class="r"><code>m &lt;- lm(len ~ dosef + supp + dosef:supp, data = ToothGrowth)
 summary(m)$coefficients</code></pre>
@@ -673,7 +692,7 @@ p &lt;- ggplot(ToothGrowth, aes(x = dosef, y = len, color = supp)) +
   geom_line(aes(y = yhat, group = supp), data = d) + 
   labs(x = &quot;Dose (mg/day)&quot;, y = &quot;Odontoblast Length&quot;, color = &quot;Supplement Type&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-02-06-2026_files/figure-html/unnamed-chunk-26-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-02-06-2026_files/figure-html/unnamed-chunk-27-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 Consider again the model with the interaction so that <span
 class="math display">\[
   E(Y_i) =

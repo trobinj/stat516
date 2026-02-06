@@ -120,7 +120,8 @@ lincon(m, a = c(1,1/6,1/6,1/6,1/6,1/6), b = -50)
 ```
 Here is how we do it with `emmeans`. 
 ```{r}
-emmeans(m, ~ 1, offset = -50, infer = TRUE)
+emmeans(m, ~1, offset = -50, infer = TRUE)
+emmeans(m, ~1, null = 50, infer = TRUE)
 ```
 By *not* listing an explanatory variable on the right-hand side of `~`, we are asking that `emmeans` average over that explanatory variable. Also note that the argument `infer = TRUE` makes the `emmeans` function provide both confidence intervals as well as tests. 
 
@@ -205,7 +206,18 @@ Note that there are 700kL in the lake, which is 700000L (which is the scale used
 emmeans::contrast(emmeans(m, ~layer), 
   method = list(layer = 700000 * c(1/7, 2/7, 4/7)), infer = TRUE)
 ```
-Another approach is to use `lincon` but your weights/coefficients will be different since they are applied to $\beta_0$, $\beta_1$, and $\beta_2$. 
+Another approach is to use `lincon` but your weights/coefficients will be different since they are applied to $\beta_0$, $\beta_1$, and $\beta_2$. We have that
+$$
+  \tau = 100000\mu_e + 200000\mu_t + 400000\mu_h = 700000\beta_0 + 200000\beta_1 + 400000\beta_2.
+$$
+or 
+$$
+  \tau = 700000\left(\beta_0 + \tfrac{2}{7}\beta_1 + \tfrac{4}{7}\beta_2\right).  
+$$
+```{r}
+lincon(m, a = c(700000,200000,400000))
+lincon(m, a = 700000 * c(1,2/7,4/7))
+```
 
 ## Marginal Means and "Main Effects"
 
