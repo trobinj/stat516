@@ -206,7 +206,7 @@ $$
 $$
 where $\log_2$ is the base-2 logarithm, and assuming that $x > 0$. Here $\beta_1$ is the change in $E(Y)$ if we increase $\log_2(x)$ by one unit, not $x$. If we increase $x$ by one unit we have a change in the expected response of 
 $$
-  \beta_0 + \beta_1\log_2(x+1) - [\beta_0 + \beta_1\log_2(x)] = \log_2(x+1) - \log_2(x).
+  \beta_0 + \beta_1\log_2(x+1) - [\beta_0 + \beta_1\log_2(x)] = \beta_1[\log_2(x+1) - \log_2(x)].
 $$
 So the change in the expected response if we increase $x$ by one unit *depends on the value of* $x$. The above is also true for any base of logarithm. But for $\log_2$ we have that $\beta_1$ is the change in $E(Y)$ if we *double* $x$. That is,
 $$
