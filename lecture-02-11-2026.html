@@ -585,6 +585,34 @@ delta   0.1620 0.05532   0.05115   0.2728  2.928 56 4.927e-03</code></pre>
 coefficients to make inferences about each parameter:
 <code>c(1,0,0,0)</code>, <code>c(0,1,0,0)</code>,
 <code>c(0,0,1,0)</code>, and <code>c(0,0,0,1)</code>.</p>
+<p>How about we constrain the model such that the expected response is
+zero when the dose is zero (although this may not be realistic here)
+such that the “intercept” <span class="math inline">\(\beta_0 + \beta_1
+= 0\)</span>, implying that <span class="math inline">\(\beta_1 =
+-\beta_0\)</span>.</p>
+<pre class="r"><code>m &lt;- nls(len ~ case_when(
+  supp == &quot;OJ&quot; ~ b0 - b0*2^(-dose/hoj),
+  supp == &quot;VC&quot; ~ b0 - b0*2^(-dose/hvc),
+  ), data = ToothGrowth, start = c(b0 = 28, hoj = 0.46, hvc = 0.46))
+  summary(m)$coefficients</code></pre>
+<pre><code>    Estimate Std. Error t value  Pr(&gt;|t|)
+b0   30.5061     2.0724  14.720 4.481e-21
+hoj   0.5805     0.0929   6.249 5.616e-08
+hvc   0.8654     0.1219   7.102 2.154e-09</code></pre>
+<pre class="r"><code>d &lt;- expand.grid(dose = seq(0, 4, length = 100), supp = c(&quot;OJ&quot;,&quot;VC&quot;))
+d$yhat &lt;- predict(m, newdata = d)
+  
+p &lt;- ggplot(ToothGrowth, aes(x = dose, y = len, color = supp)) +
+  geom_point(alpha = 0.5) + 
+  geom_line(aes(y = yhat), data = d) + 
+  labs(x = &quot;Dose (mg/day)&quot;, y = &quot;Odontoblast Length&quot;, color = &quot;Supplement Type&quot;) + 
+  theme_minimal() + 
+  theme(legend.position = &quot;inside&quot;, legend.position.inside = c(0.8,0.2))
+plot(p)</code></pre>
+<p><img src="lecture-02-11-2026_files/figure-html/unnamed-chunk-24-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>lincon(m, a = c(0,-1,1))</code></pre>
+<pre><code>           estimate      se  lower upper tvalue df    pvalue
+(0,-1,1),0   0.2849 0.07893 0.1269 0.443   3.61 57 0.0006473</code></pre>
 </div>
 <div id="estimating-a-linear-model-with-nls" class="section level2">
 <h2>Estimating a Linear Model with <code>nls</code></h2>
@@ -655,15 +683,15 @@ response for any combination of explanatory variables. For example,</p>
 <pre class="r"><code>d &lt;- expand.grid(supp = c(&quot;VC&quot;,&quot;OJ&quot;), dose = c(0.5, 1, 1.5, 2))
 d$yhat &lt;- predict(m, newdata = d)
 d</code></pre>
-<pre><code>  supp dose   yhat
-1   VC  0.5  7.705
-2   OJ  0.5 13.297
-3   VC  1.0 17.602
-4   OJ  1.0 22.405
-5   VC  1.5 22.551
-6   OJ  1.5 25.673
-7   VC  2.0 25.026
-8   OJ  2.0 26.845</code></pre>
+<pre><code>  supp dose  yhat
+1   VC  0.5 10.07
+2   OJ  0.5 13.71
+3   VC  1.0 16.81
+4   OJ  1.0 21.26
+5   VC  1.5 21.33
+6   OJ  1.5 25.42
+7   VC  2.0 24.36
+8   OJ  2.0 27.71</code></pre>
 <p>However <code>predict</code> does not provide standard errors or
 confidence intervals for estimating expected responses based on
 <code>nls</code>, and we cannot use <code>contrast</code> with
@@ -673,25 +701,25 @@ and confidence or prediction intervals from a <code>nls</code>
 object.</p>
 <pre class="r"><code>library(trtools)
 nlsint(m, newdata = d)</code></pre>
-<pre><code>     fit     se    lwr    upr
-1  7.705 1.0885  5.525  9.886
-2 13.297 0.9857 11.322 15.272
-3 17.602 0.9868 15.625 19.579
-4 22.405 0.7711 20.860 23.949
-5 22.551 0.8758 20.796 24.305
-6 25.673 0.7342 24.202 27.144
-7 25.026 0.7322 23.559 26.493
-8 26.845 1.0098 24.823 28.868</code></pre>
+<pre><code>    fit     se    lwr   upr
+1 10.07 0.6638  8.738 11.40
+2 13.71 0.8906 11.931 15.50
+3 16.81 0.8102 15.190 18.43
+4 21.26 0.8275 19.606 22.92
+5 21.33 0.8007 19.728 22.93
+6 25.42 0.8035 23.809 27.03
+7 24.36 0.8456 22.665 26.05
+8 27.71 1.0573 25.588 29.82</code></pre>
 <pre class="r"><code>cbind(d, nlsint(m, newdata = d))</code></pre>
-<pre><code>  supp dose   yhat    fit     se    lwr    upr
-1   VC  0.5  7.705  7.705 1.0885  5.525  9.886
-2   OJ  0.5 13.297 13.297 0.9857 11.322 15.272
-3   VC  1.0 17.602 17.602 0.9868 15.625 19.579
-4   OJ  1.0 22.405 22.405 0.7711 20.860 23.949
-5   VC  1.5 22.551 22.551 0.8758 20.796 24.305
-6   OJ  1.5 25.673 25.673 0.7342 24.202 27.144
-7   VC  2.0 25.026 25.026 0.7322 23.559 26.493
-8   OJ  2.0 26.845 26.845 1.0098 24.823 28.868</code></pre>
+<pre><code>  supp dose  yhat   fit     se    lwr   upr
+1   VC  0.5 10.07 10.07 0.6638  8.738 11.40
+2   OJ  0.5 13.71 13.71 0.8906 11.931 15.50
+3   VC  1.0 16.81 16.81 0.8102 15.190 18.43
+4   OJ  1.0 21.26 21.26 0.8275 19.606 22.92
+5   VC  1.5 21.33 21.33 0.8007 19.728 22.93
+6   OJ  1.5 25.42 25.42 0.8035 23.809 27.03
+7   VC  2.0 24.36 24.36 0.8456 22.665 26.05
+8   OJ  2.0 27.71 27.71 1.0573 25.588 29.82</code></pre>
 <p>The intervals are confidence intervals by default. Prediction
 intervals can be obtained using <code>interval = prediction</code> (as
 you would with the <code>predict</code> function with a linear
@@ -714,13 +742,13 @@ p &lt;- ggplot(ToothGrowth, aes(x = dose, y = len)) +
     alpha = 0.25, data = d) + 
   labs(x = &quot;Dose (mg/day)&quot;, y = &quot;Odontoblast Length&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-02-11-2026_files/figure-html/unnamed-chunk-28-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-02-11-2026_files/figure-html/unnamed-chunk-29-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>d &lt;- expand.grid(supp = c(&quot;OJ&quot;, &quot;VC&quot;), dose = seq(0, 2.25, length = 100))
 d &lt;- cbind(d, nlsint(m, newdata = d, interval = &quot;prediction&quot;))
 p &lt;- p + geom_ribbon(aes(x = dose, ymin = lwr, ymax = upr, y = NULL), 
   alpha = 0.25, data = d)
 plot(p)</code></pre>
-<p><img src="lecture-02-11-2026_files/figure-html/unnamed-chunk-28-2.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-02-11-2026_files/figure-html/unnamed-chunk-29-2.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
 </div>
 
 

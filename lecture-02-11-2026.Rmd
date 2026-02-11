@@ -258,6 +258,26 @@ lincon(m)
 ```
 This effectively causes `lincon` to use four sets of coefficients to make inferences about each parameter: `c(1,0,0,0)`, `c(0,1,0,0)`, `c(0,0,1,0)`, and `c(0,0,0,1)`.
 
+How about we constrain the model such that the expected response is zero when the dose is zero (although this may not be realistic here) such that the "intercept" $\beta_0 + \beta_1 = 0$, implying that $\beta_1 = -\beta_0$. 
+```{r}
+m <- nls(len ~ case_when(
+  supp == "OJ" ~ b0 - b0*2^(-dose/hoj),
+  supp == "VC" ~ b0 - b0*2^(-dose/hvc),
+  ), data = ToothGrowth, start = c(b0 = 28, hoj = 0.46, hvc = 0.46))
+  summary(m)$coefficients
+d <- expand.grid(dose = seq(0, 4, length = 100), supp = c("OJ","VC"))
+d$yhat <- predict(m, newdata = d)
+  
+p <- ggplot(ToothGrowth, aes(x = dose, y = len, color = supp)) +
+  geom_point(alpha = 0.5) + 
+  geom_line(aes(y = yhat), data = d) + 
+  labs(x = "Dose (mg/day)", y = "Odontoblast Length", color = "Supplement Type") + 
+  theme_minimal() + 
+  theme(legend.position = "inside", legend.position.inside = c(0.8,0.2))
+plot(p)
+lincon(m, a = c(0,-1,1))
+```
+
 ## Estimating a Linear Model with `nls`
 
 We can use `nls` to estimate a linear model. Consider the following linear model.
