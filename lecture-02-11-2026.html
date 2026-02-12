@@ -383,7 +383,7 @@ Recall that the “intercept” is <span class="math inline">\(\beta_0 +
 <code>lincon</code>.</p>
 <pre class="r"><code>m &lt;- nls(len ~ beta0 + beta1*2^(-dose/h), data = ToothGrowth, 
   start = list(beta0 = 32, beta1 = -33, h = 0.75))
-lincon(m, a = c(1,1,0)) # 1*b1 + 1*b2 + 0*h = b1 + b2</code></pre>
+lincon(m, a = c(1,1,0)) # 1*b0 + 1*b1 + 0*h = b0 + b1</code></pre>
 <pre><code>          estimate    se  lower upper tvalue df pvalue
 (1,1,0),0   -8.688 7.562 -23.83 6.455 -1.149 57 0.2554</code></pre>
 <p>Does this make sense?</p>

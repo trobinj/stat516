@@ -133,7 +133,7 @@ Recall that the "intercept" is $\beta_0 + \beta_1$. We can make inferences conce
 library(trtools)
 m <- nls(len ~ beta0 + beta1*2^(-dose/h), data = ToothGrowth, 
   start = list(beta0 = 32, beta1 = -33, h = 0.75))
-lincon(m, a = c(1,1,0)) # 1*b1 + 1*b2 + 0*h = b1 + b2
+lincon(m, a = c(1,1,0)) # 1*b0 + 1*b1 + 0*h = b0 + b1
 ```
 Does this make sense?
 
