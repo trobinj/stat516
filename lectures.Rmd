@@ -59,7 +59,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` **Holiday**.
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Assumptions](lecture-02-18-2026.html).
 
 `r i <- i + 1; d[i]` 
 
