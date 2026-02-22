@@ -11,7 +11,7 @@ This is a website is for Dr. Johnson's *Applied Regression Modeling* course (Sta
 
 <center>
 
-![https://xkcd.com/1347](http://imgs.xkcd.com/comics/t_distribution.png)
+![](heteroscedasticity.jpg)
 
 </center>
 
