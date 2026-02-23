@@ -1,0 +1,512 @@
+emmeans(m0, ~f1, submodel = m0)
+emmeans(m0, ~f1)
+emmeans(m, ~f1, submodel = m0)
+emmeans(m0, ~f1)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+summary(m)
+names(summary(m))
+sigma(m)
+summary(m)$sigma
+summary(m)$sigma <- 2
+?emmeans
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+install.packages(c("broom", "bslib", "carData", "data.table", "foreign", "gargle", "insight", "JointAI", "operator.tools", "QuickJSR", "segmented", "timechange", "timeDate", "uuid", "vctrs", "vroom", "xml2"))
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+?emmeans
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/hacks/sums_of_squares_types.R", echo = TRUE)
+ToothGrowth
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(ggplot2)
+library(Stat2Data)
+data(CrabShip)
+p <- ggplot(CrabShip, aes(x = Mass, y = Oxygen, color = Noise)) +
+geom_point() + theme_minimal() + theme(legend.position = c(0.1, 0.8)) +
+labs(y = "Oxygen Consumption (micromoles/hour)", x = "Mass (g)")
+plot(p)
+library(ggplot2)
+library(Stat2Data)
+data(CrabShip)
+p <- ggplot(CrabShip, aes(x = Mass, y = Oxygen, color = Noise)) +
+geom_point() + theme_minimal() + theme(legend.position = c(0.1, 0.8)) +
+labs(y = "Oxygen Consumption (micromoles/hour)", x = "Mass (g)")
+plot(p)
+lm(Oxygen ~ 0 + sqrt(Mass)*Noise - Noise, data = CrabShip)
+lm(Oxygen ~ 0 + sqrt(Mass):Noise - Noise, data = CrabShip)
+lm(Oxygen ~ 0 + sqrt(Mass)*Noise - Noise, data = CrabShip)
+lm(Oxygen ~ 0 + sqrt(Mass)*Noise - Noise, data = CrabShip) -> tmp
+tmp
+summary(m)$coefficients
+tmp <- update(ref_grid(m), sigma = 2)
+lm(Oxygen ~ 0 + sqrt(Mass)*Noise - Noise, data = CrabShip) -> tmp
+summary(tmp)
+lm(Oxygen ~ 0 + sqrt(Mass) + sqrt(Mass):noise, data = CrabShip) -> tmp
+lm(Oxygen ~ 0 + sqrt(Mass) + sqrt(Mass):Noise, data = CrabShip) -> tmp
+tmp
+tmp
+lm(Oxygen ~ 0 + sqrt(Mass) + sqrt(Mass):Noise, data = CrabShip)
+lm(Oxygen ~ 0 + sqrt(Mass) + sqrt(Mass)*Noise - Noise, data = CrabShip)
+lm(Oxygen ~ 0 + sqrt(Mass) + sqrt(Mass)*Noise - Noise, data = CrabShip) -> tmp
+summary(m)
+summary(tmp)
+install.packages(c("data.table", "foreign", "timechange", "vctrs", "vroom"))
+source("~/.active-rstudio-document", echo = TRUE)
+coins
+source("~/.active-rstudio-document", echo = TRUE)
+m
+source("~/.active-rstudio-document", echo = TRUE)
+?emmeans
+coins |> group_by(decades) |> summarize(n = n())
+dim(coins)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+mean(coins$weight)
+summary(m0)
+alr4::jevons
+library(tidyverse)
+set.seed(123)
+coins <- alr4::jevons |> uncount(n) |> group_by(Age) |>
+mutate(y = rnorm(n(), Weight, SD)) |>
+mutate(weight = SD * (y - mean(y))/sd(y) + Weight) |>
+mutate(decades = factor(Age)) |> select(decades, weight)
+m
+summary(m)
+emmeans(m, ~decades)
+?alr4::jevons
+source("~/.active-rstudio-document", echo = TRUE)
+dim(coins)
+c(123,78,32,17,24)/274
+32+27
+59/3
+32+27+25+20
+25+22+20
+25+22+20
+100-67
+33/2
+25+22+20+17+16
+m <- lm(weight ~ decades, data = coins, contrasts = list(decades = contr.sum))
+summary(m)$coefficients
+source("~/.active-rstudio-document", echo = TRUE)
+rmarkdown::render("lecture-02-02-2026.Rmd", output_format = "pdf_document")
+knitr::opts_chunk$set(comment = "", message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(abd)     # for the data
+library(ggplot2) # for plotting
+library(cowplot) # for use of the plot_grid function
+# boxplot
+p1 <- ggplot(MoleRats, aes(x = caste, y = ln.energy)) +
+geom_boxplot() + geom_point() + theme_minimal() +
+labs(x = "Caste", y = "Log Energy Expenditure (log kJ/Day)")
+# scatterplot
+p2 <- ggplot(MoleRats, aes(x = ln.mass, y = ln.energy, color = caste)) +
+geom_point() + theme_minimal() +
+theme(legend.position = "inside", legend.position.inside = c(0.9, 0.2)) +
+labs(x = "Log Mass (log g)", y = NULL, color = "Caste")
+# plot both plots side-by-side
+plot_grid(p1, p2, align = "h", rel_widths = c(1,3))
+MoleRats$energy <- exp(MoleRats$ln.energy)
+MoleRats$mass <- exp(MoleRats$ln.mass)
+summary(MoleRats)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+rmarkdown::render("lecture-02-02-2026.Rmd", output_format = "pdf_document")
+source("~/.active-rstudio-document", echo = TRUE)
+library(lubridate)
+x <- strsplit(this.path::this.path(), split = "/")[[1]]
+x <- strsplit(x[length(x)], split = "-")[[1]]
+date <- paste(x[2], x[3], year(Sys.Date()), sep = "-")
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE, abbr = FALSE)
+day <- day(mdy(date))
+knitr::opts_chunk$set(comment = "", message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+rm(list = ls())
+save.image()
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+summary(MoleRats)
+source("~/.active-rstudio-document", echo = TRUE)
+summary(MoleRats)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+contrast(m,
+a = list(ln.mass = c(4,4.5,5), caste = "worker"),
+b = list(ln.mass = c(4,4.5,5), caste = "lazy"))
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+contrast(m,
+a = list(ln.mass = 3, caste = c("worker","lazy")),
+b = list(ln.mass = 2, caste = c("worker","lazy")),
+cnames = c("worker rate","lazy rate"))
+source("~/.active-rstudio-document", echo = TRUE)
+rmarkdown::render("lecture-02-02-2026.Rmd", output_format = "pdf_document")
+install.packages("permallows")
+install.packages("PerMallows")
+install.packages("PerMallows")
+devtools::install_github("cran/PerMallows")
+remotes::install_github("cran/PerMallows")
+library(PerMallows)
+rmm(10, 1:5, 1)
+rmm(10, 1:5, 5)
+rmm(10, 1:5, 4)
+rmm(10, 1:5, 3)
+rmm(10, 1:5, 2)
+rmm(10, 1:5, 1)
+rmm(100, 1:5, 1)
+rmm(100, 1:5, -1)
+rmm(100, 1:5, -10)
+rmm(100, 1:5, 9)
+rmm(100, 1:5, 0)
+rmm(100, 1:5, 1)
+rmm(100, 1:5, 2)
+rmm(100, 1:5, 0)
+rmm(100, 1:5, 0.5)
+rmm(100, 1:5, 0.5, sampling.method = "distances")
+rmm(100, 1:5, 0, sampling.method = "distances")
+rmm(100, 1:5, 2, sampling.method = "distances")
+rmm(100, 1:5, -1, sampling.method = "distances")
+rmm(100, 1:5, 0, sampling.method = "distances")
+tmp <- rmm(1000, 1:5, 0, sampling.method = "distances")
+tmp <- rmm(10, 1:5, 0, sampling.method = "distances")
+tmp
+tmp <- rmm(10, 1:5, 0, sampling.method = "multistage")
+tmp
+tmp <- rmm(10, 1:5, 0, sampling.method = "distance")
+tmp <- rmm(10, 1:5, 0, sampling.method = "distances")
+tmp <- rmm(50, 1:5, 0, sampling.method = "distances")
+tmp <- rmm(500, 1:5, 0, sampling.method = "distances")
+tmp
+apply(tmp,2,mean)
+lmm(tmp)
+tmp <- rmm(500, 1:5, 1, sampling.method = "distances")
+tmp
+lmm(tmp)
+install.packages("rankdist")
+rmarkdown::render("lecture-02-02-2026.Rmd", output_format = "pdf_document")
+`netherlands_BL(1)` <- read.delim("C:/Users/trobi/Downloads/netherlands_BL(1).dat", header=FALSE)
+View(`netherlands_BL(1)`)
+ls()
+neterlands_BL(1) -> tmp
+`neterlands_BL(1)` -> tmp
+`neterlands_BL(1)` -> tmp
+tmp <- read.delim("C:/Users/trobi/Downloads/netherlands_BL(1).dat", header=FALSE)
+View(`netherlands_BL(1)`)
+tmp
+m <- glm(choice ~ I(rail_cost - car_cost) + I(rail_ivtt - car_ivtt), family = binomial, data = tmp)
+`netherlands_BL(1)` <- read.delim("C:/Users/trobi/Downloads/netherlands_BL(1).dat")
+View(`netherlands_BL(1)`)
+m <- glm(choice ~ I(rail_cost - car_cost) + I(rail_ivtt - car_ivtt), family = binomial, data = tmp)
+tmp <- read.delim("C:/Users/trobi/Downloads/netherlands_BL(1).dat")
+View(`netherlands_BL(1)`)
+tmp
+m <- glm(choice ~ I(rail_cost - car_cost) + I(rail_ivtt - car_ivtt), family = binomial, data = tmp)
+m
+summary(m)
+summary(m)
+m <- glm(1 - choice ~ I(rail_cost - car_cost) + I(rail_ivtt - car_ivtt), family = binomial, data = tmp)
+m
+m <- glm(choice ~ I(rail_cost - car_cost) + I(rail_ivtt - car_ivtt), family = binomial, data = tmp)
+m
+summary(m)$coefficients
+summary(m)$coefficients
+m <- glm(choice ~ I(rail_cost - car_cost) + I(rail_ivtt - car_ivtt), family = binomial(link = probit), data = tmp)
+summary(m)$coefficients
+m <- glm(choice ~ I(rail_cost - car_cost) + I(rail_ivtt - car_ivtt), family = binomial(link = probit), data = tmp)
+m <- glm(choice ~ I(car_cost - rail_cost) + I(rail_ivtt - car_ivtt), family = binomial, data = tmp)
+summary(m)$coefficients
+m <- glm(choice ~ I(car_cost - rail_cost) + I(car_ivtt - rail_ivtt), family = binomial, data = tmp)
+summary(m)$coefficients
+summary(m)$coefficients
+m <- glm(choice ~ I(car_cost - rail_cost) + I(rail_ivtt - car_ivtt), family = binomial, data = tmp)
+summary(m)$coefficients
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+tmp <- read.delim("C:/Users/trobi/Downloads/netherlands_BL(1).dat")
+tmp <- read.delim("C:/Users/trobi/Downloads/netherlands_BL(1).dat")
+tmp <- read.delim("C:/Users/trobi/Downloads/netherlands_BL(1).dat")
+source("~/.active-rstudio-document", echo = TRUE)
+install.packages(c("car", "checkmate", "dplyr", "ggplot2", "pkgload", "psych"))
+rmarkdown::render("lecture-02-04-2026.Rmd", output_format = "pdf_document")
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+?clotting
+?clot
+m <- lm(1/time ~ lot * log(conc), data = clot)
+summary(m)$coefficients
+m <- nls(time ~ ifelse(lot == "one", 1/(b0 + b2*log(conc)),
+1/(b0 + b1 + (b2 + b3)*log(conc))),
+data = clot, start = startingvalues)
+summary(m)$coefficients
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+startingvalues
+ls()
+m
+confint(m)
+source("~/Dropbox/finalgrades/dfwi.R", echo = TRUE)
+rmarkdown::render("lecture-02-06-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-02-06-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-02-06-2026.Rmd", output_format = "pdf_document")
+6.813^2
+install.packages(c("ggiraph", "insight", "lubridate", "performance", "viridisLite"))
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(ggplot2)
+library(Stat2Data)
+data(CrabShip)
+p <- ggplot(CrabShip, aes(x = Mass, y = Oxygen, color = Noise)) +
+geom_point() + theme_minimal() + theme(legend.position = c(0.1, 0.8)) +
+labs(y = "Oxygen Consumption (micromoles/hour)", x = "Mass (g)")
+plot(p)
+m <- lm(Oxygen ~ 0 + sqrt(Mass):Noise - Noise, data = CrabShip)
+summary(m)$coefficients''
+summary(m)
+m <- lm(Oxygen ~ 0 + sqrt(Mass):Noise - Noise, data = CrabShip)
+summary(m)
+m <- lm(Oxygen ~ 0 + sqrt(Mass)*Noise - Noise, data = CrabShip)
+m
+summary(m)
+rmarkdown::render("hw1-2026.Rmd", output_format = "pdf_document")
+m <- lm(Oxygen ~ 0 + sqrt(Mass):Noise - Noise, data = CrabShip)
+m
+m <- lm(Oxygen ~ 0 + sqrt(Mass)*Noise - Noise, data = CrabShip)
+m
+summary(m)
+m <- lm(Oxygen ~ 0 + sqrt(Mass)*Noise - Noise, data = CrabShip)
+summary(m)$coefficients
+summary(m)
+vcov(m)
+trtools::contrast(m,
+a = list(Mass = c(25,50,75), Noise = "ship"),
+b = list(Mass = c(25,50,75), Noise = "ambient"),
+cnames = c("20g","50g","75g"))
+rmarkdown::render("hw1-2026.Rmd", output_format = "pdf_document")
+1.055-e07
+1.055e07
+1.055e-07
+format(1.055e-07, scientific = FALSE)
+rmarkdown::render("hw1-2026.Rmd", output_format = "pdf_document")
+library(emmeans)
+emmeans
+?emmeans
+source("~/.active-rstudio-document", echo = TRUE)
+m
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-02-06-2026.Rmd", output_format = "pdf_document")
+install.packages("cluster")
+install.packages(c("collections", "deSolve", "doRNG", "permute", "restriktor", "robustbase", "tweedie"))
+rmarkdown::render("lecture-01-16-2026.Rmd", output_format = "pdf_document")
+install.packages(c("base64enc", "car", "cardx", "checkmate", "cluster", "deSolve", "doRNG", "dplyr", "gap", "ggiraph", "ggplot2", "globals", "insight", "lubridate", "network", "performance", "pkgload", "reformulas", "rgl", "srvyr", "tweedie", "vctrs", "viridisLite"))
+rm(list = ls())
+save.image()
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+library(MASS)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+detach("package:tidyr", unload = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(alr4)
+jevons
+library(dplyr)
+set.seed(123)
+coins <- alr4::jevons |> uncount(n) |> group_by(Age) |>
+mutate(y = rnorm(n(), Weight, SD)) |>
+mutate(weight = SD * (y - mean(y))/sd(y) + Weight) |>
+mutate(decades = factor(Age)) |> select(decades, weight)
+rmarkdown::render("hw1-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026.Rmd", output_format = "pdf_document")
+library(tidyr)
+rmarkdown::render("hw1-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026.Rmd", output_format = "pdf_document")
+eigen
+?eigen
+x <- matrix(rnorm(25), 5, 5)
+eigen(x)
+x <- matrix(runif(25), 5, 5)
+eigen(x)
+log(3,5)
+log(3,2)/log(2,5)
+source("~/.active-rstudio-document", echo = TRUE)
+rmarkdown::render("lecture-02-09-2026.Rmd", output_format = "pdf_document")
+install.packages("ggbrick")
+library(ggbrick)
+library(ggplot2)
+library(ggplot2)
+library(dplyr)
+mpg %>%
+count(class, drv) %>%
+ggplot() +
+geom_brick(aes(class, n, fill = drv)) +
+coord_brick()
+mpg %>%
+count(class, drv) %>%
+ggplot() +
+geom_waffle(aes(class, n, fill = drv)) +
+coord_waffle()
+?geom_waffle
+install.packages("fillpattern")
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+install.packages(c("AER", "gdtools", "gmp", "lattice", "pglm", "Rdpack", "vcdExtra"))
+install.packages(c("AER", "deSolve", "dplyr", "gap", "gdtools", "gmp", "lattice", "network", "Rdpack", "tidycensus", "tweedie", "vcdExtra", "vctrs"))
+rmarkdown::render("lecture-02-11-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-02-11-2025.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-02-11-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-02-11-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-02-13-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+install.packages(c("igraph", "psychotools"))
+install.packages(c("deSolve", "dplyr", "dtplyr", "gap", "gdtools", "gmp", "igraph", "lattice", "network", "popEpi", "tweedie", "vctrs"))
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+source("~/Dropbox/Teaching/s516/examples/whitemustard.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/whitemustard.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/pipeline.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/pipeline.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/pipeline.R", echo = TRUE)
+?pipeline
+source("~/Dropbox/Teaching/s516/examples/whitemustard.R", echo = TRUE)
+exp(log(0))
+S.alba
+source("~/Dropbox/Teaching/s516/examples/pipeline.R", echo = TRUE)
+?pipeline
+install.packages(c("multcompView", "tweedie"))
+source("~/Dropbox/Teaching/s516/examples/pipeline.R", echo = TRUE)
+?nlsint
+lm(Field ~ offset(Lab) + Lab, data = pipeline)
+lm(Field ~ 0 + offset(Lab) + Lab, data = pipeline)
+source("~/Dropbox/Teaching/s516/examples/pipeline.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/pipeline.R", echo = TRUE)
+?pipelne
+?pipeline
+source("~/Dropbox/Teaching/s516/examples/pipeline.R", echo = TRUE)
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+tidyr::select
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw1-2026-solutions.Rmd", output_format = "pdf_document")
+m
+summary(m)$coeffi
+source("/home/trjohns/Dropbox/Teaching/s516/s516_xxx/grooming.R", echo = TRUE)
+grooming
+rmarkdown::render("lecture-02-20-2026.Rmd", output_format = "pdf_document")
+install.packages(c("doFuture", "future.apply", "readr", "shiny"))
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+?clotting
+?clot
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+plot(predict(m),residual(m))
+plot(predict(m),residuals(m))
+m <- lm(1/time ~ lot * log(conc), data = clot)
+summary(m)$coefficients
+m <- nls(time ~ ifelse(lot == "one", 1/(b0 + b2*log(conc)),
+1/(b0 + b1 + (b2 + b3)*log(conc))),
+data = clot, start = startingvalues)
+summary(m)$coefficients
+library(trtools)
+nlsint
+?nlsint)
+?nlsint
+nlsint(m, residuals = TRUE)
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+m <- nls(time ~ ifelse(lot == "one", 1/(b0 + b2*log(conc)),
+1/(b0 + b1 + (b2 + b3)*log(conc))),
+data = clot, start = startingvalues)
+summary(m)$coefficients
+plot(predict(m), trtools::nlsint(m, residuals = TRUE)$res)
+?clot
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+m.glm
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+rstudent(m.glm)
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+plot(predict(m.glm), rstudent(m.glm))
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+plot(predict(m.glm), rstudent(m.glm))
+source("~/Dropbox/Teaching/s516/examples/clotting.R", echo = TRUE)
+nls()
+?nls
+-0.016544/-0.023908
+0.015354/0.023599
+install.packages(c("ggiraph", "xtable"))
+rmarkdown::render("lecture-02-23-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-02-23-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-02-23-2026.Rmd", output_format = "pdf_document")
