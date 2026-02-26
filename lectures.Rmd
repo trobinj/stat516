@@ -69,7 +69,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Iteratively weighted least squares, parametric models for heteroscedasticity, robust standard errors](lecture-02-25-2026.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [In-class demonstration of nonlinear regression and dealing with heteroscedasticity](lecture-02-27-2026.html).
  
 ***
 
