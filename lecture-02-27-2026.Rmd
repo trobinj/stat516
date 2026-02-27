@@ -48,6 +48,8 @@ tex <- function(x, html = knitr::opts_chunk$get("dev") %in% c("png","pdf")) {
 }
 ```
 
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
 ## The Michaelis-Menten Model
 
 The Michaelis-Menten model is perhaps the quintessential example of an application of nonlinear regression. It is from biochemistry and concerns the relationship between the (expected) rate of an enzymatic reaction to the concentration of an enzymatic substrate (i.e., the material of the reaction). As a nonlinear regression model the Michaelis-Menten model can be written as

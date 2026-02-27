@@ -296,7 +296,7 @@ $$
     1/\sigma_h^2, & \text{if the $i$-th observation is from the hypolimnion layer}.
   \end{cases}
 $$
-We do not know $\sigma_e^2$, $\sigma_t^2$, and $\sigma_h^2$, but they could be *estimated* using the sample variances $s_e^2$, $s_t^2$, and $s_h^2$, respectively, which we can easily compute since we have multiple observations from each layer. Estimate the model using weighted least squares with weights computed as described above. The sample variances can be computed and used to add weights to the data frame using functions from the **dplyr** package as demonstrated with the `CancerSurvival` data in [lecture](lecture-02-14-2025.html).
+We do not know $\sigma_e^2$, $\sigma_t^2$, and $\sigma_h^2$, but they could be *estimated* using the sample variances $s_e^2$, $s_t^2$, and $s_h^2$, respectively, which we can easily compute since we have multiple observations from each layer. Estimate the model using weighted least squares with weights computed as described above. The sample variances can be computed and used to add weights to the data frame using functions from the **dplyr** package as demonstrated with the `CancerSurvival` data in lecture.
 
     **Solution**: First we compute the weights using functions from the **dplyr** package.
     ```{r}
@@ -318,7 +318,7 @@ $$
     \sigma_h^2, & \text{if the $i$-th observation is from the hypolimnion layer},
   \end{cases}
 $$
-another approach would be to use a *parametric model* that estimates the usual parameters of the regression model (i.e., $\beta_0$, $\beta_1$, and $\beta_3$) and the three variances above *simultaneously*. Do this using the `gls` function from the **nlme** package as demonstrated in [lecture](lecture-02-19-2025.html).
+another approach would be to use a *parametric model* that estimates the usual parameters of the regression model (i.e., $\beta_0$, $\beta_1$, and $\beta_3$) and the three variances above *simultaneously*. Do this using the `gls` function from the **nlme** package as demonstrated in lecture.
 
 
     **Solution**: Here is how we would estimate this model.
@@ -337,7 +337,7 @@ another approach would be to use a *parametric model* that estimates the usual p
     ```
     We will discuss maximum likelihood and perhaps restricted maximum likelihood later in the course.
 
-3. With counts it is often assumed that the variance is proportional to the expected response --- i.e., $\text{Var}(Y_i) \propto E(Y_i)$. Assuming that is true here, estimate the model using *iteratively weighted least squares* as was demonstrated in [lecture](lecture-02-19-2025.html).
+3. With counts it is often assumed that the variance is proportional to the expected response --- i.e., $\text{Var}(Y_i) \propto E(Y_i)$. Assuming that is true here, estimate the model using *iteratively weighted least squares* as was demonstrated in lecture.
 
     **Solution**: We can program the iteratively weighted least squares algorithm as follows.
     ```{r}
