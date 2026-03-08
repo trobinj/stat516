@@ -511,7 +511,7 @@ p &lt;- ggplot(bliss, aes(x = concentration, y = dead/exposed)) +
     y = &quot;Proportion of Beetles Dying&quot;)
 plot(p)</code></pre>
 <p><img src="lecture-03-09-2026_files/figure-html/unnamed-chunk-10-1.png" alt="" width="100%" style="display: block; margin: auto;" />
-Predicted probabilities, with confidence intervals, can also be obtained
+Estimated probabilities, with confidence intervals, can also be obtained
 using <code>contrast</code> or <code>glmint</code>. Note that the
 function <span class="math inline">\(e^x/(1+e^x)\)</span> is known to R
 as <code>plogis</code>.</p>
@@ -545,7 +545,18 @@ head(d)</code></pre>
   labs(x = &quot;Concentration of Carbon Disulphide (mg/liter)&quot;,
     y = &quot;Proportion of Beetles Dying&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-03-09-2026_files/figure-html/unnamed-chunk-11-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-03-09-2026_files/figure-html/unnamed-chunk-11-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+We can also use the <strong>emmeans</strong> package to get estimated
+probabilities.</p>
+<pre class="r"><code>library(emmeans)
+emmeans(m, ~concentration, at = list(concentration = c(50,60,70)), type = &quot;response&quot;)</code></pre>
+<pre><code> concentration   prob     SE  df asymp.LCL asymp.UCL
+            50 0.0871 0.0199 Inf    0.0551     0.135
+            60 0.5354 0.0326 Inf    0.4712     0.598
+            70 0.9330 0.0157 Inf    0.8949     0.958
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the logit scale </code></pre>
 </div>
 <div id="parameter-and-contrast-interpretation-odds-ratios"
 class="section level2">
@@ -713,7 +724,7 @@ Fractional
 </table>
 <p>It is important to note that probabilities and odds are related but
 not equal.
-<img src="lecture-03-09-2026_files/figure-html/unnamed-chunk-13-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+<img src="lecture-03-09-2026_files/figure-html/unnamed-chunk-14-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 Let <span class="math inline">\(O_i\)</span> be the odds for the <span
 class="math inline">\(i\)</span>-th observation. Then <span
 class="math inline">\(O_i = p_i/(1-p_i)\)</span> and <span
@@ -745,7 +756,7 @@ p &lt;- ggplot(d, aes(x = concentration, y = odds)) +
   labs(x = &quot;Concentration of Carbon Disulphide (mg/liter)&quot;,
     y = &quot;Odds of Beetles Dying&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-03-09-2026_files/figure-html/unnamed-chunk-15-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-03-09-2026_files/figure-html/unnamed-chunk-16-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 The model for the odds is “log-linear” like the model for expected
 counts in Poisson regression. To interpret the parameters of a logistic
 regression model, we can use <em>odds ratios</em> which are similar to
@@ -792,6 +803,19 @@ concentration 1.283e+00 1.233e+00 1.341e+00</code></pre>
   b = list(concentration = 1))</code></pre>
 <pre><code> estimate lower upper
     1.283  1.23 1.338</code></pre>
+<p>Now using the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>pairs(emmeans(m, ~concentration, at = list(concentration = c(2,1))), 
+  type = &quot;response&quot;, infer = TRUE)</code></pre>
+<pre><code> contrast                        odds.ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ concentration2 / concentration1       1.28 0.0274 Inf      1.23      1.34    1  11.652 &lt;0.0001
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<p>Although <code>type = "response"</code> gave probabilities when using
+<code>emmeans</code> along, when using it with <code>pairs</code> it is
+assumed that we want odds ratios, <em>not</em> ratios of probabilities
+(also known as a “risk ratio”).</p>
 <p>An odds ratio is then simply the ratio of the odds at two different
 values of an explanatory variable. We could compute the odds ratio, for
 example, for an increase of 1, 5, 10, and 20 mg/liter.</p>
@@ -876,7 +900,7 @@ p &lt;- ggplot(BrookTrout, aes(x = trout, y = salmon.survived/salmon.released)) 
   labs(x = &quot;Presence/Absence of\n Brook Trout&quot;,
     y = &quot;Proportion of Released Salmon Surviving&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-03-09-2026_files/figure-html/unnamed-chunk-19-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-03-09-2026_files/figure-html/unnamed-chunk-21-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>m &lt;- glm(cbind(salmon.survived, salmon.released - salmon.survived) ~ trout,
   data = BrookTrout, family = binomial)
 cbind(summary(m)$coefficients, confint(m))</code></pre>
@@ -907,7 +931,22 @@ prob @ absent    0.2142 0.2024 0.2266</code></pre>
 <pre><code>               estimate  lower  upper
 odds @ present   0.2371 0.2206 0.2548
 odds @ absent    0.2726 0.2537 0.2929</code></pre>
-<p>The odds ratios are then simply a ratio of these odds.</p>
+<p>The odds ratios are then simply a ratio of these odds. Here is how we
+can obtain odds ratios using the <strong>emmeans</strong> package.</p>
+<pre class="r"><code>pairs(emmeans(m, ~trout), type = &quot;response&quot;, infer = TRUE)</code></pre>
+<pre><code> contrast         odds.ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ absent / present       1.15 0.0596 Inf      1.04      1.27    1   2.691  0.0071
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~trout), type = &quot;response&quot;, infer = TRUE, reverse = TRUE)</code></pre>
+<pre><code> contrast         odds.ratio     SE  df asymp.LCL asymp.UCL null z.ratio p.value
+ present / absent       0.87 0.0451 Inf     0.786     0.963    1  -2.691  0.0071
+
+Confidence level used: 0.95 
+Intervals are back-transformed from the log odds ratio scale 
+Tests are performed on the log odds ratio scale </code></pre>
 <p><strong>Example</strong>: Consider the following study of the
 germination of five varieties of soybean seeds. Note that each
 observation was the number of seeds that <em>failed</em> to germinate
@@ -928,7 +967,7 @@ out of 100 seeds.</p>
   geom_jitter(height = 0, width = 0.1) + theme_minimal() + 
   labs(x = &quot;Soybean Variety&quot;, y = &quot;Proportion Germinated&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-03-09-2026_files/figure-html/unnamed-chunk-22-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
+<p><img src="lecture-03-09-2026_files/figure-html/unnamed-chunk-25-1.png" alt="" width="100%" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>m &lt;- glm(cbind(100 - failure, failure) ~ variety, family = binomial, data = faraway::soybean)
 exp(cbind(coef(m), confint(m)))</code></pre>
 <pre><code>                         2.5 %  97.5 %
