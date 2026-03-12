@@ -85,7 +85,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Logistic regression --- continued](lecture-03-11-2026.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Using the **emmeans** package, the relationship between logistic and Poisson regression for rare events, and separation](lecture-03-13-2026.html).
  
 ***
 
