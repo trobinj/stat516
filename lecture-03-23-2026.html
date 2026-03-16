@@ -303,6 +303,12 @@ specifying facets.</p>
   labs(y = &quot;Field Sprayed?&quot;, x = &quot;Number of Skylark Fledglings&quot;) 
 plot(p)</code></pre>
 <p><img src="lecture-03-23-2026_files/figure-html/unnamed-chunk-5-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+We can use color for field to “condense” the plot a bit.</p>
+<pre class="r"><code>p &lt;- ggplot(skylark, aes(x = count, y = spray, color = field)) + 
+  geom_point() + facet_grid(year ~ .) + theme_minimal() + 
+  labs(y = &quot;Field Sprayed?&quot;, x = &quot;Number of Skylark Fledglings&quot;, color = &quot;Field&quot;) 
+plot(p)</code></pre>
+<p><img src="lecture-03-23-2026_files/figure-html/unnamed-chunk-6-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 The plots clearly shows the incomplete nature of the fractional
 factorial design. In any given year, a field either was or was not
 sprayed. The objective is to investigate the effect of spraying on the
@@ -350,7 +356,7 @@ p &lt;- ggplot(ex2116, aes(x = Dose, y = Tumor/Total)) +
    geom_point(alpha = 0.5) + theme_minimal() + ylim(0, 1) + 
    labs(x = &quot;Dose (ppm)&quot;, y = &quot;Proportion of Trout With Liver Tumors&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-03-23-2026_files/figure-html/unnamed-chunk-7-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-03-23-2026_files/figure-html/unnamed-chunk-8-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 Note that <code>Tumor</code> is the number of trout in a tank that
 developed tumors, and <code>Total</code> is the number of trout in the
 tank. The goal here is to estimate the effect of aflatoxicol on the risk

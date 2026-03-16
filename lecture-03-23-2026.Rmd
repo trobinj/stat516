@@ -77,6 +77,13 @@ p <- ggplot(skylark, aes(x = count, y = spray)) +
   labs(y = "Field Sprayed?", x = "Number of Skylark Fledglings") 
 plot(p)
 ```
+We can use color for field to "condense" the plot a bit.
+```{r, fig.height = 2}
+p <- ggplot(skylark, aes(x = count, y = spray, color = field)) + 
+  geom_point() + facet_grid(year ~ .) + theme_minimal() + 
+  labs(y = "Field Sprayed?", x = "Number of Skylark Fledglings", color = "Field") 
+plot(p)
+```
 The plots clearly shows the incomplete nature of the fractional factorial design. In any given year, a field either was or was not sprayed. The objective is to investigate the effect of spraying on the number of fledglings while controlling for the effects of year and field. 
 
 [^skylark]: Odderskær, P., Prang, A., Eknegaard, N., & Andersen, P. N. (1997). Skylark reproduction in pesticide treated fields (Comparative studies of Alauda arvensis breeding performance in sprayed and unsprayed barley fields). *Bekæmpelsesmiddelforskning fra Miljøstyrelsennr*, 32, National Environmental Research Institute, Ministry of the Environment and Energy, Denmark: Danish Environmental Protection Agency. 
