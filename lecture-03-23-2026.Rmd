@@ -1,0 +1,139 @@
+---
+output:
+  html_document:
+    theme: readable
+  pdf_document: default
+  word_document: default
+---
+
+```{r, echo = FALSE, message = FALSE}
+library(lubridate)
+x <- strsplit(this.path::this.path(), split = "/")[[1]]
+x <- strsplit(x[length(x)], split = "-")[[1]]
+date <- paste(x[2], x[3], year(Sys.Date()), sep = "-")
+weekday <- wday(mdy(date), label = TRUE, abbr = FALSE)
+month <- month(mdy(date), label = TRUE, abbr = FALSE)
+day <- day(mdy(date))
+```
+
+---
+title: `r paste(weekday, ", ", month, " ", day, sep = "")`
+output:
+  html_document: 
+    theme: readable
+  pdf_document: default
+urlcolor: blue
+header-includes:
+  - \usepackage{float}
+  - \usepackage{booktabs}
+  - \usepackage{array}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(comment = "", message = FALSE, out.width = "100%", fig.align = "center", cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+```
+
+```{r packages, echo = FALSE}
+library(tidyverse)
+suppressWarnings(library(kableExtra))
+```
+
+```{r, echo = FALSE}
+options(digits = 4, width = 100)
+```
+
+```{r, echo = FALSE}
+ktbl <- function(d, caption = NULL, align = "c") {
+  d %>% kable(format = ifelse(knitr::is_html_output(), "html", "latex"), 
+    booktabs = TRUE, linesep = "", align = align, escape = FALSE, caption = caption) %>%
+    kable_styling(full_width = FALSE, bootstrap_options = "hover", latex_options = "hold_position")
+}
+
+tex <- function(x, html = knitr::opts_chunk$get("dev") %in% c("png","pdf")) {
+  ifelse(html, latex2exp::TeX(x), x)
+}
+```
+
+`r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
+
+
+This demonstration features the estimation of Poisson and logistic regression models, and the interpretation of rate and odds ratios. 
+
+## Impact of Pesticides on Skylark Reproductivity
+
+During the four summers from 1992 to 1995 researchers from the National Environmental Research Institute in the Ministry of Environment and Energy in Denmark conducted a study to examine how pesticide use impacts skylark reproduction in barley fields.[^skylark] The study used a fractional factorial design in which each year two of four fields were sprayed with pesticides while the other two fields were not.[^ff] Which fields were sprayed was alternated so that a field was sprayed every other year. The number of fledgling skylarks produced in each field each year was recorded. The data are in the `skylark` data frame from the **trtools** package. The data are plotted below.
+```{r, fig.height = 6}
+library(trtools)
+library(ggplot2)
+p <- ggplot(skylark, aes(x = spray, y = count)) + 
+   geom_point() + facet_grid(field ~ year) + theme_minimal() + 
+   labs(x = "Field Sprayed?", y = "Number of Skylark Fledglings")
+plot(p)
+```
+Here is another way to visualize the data that flips the axes and "combines" the `field` and `year` variables when specifying facets.
+```{r, fig.height = 6}
+p <- ggplot(skylark, aes(x = count, y = spray)) + 
+  geom_point() + facet_grid(field + year ~ .) + theme_minimal() + 
+  labs(y = "Field Sprayed?", x = "Number of Skylark Fledglings") 
+plot(p)
+```
+The plots clearly shows the incomplete nature of the fractional factorial design. In any given year, a field either was or was not sprayed. The objective is to investigate the effect of spraying on the number of fledglings while controlling for the effects of year and field. 
+
+[^skylark]: Odderskær, P., Prang, A., Eknegaard, N., & Andersen, P. N. (1997). Skylark reproduction in pesticide treated fields (Comparative studies of Alauda arvensis breeding performance in sprayed and unsprayed barley fields). *Bekæmpelsesmiddelforskning fra Miljøstyrelsennr*, 32, National Environmental Research Institute, Ministry of the Environment and Energy, Denmark: Danish Environmental Protection Agency. 
+
+[^ff]: A [fractional factorial design](https://en.wikipedia.org/wiki/Fractional_factorial_design) is a design in which observations are made at only a subset of the possible combinations of levels of two or more factors. Such designs are quite economical but can preclude the estimation of interactions. This does not mean that such interactions are not present, but rather that if they are they are confounded with the main effects. For this particular design it is only possible to fully estimate a model with "main effects" for each of the three factors. Ideally factional factorial designs are used when interactions are negligible. 
+
+1. Estimate a Poisson regression model for the number of skylark fledglings as your response variable that will reproduce the following results.
+    ```{r, echo = 2}
+    m <- glm(count ~ spray + field + year, family = poisson, data = skylark)
+    cbind(summary(m)$coefficients, confint(m))
+    ```
+Note that here `m` is a model object created using the `glm` function. 
+
+2. What is the estimated rate ratio for the effect of spraying? How can this be interpreted?
+  
+3. What is the estimated expected number of fledglings for each condition? 
+  
+## Aflatoxicol and Liver Tumors in Trout
+
+The data in the data frame `ex2116` in the **Sleuth3** package are from an experiment that investigated the relationship between aflatoxicol and liver tumors in trout. The figure below shows the proportion of trout in each tank that developed liver tumors as well as the dose of aflatoxicol to which the trout were exposed. Aflatoxicol is a metabolite of [Aflatoxin B1](https://en.wikipedia.org/wiki/Aflatoxin), a toxic by-product produced by a mold that infects some nuts and grains. Twenty tanks of rainbow trout embryos were exposed to one of five doses of aflatoxicol for one hour. The number of fish in each tank that developed liver tumors one year later was then observed. The plot below shows the data. 
+```{r, fig.height = 4}
+library(Sleuth3)
+library(ggplot2)
+p <- ggplot(ex2116, aes(x = Dose, y = Tumor/Total)) + 
+   geom_point(alpha = 0.5) + theme_minimal() + ylim(0, 1) + 
+   labs(x = "Dose (ppm)", y = "Proportion of Trout With Liver Tumors")
+plot(p)
+```
+Note that `Tumor` is the number of trout in a tank that developed tumors, and `Total` is the number of trout in the tank. The goal here is to estimate the effect of aflatoxicol on the risk of liver tumors in trout. Here we will consider three different logistic regression models.
+
+1. Estimating a logistic regression model for the probability of tumor development as a function of the dose of aflatoxicol as a quantitative explanatory variable. You should be able to replicate the following results.
+    ```{r, echo = 2}
+    m <- glm(cbind(Tumor, Total-Tumor) ~ Dose, family = binomial, data = ex2116)
+    cbind(summary(m)$coefficients, confint(m))
+    ```
+    Plot the model with the raw data, and estimate and interpret the odds ratio for the effect of increasing dose by 0.05 ppm.[^ppm] 
+    
+0. Estimate a logistic regression model like the one above but using the logarithm of the dose as the explanatory variable (i.e., apply a log transformation to dose). You should be able to replicate the following results.
+    ```{r, echo = 2}
+    m <- glm(cbind(Tumor, Total-Tumor) ~ log(Dose), family = binomial, data = ex2116)
+    cbind(summary(m)$coefficients, confint(m))
+    ```
+    Plot the model with the raw data, and estimate and interpret the odds ratio for the effect of *doubling* the dose of aflatoxicol.
+
+0. Rather than trying to decide between using dose or some transformation of dose in the model, we can instead define dose as a 5-level factor. With this we do not need to assume a particular mathematical relationship between dose and the probability (or odds) of tumor development. But there are a couple of disadvantages. One is that inferences are limited to those dose values used in the study. Another is that it requires more parameters which can result in larger standard errors. There are two ways we could specify dose as a factor. One would be to create a new variable.
+    ```{r}
+    ex2116$Dosef <- factor(ex2116$Dose)
+    ```
+The levels of `Dosef` will be the original values of `Dose` but converted to strings, which we can see if we use the `levels` function.
+    ```{r}
+    levels(ex2116$Dosef)
+    ```
+Another approach is to replace `Dose` in the model formula with `factor(Dose)`. Using this latter approach estimate a logistic regression model with dose as a categorical explanatory variable. Also estimate and interpret the odds ratios for the effect of a dose of 0.025 ppm versus 0.01 ppm, 0.05 ppm versus 0.01 ppm, 0.1 ppm versus 0.01 ppm, and 0.25 ppm versus 0.01 ppm.[^string] 
+
+0. Estimate the odds and probability of tumor development at each value of dose used in the study for any of the three models.
+
+
+[^ppm]: Here $e^{\beta_1}$ would be the odds ratio for the effect of increasing dose by 1 ppm. However that is probably not a realistic effect as it would be a relatively large increase in dose. The study only considered up to 0.25 ppm. Using `contrast` is convenient here to estimate the odds ratio for the effect of an arbitrary change in dose. 
+
+[^string]: Note that how you specify the levels of dose will depend on whether you created a new variable like `Dosef` or converted it to a factor within the model formula with `factor(Dose)`. For the latter you will need to specify dose as a *number* but if you created it to a new variable you will need to specify it as a *string* by enclosing it in quotes.
