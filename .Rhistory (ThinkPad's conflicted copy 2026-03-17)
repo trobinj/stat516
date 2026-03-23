@@ -1,0 +1,512 @@
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d
+is.data.frame(d)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("~/.active-rstudio-document", echo = TRUE)
+f
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d
+?strats_with
+?starts_with
+library(MuMIn)
+?dredge
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+warnings()
+source("~/.active-rstudio-document", echo = TRUE)
+d
+head(d)
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d
+head(d)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+d
+summary(d)
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d$rat
+table(d$rat)
+ls -al
+library(alr4)
+library(tidyverse)
+set.seed(123)
+coins <- jevons |> uncount(n) |> group_by(Age) |>
+mutate(y = rnorm(n(), Weight, SD)) |>
+mutate(weight = SD * (y - mean(y))/sd(y) + Weight) |>
+mutate(decades = factor(Age)) |> dplyr::select(decades, weight)
+coins
+jevons
+source("~/.active-rstudio-document", echo = TRUE)
+coins
+lm(weight ~ decades, data = coins)
+m <- lm(weight ~ decades, data = coins)
+summary(m)$coefficients
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+a
+d
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+tmp
+head(d)
+head(tmp)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d
+tmp
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+tmp
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+dot_plot
+geom_dotplot()
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+?geom_dotplot
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+?geom_size
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d
+?case_when
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+rlang::last_trace()
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+rlang::last_trace()
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d
+d |> group_by(group,treatment,amount) |> summary(n = n())
+d |> group_by(group,treatment,amount) |> summarize(n = n())
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+p <- ggplot(tmp, aes(x = diet, y = y/28)) + theme_minimal() +
+geom_count() |> facet_wrap(~ group+treatment, nrow = 8)
+?facet_wrap
+p <- ggplot(tmp, aes(x = diet, y = y/28)) + theme_minimal() +
+geom_count() |> facet_wrap(vars(treatment,amount), nrow = 8)
+p <- ggplot(tmp, aes(x = diet, y = y/28)) + theme_minimal() +
+geom_count() |> facet_wrap(vars(treatment,amount), ncol = 8)
+p <- ggplot(tmp, aes(x = diet, y = y/28)) + theme_minimal() +
+geom_count() |> facet_wrap(vars(treatment,amount), nrow = 1, ncol = 8)
+p <- ggplot(tmp, aes(x = diet, y = y/28)) + theme_minimal() +
+geom_count() + facet_wrap(vars(treatment,amount), nrow = 1, ncol = 8)
+plot(p)
+rlang::last_trace()
+p <- ggplot(tmp, aes(x = treatment, y = y/28)) + theme_minimal() +
+geom_count() + facet_wrap(~group, nrow = 1, ncol = 8)
+plot(p)
+p <- ggplot(tmp, aes(x = treatment, y = y/28)) + theme_minimal() +
+geom_count() + facet_wrap(~amount)
+plot(p)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d |> group_by(group,treatment,amount) |> summarize(n = n())
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+?facet_grid
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+?facet_grid
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d |> group_by(group,treatment,amount) |> summarize(m = mean(y/28))
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+p <- ggplot(d, aes(x = amount, y = y/28, color = treatment)) + theme_minimal() +
+geom_count(position = position_dodge(width = 0.25)) +
+facet_grid(. ~ group, space = "free", scales = "free") +
+flip_cord()
+p <- ggplot(d, aes(x = amount, y = y/28, color = treatment)) + theme_minimal() +
+geom_count(position = position_dodge(width = 0.25)) +
+facet_grid(. ~ group, space = "free", scales = "free") +
+coord_flip()
+plot(p)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+p <- ggplot(d, aes(x = amount, y = y/28, color = treatment)) + theme_minimal() +
+geom_count(position = position_dodge(width = 0.25)) +
+facet_grid(. ~ group, space = "free", scales = "free") +
+guides(size = "none")
+plot(p)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+seq(180, 165, 15)
+seq(180, 165, by = 15)
+seq(180, 0, by = 15)
+seq(0, 180, by = 15)
+length(seq(0, 180, by = 15))
+length(seq(0, 165, by = 15))
+13+12
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+?pivot_longer
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d
+?group_by
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d
+install.packages(c("CVXR", "fs", "highr", "later", "lme4", "nleqslv", "ragg", "RcppGSL", "RcppParallel", "rgl", "systemfonts", "textshaping"))
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+names(d) <- c("rat","diet", "rep", paste("s", 1:28, sep = ""))
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d
+View(d)
+library(tidyverse)
+a <- "https://www2.stat.duke.edu/courses/Spring01/sta114/data/Andrews/T43.1"
+d <- read.table(a)[,-c(1:3)]
+names(d) <- c("rat","diet", "rep", paste("s", 1:28, sep = ""))
+d <- d |>
+mutate(group = case_when(
+diet == 1 ~ "NC",
+.default = "CC"
+)) |>
+mutate(treatment = case_when(
+diet %in% c(3,4,5) ~ "A",
+diet %in% c(6,7,8) ~ "B",
+.default = "none"
+)) |>
+mutate(amount = case_when(
+diet %in% c(3,6) ~ "0.25%",
+diet %in% c(4,7) ~ "0.50%",
+diet %in% c(5,8) ~ "1.00%",
+.default = "0.00%"
+)) |>
+mutate(group = factor(group, levels = c("NC","CC"))) |>
+pivot_longer(s1:s28, names_to = "surface", values_to = "decay") |>
+mutate(decay = factor(decay, levels = 0:2, labels = c("none","enamel","dentin")))
+d
+d |> filter(rat == 17)
+library(tidyverse)
+a <- "https://www2.stat.duke.edu/courses/Spring01/sta114/data/Andrews/T43.1"
+d <- read.table(a)[,-c(1:3)]
+names(d) <- c("rat","diet", "rep", paste("s", 1:28, sep = ""))
+d <- d |>
+mutate(group = case_when(
+diet == 1 ~ "NC",
+.default = "CC"
+)) |>
+mutate(treatment = case_when(
+diet %in% c(3,4,5) ~ "A",
+diet %in% c(6,7,8) ~ "B",
+.default = "none"
+)) |>
+mutate(amount = case_when(
+diet %in% c(3,6) ~ "0.25%",
+diet %in% c(4,7) ~ "0.50%",
+diet %in% c(5,8) ~ "1.00%",
+.default = "0.00%"
+))
+d
+d |> filter(rat == 17)
+a <- "https://www2.stat.duke.edu/courses/Spring01/sta114/data/Andrews/T43.1"
+d <- read.table(a)[,-c(1:3)]
+names(d) <- c("rat","diet", "rep", paste("s", 1:28, sep = ""))
+d <- d |>
+mutate(group = case_when(
+diet == 1 ~ "NC",
+.default = "CC"
+)) |>
+mutate(treatment = case_when(
+diet %in% c(3,4,5) ~ "A",
+diet %in% c(6,7,8) ~ "B",
+.default = "none"
+)) |>
+mutate(amount = case_when(
+diet %in% c(3,6) ~ "0.25%",
+diet %in% c(4,7) ~ "0.50%",
+diet %in% c(5,8) ~ "1.00%",
+.default = "0.00%"
+)) |>
+mutate(group = factor(group, levels = c("NC","CC")))
+d |> filter(rat == 17)
+a <- "https://www2.stat.duke.edu/courses/Spring01/sta114/data/Andrews/T43.1"
+d <- read.table(a)[,-c(1:3)]
+names(d) <- c("rat","diet", "rep", paste("s", 1:28, sep = ""))
+d <- d |>
+mutate(group = case_when(
+diet == 1 ~ "NC",
+.default = "CC"
+)) |>
+mutate(treatment = case_when(
+diet %in% c(3,4,5) ~ "A",
+diet %in% c(6,7,8) ~ "B",
+.default = "none"
+)) |>
+mutate(amount = case_when(
+diet %in% c(3,6) ~ "0.25%",
+diet %in% c(4,7) ~ "0.50%",
+diet %in% c(5,8) ~ "1.00%",
+.default = "0.00%"
+)) |>
+mutate(group = factor(group, levels = c("NC","CC"))) |>
+pivot_longer(s1:s28, names_to = "surface", values_to = "decay")
+d |> filter(rat == 17)
+d |> filter(rat == 17) |> print(n = Inf)
+d
+a <- "https://www2.stat.duke.edu/courses/Spring01/sta114/data/Andrews/T43.1"
+d <- read.table(a)[,-c(1:3)]
+names(d) <- c("rat","diet", "rep", paste("s", 1:28, sep = ""))
+d <- d |>
+mutate(group = case_when(
+diet == 1 ~ "NC",
+.default = "CC"
+)) |>
+mutate(treatment = case_when(
+diet %in% c(3,4,5) ~ "A",
+diet %in% c(6,7,8) ~ "B",
+.default = "none"
+)) |>
+mutate(amount = case_when(
+diet %in% c(3,6) ~ "0.25%",
+diet %in% c(4,7) ~ "0.50%",
+diet %in% c(5,8) ~ "1.00%",
+.default = "0.00%"
+)) |>
+mutate(group = factor(group, levels = c("NC","CC"))) |>
+pivot_longer(s1:s28, names_to = "surface", values_to = "decay") |>
+mutate(decay = factor(decay, levels = 0:2, labels = c("none","enamel","dentin")))
+d |> filter(rat == 17) |> print(n = Inf)
+a <- "https://www2.stat.duke.edu/courses/Spring01/sta114/data/Andrews/T43.1"
+d <- read.table(a)[,-c(1:3)]
+names(d) <- c("rat","diet", "rep", paste("s", 1:28, sep = ""))
+d <- d |>
+mutate(group = case_when(
+diet == 1 ~ "NC",
+.default = "CC"
+)) |>
+mutate(treatment = case_when(
+diet %in% c(3,4,5) ~ "A",
+diet %in% c(6,7,8) ~ "B",
+.default = "none"
+)) |>
+mutate(amount = case_when(
+diet %in% c(3,6) ~ "0.25%",
+diet %in% c(4,7) ~ "0.50%",
+diet %in% c(5,8) ~ "1.00%",
+.default = "0.00%"
+)) |>
+mutate(group = factor(group, levels = c("NC","CC")))
+d |> filter(rat == 17) |> print(n = Inf)
+d |> filter(rat == 17) |> print(n = Inf)
+library(tidyverse)
+a <- "https://www2.stat.duke.edu/courses/Spring01/sta114/data/Andrews/T43.1"
+d <- read.table(a)[,-c(1:3)]
+names(d) <- c("rat","diet", "rep", paste("s", 1:28, sep = ""))
+d <- d |>
+mutate(group = case_when(
+diet == 1 ~ "NC",
+.default = "CC"
+)) |>
+mutate(treatment = case_when(
+diet %in% c(3,4,5) ~ "A",
+diet %in% c(6,7,8) ~ "B",
+.default = "none"
+)) |>
+mutate(amount = case_when(
+diet %in% c(3,6) ~ "0.25%",
+diet %in% c(4,7) ~ "0.50%",
+diet %in% c(5,8) ~ "1.00%",
+.default = "0.00%"
+)) |>
+mutate(group = factor(group, levels = c("NC","CC")))
+d |> filter(rat == 17) |> print(n = Inf)
+d |> filter(rat == 17)
+d |> filter(rat == 16)
+library(tidyverse)
+a <- "https://www2.stat.duke.edu/courses/Spring01/sta114/data/Andrews/T43.1"
+d <- read.table(a)[,-c(1:3)]
+names(d) <- c("rat","diet", "rep", paste("s", 1:28, sep = ""))
+d <- d |>
+mutate(group = case_when(
+diet == 1 ~ "NC",
+.default = "CC"
+)) |>
+mutate(treatment = case_when(
+diet %in% c(3,4,5) ~ "A",
+diet %in% c(6,7,8) ~ "B",
+.default = "none"
+)) |>
+mutate(amount = case_when(
+diet %in% c(3,6) ~ "0.25%",
+diet %in% c(4,7) ~ "0.50%",
+diet %in% c(5,8) ~ "1.00%",
+.default = "0.00%"
+)) |>
+mutate(group = factor(group, levels = c("NC","CC"))) |>
+pivot_longer(s1:s28, names_to = "surface", values_to = "decay")
+d
+d |> filter(decay == 3)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d
+?interaction
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+?interaction
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d
+head(d)
+source("~/.active-rstudio-document", echo = TRUE)
+d
+head(d)
+dim(d)
+24*4
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("~/.active-rstudio-document", echo = TRUE)
+View(d)
+source("~/.active-rstudio-document", echo = TRUE)
+d
+angle
+angle <- seq(180, 0, by = -15)
+angle
+angle
+angle <- c(seq(180, 0, by = -15), seq(15, 165, by = 15))
+angle
+length(angle)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+dim(d)
+4608/24
+24*8
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+d$angle
+d$angle <- rep(angle, 8)
+length(angle)
+dim(d)
+4608/24
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("~/.active-rstudio-document", echo = TRUE)
+d
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+y
+dd
+d
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d
+View(d)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d
+View(d)
+with(d, table(angle,condition))
+with(d, table(angle,shape))
+with(d, table(shape,condition))
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d
+?pivot_longer
+View(d)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d
+View(d)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d
+d |> group_by(condition, response) |> summarize(y = mean(y))
+View(d)
+d
+d |> group_by(response) |> summarize(y = mean(y))
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d
+d |> group_by(response) |> summarize(y = mean(y))
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d |> group_by(response) |> summarize(y = mean(y))
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+rmarkdown::render("lecture-03-09-2026.Rmd", output_format = "pdf_document")
+install.packages(c("exactRankTests", "multcomp", "terra"))
+library(tidyverse)
+?ggtitle
+source("~/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+library(ggsci)
+scale_color_sci
+scale_color_jama
+source("~/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+source("~/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+d
+source("~/Dropbox/Teaching/s516/examples/cariogenic-diet.R", echo = TRUE)
+rmarkdown::render("lecture-03-11-2026.Rmd", output_format = "pdf_document")
+source("~/.active-rstudio-document", echo = TRUE)
+unique(lipcancer$percent)
+m <- glm(cases ~ offset(log(population)) + percent, family = poisson,
+data = lipcancer)
+summary(m)$coefficients
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+install.packages("listenv")
+rmarkdown::render("hw2-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw2-2026-solutions.Rmd", output_format = "pdf_document")
+install.packages(c("mlmRev", "mvtnorm", "units"))
+f <- function(x) 4/(x^2 + 1)
+integral(f, c(0,1))
+install.packages("calculus")
+calculus::integral(f, c(0,1))
+calculus::integral(f, bounds = list(x = c(0,1)))
+pi
+integrate(f, 0, 1)
+pi
+rmarkdown::render("lecture-03-13-2026.Rmd", output_format = "pdf_document")
+install.packages("scam")
+install.packages("globals")
+install.packages(c("future", "partykit"))
+install.packages(c("arm", "distributional", "ggrepel", "libcoin", "mvtnorm", "png"))
