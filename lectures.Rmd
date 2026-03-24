@@ -101,7 +101,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Maximum likelihood, likelihood ratios, profile likelihood, Wald tests and confidence intervals, assumptions](lecture-03-25-2026.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Over-dispersion](lecture-03-27-2026.html).
  
 ***
 
