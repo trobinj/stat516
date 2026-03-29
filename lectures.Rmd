@@ -105,7 +105,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Negative binomial models, robust standard errors for GLMs, gamma regression](lecture-03-30-2026.html).
 
 `r i <- i + 1; d[i]` 
 
