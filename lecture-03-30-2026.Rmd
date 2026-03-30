@@ -171,8 +171,8 @@ Using the **emmeans** package.
 library(emmeans)
 pairs(emmeans(m, ~density|species, at = list(density = c(0.02,0.01))), 
   type = "response", infer = TRUE)
-pairs(emmeans(m, ~density|species, at = list(density = c(0.02,0.01))), 
-  type = "response", infer = TRUE, vcov = vcovHC)
+pairs(emmeans(m, ~density|species, at = list(density = c(0.02,0.01)), vcov = vcovHC), 
+  type = "response", infer = TRUE)
 ```
 For comparison consider also the results when using quasi-likelihood.
 ```{r, message = FALSE}

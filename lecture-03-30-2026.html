@@ -13,7 +13,7 @@
 
 <title>Monday, March 30</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
@@ -498,15 +498,15 @@ species = pm:
 Confidence level used: 0.95 
 Intervals are back-transformed from the log odds ratio scale 
 Tests are performed on the log odds ratio scale </code></pre>
-<pre class="r"><code>pairs(emmeans(m, ~density|species, at = list(density = c(0.02,0.01))), 
-  type = &quot;response&quot;, infer = TRUE, vcov = vcovHC)</code></pre>
+<pre class="r"><code>pairs(emmeans(m, ~density|species, at = list(density = c(0.02,0.01)), vcov = vcovHC), 
+  type = &quot;response&quot;, infer = TRUE)</code></pre>
 <pre><code>species = kc:
  contrast                  odds.ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
- density0.02 / density0.01       2.97 0.114 Inf      2.75      3.20    1  28.191 &lt;0.0001
+ density0.02 / density0.01       2.97 0.519 Inf      2.11      4.18    1   6.214 &lt;0.0001
 
 species = pm:
  contrast                  odds.ratio    SE  df asymp.LCL asymp.UCL null z.ratio p.value
- density0.02 / density0.01       2.88 0.144 Inf      2.61      3.17    1  21.059 &lt;0.0001
+ density0.02 / density0.01       2.88 0.659 Inf      1.84      4.51    1   4.614 &lt;0.0001
 
 Confidence level used: 0.95 
 Intervals are back-transformed from the log odds ratio scale 
