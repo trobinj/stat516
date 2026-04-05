@@ -56,12 +56,13 @@ tex <- function(x, html = knitr::opts_chunk$get("dev") %in% c("png","pdf")) {
 
 `r ifelse(knitr::is_html_output(), paste("You can also download a [PDF](lecture-", date, ".pdf) copy of this lecture.", sep = ""), "")`
 
+<!-- There's no need to re-estimate and plot each model. Just do it once.  -->
 
 ## Discrete Marginal Effects
 
 Consider a regression model with (without loss of generality) two explanatory variables, $X_1$ and $X_2$. A *discrete marginal effect* is the change in the expected response when we change an explanatory variable. 
 
-For example, if we have a regression model where $E(Y)$ is a function of $X_1$ and $X_2$, the discrete marginal effect of changing $X_1$ from $x_b$ to $x_a$ is 
+For example, if we have a regression model where $E(Y)$ is a function of $X_1$ and $X_2$, a discrete marginal effect of changing $X_1$ from $x_b$ to $x_a$ is 
 $$
 E(Y|X_1 = x_a, X_2 = x_2) - E(Y|X_1 = x_b, X_2 = x_2).
 $$

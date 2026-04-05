@@ -113,7 +113,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [The delta method](lecture-04-06-2026.html).
 
 `r i <- i + 1; d[i]` 
  
