@@ -13,7 +13,7 @@
 
 <title>Monday, April 6</title>
 
-<script src="site_libs/header-attrs-2.30/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
@@ -544,28 +544,6 @@ and <span class="math inline">\(a_1 = 1/4\)</span> we can do this using
 <pre class="r"><code>lincon(m, a = c(0,0.25))</code></pre>
 <pre><code>          estimate       se   lower   upper tvalue  df   pvalue
 (0,1/4),0  0.06229 0.005346 0.05181 0.07277  11.65 Inf 2.25e-31</code></pre>
-<p>It is useful to note that when the function is linear,
-<code>dmethod</code> will produce the same results as
-<code>lincon</code>. But it provides a slightly different interface
-which can be useful since it does not require us to figure out the
-coefficients <span class="math inline">\(a_0, a_1, \dots,
-a_k\)</span>.</p>
-<p><strong>Example</strong>: Consider again the model for the
-<code>whiteside</code> data.</p>
-<pre class="r"><code>m.gas &lt;- lm(Gas ~ Insul + Temp + Insul:Temp, data = MASS::whiteside)</code></pre>
-<p>The rate of change <em>after</em> insulation is <span
-class="math inline">\(\beta_2 + \beta_3\)</span>.</p>
-<pre class="r"><code>lincon(m.gas, a = c(0,0,1,1))</code></pre>
-<pre><code>            estimate      se   lower   upper tvalue df    pvalue
-(0,0,1,1),0  -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
-<pre class="r"><code>contrast(m.gas,
-  a = list(Insul = &quot;After&quot;, Temp = 1),
-  b = list(Insul = &quot;After&quot;, Temp = 0))</code></pre>
-<pre><code> estimate      se   lower   upper tvalue df    pvalue
-  -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
-<pre class="r"><code>dmethod(m.gas, pfunc = &quot;b2 + b3&quot;, pname = c(&quot;b0&quot;,&quot;b1&quot;,&quot;b2&quot;,&quot;b3&quot;))</code></pre>
-<pre><code> estimate      se   lower  upper tvalue  df    pvalue
-  -0.2779 0.02292 -0.3229 -0.233 -12.12 Inf 7.877e-34</code></pre>
 <p><strong>Example</strong>: Returning the the <code>bliss</code> data
 and model, consider the <em>discrete</em> marginal effect of increasing
 dose from 50 to 60 mg/liter. This is <span class="math display">\[
@@ -607,7 +585,7 @@ p &lt;- ggplot(paper, aes(x = Hardwood, y = Strength)) +
   geom_line(aes(y = yhat), data = d) + 
   labs(x = &quot;Percent Hardwood&quot;, y = &quot;Tensile Strength (psi)&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-04-06-2026_files/figure-html/unnamed-chunk-18-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-04-06-2026_files/figure-html/unnamed-chunk-16-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 Now consider the problem of estimating (a) the value of percent hardwood
 at which expected tensile strength is maximized, and (b) the maximum
 expected tensile strength. The percent hardwood that maximizes expected
@@ -651,7 +629,7 @@ p &lt;- ggplot(case2102, aes(x = Distance, y = Removed/Placed)) +
   scale_fill_manual(values = c(&quot;black&quot;,&quot;white&quot;)) + theme_classic() + 
   labs(y = &quot;Observed/Expected Proportion&quot;, x = &quot;Distance from Liverpool (km)&quot;)
 plot(p)</code></pre>
-<p><img src="lecture-04-06-2026_files/figure-html/unnamed-chunk-20-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-04-06-2026_files/figure-html/unnamed-chunk-18-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 Suppose we want to estimate the point at which the two curves
 <em>cross</em>. First consider the model parameterization.</p>
 <pre class="r"><code>summary(m)$coefficients</code></pre>
@@ -706,7 +684,7 @@ d$yhat &lt;- predict(m, newdata = d)
 p &lt;- ggplot(d, aes(x = Time, y = Temp, z = yhat))
 p &lt;- p + geom_contour(bins = 20) + theme_classic()
 plot(p)</code></pre>
-<p><img src="lecture-04-06-2026_files/figure-html/unnamed-chunk-23-1.png" alt="" width="100%" style="display: block; margin: auto;" />
+<p><img src="lecture-04-06-2026_files/figure-html/unnamed-chunk-21-1.png" alt="" width="100%" style="display: block; margin: auto;" />
 The model is <span class="math display">\[
     E(Y_i) = \beta_0 + \beta_1 \text{time}_i + \beta_2 \text{temp}_i +
     \beta_3 \text{time}_i^2 + \beta_4 \text{temp}_i^2 + \beta_5
@@ -787,9 +765,9 @@ insulation: <span class="math display">\[\ell = 0\beta_0 + 0\beta_1 +
 <pre class="r"><code>lincon(m, a = c(0,0,1,1))</code></pre>
 <pre><code>            estimate      se   lower   upper tvalue df    pvalue
 (0,0,1,1),0  -0.2779 0.02292 -0.3239 -0.2319 -12.12 52 8.936e-17</code></pre>
-<pre class="r"><code>dmethod(m, pfunc = &quot;b2 + b2&quot;, pname = c(&quot;b0&quot;,&quot;b1&quot;,&quot;b2&quot;,&quot;b3&quot;))</code></pre>
-<pre><code> estimate      se   lower   upper tvalue  df    pvalue
-  -0.7865 0.04497 -0.8746 -0.6983 -17.49 Inf 1.789e-68</code></pre>
+<pre class="r"><code>dmethod(m, pfunc = &quot;b2 + b3&quot;, pname = c(&quot;b0&quot;,&quot;b1&quot;,&quot;b2&quot;,&quot;b3&quot;))</code></pre>
+<pre><code> estimate      se   lower  upper tvalue  df    pvalue
+  -0.2779 0.02292 -0.3229 -0.233 -12.12 Inf 7.877e-34</code></pre>
 <p>3.<span class="math inline">\(\!\)</span> Expected gas consumption
 before insulation at 5C: <span class="math display">\[\ell = 1\beta_0 +
 0\beta_1 + 5\beta_2 + 0\beta_3 = \beta_0 + 5\beta_2.\]</span></p>

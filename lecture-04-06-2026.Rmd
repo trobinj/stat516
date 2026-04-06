@@ -269,20 +269,6 @@ but since $\beta_1/4 = a_0\beta_0 + a_1\beta_1$ where $a_0 = 0$ and $a_1 = 1/4$ 
 ```{r}
 lincon(m, a = c(0,0.25))
 ```
-It is useful to note that when the function is linear, `dmethod` will produce the same results as `lincon`. But it provides a slightly different interface which can be useful since it does not require us to figure out the coefficients $a_0, a_1, \dots, a_k$. 
-
-**Example**: Consider again the model for the `whiteside` data.
-```{r}
-m.gas <- lm(Gas ~ Insul + Temp + Insul:Temp, data = MASS::whiteside)
-```
-The rate of change *after* insulation is $\beta_2 + \beta_3$. 
-```{r}
-lincon(m.gas, a = c(0,0,1,1))
-contrast(m.gas,
-  a = list(Insul = "After", Temp = 1),
-  b = list(Insul = "After", Temp = 0))
-dmethod(m.gas, pfunc = "b2 + b3", pname = c("b0","b1","b2","b3"))
-```
 
 **Example**: Returning the the `bliss` data and model, consider the *discrete* marginal effect of increasing dose from 50 to 60 mg/liter. This is 
 $$
@@ -440,7 +426,7 @@ dmethod(m, pfunc = "b2", pname = c("b0","b1","b2","b3"))
 2.$\!$ Rate of change after insulation: $$\ell = 0\beta_0 + 0\beta_1 + 1\beta_2 + 1\beta_3 = \beta_2 + \beta_3.$$
 ```{r}
 lincon(m, a = c(0,0,1,1))
-dmethod(m, pfunc = "b2 + b2", pname = c("b0","b1","b2","b3"))
+dmethod(m, pfunc = "b2 + b3", pname = c("b0","b1","b2","b3"))
 ```
 3.$\!$ Expected gas consumption before insulation at 5C: $$\ell = 1\beta_0 + 0\beta_1 + 5\beta_2 + 0\beta_3 = \beta_0 + 5\beta_2.$$
 ```{r}
