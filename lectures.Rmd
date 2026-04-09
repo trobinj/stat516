@@ -117,7 +117,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Introduction to survival analysis, accelerated failure time models](lecture-04-08-2026.html).
  
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Censoring, survival functions](lecture-04-10-2026.html).
  
 ***
 
