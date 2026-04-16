@@ -125,7 +125,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Proportional hazards models --- continued, discrete survival time models](lecture-04-15-2026.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Discrete survival models --- continued, introduction to categorical response variable regression models](lecture-04-17-2026.html).
  
 ***
 
