@@ -129,7 +129,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Sequential categorical regression models, proportional odds models](lecture-04-20-2026.html).
 
 `r i <- i + 1; d[i]` 
 
