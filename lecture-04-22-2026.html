@@ -694,9 +694,9 @@ package must be installed using
 library(PoEdata) 
 data(cola)
 
-mycola &lt;- cola |&gt;mutate(mode = rep(c(&quot;Pepsi&quot;,&quot;7-Up&quot;,&quot;Coke&quot;), n()/3)) %&gt;%
-   select(id, mode, choice, price, feature, display) %&gt;%
-   mutate(feature = factor(feature, levels = 0:1, labels = c(&quot;no&quot;,&quot;yes&quot;))) %&gt;%
+mycola &lt;- cola |&gt; mutate(mode = rep(c(&quot;Pepsi&quot;,&quot;7-Up&quot;,&quot;Coke&quot;), n()/3)) |&gt;
+   select(id, mode, choice, price, feature, display) |&gt;
+   mutate(feature = factor(feature, levels = 0:1, labels = c(&quot;no&quot;,&quot;yes&quot;))) |&gt;
    mutate(display = factor(display, levels = 0:1, labels = c(&quot;no&quot;,&quot;yes&quot;)))
 
 head(mycola)</code></pre>
