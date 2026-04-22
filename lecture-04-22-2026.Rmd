@@ -257,9 +257,9 @@ library(dplyr)
 library(PoEdata) 
 data(cola)
 
-mycola <- cola |>mutate(mode = rep(c("Pepsi","7-Up","Coke"), n()/3)) %>%
-   select(id, mode, choice, price, feature, display) %>%
-   mutate(feature = factor(feature, levels = 0:1, labels = c("no","yes"))) %>%
+mycola <- cola |> mutate(mode = rep(c("Pepsi","7-Up","Coke"), n()/3)) |>
+   select(id, mode, choice, price, feature, display) |>
+   mutate(feature = factor(feature, levels = 0:1, labels = c("no","yes"))) |>
    mutate(display = factor(display, levels = 0:1, labels = c("no","yes")))
 
 head(mycola)
