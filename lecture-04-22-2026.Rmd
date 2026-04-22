@@ -147,7 +147,7 @@ d <- data.frame(exposure.time = seq(5, 52, length = 100))
 d <- cbind(d, predict(m, newdata = d, type = "response"))
 head(d)
 library(tidyr) 
-d <- d %>% pivot_longer(cols = c(normal, mild, severe),
+d <- d |>pivot_longer(cols = c(normal, mild, severe),
   names_to = "condition", values_to = "probability")
 head(d)
 ```
@@ -204,7 +204,7 @@ d <- expand.grid(Gender = c("female","male"), Size = c("<2.3",">2.3"))
 d <- cbind(d, predict(m, newdata = d, type = "response"))
 head(d)
 library(tidyr)
-d <- d %>% pivot_longer(cols = c(bird, fish, invert, other, rep),
+d <- d |>pivot_longer(cols = c(bird, fish, invert, other, rep),
   names_to = "food", values_to = "probability")
 head(d)
 p <- ggplot(d, aes(x = food, y = probability, color = Gender)) + theme_minimal() + 
@@ -257,7 +257,7 @@ library(dplyr)
 library(PoEdata) 
 data(cola)
 
-mycola <- cola %>% mutate(mode = rep(c("Pepsi","7-Up","Coke"), n()/3)) %>%
+mycola <- cola |>mutate(mode = rep(c("Pepsi","7-Up","Coke"), n()/3)) %>%
    select(id, mode, choice, price, feature, display) %>%
    mutate(feature = factor(feature, levels = 0:1, labels = c("no","yes"))) %>%
    mutate(display = factor(display, levels = 0:1, labels = c("no","yes")))
