@@ -1,0 +1,512 @@
+m4 <- nls(time ~ case_when(
+lot == "one" ~ 1/(alph0 + alph1 * log(conc)),
+lot == "two" ~ delta/(alph0 + alph1 * log(conc))),
+start = c(alph0 = -0.02, alph1 = 0.02, delta = 0.7),
+weights = w, data = clot.subset)
+clot.subset$w <- 1 / predict(m4)^2
+}
+summary(m4)$coefficients
+rmarkdown::render("hw-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw2-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw2-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw2-2026-solutions.Rmd", output_format = "pdf_document")
+install.packages(c("arm", "miceadds", "mvtnorm", "ragg", "scam", "textshaping", "units"))
+rmarkdown::render("hw2-2026-solutions.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw2-2026-solutions.Rmd", output_format = "pdf_document")
+install.packages("ISwR")
+rmarkdown::render("lecture-03-23-2026.Rmd", output_format = "pdf_document")
+install.packages(c("miceadds", "mvtnorm", "png", "scam", "units"))
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+?facet_grid
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+rmarkdown::render("lecture-03-23-2026.Rmd", output_format = "pdf_document")
+source("~/.active-rstudio-document", echo = TRUE)
+m
+summary(m)
+source("~/.active-rstudio-document", echo = TRUE)
+m
+summary(m)
+source("~/.active-rstudio-document", echo = TRUE)
+summary(m)
+library(ecostats)
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(ecostats)
+library(dplyr)
+aphidstudy <- bind_rows(aphids, .id = "Field")
+library(emmeans)
+m <- glm(counts ~ Time*Field*Treatment, family = poisson, data = aphidstudy)
+emmeans(m, ~Time|Field*Treatment, at = list(Time = c(2,1)))
+pairs(emmeans(m, ~Time|Field*Treatment, at = list(Time = c(2,1))), type = "response")
+pairs(emmeans(m, ~Time|Field*Treatment, at = list(Time = c(8,1))), type = "response")
+pairs(emmeans(m, ~Time|Field*Treatment, at = list(Time = c(10,0))), type = "response")
+pairs(emmeans(m, ~Treatment|Field*Time, at = list(Time = 50), type = "response")
+)
+pairs(emmeans(m, ~Treatment|Field*Time, at = list(Time = 50), type = "response", reverse = TRUE)
+)
+pairs(emmeans(m, ~Treatment|Field*Time, at = list(Time = 50), type = "response"), reverse = TRUE)
+install.packages(c("forecast", "httpuv", "leaflet.providers", "RcppArmadillo", "TMB", "vcdExtra"))
+install.packages(c("deSolve", "XML"))
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-03-23-2026-solutions.Rmd", output_format = "pdf_document")
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+ex2116
+source("~/.active-rstudio-document", echo = TRUE)
+ex2116
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+m
+m
+summary(m)
+source("~/.active-rstudio-document", echo = TRUE)
+rmarkdown::render("lecture-03-23-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-03-25-2026.Rmd", output_format = "pdf_document")
+(10.2 - 1)*100
+?emmeans
+log(1)
+?emmeans::contrast
+round(0.4949,2)
+rmarkdown::render("lecture-03-27-2026.Rmd", output_format = "pdf_document")
+install.packages(c("PlackettLuce", "psych"))
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/visual_pattern_recognition.R", echo = TRUE)
+d
+rmarkdown::render("lecture-03-30-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-03-30-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-04-01-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-04-03-2026.Rmd", output_format = "pdf_document")
+colourpicker:::plotHelperAddin()
+rmarkdown::render("hw3-2026-solutions.Rmd", output_format = "pdf_document")
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/rtrout.R", echo = TRUE)
+library(agridat)
+data("streibig.competition")
+streibig.competition
+modeldata::pathology
+library(modeldata)
+install.packages("modeldata")
+install.packages("modeldata")
+library(modeldata)
+pathology
+install.packages(c("backports", "dplyr", "ucminf"))
+library(COUNT)
+azprocedure
+data(azprocedure)
+azprocedure
+table(azprocedure$hospital)
+length(table(azprocedure$hospital))
+rmarkdown::render("hw3-2026-solutions.Rmd", output_format = "pdf_document")
+library(ecostats)
+seedsTemp
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/ravens.R", echo = TRUE)
+?ravens
+summary(m)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/ravens.R", echo = TRUE)
+?ravens
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/ravens.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/ravens.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/ravens.R", echo = TRUE)
+?lmer4::convergence
+?lme4::convergence
+summary(m)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/ravens.R", echo = TRUE)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/ravens.R", echo = TRUE)
+?glmerControl
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/ravens.R", echo = TRUE)
+tmp
+names(tmp)
+tmp$fixef
+summary(tmp)
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/ravens.R", echo = TRUE)
+rmarkdown::render("lecture-04-06-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw3-2026-solutions.Rmd", output_format = "pdf_document")
+install.packages("rlang")
+rmarkdown::render("lecture-04-06-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-04-08-2026.Rmd", output_format = "pdf_document")
+install.package("rstudiothemes")
+install.packages("rstudiothemes")
+library(rstudiothemes)
+install_rstudiothemes()
+View(clot)
+rstudiothemes::list_rstudiothemes()
+library(survival)
+?phreg
+phreg
+library(eha)
+install.packages("eha")
+install.packages("eha")
+library(eha)
+?phreg
+log(-log(1-0.5))
+library(eha)
+oldmort
+?oldmort
+oldmort$enter
+hist(oldmort$enter)
+install.packages(c("asbio", "epiR", "igraph", "liver"))
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+vcov(m)
+coef(m)
+source("~/.active-rstudio-document", echo = TRUE)
+vcov(m)
+?flexsurvreg
+coef(m)
+source("~/.active-rstudio-document", echo = TRUE)
+vcov(m)
+coef(m)
+summary(m)
+print(m)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+vcov(m)
+m
+source("~/.active-rstudio-document", echo = TRUE)
+vcov(m)
+m
+coef(m)
+?summary(m)
+names(summary(m))
+names(print(m))
+names(m)
+m$ncovs
+m$ncoveffs
+m$fixedpars
+m
+source("~/.active-rstudio-document", echo = TRUE)
+m
+source("~/.active-rstudio-document", echo = TRUE)
+m
+source("~/.active-rstudio-document", echo = TRUE)
+m
+m$call$data
+coef(m)
+m$vcov
+vcov(m)
+source("~/.active-rstudio-document", echo = TRUE)
+formula(m)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+m
+survreg
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+formula(m)
+coef(m)
+coef(m)
+source("~/.active-rstudio-document", echo = TRUE)
+names(coef(m))
+names(coef(g))
+names(vcov(m))
+vcov(m)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+?survreg
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+coef(m)
+coef(g)
+vcov(m)
+vcov(g)
+rownames(vcov(m))
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+tmp
+coef(m)
+seq_along(coef(m))
+?qdrg
+coef(m)
+m
+source("~/.active-rstudio-document", echo = TRUE)
+m$call$data
+eval(m$call$data)
+tmp
+qdrg(g)
+emmGrid(g)
+coef(g)
+tmp
+?summary(tmp)
+tmp
+?qdrg
+rmarkdown::render("lecture-04-10-2026.Rmd", output_format = "pdf_document")
+trtools::diabetes
+?trtools::contrast
+install.packages(c("cli", "emmeans", "ggsci", "nleqslv", "QuickJSR", "this.path"))
+trtools::daphniastrat
+?trtools::daphniastrat
+trtools::emesis
+?trtools::emesis
+install.packages("purrr")
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(epiR)
+data(epi.SClip) # necessary to "load" the data
+library(dplyr)
+lipcancer <- epi.SClip |>
+mutate(district = factor(district, levels = rev(sort(unique(district))))) |>
+mutate(percent = paste(prop.ag, "%", sep = "")) |>
+mutate(percent = reorder(percent, prop.ag)) |>
+select(district, cases, population, percent)
+head(lipcancer)
+m <- glm(cases ~ offset(log(population)) + percent,
+family = poisson, data = lipcancer)
+plot(predict(m),rstudent(m))
+mean(abs(rstudent(m)) > 2)
+?rtrout
+?trtools::rtrout
+?trtools::trout
+?GLMsData
+library(GLMsData)
+rtrout
+data(rtrout)
+data(rtrout)
+?rtrout
+rtrout
+m <- glm(Weight ~ Dose, family = Gamma(link = log), data = rtrout)
+d <- data.frame(Dose = seq(0, 210, length = 100))
+d <- cbind(d, glmint(m, newdata = d))
+library(GLMsData)
+library(ggplot2)
+library(dplyr)
+library(trtools)
+data(rtrout)
+# This is a nice example to demonstrate the delta method. The goal of the study (see ?rtrout) was to estimate the dose at which the (expected) weight was 75% of the (expected) weight at a dose of zero (i.e., a 25% decrease in the (expected) weight). Below I show how to estimate this dose for two models, as well as how to verify the result.
+# log-linear gamma model
+m <- glm(Weight ~ Dose, family = Gamma(link = log), data = rtrout)
+d <- data.frame(Dose = seq(0, 210, length = 100))
+d <- cbind(d, glmint(m, newdata = d))
+p <- ggplot(rtrout, aes(x = Dose, y = Weight)) + theme_classic()
+p <- p + geom_point(alpha = 0.5)
+p <- p + geom_line(aes(y = fit), data = d)
+p <- p + geom_ribbon(aes(ymin = low, ymax = upp, y = NULL), color = NA, alpha = 0.25, data = d)
+plot(p)
+rtrout
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(ggplot2)
+library(GLMsData)
+data(rtrout)
+p <- ggplot(rtrout, aes(x = Dose, y = Weight)) + theme_classic() +
+geom_point() + labs(x = "Dose of 3,4-Dichloroaniline (micrograms per liter)",
+y = "Weight (g)", title = "Trout Weights after 28 Days by Exposure Dose")
+plot(p)
+# log-linear gamma model
+m <- glm(Weight ~ Dose, family = Gamma(link = log), data = rtrout)
+?scale_x_continuous
+plot(predict(m),rstudent(m))
+# linear model
+m <- glm(Weight ~ Dose, family = gaussian(link = identity), data = rtrout)
+plot(predict(m),rstudent(m))
+summary(m)
+deviance(m)
+?rtrout
+source("C:/Users/trobi/Dropbox/Teaching/s516/examples/rtrout.R", echo = TRUE)
+?trtools::daphniastrat
+50000/0.2
+50000*5
+50000/0.4
+install.packages("Lock5Data")
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "tikz"))
+library(Lock5Data)
+FireAnts$censored <- ifelse(FireAnts$Flee == 61, "yes", "no")
+FireAnts$fleetime <- ifelse(FireAnts$Flee == 61, 60, FireAnts$Flee)
+library(dplyr)
+FireAnts <- FireAnts %>%
+mutate(censored = ifelse(Flee == 61, "yes", "no")) %>%
+mutate(fleetime = ifelse(Flee == 61, 60, Flee))
+library(ggplot2)
+p <- ggplot(FireAnts, aes(x = Habitat, y = fleetime, fill = censored)) +
+geom_dotplot(aes(fill = censored), binwidth = 1, binaxis = "y",
+stackdir = "center", method = "histodot") +
+scale_fill_manual(values = c("black", "white")) +
+theme_minimal() + coord_flip() +
+labs(y = "Seconds Elapsed Until Lizard Flees", fill = "Censored?")
+plot(p)
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(SMPracticals)
+springs$censored <- factor(springs$cens, levels = 0:1, labels = c("yes","no"))
+head(springs)
+str(springs)
+library(ggplot2)
+p <- ggplot(springs, aes(x = stress, y = cycles)) +
+geom_dotplot(aes(fill = censored), binwidth = 200,
+binaxis = "y", stackdir = "center", method = "histodot") +
+scale_fill_manual(values = c("white", grey(0.65))) +
+labs(x = "Stress (newtons per square mm)",
+y = "Thousands of Cycles Until Failure", fill = "Censored?") +
+theme_minimal() + theme(legend.position = c(0.85, 0.85))
+plot(p)
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(ggplot2)
+library(Sleuth3)
+p1 <- ggplot(case0802, aes(x = Voltage, y = Time)) +
+geom_point(alpha = 0.25) + theme_classic() +
+labs(x = "Voltage (kV)", y = "Time to Breakdown (min)") +
+scale_x_continuous(breaks = unique(case0802$Voltage))
+p2 <- ggplot(case0802, aes(x = Voltage, y = Time)) +
+geom_point(alpha = 0.25) + theme_classic() +
+labs(x = "Voltage (kV)", y = "Time to Breakdown (min)") +
+scale_x_continuous(breaks = unique(case0802$Voltage)) +
+scale_y_continuous(transform = "log10",
+breaks = c(0.1, 1, 10, 100, 1000),
+labels = function(x) format(x, scientific = FALSE))
+cowplot::plot_grid(p1, p2)
+library(dplyr)
+case0802new <- case0802 %>%
+mutate(status = ifelse(Time <= 60, 1, 0)) %>%
+mutate(censored = ifelse(status, "no", "yes")) %>%
+mutate(Time = ifelse(status, Time, 60))
+p1 <- ggplot(case0802new, aes(x = Voltage, y = Time)) +
+geom_count(alpha = 0.25) + theme_classic() +
+labs(x = "Voltage (kV)", y = "Time to Breakdown (min)") +
+scale_x_continuous(breaks = unique(case0802$Voltage)) +
+guides(size = "none")
+p2 <- ggplot(case0802new, aes(x = Voltage, y = Time)) +
+geom_count(alpha = 0.25) + theme_classic() +
+labs(x = "Voltage (kV)", y = "Time to Breakdown (min)") +
+scale_x_continuous(breaks = unique(case0802$Voltage)) +
+scale_y_continuous(trans = "log10",
+breaks = c(0.1, 1, 10, 60),
+labels = c(0.1, 1, 10, 60)) +
+guides(size = "none")
+cowplot::plot_grid(p1, p2)
+rm(list = ls())
+save.image()
+library(eha)
+phreg
+?phreg
+library(flexsurvreg)
+library(flexsurv)
+rmarkdown::render("lecture-04-12-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-04-13-2026.Rmd", output_format = "pdf_document")
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(Lock5Data)
+library(dplyr)
+FireAnts <- FireAnts |>
+mutate(censored = ifelse(Flee == 61, "yes", "no")) |>
+mutate(fleetime = ifelse(Flee == 61, 60, Flee))
+FireAnts
+m <- glm(Twitches ~ Habitat, family = poisson, data = FireAnts)
+m
+summary(m)
+plot(predict(m),rstudent(m))
+knitr::opts_chunk$set(echo = TRUE, comment = "", message = FALSE, out.width = "100%", fig.align = "center", fig.width = 9, cache = FALSE, dev = ifelse(knitr::is_html_output(), "png", "pdf"))
+library(epiR)
+data(epi.SClip) # necessary to "load" the data
+library(dplyr)
+lipcancer <- epi.SClip |>
+mutate(district = factor(district, levels = rev(sort(unique(district))))) |>
+mutate(percent = paste(prop.ag, "%", sep = "")) |>
+mutate(percent = reorder(percent, prop.ag)) |>
+select(district, cases, population, percent)
+head(lipcancer)
+m <- glm(cases ~ offset(log(population)) + percent,
+family = poisson, data = lipcancer)
+m
+plot(predict(m), rstudent(m))
+m <- glm(Twitches ~ Habitat, family = poisson, data = FireAnts)
+m
+mean(rstudent(m) > 2)
+mean(abs(rstudent(m)) > 2)
+library(trtools)
+library(ggplot2)
+p <- ggplot(daphniastrat, aes(x = layer, y = count)) + theme_minimal() +
+geom_dotplot(binaxis = "y", binwidth = 1, stackdir = "center") +
+labs(x = "Layer", y = "Number of Daphnia\n Per Liter of Water", title = "Daphnia Counts by Layer")
+plot(p)
+m <- glm(count ~ layer, family = poisson, data = daphniastrat)
+summary(m)$coefficients
+plot(predict(m),rstudent(m))
+mean(abs(rstudent(m)) > 2)
+?geom_count
+?scale_size_area
+install.packages(c("V8", "vctrs"))
+install.packages("insight")
+rmarkdown::render("hw4-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw4-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw4-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw4-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("hw4-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-04-15-2026.Rmd", output_format = "pdf_document")
+MASS::mvrnorm
+source("~/.active-rstudio-document", echo = TRUE)
+y
+y > 1
+source("~/.active-rstudio-document", echo = TRUE)
+y
+source("~/.active-rstudio-document", echo = TRUE)
+y
+cvar
+source("~/.active-rstudio-document", echo = TRUE)
+y
+cvar
+source("~/.active-rstudio-document", echo = TRUE)
+y
+cvar
+source("~/.active-rstudio-document", echo = TRUE)
+y
+source("~/.active-rstudio-document", echo = TRUE)
+z
+table(z)
+source("~/.active-rstudio-document", echo = TRUE)
+table(z)
+source("~/.active-rstudio-document", echo = TRUE)
+table(z)
+source("~/.active-rstudio-document", echo = TRUE)
+table(z)
+source("~/.active-rstudio-document", echo = TRUE)
+source("~/.active-rstudio-document", echo = TRUE)
+install.packages(c("arm", "mvtnorm", "openssl", "QuickJSR", "Rcpp", "S7"))
+rmarkdown::render("lecture-04-15-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-04-17-2026.Rmd", output_format = "pdf_document")
+rmarkdown::render("lecture-04-17-2026.Rmd", output_format = "pdf_document")
+install.packages(c("ggsci", "glue", "parallelly", "QuickJSR"))
+rmarkdown::render("lecture-04-20-2026.Rmd", output_format = )
+rmarkdown::render("lecture-04-20-2026.Rmd", output_format = "pdf_document")
