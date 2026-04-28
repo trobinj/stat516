@@ -139,7 +139,7 @@ i <- 1
 
 `r i <- i + 1; d[i]` [Fixed effects approach](lecture-04-27-2026.html).
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Random effects approach](lecture-04-29-2026.html).
 
 `r i <- i + 1; d[i]` 
  
