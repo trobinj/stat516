@@ -145,7 +145,7 @@ i <- 1
  
 ***
 
-`r i <- i + 1; d[i]` 
+`r i <- i + 1; d[i]` [Model fit and selection](lecture-05-04-2026.html).
 
 `r i <- i + 1; d[i]` 
 
