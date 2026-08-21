@@ -5,16 +5,16 @@ output:
     theme: readable
 ---
   
-This is a website is for Dr. Johnson's *Applied Regression Modeling* course (Stat 4360/5160) for the spring semester of 2026 at the University of Idaho.
+This is a placeholder is for Dr. Johnson's *Applied Regression Modeling* course (Stat 4360/5160) at the University of Idaho.
 
 ***
 
-<center>
+<!-- <center> -->
 
-![https://xkcd.com/59](http://imgs.xkcd.com/comics/graduation.jpg)
+<!-- ![https://xkcd.com/59](http://imgs.xkcd.com/comics/graduation.jpg) -->
 
-</center>
+<!-- </center> -->
 
-***
+<!-- *** -->
 
-The [Rmarkdown](https://rmarkdown.rstudio.com) source files for everything on this website can be viewed at [https://github.com/trobinj/stat516/tree/gh-pages](https://github.com/trobinj/stat516/tree/gh-pages). These are the files with the .Rmd extension.
+<!-- The [Rmarkdown](https://rmarkdown.rstudio.com) source files for everything on this website can be viewed at [https://github.com/trobinj/stat516/tree/gh-pages](https://github.com/trobinj/stat516/tree/gh-pages). These are the files with the .Rmd extension. -->
